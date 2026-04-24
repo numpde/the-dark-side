@@ -12,8 +12,8 @@ from dataclasses import asdict
 from pathlib import Path
 import random
 
-from karura_common import BENCHMARKS_DIR, CONTIGS_JSON, JUNCTIONS_JSON
-from karura_routing import (
+from .karura_common import BENCHMARKS_DIR, CONTIGS_JSON, JUNCTIONS_JSON
+from .karura_routing import (
     PlannerConfig,
     RouteCandidate,
     load_junction_catalog,

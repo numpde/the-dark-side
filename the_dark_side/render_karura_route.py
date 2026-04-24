@@ -11,8 +11,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageOps
 
-from karura_common import SCREENSHOT, VIEWPORT, mercator
-from karura_routing import asset_index, load_payload, load_route_graph
+from .karura_common import SCREENSHOT, VIEWPORT, mercator
+from .karura_routing import asset_index, load_payload, load_route_graph
 
 
 BASE_IMAGE_ALPHA = 0.7

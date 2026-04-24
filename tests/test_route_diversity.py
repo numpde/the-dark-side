@@ -3,8 +3,8 @@ from __future__ import annotations
 import random
 import unittest
 
-from karura_common import CONTIGS_JSON, JUNCTIONS_JSON
-from karura_routing import (
+from the_dark_side.karura_common import CONTIGS_JSON, JUNCTIONS_JSON
+from the_dark_side.karura_routing import (
     PlannerConfig,
     load_junction_catalog,
     load_route_graph,

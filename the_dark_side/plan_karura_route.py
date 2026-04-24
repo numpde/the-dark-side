@@ -10,8 +10,8 @@ import os
 from pathlib import Path
 import random
 
-from karura_common import CONTIGS_JSON, JUNCTIONS_JSON, ROUTES_DIR
-from karura_routing import (
+from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, ROUTES_DIR
+from .karura_routing import (
     PlannerConfig,
     load_junction_catalog,
     load_route_graph,

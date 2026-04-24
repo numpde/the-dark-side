@@ -1,50 +1,46 @@
-# Karura Map Pipeline
+# the-dark-side
 
-Small local pipeline for:
+Static route generator and GitHub Pages app for long, low-overlap bike routes through Karura Forest.
 
-1. downloading Karura OSM data from Overpass
-2. normalizing it into a JSON map structure
-3. collapsing the ride graph into contigs
-4. rendering debug overlays on the reference screenshot
-5. planning long low-overlap routes between curated junctions
-6. exporting a frontend-only static route catalog for GitHub Pages
+## Layout
 
-## Files
+```text
+.
+├── the_dark_side/        Python package
+├── web/                  Static frontend and generated web data
+├── data/                 Source map and derived graph data
+├── curated/              Hand-edited junction and figure catalogs
+├── assets/
+│   ├── reference/        Screenshot + fitted viewport
+│   ├── figures/          Tracked presentation figures
+│   └── debug/            Regenerable debug overlays (ignored)
+├── tests/                Route diversity audit
+└── .github/workflows/    GitHub Pages deployment
+```
 
-- `download_karura_map.py`
-  Downloads relation `13626194` (`Karura Forest`) and writes:
+## Python modules
+
+- `the_dark_side.download_karura_map`
+  Downloads relation `13626194` from Overpass and writes:
   - `data/karura_overpass.json`
   - `data/karura_map.json`
-- `build_karura_contigs.py`
+- `the_dark_side.build_karura_contigs`
   Collapses the ride graph into maximal chains between crossings and writes:
   - `data/karura_contigs.json`
-- `karura_routing.py`
-  Shared graph/junction loaders plus route planners
-- `curated/karura_junctions.json`
-  Hand-picked named junctions for UI/routing use
-- `curated/karura_figures.json`
-  Hand-picked figure definitions with asset-scoped references
-- `plan_karura_route.py`
-  Generates route candidates between curated junctions
-  - `naive`: simple stochastic rollout
-  - `beam`: higher-quality beam search with seeded final-route selection from a diverse candidate pool
-  - `mcts`: Monte Carlo tree search with tuned multi-rollout evaluation and loop-aware late-return reward for stronger coverage while keeping seed diversity
-- `benchmark_karura_routes.py`
-  Benchmarks route planners across seeds and scenarios and writes JSON + Markdown summaries
-- `render_karura_overlay.py`
-  Renders overlays from `data/karura_map.json`
-- `render_karura_figures.py`
-  Renders curated figures from the figure catalog
-- `render_karura_route.py`
-  Renders planned route candidates on the aligned screenshot
-- `export_karura_web_catalog.py`
-  Exports a static frontend catalog plus a contig-network GeoJSON into `app/generated/`
-- `app/`
-  Zero-build static frontend that picks a random precomputed route on load and builds GPX in the browser
-- `karura-source-screenshot.png`
-  Reference screenshot used for visual alignment
-- `karura-viewport.json`
-  Pre-fit viewport parameters used to project the map onto the screenshot
+- `the_dark_side.karura_routing`
+  Shared graph/junction loaders plus route planners.
+- `the_dark_side.plan_karura_route`
+  Generates route candidates between curated junctions.
+- `the_dark_side.benchmark_karura_routes`
+  Benchmarks route planners across seeds and scenarios.
+- `the_dark_side.render_karura_overlay`
+  Renders debug overlays from `data/karura_map.json`.
+- `the_dark_side.render_karura_figures`
+  Renders curated figures from the figure catalog.
+- `the_dark_side.render_karura_route`
+  Renders planned route candidates on the aligned screenshot.
+- `the_dark_side.export_karura_web_catalog`
+  Exports the static frontend catalog plus a contig-network GeoJSON into `web/generated/`.
 
 ## Setup
 
@@ -52,62 +48,52 @@ Small local pipeline for:
 python3 -m pip install -r requirements.txt
 ```
 
-The static frontend itself does not need a Node build step. It is plain HTML/CSS/JS plus generated JSON assets.
+The frontend is plain HTML/CSS/JS. No Node build step is required.
 
-## Usage
+## Common commands
 
 Download and normalize the map:
 
 ```bash
-python3 download_karura_map.py
-```
-
-Render the ride graph overlay:
-
-```bash
-python3 render_karura_overlay.py --mode ride
-```
-
-Render the control overlay with all clipped ways:
-
-```bash
-python3 render_karura_overlay.py --mode all
+python3 -m the_dark_side.download_karura_map
 ```
 
 Build contigs from the ride graph:
 
 ```bash
-python3 build_karura_contigs.py
+python3 -m the_dark_side.build_karura_contigs
+```
+
+Render the ride graph overlay:
+
+```bash
+python3 -m the_dark_side.render_karura_overlay --mode ride
+```
+
+Render the control overlay with all clipped ways:
+
+```bash
+python3 -m the_dark_side.render_karura_overlay --mode all
 ```
 
 Render the contig overlay:
 
 ```bash
-python3 render_karura_overlay.py --mode contigs
+python3 -m the_dark_side.render_karura_overlay --mode contigs
 ```
 
 Render the curated junction figure:
 
 ```bash
-python3 render_karura_figures.py --figure-id junctions_primary
+python3 -m the_dark_side.render_karura_figures --figure-id junctions_primary
 ```
 
-Generate a naive proof-of-concept route between the two curated junctions:
+Generate route candidates:
 
 ```bash
-python3 plan_karura_route.py --algorithm naive
-```
-
-Generate a beam-search route between the same junctions:
-
-```bash
-python3 plan_karura_route.py --algorithm beam
-```
-
-Generate an MCTS route between the same junctions:
-
-```bash
-python3 plan_karura_route.py --algorithm mcts
+python3 -m the_dark_side.plan_karura_route --algorithm naive
+python3 -m the_dark_side.plan_karura_route --algorithm beam
+python3 -m the_dark_side.plan_karura_route --algorithm mcts
 ```
 
 The current MCTS defaults are tuned toward longer coverage-heavy routes:
@@ -120,12 +106,12 @@ The current MCTS defaults are tuned toward longer coverage-heavy routes:
 - `--mcts-loop-late-return-bonus 180`
 - `--mcts-loop-overlap-penalty-per-m 4`
 
-Both commands write JSON route assets under `data/routes/`.
+Generated route JSON assets go under `data/routes/`.
 
 Render the top route from one of those assets:
 
 ```bash
-python3 render_karura_route.py data/routes/karura-route-naive-family_trail_west-to-kiambu_side_exit-seed7.json
+python3 -m the_dark_side.render_karura_route data/routes/karura-route-naive-family_trail_west-to-kiambu_side_exit-seed7.json
 ```
 
 Run the route diversity audit:
@@ -137,7 +123,7 @@ python3 -m unittest -v tests.test_route_diversity
 Run the route benchmark summary:
 
 ```bash
-python3 benchmark_karura_routes.py --seed-start 1 --seed-end 10
+python3 -m the_dark_side.benchmark_karura_routes --seed-start 1 --seed-end 10
 ```
 
 This writes:
@@ -147,17 +133,17 @@ This writes:
 Export the static route catalog used by the frontend app:
 
 ```bash
-python3 export_karura_web_catalog.py --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
 ```
 
 This writes:
-- `app/generated/catalog.json`
-- `app/generated/karura-network.geojson`
+- `web/generated/catalog.json`
+- `web/generated/karura-network.geojson`
 
 Serve the frontend locally:
 
 ```bash
-cd app
+cd web
 python3 -m http.server 8765
 ```
 
@@ -172,9 +158,9 @@ The page will:
 - render the route over OpenStreetMap with the Karura contig network faintly underneath
 - generate a GPX download in the browser for the current route
 
-GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes the `app/` directory.
+GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes `web/`.
 
-## Data Shape
+## Data shape
 
 `data/karura_map.json` contains:
 
@@ -189,26 +175,26 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
   - `inside_length_m`
   - `bounds`
 
-`segment_pairs` are the clipped segments whose midpoints fall inside the Karura boundary. The renderer uses those directly rather than reparsing the OSM relation.
+`segment_pairs` are the clipped segments whose midpoints fall inside the Karura boundary.
 
 `data/karura_contigs.json` contains the collapsed ride graph:
 
 - `crossings`: graph nodes with degree other than `2`
 - `contigs`: maximal chains of rideable segments between crossings or dead ends
 
-`curated/karura_junctions.json` is the manual layer for named junctions that we want to preserve even if the generated graph is rebuilt.
+`curated/karura_junctions.json` is the manual layer for named junctions:
 
 - `location` is the stable geographic point
 - `asset_refs` contains graph-specific references (`graph_node_id`, `incident_contig_ids`) scoped to a particular generated asset
 - `assets` records which generated graph file those references target
 
-`curated/karura_figures.json` is the manual layer for presentation figures.
+`curated/karura_figures.json` is the manual layer for presentation figures:
 
 - `figures` contains stable figure ids
 - each figure has `asset_refs` pointing at the generated assets it depends on
 - figure items reference stable curated entities such as `junction_id`
 
-`data/routes/*.json` contains generated route candidates.
+`data/routes/*.json` contains generated route candidates:
 
 - each route asset references the contig graph and junction catalog it was planned from
 - `start` and `end` preserve the curated junction ids alongside the graph node ids
@@ -218,7 +204,7 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
   - per-step traversal info, including whether a short connector was reused
   - `unique_length_m` and `overlap_length_m`
 
-`app/generated/catalog.json` contains the static frontend bundle.
+`web/generated/catalog.json` contains the static frontend bundle:
 
 - `areas` contains the currently supported areas, starting with `karura`
 - each area contains:

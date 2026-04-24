@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON
+from .karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON
 
 DEFAULT_RELATION_ID = 13626194
 DEFAULT_OVERPASS_URL = "https://overpass-api.de/api/interpreter"

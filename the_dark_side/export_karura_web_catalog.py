@@ -12,8 +12,8 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from karura_common import CONTIGS_JSON, JUNCTIONS_JSON, BASE
-from karura_routing import (
+from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, WEB_GENERATED_DIR
+from .karura_routing import (
     PlannerConfig,
     RouteCandidate,
     build_route_node_ids,
@@ -27,8 +27,8 @@ from karura_routing import (
 )
 
 
-DEFAULT_CATALOG_JSON = BASE / "app" / "generated" / "catalog.json"
-DEFAULT_NETWORK_GEOJSON = BASE / "app" / "generated" / "karura-network.geojson"
+DEFAULT_CATALOG_JSON = WEB_GENERATED_DIR / "catalog.json"
+DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
 DEFAULT_ALGORITHMS = ("mcts", "beam")
 
 

@@ -6,17 +6,24 @@ import math
 from pathlib import Path
 
 
-BASE = Path(__file__).resolve().parent
-DATA_DIR = BASE / "data"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+BASE = REPO_ROOT
+DATA_DIR = REPO_ROOT / "data"
 RAW_JSON = DATA_DIR / "karura_overpass.json"
 MAP_JSON = DATA_DIR / "karura_map.json"
 CONTIGS_JSON = DATA_DIR / "karura_contigs.json"
 ROUTES_DIR = DATA_DIR / "routes"
 BENCHMARKS_DIR = DATA_DIR / "benchmarks"
-CURATED_DIR = BASE / "curated"
+CURATED_DIR = REPO_ROOT / "curated"
 JUNCTIONS_JSON = CURATED_DIR / "karura_junctions.json"
-SCREENSHOT = BASE / "karura-source-screenshot.png"
-VIEWPORT = BASE / "karura-viewport.json"
+ASSETS_DIR = REPO_ROOT / "assets"
+REFERENCE_DIR = ASSETS_DIR / "reference"
+DEBUG_DIR = ASSETS_DIR / "debug"
+FIGURES_DIR = ASSETS_DIR / "figures"
+SCREENSHOT = REFERENCE_DIR / "karura-source-screenshot.png"
+VIEWPORT = REFERENCE_DIR / "karura-viewport.json"
+WEB_DIR = REPO_ROOT / "web"
+WEB_GENERATED_DIR = WEB_DIR / "generated"
 
 R = 6378137.0
 RIDEABLE = {

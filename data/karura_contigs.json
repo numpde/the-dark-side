@@ -12447,7 +12447,7 @@
     "graph_mode": "ride",
     "node_count": 2954,
     "source_asset_id": "karura-map-r13626194-20260424T080933741103Z",
-    "source_map": "/home/ra/repos/the-dark-side/data/karura_map.json"
+    "source_map": "data/karura_map.json"
   },
   "nodes": {
     "10597364805": {

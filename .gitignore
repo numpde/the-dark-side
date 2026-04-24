@@ -3,7 +3,7 @@ __pycache__/
 
 data/routes/
 data/benchmarks/
-karura-*-overlay.png
+assets/debug/
 node_modules/
 dist/
 .parcel-cache/

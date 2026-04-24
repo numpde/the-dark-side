@@ -9,12 +9,12 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from karura_common import BASE, VIEWPORT, mercator
+from .karura_common import CURATED_DIR, DEBUG_DIR, FIGURES_DIR, VIEWPORT, mercator
 
 
-FIGURES_JSON = BASE / "curated" / "karura_figures.json"
+FIGURES_JSON = CURATED_DIR / "karura_figures.json"
 OVERLAY_BY_ASSET_KIND = {
-    "contig_graph": BASE / "karura-contigs-random-overlay.png",
+    "contig_graph": DEBUG_DIR / "karura-contigs-random-overlay.png",
 }
 
 

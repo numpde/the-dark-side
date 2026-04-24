@@ -9,9 +9,9 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageOps
 
-from karura_common import (
-    BASE,
+from .karura_common import (
     CONTIGS_JSON,
+    DEBUG_DIR,
     EXCLUDED_WAY_IDS,
     MAP_JSON,
     SCREENSHOT,
@@ -22,9 +22,9 @@ from karura_common import (
 
 
 OUT_BY_MODE = {
-    "ride": BASE / "karura-ride-graph-random-overlay.png",
-    "all": BASE / "karura-all-ways-control-overlay.png",
-    "contigs": BASE / "karura-contigs-random-overlay.png",
+    "ride": DEBUG_DIR / "karura-ride-graph-random-overlay.png",
+    "all": DEBUG_DIR / "karura-all-ways-control-overlay.png",
+    "contigs": DEBUG_DIR / "karura-contigs-random-overlay.png",
 }
 BASE_IMAGE_ALPHA = 0.7
 

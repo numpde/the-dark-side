@@ -5,13 +5,10 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "app/**"
+      - "web/**"
       - "curated/**"
       - "data/karura_contigs.json"
-      - "export_karura_web_catalog.py"
-      - "karura_routing.py"
-      - "karura_common.py"
-      - "plan_karura_route.py"
+      - "the_dark_side/**"
 
 permissions:
   contents: read
@@ -36,7 +33,7 @@ jobs:
 
       - name: Export static route catalog
         run: |
-          python3 export_karura_web_catalog.py \
+          python3 -m the_dark_side.export_karura_web_catalog \
             --seed-start 1 \
             --seed-end 6 \
             --routes-per-scenario 12 \
@@ -44,7 +41,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: app
+          path: web
 
   deploy:
     environment:

@@ -56,7 +56,7 @@
         }
       ],
       "kind": "junction_figure",
-      "output_path": "../karura-junctions-figure.png"
+      "output_path": "../assets/figures/karura-junctions-figure.png"
     }
   ],
   "meta": {

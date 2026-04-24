@@ -10,7 +10,7 @@ from collections import Counter, defaultdict
 from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 
-from karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_JSON as DEFAULT_MAP_JSON, include_ride_way
+from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_JSON as DEFAULT_MAP_JSON, include_ride_way
 
 
 def parse_args() -> argparse.Namespace:
