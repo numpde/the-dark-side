@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+data/routes/
+data/benchmarks/
+karura-*-overlay.png
+node_modules/
+dist/
+.parcel-cache/
+.parcel-dev/

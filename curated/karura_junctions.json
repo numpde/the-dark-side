@@ -1,0 +1,70 @@
+{
+  "assets": [
+    {
+      "id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+      "kind": "contig_graph",
+      "path": "../data/karura_contigs.json",
+      "source_asset_id": "karura-map-r13626194-20260424T080933741103Z"
+    }
+  ],
+  "junctions": [
+    {
+      "asset_refs": [
+        {
+          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "graph_node_id": 13075347358,
+          "incident_contig_ids": [
+            72,
+            90,
+            169
+          ]
+        }
+      ],
+      "id": "family_trail_west",
+      "kind": "junction",
+      "location": {
+        "lat": -1.2472386,
+        "lon": 36.8177062
+      },
+      "name": "Family Trail west junction",
+      "notes": "Selected junction at the west end of Family Trail.",
+      "tags": [
+        "family-trail",
+        "west"
+      ]
+    },
+    {
+      "asset_refs": [
+        {
+          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "graph_node_id": 6159312406,
+          "incident_contig_ids": [
+            12,
+            95,
+            110,
+            143
+          ]
+        }
+      ],
+      "id": "kiambu_side_exit",
+      "kind": "junction",
+      "location": {
+        "lat": -1.2398552,
+        "lon": 36.8439087
+      },
+      "name": "Kiambu-side exit junction",
+      "notes": "Chosen Kiambu-side exit junction near the gate labeled Gate C.",
+      "tags": [
+        "kiambu-side",
+        "exit"
+      ]
+    }
+  ],
+  "meta": {
+    "asset_id": "karura-junctions-curated-v1",
+    "asset_kind": "junction_catalog",
+    "area": "Karura",
+    "description": "Curated named junctions on the Karura contig graph.",
+    "schema_version": 2
+  }
+}

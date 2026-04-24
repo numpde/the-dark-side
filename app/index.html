@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karura forest random bike routes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <h1>Karura forest random bike routes</h1>
+
+    <div class="controls-grid">
+      <label id="area-field">
+        <span>Area</span>
+        <select id="area-select"></select>
+      </label>
+
+      <label>
+        <span>Start</span>
+        <select id="start-select"></select>
+      </label>
+
+      <label>
+        <span>End</span>
+        <select id="end-select"></select>
+      </label>
+    </div>
+
+    <div class="route-strip">
+      <p class="scenario-title" id="scenario-label">Loading…</p>
+      <div class="route-stats">
+        <p><span>Coverage</span> <strong id="coverage-value">Loading…</strong></p>
+        <p><span>Self-overlap</span> <strong id="overlap-value">Loading…</strong></p>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button type="button" id="new-route-button">New route</button>
+      <a class="download-link" id="download-link" href="#">Download GPX</a>
+    </div>
+
+    <div class="map-view" id="map"></div>
+    <div class="error-card hidden" id="error-card"></div>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

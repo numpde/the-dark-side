@@ -1,0 +1,69 @@
+{
+  "assets": [
+    {
+      "id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+      "kind": "contig_graph",
+      "path": "../data/karura_contigs.json",
+      "source_asset_id": "karura-map-r13626194-20260424T080933741103Z"
+    },
+    {
+      "id": "karura-junctions-curated-v1",
+      "kind": "junction_catalog",
+      "path": "karura_junctions.json"
+    }
+  ],
+  "figures": [
+    {
+      "asset_refs": [
+        {
+          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "kind": "base_graph"
+        },
+        {
+          "asset_id": "karura-junctions-curated-v1",
+          "kind": "junction_catalog"
+        }
+      ],
+      "header": {
+        "subtitle": "Selected junction nodes on the contig graph",
+        "title": "Karura Junction Figure"
+      },
+      "id": "junctions_primary",
+      "items": [
+        {
+          "color": [
+            255,
+            107,
+            53,
+            255
+          ],
+          "junction_id": "family_trail_west",
+          "label_dx": -420,
+          "label_dy": -160,
+          "subtitle_template": "node {graph_node_id}"
+        },
+        {
+          "color": [
+            0,
+            168,
+            232,
+            255
+          ],
+          "junction_id": "kiambu_side_exit",
+          "label_dx": -560,
+          "label_dy": -150,
+          "subtitle_template": "node {graph_node_id}"
+        }
+      ],
+      "kind": "junction_figure",
+      "output_path": "../karura-junctions-figure.png"
+    }
+  ],
+  "meta": {
+    "asset_id": "karura-figures-curated-v1",
+    "asset_kind": "figure_catalog",
+    "area": "Karura",
+    "description": "Curated figure definitions for Karura map assets.",
+    "schema_version": 1
+  }
+}

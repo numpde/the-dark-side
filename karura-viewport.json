@@ -1,0 +1,21 @@
+{
+  "viewport": {
+    "score": -10.052092097325241,
+    "center_x": 4098826.464134042,
+    "center_y": -137882.6181913094,
+    "meters_per_px": 2.105952380952381
+  },
+  "meters_per_px_from_scale_bar": 2.1166666666666667,
+  "geographic_bounds": {
+    "min_lon": 36.79314254420716,
+    "min_lat": -1.2566812318216019,
+    "max_lon": 36.847626649496554,
+    "max_lat": -1.2203669814198115
+  },
+  "highlighted_names": [
+    "Middle Track",
+    "Muhuga Trail",
+    "Mukeu Trail",
+    "Wangari Maathai"
+  ]
+}

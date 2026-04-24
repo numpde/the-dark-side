@@ -1,0 +1,225 @@
+:root {
+  --ink: #16211e;
+  --mist: #eef1e7;
+  --sand: #d8c7a5;
+  --fern: #325847;
+  --fern-deep: #223a31;
+  --line: rgba(22, 33, 30, 0.12);
+  --font-sans: "Space Grotesk", "Avenir Next", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(216, 199, 165, 0.55), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(50, 88, 71, 0.22), transparent 35%),
+    linear-gradient(135deg, #f3efe6 0%, #e7ecdf 45%, #dde6d8 100%);
+}
+
+.app-shell {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 18px 24px;
+}
+
+.map-view {
+  width: 100%;
+  min-height: 58vh;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 3vw, 3rem);
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+label span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(22, 33, 30, 0.72);
+}
+
+select,
+button,
+.download-link {
+  font: inherit;
+}
+
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(22, 33, 30, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+}
+
+.route-strip {
+  display: grid;
+  gap: 6px;
+}
+
+.scenario-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.route-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.route-stats p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: rgba(22, 33, 30, 0.78);
+}
+
+.route-stats span {
+  color: rgba(22, 33, 30, 0.52);
+  margin-right: 6px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+button,
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+}
+
+button {
+  border: none;
+  background: linear-gradient(135deg, var(--fern), var(--fern-deep));
+  color: white;
+  font-weight: 700;
+}
+
+.download-link {
+  border: 1px solid rgba(22, 33, 30, 0.16);
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+}
+
+button:hover,
+.download-link:hover {
+  transform: translateY(-1px);
+}
+
+.error-card {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(148, 35, 35, 0.08);
+  color: #8f1b1b;
+}
+
+.hidden {
+  display: none;
+}
+
+.leaflet-control-attribution {
+  font-family: var(--font-sans);
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    gap: 10px;
+    padding: 12px 12px 16px;
+  }
+
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  label {
+    gap: 4px;
+  }
+
+  label span {
+    font-size: 0.84rem;
+  }
+
+  select {
+    padding: 11px 13px;
+    border-radius: 14px;
+  }
+
+  .route-strip {
+    gap: 4px;
+  }
+
+  .scenario-title {
+    font-size: 1rem;
+  }
+
+  .route-stats {
+    display: grid;
+    gap: 4px;
+  }
+
+  .route-stats p {
+    font-size: 0.9rem;
+  }
+
+  .button-row {
+    width: 100%;
+    gap: 8px;
+  }
+
+  button,
+  .download-link {
+    flex: 1 1 100%;
+    min-height: 44px;
+  }
+
+  .map-view {
+    min-height: 44vh;
+    border-radius: 20px;
+  }
+}
