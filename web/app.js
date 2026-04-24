@@ -13,6 +13,7 @@ const overlapValue = document.getElementById("overlap-value");
 const errorCard = document.getElementById("error-card");
 const newRouteButton = document.getElementById("new-route-button");
 const downloadLink = document.getElementById("download-link");
+const LOOP_ARROW_INTERVAL_MS = 1000;
 
 let appState = {
   catalog: null,
@@ -24,6 +25,7 @@ let appState = {
   routeLayer: null,
   markerLayer: null,
   gpxUrl: null,
+  loopArrowPhase: 0,
 };
 
 
@@ -50,6 +52,16 @@ function formatOverlap(lengthM, totalM) {
 }
 
 
+function formatElevationChange(lengthM) {
+  return `${lengthM.toFixed(0)} m`;
+}
+
+
+function animatedLoopArrow() {
+  return appState.loopArrowPhase % 2 === 0 ? "↗" : "↘";
+}
+
+
 function mixColor(start, end, fraction) {
   const clamped = Math.max(0, Math.min(1, fraction));
   const values = start.map((value, index) =>
@@ -68,8 +80,20 @@ function boundsToLeaflet(bounds) {
 
 
 function buildGpx(route, startJunction, endJunction) {
+  const hasElevations =
+    Array.isArray(route.elevations_m) &&
+    route.elevations_m.length === route.coordinates.length;
   const trackPoints = route.coordinates
-    .map(([lon, lat]) => `      <trkpt lat="${lat}" lon="${lon}"></trkpt>`)
+    .map(([lon, lat], index) => {
+      if (!hasElevations) {
+        return `      <trkpt lat="${lat}" lon="${lon}"></trkpt>`;
+      }
+      return [
+        `      <trkpt lat="${lat}" lon="${lon}">`,
+        `        <ele>${route.elevations_m[index].toFixed(1)}</ele>`,
+        "      </trkpt>",
+      ].join("\n");
+    })
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="karura-route-drop" xmlns="http://www.topografix.com/GPX/1/1">
@@ -238,15 +262,35 @@ function renderRoute() {
 }
 
 
-function updateSummary() {
+function updateRouteStats() {
   const route = appState.route;
   const scenario = currentScenario();
   if (!route || !scenario) {
     return;
   }
   scenarioLabel.textContent = scenarioLabelText(scenario, appState.area);
-  coverageValue.textContent = formatDistance(route.unique_length_m);
+  const hasGain = typeof route.elevation_gain_m === "number";
+  const hasLoss = typeof route.elevation_loss_m === "number";
+  let coverageText = formatDistance(route.unique_length_m);
+  if (scenario.is_loop && hasGain && hasLoss) {
+    const averageChange = (route.elevation_gain_m + route.elevation_loss_m) / 2;
+    coverageText += ` (${animatedLoopArrow()} ${formatElevationChange(averageChange)})`;
+  } else if (hasGain || hasLoss) {
+    const upText = hasGain ? formatElevationChange(route.elevation_gain_m) : "—";
+    const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
+    coverageText += ` (↗ ${upText}, ↘ ${downText})`;
+  }
+  coverageValue.textContent = coverageText;
   overlapValue.textContent = formatOverlap(route.overlap_length_m, route.total_length_m);
+}
+
+
+function updateDownloadLink() {
+  const route = appState.route;
+  const scenario = currentScenario();
+  if (!route || !scenario) {
+    return;
+  }
 
   const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
   const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
@@ -257,6 +301,12 @@ function updateSummary() {
   appState.gpxUrl = URL.createObjectURL(new Blob([gpx], { type: "application/gpx+xml" }));
   downloadLink.href = appState.gpxUrl;
   downloadLink.download = `${route.id}.gpx`;
+}
+
+
+function updateSummary() {
+  updateRouteStats();
+  updateDownloadLink();
 }
 
 
@@ -290,7 +340,6 @@ function populateAreaOptions() {
     option.textContent = area.name;
     areaSelect.append(option);
   });
-  areaField.classList.toggle("hidden", appState.catalog.areas.length <= 1);
 }
 
 
@@ -381,3 +430,12 @@ async function boot() {
 
 
 boot();
+
+
+window.setInterval(() => {
+  appState.loopArrowPhase = (appState.loopArrowPhase + 1) % 2;
+  const scenario = currentScenario();
+  if (appState.route && scenario?.is_loop) {
+    updateRouteStats();
+  }
+}, LOOP_ARROW_INTERVAL_MS);

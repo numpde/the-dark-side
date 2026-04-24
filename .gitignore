@@ -3,6 +3,7 @@ __pycache__/
 
 data/routes/
 data/benchmarks/
+data/elevation_cache/
 assets/debug/
 node_modules/
 dist/

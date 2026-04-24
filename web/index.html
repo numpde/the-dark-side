@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Karura forest random bike routes</title>
+  <title>Random bike routes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
 </head>
 <body>
   <main class="app-shell">
-    <h1>Karura forest random bike routes</h1>
+    <h1>Random bike routes</h1>
 
     <div class="controls-grid">
       <label id="area-field">
@@ -43,6 +43,10 @@
         <p><span>Self-overlap</span> <strong id="overlap-value">Loading…</strong></p>
       </div>
     </div>
+
+    <p class="note">
+      Note: paths are based on OpenStreetMap; elevation is derived from Open Topo Data's Mapzen dataset; routes and gain/loss are approximate.
+    </p>
 
     <div class="button-row">
       <button type="button" id="new-route-button">New route</button>

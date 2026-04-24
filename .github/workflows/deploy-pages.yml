@@ -8,6 +8,7 @@ on:
       - "web/**"
       - "curated/**"
       - "data/karura_contigs.json"
+      - "data/karura_elevation.json"
       - "the_dark_side/**"
 
 permissions:

@@ -27,8 +27,13 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.build_karura_contigs`
   Collapses the ride graph into maximal chains between crossings and writes:
   - `data/karura_contigs.json`
+- `the_dark_side.build_karura_elevation`
+  Annotates the contig graph nodes with elevation values and writes:
+  - `data/karura_elevation.json`
 - `the_dark_side.karura_routing`
   Shared graph/junction loaders plus route planners.
+- `the_dark_side.elevation`
+  Elevation clients plus helpers for graph and route profile summarization.
 - `the_dark_side.plan_karura_route`
   Generates route candidates between curated junctions.
 - `the_dark_side.benchmark_karura_routes`
@@ -80,6 +85,12 @@ Render the contig overlay:
 
 ```bash
 python3 -m the_dark_side.render_karura_overlay --mode contigs
+```
+
+Build the graph elevation asset:
+
+```bash
+python3 -m the_dark_side.build_karura_elevation --provider open-topo-data
 ```
 
 Render the curated junction figure:
@@ -139,6 +150,15 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
 This writes:
 - `web/generated/catalog.json`
 - `web/generated/karura-network.geojson`
+
+Export the route catalog. If `data/karura_elevation.json` exists, elevation gain/loss and GPX `<ele>` values are derived from that local graph asset:
+
+```bash
+python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+```
+
+The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
+The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present in the catalog.
 
 Serve the frontend locally:
 
@@ -212,3 +232,10 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
   - `scenarios`
   - a `network_path` to the generated GeoJSON overlay
 - each scenario contains a prefiltered, diverse route pool with full route coordinates ready for map rendering or GPX export
+- route records may also contain:
+  - `elevation_gain_m`
+  - `elevation_loss_m`
+  - `elevation_min_m`
+  - `elevation_max_m`
+  - `elevations_m` aligned with `coordinates`
+  - `elevation_profile` as `[distance_m, elevation_m]` pairs for charting

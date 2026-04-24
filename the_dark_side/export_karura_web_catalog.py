@@ -12,7 +12,13 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, WEB_GENERATED_DIR
+from .elevation import summarize_elevation_series
+from .karura_common import (
+    CONTIGS_JSON,
+    ELEVATION_JSON,
+    JUNCTIONS_JSON,
+    WEB_GENERATED_DIR,
+)
 from .karura_routing import (
     PlannerConfig,
     RouteCandidate,
@@ -79,6 +85,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mcts-loop-unused-penalty-per-m", type=float, default=0.045)
     parser.add_argument("--mcts-loop-late-return-bonus", type=float, default=180.0)
     parser.add_argument("--mcts-loop-overlap-penalty-per-m", type=float, default=4.0)
+    parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
+    parser.add_argument("--elevation-profile-spacing-m", type=float, default=60.0)
+    parser.add_argument("--elevation-smoothing-window", type=int, default=3)
+    parser.add_argument("--elevation-min-step-m", type=float, default=0.5)
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
     parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
     return parser.parse_args()
@@ -256,6 +266,39 @@ def network_geojson(graph) -> dict:
     return {"type": "FeatureCollection", "features": features}
 
 
+def load_elevation_asset(path: Path | None) -> dict[int, float]:
+    if path is None or not path.exists():
+        return {}
+    payload = json.loads(path.read_text())
+    node_elevations: dict[int, float] = {}
+    for node_id, node_payload in payload.get("nodes", {}).items():
+        elevation = node_payload.get("elevation_m")
+        if elevation is None:
+            continue
+        node_elevations[int(node_id)] = float(elevation)
+    return node_elevations
+
+
+def elevation_payload_for_route(
+    args: argparse.Namespace,
+    node_elevations: dict[int, float],
+    route_node_ids: list[int],
+    coordinates: list[list[float]],
+) -> dict:
+    if not node_elevations:
+        return {}
+    elevations = [node_elevations.get(node_id) for node_id in route_node_ids]
+    if any(elevation is None for elevation in elevations):
+        return {}
+    return summarize_elevation_series(
+        coordinates,
+        [float(elevation) for elevation in elevations],
+        profile_spacing_m=args.elevation_profile_spacing_m,
+        smoothing_window=args.elevation_smoothing_window,
+        min_step_m=args.elevation_min_step_m,
+    )
+
+
 def area_bounds(graph) -> list[float]:
     lons = [node.lon for node in graph.nodes.values()]
     lats = [node.lat for node in graph.nodes.values()]
@@ -276,6 +319,7 @@ def main() -> None:
     args = parse_args()
     algorithms = args.algorithm or list(DEFAULT_ALGORITHMS)
     config = build_config(args)
+    node_elevations = load_elevation_asset(args.elevation_json)
     graph = load_route_graph(args.contigs_json)
     junction_catalog = load_junction_catalog(args.junctions_json)
     junction_defs = junction_catalog["junctions"]
@@ -350,6 +394,12 @@ def main() -> None:
                             "repeated_contig_ids": list(record.candidate.repeated_contig_ids),
                             "bounds": record.bounds,
                             "coordinates": record.coordinates,
+                            **elevation_payload_for_route(
+                                args,
+                                node_elevations,
+                                build_route_node_ids(graph, record.candidate.steps),
+                                record.coordinates,
+                            ),
                         }
                         for record in selected
                     ],
@@ -366,6 +416,7 @@ def main() -> None:
             "seed_end": args.seed_end,
             "candidate_limit_per_run": args.candidate_limit_per_run,
             "routes_per_scenario": args.routes_per_scenario,
+            "elevation_asset_path": str(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
         },
         "areas": [
             {
