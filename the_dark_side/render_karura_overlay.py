@@ -13,6 +13,7 @@ from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
     EXCLUDED_WAY_IDS,
+    MAP_PATCHES_JSON,
     SCREENSHOT,
     VIEWPORT,
     include_ride_way,
@@ -25,15 +26,17 @@ OUT_BY_MODE = {
     "ride": DEBUG_DIR / "karura-ride-graph-random-overlay.png",
     "all": DEBUG_DIR / "karura-all-ways-control-overlay.png",
     "contigs": DEBUG_DIR / "karura-contigs-random-overlay.png",
+    "patches": DEBUG_DIR / "karura-patches-random-overlay.png",
 }
 BASE_IMAGE_ALPHA = 0.7
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=("ride", "all", "contigs"), default="ride")
+    parser.add_argument("--mode", choices=("ride", "all", "contigs", "patches"), default="ride")
     parser.add_argument("--map-json", type=Path)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
+    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
     parser.add_argument("--screenshot", type=Path, default=SCREENSHOT)
     parser.add_argument("--viewport", type=Path, default=VIEWPORT)
     parser.add_argument("--output", type=Path)
@@ -92,6 +95,29 @@ def parse_contigs(path):
     return contigs
 
 
+def parse_patches(path):
+    payload = json.loads(path.read_text())
+    patch_items = []
+    for patch in payload.get("patches", []):
+        if not patch.get("enabled", True):
+            continue
+        if patch.get("op") != "add_way":
+            continue
+        node_lookup = {
+            int(node["id"]): mercator(float(node["lon"]), float(node["lat"]))
+            for node in patch.get("nodes", [])
+        }
+        segments = []
+        node_ids = [int(node_id) for node_id in patch.get("node_ids", [])]
+        for first_id, second_id in zip(node_ids, node_ids[1:]):
+            if first_id not in node_lookup or second_id not in node_lookup:
+                continue
+            segments.append((node_lookup[first_id], node_lookup[second_id]))
+        if segments:
+            patch_items.append((str(patch["id"]), segments, patch))
+    return patch_items
+
+
 def project_point(xy, viewport, size):
     w, h = size
     return (
@@ -116,13 +142,18 @@ def main():
     draw = ImageDraw.Draw(img, "RGBA")
 
     map_json = args.map_json or resolve_map_json()
-    ways = parse_contigs(args.contigs_json) if args.mode == "contigs" else parse_map(map_json, args.mode)
+    if args.mode == "contigs":
+        ways = parse_contigs(args.contigs_json)
+    elif args.mode == "patches":
+        ways = parse_patches(args.patches_json)
+    else:
+        ways = parse_map(map_json, args.mode)
     rng = random.Random(7)
     segment_count = 0
 
     for item_id, segments, _ in ways:
         contig_color = None
-        if args.mode == "contigs":
+        if args.mode in {"contigs", "patches"}:
             contig_rng = random.Random(item_id)
             contig_color = (
                 contig_rng.randint(40, 255),

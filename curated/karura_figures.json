@@ -1,10 +1,10 @@
 {
   "assets": [
     {
-      "id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+      "id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
       "kind": "contig_graph",
       "path": "../data/karura_contigs.json",
-      "source_asset_id": "karura-map-r13626194-20260424T080933741103Z"
+      "source_asset_id": null
     },
     {
       "id": "karura-junctions-curated-v1",
@@ -16,7 +16,7 @@
     {
       "asset_refs": [
         {
-          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
           "kind": "base_graph"
         },
         {

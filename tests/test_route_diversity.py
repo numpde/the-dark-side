@@ -16,6 +16,7 @@ from the_dark_side.karura_routing import (
 
 
 SEEDS = (1, 2, 3, 4)
+BEAM_SEEDS = (1, 2, 3, 4, 5, 6, 7, 8)
 
 
 class RouteDiversityAuditTest(unittest.TestCase):
@@ -88,7 +89,7 @@ class RouteDiversityAuditTest(unittest.TestCase):
         )
 
     def test_beam_primary_route_changes_with_seed(self) -> None:
-        signatures = {self.run_planner("beam", seed).contig_id_sequence for seed in SEEDS}
+        signatures = {self.run_planner("beam", seed).contig_id_sequence for seed in BEAM_SEEDS}
         self.assertGreater(
             len(signatures),
             1,

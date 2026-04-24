@@ -1,22 +1,22 @@
 {
   "assets": [
     {
-      "id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+      "id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
       "kind": "contig_graph",
       "path": "../data/karura_contigs.json",
-      "source_asset_id": "karura-map-r13626194-20260424T080933741103Z"
+      "source_asset_id": null
     }
   ],
   "junctions": [
     {
       "asset_refs": [
         {
-          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
           "graph_node_id": 13075347358,
           "incident_contig_ids": [
-            72,
-            90,
-            169
+            75,
+            94,
+            178
           ]
         }
       ],
@@ -36,13 +36,13 @@
     {
       "asset_refs": [
         {
-          "asset_id": "karura-contigs-ride-from-karura-map-r13626194-20260424T080933741103Z",
+          "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
           "graph_node_id": 6159312406,
           "incident_contig_ids": [
-            12,
-            95,
-            110,
-            143
+            14,
+            99,
+            115,
+            152
           ]
         }
       ],

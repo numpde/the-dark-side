@@ -21,7 +21,7 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 ## Python modules
 
 - `the_dark_side.download_karura_map`
-  Downloads relation `13626194` from Overpass and writes:
+  Downloads the union of relations `13626194` (`Karura Forest`) and `15417497` (`Karura Playground`) from Overpass and writes:
   - `data/karura_overpass.json`
   - `data/karura_map.json`
 - `the_dark_side.build_karura_contigs`
@@ -38,7 +38,7 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.elevation`
   Elevation clients plus helpers for graph and route profile summarization.
 - `the_dark_side.plan_karura_route`
-  Generates route candidates between curated junctions.
+  Debug tool: generates one-off route candidates between curated junctions under `data/routes/`.
 - `the_dark_side.benchmark_karura_routes`
   Benchmarks route planners across seeds and scenarios.
 - `the_dark_side.render_karura_overlay`
@@ -46,7 +46,7 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.render_karura_figures`
   Renders curated figures from the figure catalog.
 - `the_dark_side.render_karura_route`
-  Renders planned route candidates on the aligned screenshot.
+  Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
   Exports the static frontend catalog plus a contig-network GeoJSON into `web/generated/`.
 
@@ -66,6 +66,8 @@ Download and normalize the map:
 python3 -m the_dark_side.download_karura_map
 ```
 
+Add `--no-fill-segment-gaps` to disable continuity repair along clipped ways for debugging.
+
 Build contigs from the ride graph:
 
 ```bash
@@ -78,6 +80,8 @@ Apply local structural map patches:
 python3 -m the_dark_side.apply_karura_patches
 ```
 
+This step also supports `--no-fill-segment-gaps` if you want patched way geometry to preserve raw endpoint-only clipping.
+
 `build_karura_contigs` will prefer `data/karura_map_patched.json` when it exists, and fall back to `data/karura_map.json` otherwise.
 
 Render the ride graph overlay:
@@ -86,7 +90,7 @@ Render the ride graph overlay:
 python3 -m the_dark_side.render_karura_overlay --mode ride
 ```
 
-Render the control overlay with all clipped ways:
+Render the control overlay with all ways clipped to the current baseline boundary union:
 
 ```bash
 python3 -m the_dark_side.render_karura_overlay --mode all
@@ -110,7 +114,7 @@ Render the curated junction figure:
 python3 -m the_dark_side.render_karura_figures --figure-id junctions_primary
 ```
 
-Generate route candidates:
+Generate route candidates for debugging:
 
 ```bash
 python3 -m the_dark_side.plan_karura_route --algorithm naive
@@ -128,9 +132,9 @@ The current MCTS defaults are tuned toward longer coverage-heavy routes:
 - `--mcts-loop-late-return-bonus 180`
 - `--mcts-loop-overlap-penalty-per-m 4`
 
-Generated route JSON assets go under `data/routes/`.
+These one-off route assets are debug output only. The canonical product output is `web/generated/catalog.json`.
 
-Render the top route from one of those assets:
+Render the top route from one of those debug assets:
 
 ```bash
 python3 -m the_dark_side.render_karura_route data/routes/karura-route-naive-family_trail_west-to-kiambu_side_exit-seed7.json
@@ -167,6 +171,8 @@ Export the route catalog. If `data/karura_elevation.json` exists, elevation gain
 ```bash
 python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
 ```
+
+By default the catalog exporter samples `mcts`, `beam`, and `naive` planners, then keeps a diverse subset per scenario.
 
 The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
 The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present in the catalog.
@@ -248,7 +254,7 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
   - `inside_length_m`
   - `bounds`
 
-`segment_pairs` are the clipped segments whose midpoints fall inside the Karura boundary.
+`segment_pairs` are the clipped segments whose midpoints fall inside the current baseline boundary union.
 
 `data/karura_contigs.json` contains the collapsed ride graph:
 
@@ -279,16 +285,6 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
 - `figures` contains stable figure ids
 - each figure has `asset_refs` pointing at the generated assets it depends on
 - figure items reference stable curated entities such as `junction_id`
-
-`data/routes/*.json` contains generated route candidates:
-
-- each route asset references the contig graph and junction catalog it was planned from
-- `start` and `end` preserve the curated junction ids alongside the graph node ids
-- `routes` contains ranked candidates with:
-  - `contig_id_sequence`
-  - `route_node_ids`
-  - per-step traversal info, including whether a short connector was reused
-  - `unique_length_m` and `overlap_length_m`
 
 `web/generated/catalog.json` contains the static frontend bundle:
 

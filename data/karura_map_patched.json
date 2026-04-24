@@ -1008,39 +1008,16 @@
     }
   },
   "meta": {
-    "asset_id": "karura-map-r13626194-r15417497-20260424T183329146066Z",
-    "asset_kind": "map",
-    "downloaded_at": "2026-04-24T18:33:29.146066Z",
-    "name": "Karura Forest + Karura Playground",
+    "applied_patch_ids": [],
+    "asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-516e53121c90",
+    "asset_kind": "patched_map",
     "node_count": 3067,
-    "overpass_url": "https://overpass-api.de/api/interpreter",
-    "query": "[out:json][timeout:180];\nrel(13626194)->.rel0;\n.rel0 map_to_area->.area0;\nrel(15417497)->.rel1;\n.rel1 map_to_area->.area1;\n(\n  .rel0;\n  way(r.rel0);\n  way(area.area0);\n  .rel1;\n  way(r.rel1);\n  way(area.area1);\n);\n(._;>;);\nout body;",
-    "raw_element_count": 3295,
-    "relation_ids": [
-      13626194,
-      15417497
-    ],
-    "relations": [
-      {
-        "relation_id": 13626194,
-        "relation_tags": {
-          "landuse": "forest",
-          "name": "Karura Forest",
-          "name:ko": "\uce74\ub8e8\ub77c \uc232",
-          "type": "multipolygon",
-          "wikidata": "Q6373728",
-          "wikipedia": "en:Karura Forest"
-        }
-      },
-      {
-        "relation_id": 15417497,
-        "relation_tags": {
-          "leisure": "park",
-          "name": "Karura Playground",
-          "type": "multipolygon"
-        }
-      }
-    ],
+    "patches_path": "/home/ra/repos/the-dark-side/curated/karura_map_patches.json",
+    "patchset_asset_kind": "map_patchset",
+    "patchset_digest": "516e53121c90",
+    "patchset_id": "karura-map-patches-v1",
+    "source_asset_id": "karura-map-r13626194-r15417497-20260424T183329146066Z",
+    "source_map": "/home/ra/repos/the-dark-side/data/karura_map.json",
     "way_count": 225
   },
   "nodes": {

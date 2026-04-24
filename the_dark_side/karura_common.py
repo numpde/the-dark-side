@@ -63,4 +63,6 @@ def mercator(lon: float, lat: float) -> tuple[float, float]:
 def include_ride_way(way_id: int, tags: dict[str, str]) -> bool:
     if way_id in EXCLUDED_WAY_IDS:
         return False
+    if tags.get("local:context_only") == "yes":
+        return False
     return tags.get("highway") in RIDEABLE and tags.get("service") not in SKIP_SERVICE_TYPES

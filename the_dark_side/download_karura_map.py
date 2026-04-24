@@ -10,14 +10,14 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from .karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON
 
-DEFAULT_RELATION_ID = 13626194
+DEFAULT_RELATION_IDS = [13626194, 15417497]
 DEFAULT_OVERPASS_URL = "https://overpass-api.de/api/interpreter"
 USER_AGENT = "karura-map-downloader/1.0"
 
@@ -64,7 +64,7 @@ class WayRecord:
 
 
 @dataclass(frozen=True)
-class BoundaryRecord:
+class BoundaryComponent:
     relation_id: int
     relation_tags: dict[str, str]
     outer_rings: list[list[int]]
@@ -77,6 +77,39 @@ class BoundaryRecord:
             "outer_rings": self.outer_rings,
             "inner_rings": self.inner_rings,
         }
+
+
+@dataclass(frozen=True)
+class BoundaryRecord:
+    relation_id: int
+    relation_tags: dict[str, str]
+    outer_rings: list[list[int]]
+    inner_rings: list[list[int]]
+    components: list[BoundaryComponent] = field(default_factory=list)
+
+    def iter_components(self) -> list[BoundaryComponent]:
+        if self.components:
+            return self.components
+        return [
+            BoundaryComponent(
+                relation_id=self.relation_id,
+                relation_tags=self.relation_tags,
+                outer_rings=self.outer_rings,
+                inner_rings=self.inner_rings,
+            )
+        ]
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = {
+            "relation_id": self.relation_id,
+            "relation_tags": self.relation_tags,
+            "outer_rings": self.outer_rings,
+            "inner_rings": self.inner_rings,
+        }
+        if self.components:
+            payload["components"] = [component.to_dict() for component in self.components]
+            payload["relation_ids"] = [component.relation_id for component in self.components]
+        return payload
 
 
 @dataclass(frozen=True)
@@ -97,25 +130,53 @@ class KaruraMap:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--relation-id", type=int, default=DEFAULT_RELATION_ID)
+    parser.add_argument(
+        "--relation-id",
+        dest="relation_ids",
+        type=int,
+        action="append",
+        help="OSM relation id to include; repeat to union multiple relations",
+    )
     parser.add_argument("--overpass-url", default=DEFAULT_OVERPASS_URL)
     parser.add_argument("--raw-json", type=Path, default=DEFAULT_RAW_JSON)
     parser.add_argument("--map-json", type=Path, default=DEFAULT_MAP_JSON)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--pause-seconds", type=float, default=2.0)
-    return parser.parse_args()
+    parser.add_argument(
+        "--fill-segment-gaps",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Fill clipped gaps between kept segments on the same way",
+    )
+    args = parser.parse_args()
+    if not args.relation_ids:
+        args.relation_ids = list(DEFAULT_RELATION_IDS)
+    return args
 
 
-def build_query(relation_id: int, timeout: int) -> str:
+def build_query(relation_ids: list[int], timeout: int) -> str:
+    relation_lines: list[str] = []
+    collect_lines: list[str] = []
+    for index, relation_id in enumerate(relation_ids):
+        relation_lines.extend(
+            [
+                f"rel({relation_id})->.rel{index};",
+                f".rel{index} map_to_area->.area{index};",
+            ]
+        )
+        collect_lines.extend(
+            [
+                f"  .rel{index};",
+                f"  way(r.rel{index});",
+                f"  way(area.area{index});",
+            ]
+        )
     return f"""
 [out:json][timeout:{timeout}];
-rel({relation_id})->.karura;
-.karura map_to_area->.karura_area;
+{chr(10).join(relation_lines)}
 (
-  .karura;
-  way(r.karura);
-  way(area.karura_area);
+{chr(10).join(collect_lines)}
 );
 (._;>;);
 out body;
@@ -201,10 +262,33 @@ def haversine_meters(a: NodeRecord, b: NodeRecord) -> float:
     return 2 * 6371000.0 * asin(sqrt(value))
 
 
-def build_map(payload: dict[str, Any], relation_id: int, overpass_url: str, query: str) -> KaruraMap:
+def keep_segment_by_endpoint(first: NodeRecord, second: NodeRecord, inside_karura) -> bool:
+    return inside_karura((first.lon, first.lat)) or inside_karura((second.lon, second.lat))
+
+
+def fill_kept_segment_gaps(keep_flags: list[bool]) -> list[bool]:
+    kept_indices = [index for index, keep in enumerate(keep_flags) if keep]
+    if len(kept_indices) < 2:
+        return keep_flags
+    filled = list(keep_flags)
+    for start_index, end_index in zip(kept_indices, kept_indices[1:]):
+        if end_index - start_index > 1:
+            for index in range(start_index + 1, end_index):
+                filled[index] = True
+    return filled
+
+
+def build_map(
+    payload: dict[str, Any],
+    relation_ids: list[int],
+    overpass_url: str,
+    query: str,
+    *,
+    fill_segment_gaps: bool = True,
+) -> KaruraMap:
     nodes: dict[int, NodeRecord] = {}
     way_rows: dict[int, dict[str, Any]] = {}
-    relation: dict[str, Any] | None = None
+    relations: dict[int, dict[str, Any]] = {}
 
     for element in payload.get("elements", []):
         element_type = element.get("type")
@@ -217,35 +301,54 @@ def build_map(payload: dict[str, Any], relation_id: int, overpass_url: str, quer
                 "node_ids": [int(node_id) for node_id in element.get("nodes", [])],
                 "tags": dict(element.get("tags", {})),
             }
-        elif element_type == "relation" and element_id == relation_id:
-            relation = element
+        elif element_type == "relation" and element_id in relation_ids:
+            relations[element_id] = element
 
-    if relation is None:
-        raise RuntimeError(f"Relation {relation_id} was not returned by Overpass")
+    missing_relations = [relation_id for relation_id in relation_ids if relation_id not in relations]
+    if missing_relations:
+        raise RuntimeError(f"Relations were not returned by Overpass: {missing_relations}")
 
-    outer_way_refs = [
-        int(member["ref"])
-        for member in relation.get("members", [])
-        if member.get("type") == "way" and member.get("role") == "outer"
+    boundary_components: list[BoundaryComponent] = []
+    boundary_way_refs: set[int] = set()
+    for relation_id in relation_ids:
+        relation = relations[relation_id]
+        outer_way_refs = [
+            int(member["ref"])
+            for member in relation.get("members", [])
+            if member.get("type") == "way" and member.get("role") == "outer"
+        ]
+        inner_way_refs = [
+            int(member["ref"])
+            for member in relation.get("members", [])
+            if member.get("type") == "way" and member.get("role") == "inner"
+        ]
+        boundary_way_refs.update(outer_way_refs)
+        boundary_way_refs.update(inner_way_refs)
+        boundary_components.append(
+            BoundaryComponent(
+                relation_id=relation_id,
+                relation_tags=dict(relation.get("tags", {})),
+                outer_rings=join_rings([way_rows[way_id]["node_ids"] for way_id in outer_way_refs if way_id in way_rows]),
+                inner_rings=join_rings([way_rows[way_id]["node_ids"] for way_id in inner_way_refs if way_id in way_rows]),
+            )
+        )
+
+    component_coords = [
+        (
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.inner_rings],
+        )
+        for component in boundary_components
     ]
-    inner_way_refs = [
-        int(member["ref"])
-        for member in relation.get("members", [])
-        if member.get("type") == "way" and member.get("role") == "inner"
-    ]
-
-    outer_rings = join_rings([way_rows[way_id]["node_ids"] for way_id in outer_way_refs if way_id in way_rows])
-    inner_rings = join_rings([way_rows[way_id]["node_ids"] for way_id in inner_way_refs if way_id in way_rows])
-
-    outer_ring_coords = [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in outer_rings]
-    inner_ring_coords = [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in inner_rings]
 
     def inside_karura(point: tuple[float, float]) -> bool:
-        if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
-            return False
-        if any(point_in_ring(point, ring) for ring in inner_ring_coords):
-            return False
-        return True
+        for outer_ring_coords, inner_ring_coords in component_coords:
+            if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
+                continue
+            if any(point_in_ring(point, ring) for ring in inner_ring_coords):
+                continue
+            return True
+        return False
 
     ways: dict[int, WayRecord] = {}
     for way_id, row in way_rows.items():
@@ -261,17 +364,25 @@ def build_map(payload: dict[str, Any], relation_id: int, overpass_url: str, quer
         lons = [nodes[node_id].lon for node_id in node_ids]
         bounds = [min(lons), min(lats), max(lons), max(lats)]
 
-        for first_id, second_id in zip(node_ids, node_ids[1:]):
+        segments = list(zip(node_ids, node_ids[1:]))
+        keep_flags = []
+        segment_lengths = []
+        for first_id, second_id in segments:
             first = nodes[first_id]
             second = nodes[second_id]
             segment_length = haversine_meters(first, second)
             total_length_m += segment_length
-            midpoint = ((first.lon + second.lon) / 2, (first.lat + second.lat) / 2)
-            if inside_karura(midpoint):
+            segment_lengths.append(segment_length)
+            keep_flags.append(keep_segment_by_endpoint(first, second, inside_karura))
+
+        if fill_segment_gaps:
+            keep_flags = fill_kept_segment_gaps(keep_flags)
+        for (first_id, second_id), segment_length, keep in zip(segments, segment_lengths, keep_flags):
+            if keep:
                 segment_pairs.append([first_id, second_id])
                 inside_length_m += segment_length
 
-        if not segment_pairs and way_id not in outer_way_refs and way_id not in inner_way_refs:
+        if not segment_pairs and way_id not in boundary_way_refs:
             continue
 
         ways[way_id] = WayRecord(
@@ -284,22 +395,32 @@ def build_map(payload: dict[str, Any], relation_id: int, overpass_url: str, quer
             bounds=[round(value, 7) for value in bounds],
         )
 
+    relation_names = [relations[relation_id].get("tags", {}).get("name", str(relation_id)) for relation_id in relation_ids]
     boundary = BoundaryRecord(
-        relation_id=relation_id,
-        relation_tags=dict(relation.get("tags", {})),
-        outer_rings=outer_rings,
-        inner_rings=inner_rings,
+        relation_id=relation_ids[0],
+        relation_tags={"name": "Karura union boundary", "type": "derived_union"},
+        outer_rings=[ring for component in boundary_components for ring in component.outer_rings],
+        inner_rings=[ring for component in boundary_components for ring in component.inner_rings],
+        components=boundary_components,
     )
 
     downloaded_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     meta = {
-        "name": relation.get("tags", {}).get("name", "Karura"),
-        "asset_id": f"karura-map-r{relation_id}-{timestamp_asset_suffix(downloaded_at)}",
+        "name": " + ".join(relation_names),
+        "asset_id": f"karura-map-r{'-r'.join(str(relation_id) for relation_id in relation_ids)}-{timestamp_asset_suffix(downloaded_at)}",
         "asset_kind": "map",
         "downloaded_at": downloaded_at,
         "overpass_url": overpass_url,
         "query": query,
-        "relation_id": relation_id,
+        "relation_ids": relation_ids,
+        "relations": [
+            {
+                "relation_id": relation_id,
+                "relation_tags": dict(relations[relation_id].get("tags", {})),
+            }
+            for relation_id in relation_ids
+        ],
+        "fill_segment_gaps": fill_segment_gaps,
         "node_count": len(nodes),
         "way_count": len(ways),
         "raw_element_count": len(payload.get("elements", [])),
@@ -321,6 +442,15 @@ def load_map(path: Path) -> KaruraMap:
         relation_tags=dict(boundary_payload["relation_tags"]),
         outer_rings=[[int(node_id) for node_id in ring] for ring in boundary_payload["outer_rings"]],
         inner_rings=[[int(node_id) for node_id in ring] for ring in boundary_payload["inner_rings"]],
+        components=[
+            BoundaryComponent(
+                relation_id=int(component_payload["relation_id"]),
+                relation_tags=dict(component_payload["relation_tags"]),
+                outer_rings=[[int(node_id) for node_id in ring] for ring in component_payload["outer_rings"]],
+                inner_rings=[[int(node_id) for node_id in ring] for ring in component_payload["inner_rings"]],
+            )
+            for component_payload in boundary_payload.get("components", [])
+        ],
     )
     nodes = {
         int(node_id): NodeRecord(
@@ -347,7 +477,7 @@ def load_map(path: Path) -> KaruraMap:
 
 def main() -> None:
     args = parse_args()
-    query = build_query(args.relation_id, args.timeout)
+    query = build_query(args.relation_ids, args.timeout)
     payload = download_overpass(
         query=query,
         url=args.overpass_url,
@@ -357,17 +487,24 @@ def main() -> None:
     )
     write_json(args.raw_json, payload)
 
-    karura_map = build_map(payload, relation_id=args.relation_id, overpass_url=args.overpass_url, query=query)
+    karura_map = build_map(
+        payload,
+        relation_ids=args.relation_ids,
+        overpass_url=args.overpass_url,
+        query=query,
+        fill_segment_gaps=args.fill_segment_gaps,
+    )
     write_json(args.map_json, karura_map.to_dict())
 
     summary = {
-        "relation_id": args.relation_id,
+        "relation_ids": args.relation_ids,
         "raw_json": str(args.raw_json),
         "map_json": str(args.map_json),
         "node_count": len(karura_map.nodes),
         "way_count": len(karura_map.ways),
         "outer_ring_count": len(karura_map.boundary.outer_rings),
         "inner_ring_count": len(karura_map.boundary.inner_rings),
+        "fill_segment_gaps": args.fill_segment_gaps,
     }
     print(json.dumps(summary, indent=2))
 

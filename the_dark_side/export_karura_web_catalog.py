@@ -36,7 +36,7 @@ from .karura_routing import (
 
 DEFAULT_CATALOG_JSON = WEB_GENERATED_DIR / "catalog.json"
 DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
-DEFAULT_ALGORITHMS = ("mcts", "beam")
+DEFAULT_ALGORITHMS = ("mcts", "beam", "naive")
 
 
 @dataclass(frozen=True)
