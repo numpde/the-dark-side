@@ -3,7 +3,6 @@ const networkUrls = {
   karura: new URL("./generated/karura-network.geojson", window.location.href),
 };
 
-const areaField = document.getElementById("area-field");
 const areaSelect = document.getElementById("area-select");
 const startSelect = document.getElementById("start-select");
 const endSelect = document.getElementById("end-select");
@@ -25,6 +24,34 @@ let appState = {
   gpxUrl: null,
   loopArrowPhase: 0,
 };
+
+
+function cloneProfile(profile) {
+  return Array.isArray(profile) ? profile.map(([distance, elevation]) => [distance, elevation]) : [];
+}
+
+
+function reverseProfile(profile) {
+  if (!Array.isArray(profile) || !profile.length) {
+    return [];
+  }
+  const totalDistance = profile[profile.length - 1][0];
+  return [...profile]
+    .reverse()
+    .map(([distance, elevation]) => [
+      Math.round((totalDistance - distance) * 1000) / 1000,
+      elevation,
+    ]);
+}
+
+
+function buildRouteFamilyIndex(area) {
+  const index = {};
+  for (const family of area.route_families || []) {
+    index[family.id] = family;
+  }
+  area.routeFamilyIndex = index;
+}
 
 
 function showError(message) {
@@ -133,6 +160,42 @@ function randomRoute(routes, previousRouteId) {
     next = routes[Math.floor(Math.random() * routes.length)];
   }
   return next;
+}
+
+
+function materializeRoute(routeRef, area) {
+  const family = area.routeFamilyIndex?.[routeRef.family_id];
+  if (!family) {
+    throw new Error(`Missing route family: ${routeRef.family_id}`);
+  }
+
+  const route = {
+    ...family,
+    id: routeRef.id,
+    family_id: routeRef.family_id,
+    direction: routeRef.direction,
+    algorithm: routeRef.algorithm,
+    seed: routeRef.seed,
+    candidate_rank: routeRef.candidate_rank,
+    quality_score: routeRef.quality_score,
+    coordinates: family.coordinates.map(([lon, lat]) => [lon, lat]),
+    elevations_m: Array.isArray(family.elevations_m) ? [...family.elevations_m] : undefined,
+    elevation_profile: cloneProfile(family.elevation_profile),
+    repeated_contig_ids: Array.isArray(family.repeated_contig_ids) ? [...family.repeated_contig_ids] : [],
+  };
+
+  if (routeRef.direction === "reverse") {
+    route.coordinates.reverse();
+    if (Array.isArray(route.elevations_m)) {
+      route.elevations_m.reverse();
+    }
+    route.elevation_profile = reverseProfile(family.elevation_profile);
+    const gain = route.elevation_gain_m;
+    route.elevation_gain_m = route.elevation_loss_m;
+    route.elevation_loss_m = gain;
+  }
+
+  return route;
 }
 
 
@@ -315,7 +378,8 @@ function chooseRoute() {
     appState.route = null;
     return;
   }
-  appState.route = randomRoute(scenario.routes, appState.route?.id);
+  const routeRef = randomRoute(scenario.routes, appState.route?.id);
+  appState.route = routeRef ? materializeRoute(routeRef, appState.area) : null;
   updateUrl();
   updateSummary();
   renderRoute();
@@ -394,6 +458,7 @@ async function boot() {
       throw new Error(`Failed to load route catalog: ${response.status}`);
     }
     appState.catalog = await response.json();
+    appState.catalog.areas.forEach(buildRouteFamilyIndex);
     syncSelectorsFromQuery();
     await loadAreaNetwork();
     chooseRoute();

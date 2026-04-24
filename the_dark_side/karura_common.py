@@ -11,6 +11,7 @@ BASE = REPO_ROOT
 DATA_DIR = REPO_ROOT / "data"
 RAW_JSON = DATA_DIR / "karura_overpass.json"
 MAP_JSON = DATA_DIR / "karura_map.json"
+PATCHED_MAP_JSON = DATA_DIR / "karura_map_patched.json"
 CONTIGS_JSON = DATA_DIR / "karura_contigs.json"
 ELEVATION_JSON = DATA_DIR / "karura_elevation.json"
 ROUTES_DIR = DATA_DIR / "routes"
@@ -18,6 +19,8 @@ BENCHMARKS_DIR = DATA_DIR / "benchmarks"
 ELEVATION_CACHE_DIR = DATA_DIR / "elevation_cache"
 CURATED_DIR = REPO_ROOT / "curated"
 JUNCTIONS_JSON = CURATED_DIR / "karura_junctions.json"
+MAP_PATCHES_JSON = CURATED_DIR / "karura_map_patches.json"
+ROUTING_OVERRIDES_JSON = CURATED_DIR / "karura_routing_overrides.json"
 ASSETS_DIR = REPO_ROOT / "assets"
 REFERENCE_DIR = ASSETS_DIR / "reference"
 DEBUG_DIR = ASSETS_DIR / "debug"
@@ -40,6 +43,12 @@ RIDEABLE = {
 }
 SKIP_SERVICE_TYPES = {"parking_aisle"}
 EXCLUDED_WAY_IDS = {643633767}
+
+
+def resolve_map_json(prefer_patched: bool = True) -> Path:
+    if prefer_patched and PATCHED_MAP_JSON.exists():
+        return PATCHED_MAP_JSON
+    return MAP_JSON
 
 
 def mercator(lon: float, lat: float) -> tuple[float, float]:

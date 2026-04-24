@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "asset_kind": "map_patchset",
+    "description": "Local structural fixes layered on top of the downloaded Karura OSM-derived map asset.",
+    "patchset_id": "karura-map-patches-v1"
+  },
+  "patches": []
+}

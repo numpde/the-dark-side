@@ -10,12 +10,12 @@ from collections import Counter, defaultdict
 from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 
-from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_JSON as DEFAULT_MAP_JSON, include_ride_way
+from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, include_ride_way, resolve_map_json
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--map-json", type=Path, default=DEFAULT_MAP_JSON)
+    parser.add_argument("--map-json", type=Path)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUT_JSON)
     return parser.parse_args()
 
@@ -264,8 +264,9 @@ def build_contigs(payload: dict, source_map: str) -> dict:
 
 def main() -> None:
     args = parse_args()
-    payload = json.loads(args.map_json.read_text())
-    contig_graph = build_contigs(payload, source_map=str(args.map_json))
+    map_json = args.map_json or resolve_map_json()
+    payload = json.loads(map_json.read_text())
+    contig_graph = build_contigs(payload, source_map=str(map_json))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(contig_graph, indent=2, sort_keys=True) + "\n")
     print(

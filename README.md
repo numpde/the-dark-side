@@ -27,6 +27,9 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.build_karura_contigs`
   Collapses the ride graph into maximal chains between crossings and writes:
   - `data/karura_contigs.json`
+- `the_dark_side.apply_karura_patches`
+  Applies local structural patches to the normalized map asset and writes:
+  - `data/karura_map_patched.json`
 - `the_dark_side.build_karura_elevation`
   Annotates the contig graph nodes with elevation values and writes:
   - `data/karura_elevation.json`
@@ -68,6 +71,14 @@ Build contigs from the ride graph:
 ```bash
 python3 -m the_dark_side.build_karura_contigs
 ```
+
+Apply local structural map patches:
+
+```bash
+python3 -m the_dark_side.apply_karura_patches
+```
+
+`build_karura_contigs` will prefer `data/karura_map_patched.json` when it exists, and fall back to `data/karura_map.json` otherwise.
 
 Render the ride graph overlay:
 
@@ -180,6 +191,48 @@ The page will:
 
 GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes `web/`.
 
+## Local patch strategy
+
+The repo treats OpenStreetMap as the upstream base layer, then applies a local override layer for product-specific corrections.
+
+Use `curated/karura_map_patches.json` for structural fixes that should affect the normalized map before graph building. The current patch language supports:
+
+- `add_way`
+- `remove_way`
+- `update_way_tags`
+- `replace_way_geometry`
+
+This is the right place for:
+
+- missing local paths
+- local-only geometry fixes
+- access or surface tag overrides
+- removing paths that should not exist in the local product graph
+
+Use `curated/karura_routing_overrides.json` for time-varying routing knowledge that should sit on top of the contig graph rather than alter the base map. This catalog is reserved for:
+
+- temporary closures
+- construction
+- bikeability penalties
+- connector eligibility
+
+The intended build order is:
+
+1. `download_karura_map`
+2. `apply_karura_patches`
+3. `build_karura_contigs`
+4. `build_karura_elevation`
+5. route planning / web export
+
+Important: `curated/karura_map_patches.json` is not consumed directly by the GitHub Pages workflow. After changing map patches, regenerate and commit the derived assets before pushing:
+
+```bash
+python3 -m the_dark_side.apply_karura_patches
+python3 -m the_dark_side.build_karura_contigs
+python3 -m the_dark_side.build_karura_elevation --provider open-topo-data
+python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+```
+
 ## Data shape
 
 `data/karura_map.json` contains:
@@ -201,6 +254,19 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
 
 - `crossings`: graph nodes with degree other than `2`
 - `contigs`: maximal chains of rideable segments between crossings or dead ends
+
+`curated/karura_map_patches.json` contains local structural edits layered on top of the downloaded map asset:
+
+- `meta`: patchset metadata
+- `patches`: ordered patch operations
+
+`data/karura_map_patched.json` contains the derived patched map asset:
+
+- `meta.source_asset_id`: the upstream normalized map asset
+- `meta.patchset_id`: the local patch catalog used to derive it
+- `meta.patchset_digest`: a content digest of the enabled applied patches
+- `meta.applied_patch_ids`: the patch operations that were enabled and applied
+- `nodes` / `ways`: the map payload after local structural edits
 
 `curated/karura_junctions.json` is the manual layer for named junctions:
 
@@ -229,10 +295,12 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
 - `areas` contains the currently supported areas, starting with `karura`
 - each area contains:
   - `junctions`
+  - `route_families`
   - `scenarios`
   - a `network_path` to the generated GeoJSON overlay
-- each scenario contains a prefiltered, diverse route pool with full route coordinates ready for map rendering or GPX export
-- route records may also contain:
+- each `route_family` stores one canonical route geometry normalized up to reversal
+- each scenario contains a prefiltered, diverse route pool as directional references into those shared route families
+- route family records may also contain:
   - `elevation_gain_m`
   - `elevation_loss_m`
   - `elevation_min_m`

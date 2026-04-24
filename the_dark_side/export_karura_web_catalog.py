@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 from collections import defaultdict
@@ -48,6 +49,9 @@ class RouteRecord:
     seed: int
     candidate_rank: int
     candidate: RouteCandidate
+    route_node_ids: tuple[int, ...]
+    family_signature: tuple[int, ...]
+    direction_from_family: str
     coordinates: list[list[float]]
     bounds: list[float]
     contig_set: tuple[int, ...]
@@ -150,6 +154,13 @@ def bounds_for_coordinates(coordinates: list[list[float]]) -> list[float]:
     ]
 
 
+def canonicalize_route_node_ids(node_ids: tuple[int, ...]) -> tuple[tuple[int, ...], str]:
+    reversed_node_ids = tuple(reversed(node_ids))
+    if reversed_node_ids < node_ids:
+        return reversed_node_ids, "reverse"
+    return node_ids, "forward"
+
+
 def route_quality_score(candidate: RouteCandidate) -> float:
     return candidate.unique_length_m - 8.0 * candidate.overlap_length_m
 
@@ -168,10 +179,15 @@ def route_id_for(
     return f"karura-{start_junction_id}-to-{end_junction_id}-{algorithm}-seed{seed}-r{candidate_rank + 1}"
 
 
+def family_id_for(signature: tuple[int, ...]) -> str:
+    digest = hashlib.sha1(",".join(str(node_id) for node_id in signature).encode("utf-8")).hexdigest()
+    return f"karura-route-family-{digest[:12]}"
+
+
 def dedupe_records(records: list[RouteRecord]) -> list[RouteRecord]:
     unique: dict[tuple[int, ...], RouteRecord] = {}
     for record in sorted(records, key=lambda item: item.quality_score, reverse=True):
-        signature = record.candidate.contig_id_sequence
+        signature = record.family_signature
         if signature not in unique:
             unique[signature] = record
     return list(unique.values())
@@ -224,6 +240,9 @@ def build_route_record(
     candidate_rank: int,
     candidate: RouteCandidate,
 ) -> RouteRecord:
+    route_node_ids_list = build_route_node_ids(graph, candidate.steps)
+    route_node_ids = tuple(route_node_ids_list)
+    family_signature, direction_from_family = canonicalize_route_node_ids(route_node_ids)
     coordinates = route_coordinates(graph, candidate)
     return RouteRecord(
         route_id=route_id_for(start_junction_id, end_junction_id, algorithm, seed, candidate_rank),
@@ -234,6 +253,9 @@ def build_route_record(
         seed=seed,
         candidate_rank=candidate_rank,
         candidate=candidate,
+        route_node_ids=route_node_ids,
+        family_signature=family_signature,
+        direction_from_family=direction_from_family,
         coordinates=coordinates,
         bounds=bounds_for_coordinates(coordinates),
         contig_set=tuple(sorted(set(candidate.contig_id_sequence))),
@@ -310,6 +332,42 @@ def area_bounds(graph) -> list[float]:
     ]
 
 
+def canonical_coordinates(record: RouteRecord) -> list[list[float]]:
+    if record.direction_from_family == "forward":
+        return record.coordinates
+    return list(reversed(record.coordinates))
+
+
+def build_route_family_payload(
+    *,
+    family_id: str,
+    record: RouteRecord,
+    args: argparse.Namespace,
+    node_elevations: dict[int, float],
+) -> dict:
+    coordinates = canonical_coordinates(record)
+    route_node_ids = list(record.family_signature)
+    return {
+        "id": family_id,
+        "quality_score": record.quality_score,
+        "complete": record.candidate.complete,
+        "score": round(record.candidate.score, 3),
+        "unique_length_m": round(record.candidate.unique_length_m, 3),
+        "overlap_length_m": round(record.candidate.overlap_length_m, 3),
+        "total_length_m": round(record.candidate.total_length_m, 3),
+        "step_count": len(record.candidate.steps),
+        "repeated_contig_ids": list(record.candidate.repeated_contig_ids),
+        "bounds": record.bounds,
+        "coordinates": coordinates,
+        **elevation_payload_for_route(
+            args,
+            node_elevations,
+            route_node_ids,
+            coordinates,
+        ),
+    }
+
+
 def write_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n")
@@ -361,7 +419,7 @@ def main() -> None:
                             )
                         )
 
-    catalog_scenarios = []
+    selected_records_by_scenario: dict[str, list[RouteRecord]] = {}
     for start_junction_id in junction_ids:
         for end_junction_id in junction_ids:
             scenario_id = scenario_id_for(start_junction_id, end_junction_id)
@@ -371,6 +429,35 @@ def main() -> None:
                 routes_per_scenario=args.routes_per_scenario,
                 selection_window=args.selection_window,
             )
+            selected_records_by_scenario[scenario_id] = selected
+
+    representative_by_family: dict[tuple[int, ...], RouteRecord] = {}
+    for records in selected_records_by_scenario.values():
+        for record in records:
+            existing = representative_by_family.get(record.family_signature)
+            if existing is None or record.quality_score > existing.quality_score:
+                representative_by_family[record.family_signature] = record
+
+    family_id_by_signature = {
+        signature: family_id_for(signature)
+        for signature in representative_by_family
+    }
+
+    route_families = [
+        build_route_family_payload(
+            family_id=family_id_by_signature[signature],
+            record=representative_by_family[signature],
+            args=args,
+            node_elevations=node_elevations,
+        )
+        for signature in sorted(representative_by_family)
+    ]
+
+    catalog_scenarios = []
+    for start_junction_id in junction_ids:
+        for end_junction_id in junction_ids:
+            scenario_id = scenario_id_for(start_junction_id, end_junction_id)
+            selected = selected_records_by_scenario[scenario_id]
             catalog_scenarios.append(
                 {
                     "id": scenario_id,
@@ -381,25 +468,12 @@ def main() -> None:
                     "routes": [
                         {
                             "id": record.route_id,
+                            "family_id": family_id_by_signature[record.family_signature],
+                            "direction": record.direction_from_family,
                             "algorithm": record.algorithm,
                             "seed": record.seed,
                             "candidate_rank": record.candidate_rank,
                             "quality_score": record.quality_score,
-                            "complete": record.candidate.complete,
-                            "score": round(record.candidate.score, 3),
-                            "unique_length_m": round(record.candidate.unique_length_m, 3),
-                            "overlap_length_m": round(record.candidate.overlap_length_m, 3),
-                            "total_length_m": round(record.candidate.total_length_m, 3),
-                            "step_count": len(record.candidate.steps),
-                            "repeated_contig_ids": list(record.candidate.repeated_contig_ids),
-                            "bounds": record.bounds,
-                            "coordinates": record.coordinates,
-                            **elevation_payload_for_route(
-                                args,
-                                node_elevations,
-                                build_route_node_ids(graph, record.candidate.steps),
-                                record.coordinates,
-                            ),
                         }
                         for record in selected
                     ],
@@ -416,6 +490,7 @@ def main() -> None:
             "seed_end": args.seed_end,
             "candidate_limit_per_run": args.candidate_limit_per_run,
             "routes_per_scenario": args.routes_per_scenario,
+            "route_family_count": len(route_families),
             "elevation_asset_path": str(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
         },
         "areas": [
@@ -434,6 +509,7 @@ def main() -> None:
                     }
                     for junction in junction_defs
                 ],
+                "route_families": route_families,
                 "scenarios": catalog_scenarios,
             }
         ],
@@ -449,6 +525,7 @@ def main() -> None:
                 "area_count": len(catalog_payload["areas"]),
                 "scenario_count": len(catalog_scenarios),
                 "route_count": sum(scenario["route_count"] for scenario in catalog_scenarios),
+                "route_family_count": len(route_families),
             },
             indent=2,
         )

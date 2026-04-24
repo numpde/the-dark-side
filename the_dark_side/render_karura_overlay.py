@@ -13,11 +13,11 @@ from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
     EXCLUDED_WAY_IDS,
-    MAP_JSON,
     SCREENSHOT,
     VIEWPORT,
     include_ride_way,
     mercator,
+    resolve_map_json,
 )
 
 
@@ -32,7 +32,7 @@ BASE_IMAGE_ALPHA = 0.7
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=("ride", "all", "contigs"), default="ride")
-    parser.add_argument("--map-json", type=Path, default=MAP_JSON)
+    parser.add_argument("--map-json", type=Path)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--screenshot", type=Path, default=SCREENSHOT)
     parser.add_argument("--viewport", type=Path, default=VIEWPORT)
@@ -115,7 +115,8 @@ def main():
     img = prepare_base_image(args.screenshot)
     draw = ImageDraw.Draw(img, "RGBA")
 
-    ways = parse_contigs(args.contigs_json) if args.mode == "contigs" else parse_map(args.map_json, args.mode)
+    map_json = args.map_json or resolve_map_json()
+    ways = parse_contigs(args.contigs_json) if args.mode == "contigs" else parse_map(map_json, args.mode)
     rng = random.Random(7)
     segment_count = 0
 

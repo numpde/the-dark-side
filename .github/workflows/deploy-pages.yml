@@ -6,7 +6,7 @@ on:
     branches: ["main"]
     paths:
       - "web/**"
-      - "curated/**"
+      - "curated/karura_junctions.json"
       - "data/karura_contigs.json"
       - "data/karura_elevation.json"
       - "the_dark_side/**"

@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "asset_kind": "routing_override_catalog",
+    "description": "Time-varying local routing knowledge layered on top of the contig graph.",
+    "catalog_id": "karura-routing-overrides-v1"
+  },
+  "overrides": []
+}
