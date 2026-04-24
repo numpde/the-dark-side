@@ -95,23 +95,6 @@ select {
   font-weight: 700;
 }
 
-.route-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 14px;
-}
-
-.route-stats p {
-  margin: 0;
-  font-size: 0.92rem;
-  color: rgba(22, 33, 30, 0.78);
-}
-
-.route-stats span {
-  color: rgba(22, 33, 30, 0.52);
-  margin-right: 6px;
-}
-
 .note {
   margin: -6px 0 -2px;
   font-size: 0.78rem;
@@ -203,15 +186,6 @@ button:hover,
 
   .scenario-title {
     font-size: 1rem;
-  }
-
-  .route-stats {
-    display: grid;
-    gap: 4px;
-  }
-
-  .route-stats p {
-    font-size: 0.9rem;
   }
 
   .note {

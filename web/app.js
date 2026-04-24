@@ -8,8 +8,6 @@ const areaSelect = document.getElementById("area-select");
 const startSelect = document.getElementById("start-select");
 const endSelect = document.getElementById("end-select");
 const scenarioLabel = document.getElementById("scenario-label");
-const coverageValue = document.getElementById("coverage-value");
-const overlapValue = document.getElementById("overlap-value");
 const errorCard = document.getElementById("error-card");
 const newRouteButton = document.getElementById("new-route-button");
 const downloadLink = document.getElementById("download-link");
@@ -43,12 +41,6 @@ function clearError() {
 
 function formatDistance(lengthM) {
   return `${(lengthM / 1000).toFixed(2)} km`;
-}
-
-
-function formatOverlap(lengthM, totalM) {
-  const ratio = totalM > 0 ? (100 * lengthM) / totalM : 0;
-  return `${lengthM.toFixed(1)} m (${ratio.toFixed(1)}%)`;
 }
 
 
@@ -268,20 +260,18 @@ function updateRouteStats() {
   if (!route || !scenario) {
     return;
   }
-  scenarioLabel.textContent = scenarioLabelText(scenario, appState.area);
   const hasGain = typeof route.elevation_gain_m === "number";
   const hasLoss = typeof route.elevation_loss_m === "number";
-  let coverageText = formatDistance(route.unique_length_m);
+  let summaryText = `${scenarioLabelText(scenario, appState.area)}, ${formatDistance(route.unique_length_m)}`;
   if (scenario.is_loop && hasGain && hasLoss) {
     const averageChange = (route.elevation_gain_m + route.elevation_loss_m) / 2;
-    coverageText += ` (${animatedLoopArrow()} ${formatElevationChange(averageChange)})`;
+    summaryText += ` (${animatedLoopArrow()} ${formatElevationChange(averageChange)})`;
   } else if (hasGain || hasLoss) {
     const upText = hasGain ? formatElevationChange(route.elevation_gain_m) : "—";
     const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
-    coverageText += ` (↗ ${upText}, ↘ ${downText})`;
+    summaryText += ` (↗ ${upText}, ↘ ${downText})`;
   }
-  coverageValue.textContent = coverageText;
-  overlapValue.textContent = formatOverlap(route.overlap_length_m, route.total_length_m);
+  scenarioLabel.textContent = summaryText;
 }
 
 
