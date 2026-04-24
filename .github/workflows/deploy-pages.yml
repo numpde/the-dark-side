@@ -35,6 +35,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Run frontend GPX tests
+        run: |
+          node --test tests/test_gpx.mjs
+          node --check web/app.js
+
       - name: Export static route catalog
         run: |
           python3 -m the_dark_side.export_karura_web_catalog \

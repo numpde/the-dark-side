@@ -1,3 +1,5 @@
+import { wireGpxDownload } from "./gpx.mjs";
+
 const catalogUrl = new URL("./generated/catalog.json", window.location.href);
 const networkUrls = {
   karura: new URL("./generated/karura-network.geojson", window.location.href),
@@ -95,38 +97,6 @@ function boundsToLeaflet(bounds) {
     [bounds[1], bounds[0]],
     [bounds[3], bounds[2]],
   ];
-}
-
-
-function buildGpx(route, startJunction, endJunction) {
-  const hasElevations =
-    Array.isArray(route.elevations_m) &&
-    route.elevations_m.length === route.coordinates.length;
-  const trackPoints = route.coordinates
-    .map(([lon, lat], index) => {
-      if (!hasElevations) {
-        return `      <trkpt lat="${lat}" lon="${lon}"></trkpt>`;
-      }
-      return [
-        `      <trkpt lat="${lat}" lon="${lon}">`,
-        `        <ele>${route.elevations_m[index].toFixed(1)}</ele>`,
-        "      </trkpt>",
-      ].join("\n");
-    })
-    .join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="karura-route-drop" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata>
-    <name>${route.id}</name>
-  </metadata>
-  <trk>
-    <name>${startJunction.name} to ${endJunction.name}</name>
-    <trkseg>
-${trackPoints}
-    </trkseg>
-  </trk>
-</gpx>
-`;
 }
 
 
@@ -347,13 +317,13 @@ function updateDownloadLink() {
 
   const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
   const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
-  const gpx = buildGpx(route, startJunction, endJunction);
-  if (appState.gpxUrl) {
-    URL.revokeObjectURL(appState.gpxUrl);
-  }
-  appState.gpxUrl = URL.createObjectURL(new Blob([gpx], { type: "application/gpx+xml" }));
-  downloadLink.href = appState.gpxUrl;
-  downloadLink.download = `${route.id}.gpx`;
+  const download = wireGpxDownload(downloadLink, {
+    route,
+    startJunction,
+    endJunction,
+    previousUrl: appState.gpxUrl,
+  });
+  appState.gpxUrl = download.url;
 }
 
 

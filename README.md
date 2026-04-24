@@ -146,6 +146,12 @@ Run the route diversity audit:
 python3 -m unittest -v tests.test_route_diversity
 ```
 
+Run the GPX export and download-link tests:
+
+```bash
+node --test tests/test_gpx.mjs
+```
+
 Run the route benchmark summary:
 
 ```bash
