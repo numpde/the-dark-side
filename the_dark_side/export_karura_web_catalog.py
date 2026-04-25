@@ -13,17 +13,26 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .build_config import (
+    catalog_build_config_digest,
+    load_catalog_build_config,
+    normalize_catalog_build_config,
+)
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .elevation import summarize_elevation_series
 from .karura_common import (
+    CATALOG_BUILD_JSON,
     CONTIGS_JSON,
     ELEVATION_JSON,
     MAP_JSON,
     JUNCTIONS_JSON,
     MAP_PATCHES_JSON,
+    repo_rel,
+    WEB_SOURCE_DIR,
     WEB_GENERATED_DIR,
     include_editor_way,
+    sync_web_source_assets,
 )
 from .karura_routing import (
     PlannerConfig,
@@ -42,7 +51,6 @@ from .karura_routing import (
 DEFAULT_CATALOG_JSON = WEB_GENERATED_DIR / "catalog.json"
 DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
 DEFAULT_EDITOR_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-editor-network.geojson"
-DEFAULT_ALGORITHMS = ("mcts", "beam", "naive")
 
 
 @dataclass(frozen=True)
@@ -64,47 +72,84 @@ class RouteRecord:
     quality_score: float
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
+    pre_args, remaining = pre_parser.parse_known_args(argv)
+    build_defaults = load_catalog_build_config(pre_args.build_config_json)
+
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--build-config-json", type=Path, default=pre_args.build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), action="append")
-    parser.add_argument("--seed-start", type=int, default=1)
-    parser.add_argument("--seed-end", type=int, default=12)
-    parser.add_argument("--candidate-limit-per-run", type=int, default=2)
-    parser.add_argument("--routes-per-scenario", type=int, default=18)
-    parser.add_argument("--selection-window", type=int, default=72)
-    parser.add_argument("--short-connector-max-length-m", type=float, default=35.0)
-    parser.add_argument("--max-overlap-m", type=float, default=70.0)
-    parser.add_argument("--max-steps", type=int, default=256)
-    parser.add_argument("--random-top-k", type=int, default=4)
-    parser.add_argument("--end-stop-probability", type=float, default=0.7)
-    parser.add_argument("--end-stop-unused-slack-m", type=float, default=400.0)
-    parser.add_argument("--rollout-trials", type=int, default=250)
-    parser.add_argument("--beam-width", type=int, default=80)
-    parser.add_argument("--beam-branch-factor", type=int, default=5)
-    parser.add_argument("--beam-rounds", type=int, default=200)
-    parser.add_argument("--beam-selection-pool", type=int, default=5)
-    parser.add_argument("--beam-selection-window", type=int, default=12)
-    parser.add_argument("--mcts-iterations", type=int, default=640)
-    parser.add_argument("--mcts-exploration-weight", type=float, default=1.0)
-    parser.add_argument("--mcts-rollout-top-k", type=int, default=3)
-    parser.add_argument("--mcts-rollout-samples", type=int, default=3)
-    parser.add_argument("--mcts-prior-weight", type=float, default=0.5)
-    parser.add_argument("--mcts-loop-completion-bonus", type=float, default=220.0)
-    parser.add_argument("--mcts-loop-unused-penalty-per-m", type=float, default=0.045)
-    parser.add_argument("--mcts-loop-late-return-bonus", type=float, default=180.0)
-    parser.add_argument("--mcts-loop-overlap-penalty-per-m", type=float, default=4.0)
+    parser.add_argument("--seed-start", type=int, default=build_defaults["seed_start"])
+    parser.add_argument("--seed-end", type=int, default=build_defaults["seed_end"])
+    parser.add_argument("--candidate-limit-per-run", type=int, default=build_defaults["candidate_limit_per_run"])
+    parser.add_argument("--routes-per-scenario", type=int, default=build_defaults["routes_per_scenario"])
+    parser.add_argument("--selection-window", type=int, default=build_defaults["selection_window"])
+    parser.add_argument("--short-connector-max-length-m", type=float, default=build_defaults["short_connector_max_length_m"])
+    parser.add_argument("--max-overlap-m", type=float, default=build_defaults["max_overlap_m"])
+    parser.add_argument("--max-steps", type=int, default=build_defaults["max_steps"])
+    parser.add_argument("--random-top-k", type=int, default=build_defaults["random_top_k"])
+    parser.add_argument("--end-stop-probability", type=float, default=build_defaults["end_stop_probability"])
+    parser.add_argument("--end-stop-unused-slack-m", type=float, default=build_defaults["end_stop_unused_slack_m"])
+    parser.add_argument("--end-finish-unused-slack-m", type=float, default=build_defaults["end_finish_unused_slack_m"])
+    parser.add_argument("--future-length-weight", type=float, default=build_defaults["future_length_weight"])
+    parser.add_argument("--connector-length-weight", type=float, default=build_defaults["connector_length_weight"])
+    parser.add_argument("--overlap-penalty-per-m", type=float, default=build_defaults["overlap_penalty_per_m"])
+    parser.add_argument("--articulation-penalty", type=float, default=build_defaults["articulation_penalty"])
+    parser.add_argument(
+        "--articulation-future-threshold-m",
+        type=float,
+        default=build_defaults["articulation_future_threshold_m"],
+    )
+    parser.add_argument("--dead-end-penalty", type=float, default=build_defaults["dead_end_penalty"])
+    parser.add_argument("--early-finish-penalty", type=float, default=build_defaults["early_finish_penalty"])
+    parser.add_argument("--rollout-trials", type=int, default=build_defaults["rollout_trials"])
+    parser.add_argument("--keep-best", type=int, default=build_defaults["keep_best"])
+    parser.add_argument("--beam-width", type=int, default=build_defaults["beam_width"])
+    parser.add_argument("--beam-branch-factor", type=int, default=build_defaults["beam_branch_factor"])
+    parser.add_argument("--beam-rounds", type=int, default=build_defaults["beam_rounds"])
+    parser.add_argument("--beam-selection-pool", type=int, default=build_defaults["beam_selection_pool"])
+    parser.add_argument("--beam-selection-window", type=int, default=build_defaults["beam_selection_window"])
+    parser.add_argument("--mcts-iterations", type=int, default=build_defaults["mcts_iterations"])
+    parser.add_argument("--mcts-exploration-weight", type=float, default=build_defaults["mcts_exploration_weight"])
+    parser.add_argument("--mcts-rollout-top-k", type=int, default=build_defaults["mcts_rollout_top_k"])
+    parser.add_argument("--mcts-rollout-samples", type=int, default=build_defaults["mcts_rollout_samples"])
+    parser.add_argument("--mcts-prior-weight", type=float, default=build_defaults["mcts_prior_weight"])
+    parser.add_argument("--mcts-loop-completion-bonus", type=float, default=build_defaults["mcts_loop_completion_bonus"])
+    parser.add_argument(
+        "--mcts-loop-unused-penalty-per-m",
+        type=float,
+        default=build_defaults["mcts_loop_unused_penalty_per_m"],
+    )
+    parser.add_argument("--mcts-loop-late-return-bonus", type=float, default=build_defaults["mcts_loop_late_return_bonus"])
+    parser.add_argument(
+        "--mcts-loop-overlap-penalty-per-m",
+        type=float,
+        default=build_defaults["mcts_loop_overlap_penalty_per_m"],
+    )
     parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument("--elevation-profile-spacing-m", type=float, default=60.0)
-    parser.add_argument("--elevation-smoothing-window", type=int, default=3)
-    parser.add_argument("--elevation-min-step-m", type=float, default=0.5)
+    parser.add_argument(
+        "--elevation-profile-spacing-m",
+        type=float,
+        default=build_defaults["elevation_profile_spacing_m"],
+    )
+    parser.add_argument(
+        "--elevation-smoothing-window",
+        type=int,
+        default=build_defaults["elevation_smoothing_window"],
+    )
+    parser.add_argument("--elevation-min-step-m", type=float, default=build_defaults["elevation_min_step_m"])
     parser.add_argument("--editor-map-json", type=Path, default=MAP_JSON)
     parser.add_argument("--editor-patches-json", type=Path, default=MAP_PATCHES_JSON)
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
     parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
     parser.add_argument("--output-editor-network", type=Path, default=DEFAULT_EDITOR_NETWORK_GEOJSON)
-    return parser.parse_args()
+    args = parser.parse_args(remaining)
+    args.algorithm = args.algorithm or list(build_defaults["algorithms"])
+    return args
 
 
 def build_config(args: argparse.Namespace) -> PlannerConfig:
@@ -115,7 +160,16 @@ def build_config(args: argparse.Namespace) -> PlannerConfig:
         random_top_k=args.random_top_k,
         end_stop_probability=args.end_stop_probability,
         end_stop_unused_slack_m=args.end_stop_unused_slack_m,
+        end_finish_unused_slack_m=args.end_finish_unused_slack_m,
+        future_length_weight=args.future_length_weight,
+        connector_length_weight=args.connector_length_weight,
+        overlap_penalty_per_m=args.overlap_penalty_per_m,
+        articulation_penalty=args.articulation_penalty,
+        articulation_future_threshold_m=args.articulation_future_threshold_m,
+        dead_end_penalty=args.dead_end_penalty,
+        early_finish_penalty=args.early_finish_penalty,
         rollout_trials=args.rollout_trials,
+        keep_best=args.keep_best,
         beam_width=args.beam_width,
         beam_branch_factor=args.beam_branch_factor,
         beam_rounds=args.beam_rounds,
@@ -130,6 +184,52 @@ def build_config(args: argparse.Namespace) -> PlannerConfig:
         mcts_loop_unused_penalty_per_m=args.mcts_loop_unused_penalty_per_m,
         mcts_loop_late_return_bonus=args.mcts_loop_late_return_bonus,
         mcts_loop_overlap_penalty_per_m=args.mcts_loop_overlap_penalty_per_m,
+    )
+
+
+def effective_build_config(args: argparse.Namespace) -> dict:
+    return normalize_catalog_build_config(
+        {
+            "algorithms": list(args.algorithm),
+            "seed_start": args.seed_start,
+            "seed_end": args.seed_end,
+            "candidate_limit_per_run": args.candidate_limit_per_run,
+            "routes_per_scenario": args.routes_per_scenario,
+            "selection_window": args.selection_window,
+            "short_connector_max_length_m": args.short_connector_max_length_m,
+            "max_overlap_m": args.max_overlap_m,
+            "max_steps": args.max_steps,
+            "random_top_k": args.random_top_k,
+            "end_stop_probability": args.end_stop_probability,
+            "end_stop_unused_slack_m": args.end_stop_unused_slack_m,
+            "end_finish_unused_slack_m": args.end_finish_unused_slack_m,
+            "future_length_weight": args.future_length_weight,
+            "connector_length_weight": args.connector_length_weight,
+            "overlap_penalty_per_m": args.overlap_penalty_per_m,
+            "articulation_penalty": args.articulation_penalty,
+            "articulation_future_threshold_m": args.articulation_future_threshold_m,
+            "dead_end_penalty": args.dead_end_penalty,
+            "early_finish_penalty": args.early_finish_penalty,
+            "rollout_trials": args.rollout_trials,
+            "keep_best": args.keep_best,
+            "beam_width": args.beam_width,
+            "beam_branch_factor": args.beam_branch_factor,
+            "beam_rounds": args.beam_rounds,
+            "beam_selection_pool": args.beam_selection_pool,
+            "beam_selection_window": args.beam_selection_window,
+            "mcts_iterations": args.mcts_iterations,
+            "mcts_exploration_weight": args.mcts_exploration_weight,
+            "mcts_rollout_top_k": args.mcts_rollout_top_k,
+            "mcts_rollout_samples": args.mcts_rollout_samples,
+            "mcts_prior_weight": args.mcts_prior_weight,
+            "mcts_loop_completion_bonus": args.mcts_loop_completion_bonus,
+            "mcts_loop_unused_penalty_per_m": args.mcts_loop_unused_penalty_per_m,
+            "mcts_loop_late_return_bonus": args.mcts_loop_late_return_bonus,
+            "mcts_loop_overlap_penalty_per_m": args.mcts_loop_overlap_penalty_per_m,
+            "elevation_profile_spacing_m": args.elevation_profile_spacing_m,
+            "elevation_smoothing_window": args.elevation_smoothing_window,
+            "elevation_min_step_m": args.elevation_min_step_m,
+        }
     )
 
 
@@ -272,7 +372,7 @@ def build_route_record(
     )
 
 
-def network_geojson(graph) -> dict:
+def network_geojson(graph, *, meta: dict | None = None) -> dict:
     features = []
     if isinstance(graph, dict):
         nodes = {
@@ -307,7 +407,7 @@ def network_geojson(graph) -> dict:
                     },
                 }
             )
-        return {"type": "FeatureCollection", "features": features}
+        return {"type": "FeatureCollection", "meta": meta or {}, "features": features}
 
     for contig in graph.contigs.values():
         coordinates = [
@@ -333,7 +433,7 @@ def network_geojson(graph) -> dict:
                 },
             }
         )
-    return {"type": "FeatureCollection", "features": features}
+    return {"type": "FeatureCollection", "meta": meta or {}, "features": features}
 
 
 def load_patch_snapshot(path: Path) -> dict:
@@ -348,17 +448,20 @@ def load_patch_snapshot(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
-def load_elevation_asset(path: Path | None) -> dict[int, float]:
+def load_elevation_asset(path: Path | None, *, expected_graph_asset_id: str | None = None) -> tuple[dict[int, float], bool]:
     if path is None or not path.exists():
-        return {}
+        return {}, False
     payload = json.loads(path.read_text())
+    payload_graph_asset_id = payload.get("meta", {}).get("graph_asset_id")
+    if expected_graph_asset_id is not None and payload_graph_asset_id != expected_graph_asset_id:
+        return {}, False
     node_elevations: dict[int, float] = {}
     for node_id, node_payload in payload.get("nodes", {}).items():
         elevation = node_payload.get("elevation_m")
         if elevation is None:
             continue
         node_elevations[int(node_id)] = float(elevation)
-    return node_elevations
+    return node_elevations, True
 
 
 def elevation_payload_for_route(
@@ -433,19 +536,23 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def main() -> None:
-    args = parse_args()
-    algorithms = args.algorithm or list(DEFAULT_ALGORITHMS)
+def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
+    algorithms = list(args.algorithm)
+    build_config_payload = effective_build_config(args)
+    build_config_digest = catalog_build_config_digest(build_config_payload)
     config = build_config(args)
-    node_elevations = load_elevation_asset(args.elevation_json)
     graph = load_route_graph(args.contigs_json)
+    node_elevations, elevation_matches_graph = load_elevation_asset(
+        args.elevation_json,
+        expected_graph_asset_id=graph.asset_id,
+    )
     editor_map = load_map(args.editor_map_json)
     patch_snapshot = load_patch_snapshot(args.editor_patches_json)
     editor_graph_payload = build_contigs(
         editor_map.to_dict(),
-        source_map=str(args.editor_map_json),
+        source_map=repo_rel(args.editor_map_json),
         patchset=patch_snapshot,
-        patchset_path=str(args.editor_patches_json),
+        patchset_path=repo_rel(args.editor_patches_json),
         include_way=include_editor_way,
         graph_mode="editor",
     )
@@ -561,7 +668,11 @@ def main() -> None:
             "candidate_limit_per_run": args.candidate_limit_per_run,
             "routes_per_scenario": args.routes_per_scenario,
             "route_family_count": len(route_families),
-            "elevation_asset_path": str(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
+            "build_config_path": repo_rel(args.build_config_json),
+            "build_config_digest": build_config_digest,
+            "build_config": build_config_payload,
+            "elevation_asset_path": repo_rel(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
+            "elevation_asset_matches_graph": elevation_matches_graph,
         },
         "areas": [
             {
@@ -586,19 +697,54 @@ def main() -> None:
         ],
     }
 
-    write_json(args.output_catalog, catalog_payload)
-    write_json(args.output_network, network_geojson(graph))
-    write_json(args.output_editor_network, network_geojson(editor_graph_payload))
+    route_network = network_geojson(
+        graph,
+        meta={
+            "graph_asset_id": graph.asset_id,
+            "asset_kind": graph.asset_kind,
+            "source_path": repo_rel(args.contigs_json),
+        },
+    )
+    editor_network = network_geojson(
+        editor_graph_payload,
+        meta={
+            "graph_asset_id": editor_graph_payload["meta"]["asset_id"],
+            "graph_mode": editor_graph_payload["meta"]["graph_mode"],
+            "source_map_asset_id": editor_graph_payload["meta"]["source_asset_id"],
+            "patchset_id": editor_graph_payload["meta"].get("patchset_id"),
+            "patches_path": editor_graph_payload["meta"].get("patches_path"),
+        },
+    )
+    return {
+        "catalog": catalog_payload,
+        "network": route_network,
+        "editor_network": editor_network,
+    }
+
+
+def export_catalog(args: argparse.Namespace) -> dict[str, dict]:
+    sync_web_source_assets()
+    payloads = build_export_payloads(args)
+    write_json(args.output_catalog, payloads["catalog"])
+    write_json(args.output_network, payloads["network"])
+    write_json(args.output_editor_network, payloads["editor_network"])
+    return payloads
+
+
+def main() -> None:
+    args = parse_args()
+    payloads = export_catalog(args)
     print(
         json.dumps(
             {
                 "catalog": str(args.output_catalog),
                 "network": str(args.output_network),
                 "editor_network": str(args.output_editor_network),
-                "area_count": len(catalog_payload["areas"]),
-                "scenario_count": len(catalog_scenarios),
-                "route_count": sum(scenario["route_count"] for scenario in catalog_scenarios),
-                "route_family_count": len(route_families),
+                "published_sources": [str(path) for path in sorted(WEB_SOURCE_DIR.glob("*.json"))],
+                "area_count": len(payloads["catalog"]["areas"]),
+                "scenario_count": len(payloads["catalog"]["areas"][0]["scenarios"]),
+                "route_count": sum(scenario["route_count"] for scenario in payloads["catalog"]["areas"][0]["scenarios"]),
+                "route_family_count": len(payloads["catalog"]["areas"][0]["route_families"]),
             },
             indent=2,
         )

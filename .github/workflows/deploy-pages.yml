@@ -2,12 +2,16 @@ name: Deploy Static App
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 2 * * *"
   push:
     branches: ["main"]
     paths:
+      - ".github/workflows/deploy-pages.yml"
+      - "source/**"
       - "web/**"
       - "curated/karura_junctions.json"
-      - "data/karura_contigs.json"
+      - "data/karura_map.json"
       - "data/karura_elevation.json"
       - "the_dark_side/**"
 
@@ -35,7 +39,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: "24"
 
@@ -47,13 +51,21 @@ jobs:
           node --check web/editor.js
           node --check web/editor-state.mjs
 
-      - name: Export static route catalog
+      - name: Run Python asset tests
         run: |
-          python3 -m the_dark_side.export_karura_web_catalog \
-            --seed-start 1 \
-            --seed-end 6 \
-            --routes-per-scenario 12 \
-            --selection-window 36
+          python3 -m unittest -v \
+            tests.test_build_config \
+            tests.test_export_catalog \
+            tests.test_map_patches \
+            tests.test_route_diversity
+
+      - name: Rebuild deterministic assets
+        run: |
+          python3 -m the_dark_side.rebuild_all
+
+      - name: Verify asset provenance
+        run: |
+          python3 -m the_dark_side.verify_assets
 
       - uses: actions/upload-pages-artifact@v5
         with:

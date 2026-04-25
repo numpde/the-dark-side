@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from datetime import date
 import unittest
 
 from the_dark_side.apply_karura_patches import apply_patchset, build_inside_karura, compute_way_record
 from the_dark_side.build_karura_contigs import build_contigs
-from the_dark_side.karura_common import include_editor_way, include_ride_way
+from the_dark_side.karura_common import include_editor_way, include_ride_way, is_currently_unavailable
 from the_dark_side.download_karura_map import BoundaryComponent, BoundaryRecord, KaruraMap, NodeRecord
 
 
@@ -54,7 +55,7 @@ class MapPatchPipelineTest(unittest.TestCase):
             self.build_map(),
             patchset={"meta": {"patchset_id": "noop"}, "patches": []},
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
         self.assertEqual(len(patched.ways), 2)
         self.assertEqual(patched.meta["patchset_id"], "noop")
@@ -100,7 +101,7 @@ class MapPatchPipelineTest(unittest.TestCase):
                 ],
             },
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
 
         self.assertEqual(sorted(patched.ways), [-100, 10])
@@ -133,7 +134,7 @@ class MapPatchPipelineTest(unittest.TestCase):
                 ],
             },
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
         second = apply_patchset(
             base_map,
@@ -149,7 +150,7 @@ class MapPatchPipelineTest(unittest.TestCase):
                 ],
             },
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
 
         self.assertNotEqual(first.meta["patchset_digest"], second.meta["patchset_digest"])
@@ -161,14 +162,14 @@ class MapPatchPipelineTest(unittest.TestCase):
             base_map,
             patchset={"meta": {"patchset_id": "ops"}, "patches": []},
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
             fill_segment_gaps=True,
         )
         second = apply_patchset(
             base_map,
             patchset={"meta": {"patchset_id": "ops"}, "patches": []},
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
             fill_segment_gaps=False,
         )
 
@@ -197,7 +198,7 @@ class MapPatchPipelineTest(unittest.TestCase):
                 ],
             },
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
 
         self.assertIn(30, patched.ways)
@@ -214,12 +215,12 @@ class MapPatchPipelineTest(unittest.TestCase):
                         "id": "editor-policy-contig-1",
                         "op": "update_contig_tags",
                         "contig_id": 1,
-                        "set": {"local:availability": "temporarily_unavailable"},
+                        "set": {"local:unavailable_until": "2099-12-31"},
                     }
                 ],
             },
             source_map="data/karura_map.json",
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
 
         self.assertEqual(sorted(patched.ways), [10, 20])
@@ -287,7 +288,29 @@ class MapPatchPipelineTest(unittest.TestCase):
             )
         )
 
-    def test_temporary_unavailability_keeps_way_out_of_ride_graph(self) -> None:
+    def test_future_unavailable_until_keeps_way_out_of_ride_graph(self) -> None:
+        self.assertFalse(
+            include_ride_way(
+                124,
+                {
+                    "highway": "path",
+                    "local:unavailable_until": "2099-12-31",
+                },
+            )
+        )
+
+    def test_past_unavailable_until_allows_way_back_into_ride_graph(self) -> None:
+        self.assertTrue(
+            include_ride_way(
+                124,
+                {
+                    "highway": "path",
+                    "local:unavailable_until": "2000-01-01",
+                },
+            )
+        )
+
+    def test_legacy_temporary_unavailability_still_keeps_way_out_of_ride_graph(self) -> None:
         self.assertFalse(
             include_ride_way(
                 124,
@@ -297,6 +320,11 @@ class MapPatchPipelineTest(unittest.TestCase):
                 },
             )
         )
+
+    def test_is_currently_unavailable_uses_inclusive_until_date(self) -> None:
+        tags = {"local:unavailable_until": "2026-05-01"}
+        self.assertTrue(is_currently_unavailable(tags, on_date=date(2026, 5, 1)))
+        self.assertFalse(is_currently_unavailable(tags, on_date=date(2026, 5, 2)))
 
     def test_build_contigs_applies_contig_policy_tags(self) -> None:
         payload = self.build_map().to_dict()
@@ -312,18 +340,18 @@ class MapPatchPipelineTest(unittest.TestCase):
                         "contig_id": 1,
                         "node_ids": [11, 12, 13],
                         "set": {
-                            "local:availability": "temporarily_unavailable",
+                            "local:unavailable_until": "2099-12-31",
                             "local:bicycle_direction": "forward",
                         },
                     }
                 ],
             },
-            patchset_path="web/source/karura-map-patches.json",
+            patchset_path="source/karura-map-patches.json",
         )
 
         first = contig_graph["contigs"][0]
         self.assertEqual(first["node_ids"], [11, 12, 13])
-        self.assertEqual(first["tags"]["local:availability"], "temporarily_unavailable")
+        self.assertEqual(first["tags"]["local:unavailable_until"], "2099-12-31")
         self.assertEqual(first["tags"]["local:bicycle_direction"], "forward")
 
     def test_build_contigs_rejects_stale_contig_signature(self) -> None:
@@ -340,11 +368,11 @@ class MapPatchPipelineTest(unittest.TestCase):
                             "op": "update_contig_tags",
                             "contig_id": 1,
                             "node_ids": [11, 12],
-                            "set": {"local:availability": "temporarily_unavailable"},
+                            "set": {"local:unavailable_until": "2099-12-31"},
                         }
                     ],
                 },
-                patchset_path="web/source/karura-map-patches.json",
+                patchset_path="source/karura-map-patches.json",
             )
 
     def test_compute_way_record_keeps_segment_if_either_endpoint_is_inside(self) -> None:

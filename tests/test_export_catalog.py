@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 from types import SimpleNamespace
 import unittest
 
@@ -8,6 +11,7 @@ from the_dark_side.export_karura_web_catalog import (
     canonicalize_route_node_ids,
     dedupe_records,
     family_id_for,
+    load_elevation_asset,
 )
 
 
@@ -77,6 +81,25 @@ class ExportCatalogNormalizationTest(unittest.TestCase):
         reverse = canonicalize_route_node_ids((9, 7, 5, 1))[0]
 
         self.assertEqual(family_id_for(forward), family_id_for(reverse))
+
+    def test_load_elevation_asset_ignores_graph_mismatch(self) -> None:
+        payload = {
+            "meta": {
+                "graph_asset_id": "graph-a",
+            },
+            "nodes": {
+                "1": {"elevation_m": 10.0},
+                "2": {"elevation_m": 20.0},
+            },
+        }
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "elevation.json"
+            path.write_text(json.dumps(payload))
+
+            elevations, matches = load_elevation_asset(path, expected_graph_asset_id="graph-b")
+
+        self.assertEqual(elevations, {})
+        self.assertFalse(matches)
 
 
 if __name__ == "__main__":

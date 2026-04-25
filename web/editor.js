@@ -4,26 +4,85 @@ import {
   normalizePatchset,
   policyForWay,
   setWayPolicy,
-} from "./editor-state.mjs";
+} from "./editor-state.mjs?v=20260425d";
+
+function findErrorBox() {
+  return document.getElementById("error-box");
+}
+
+
+function formatError(error) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === "string") {
+    return error;
+  }
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+}
+
+
+function reportFatalError(error, context = "Editor error") {
+  const message = `${context}: ${formatError(error)}`;
+  console.error(message, error);
+  const box = findErrorBox();
+  if (box) {
+    box.textContent = message;
+    box.classList.remove("hidden");
+  }
+}
+
+
+window.addEventListener("error", (event) => {
+  reportFatalError(event.error ?? event.message, "Page error");
+});
+
+window.addEventListener("unhandledrejection", (event) => {
+  reportFatalError(event.reason, "Unhandled promise rejection");
+});
+
+function requireElement(id) {
+  const element = document.getElementById(id);
+  if (!element) {
+    const message = `Missing required page element: #${id}`;
+    const fallbackErrorBox = findErrorBox();
+    if (fallbackErrorBox) {
+      fallbackErrorBox.textContent = message;
+      fallbackErrorBox.classList.remove("hidden");
+    }
+    console.error(message);
+    throw new Error(message);
+  }
+  return element;
+}
+
 
 const waysUrl = new URL("./generated/karura-editor-network.geojson", window.location.href);
 const patchesUrl = new URL("./source/karura-map-patches.json", window.location.href);
 
-const exportButton = document.getElementById("export-button");
-const importButton = document.getElementById("import-button");
-const importInput = document.getElementById("import-input");
-const wayHeading = document.getElementById("way-heading");
-const wayMeta = document.getElementById("way-meta");
-const bikeabilitySelect = document.getElementById("bikeability-select");
-const directionSelect = document.getElementById("direction-select");
-const availabilitySelect = document.getElementById("availability-select");
-const changeCount = document.getElementById("change-count");
-const clearButton = document.getElementById("clear-button");
-const errorBox = document.getElementById("error-box");
-const loadedPatchPath = document.getElementById("loaded-patch-path");
-const exportHint = document.getElementById("export-hint");
-const patchPreview = document.getElementById("patch-preview");
+const exportButton = requireElement("export-button");
+const importButton = requireElement("import-button");
+const importInput = requireElement("import-input");
+const wayHeading = requireElement("way-heading");
+const wayMeta = requireElement("way-meta");
+const bikeabilitySelect = requireElement("bikeability-select");
+const directionSelect = requireElement("direction-select");
+const unavailableUntilInput = requireElement("unavailable-until-input");
+const changeCount = requireElement("change-count");
+const clearButton = requireElement("clear-button");
+const errorBox = requireElement("error-box");
+const loadedPatchPath = requireElement("loaded-patch-path");
+const exportHint = requireElement("export-hint");
+const patchPreview = requireElement("patch-preview");
 const stateButtons = [...document.querySelectorAll(".state-button")];
+if (stateButtons.length === 0) {
+  reportFatalError("Missing required state buttons", "Failed to load editor");
+  throw new Error("Missing required state buttons");
+}
 
 const appState = {
   map: null,
@@ -48,6 +107,52 @@ function showError(message) {
 function clearError() {
   errorBox.textContent = "";
   errorBox.classList.add("hidden");
+}
+
+
+function guard(fn, context) {
+  return (...args) => {
+    try {
+      return fn(...args);
+    } catch (error) {
+      reportFatalError(error, context);
+      return undefined;
+    }
+  };
+}
+
+
+function guardAsync(fn, context) {
+  return async (...args) => {
+    try {
+      return await fn(...args);
+    } catch (error) {
+      reportFatalError(error, context);
+      return undefined;
+    }
+  };
+}
+
+
+function karuraTodayDateString() {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Africa/Nairobi",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = Object.fromEntries(
+    formatter
+      .formatToParts(new Date())
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, part.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
+
+function isCurrentlyUnavailable(policy) {
+  return policy.unavailableUntil != null && policy.unavailableUntil >= karuraTodayDateString();
 }
 
 
@@ -89,7 +194,7 @@ function ensureMap() {
 function styleForPolicy(policy) {
   const bikeability = policy.bikeability == null ? 0 : Number(policy.bikeability);
   const extraWeight = Math.max(0, bikeability - 1) * 0.5;
-  if (policy.availability === "temporarily_unavailable") {
+  if (isCurrentlyUnavailable(policy)) {
     return {
       color: "#c07a2d",
       weight: 4 + extraWeight,
@@ -239,7 +344,7 @@ function isDefaultPolicy(policy) {
     policy.routingState === "default" &&
     policy.bikeability == null &&
     policy.bicycleDirection === "both" &&
-    policy.availability === "default"
+    policy.unavailableUntil == null
   );
 }
 
@@ -277,8 +382,8 @@ function updateControls() {
   bikeabilitySelect.value = policy.bikeability == null ? "" : String(policy.bikeability);
   directionSelect.disabled = disabled;
   directionSelect.value = policy.bicycleDirection;
-  availabilitySelect.disabled = disabled;
-  availabilitySelect.value = policy.availability;
+  unavailableUntilInput.disabled = disabled;
+  unavailableUntilInput.value = policy.unavailableUntil ?? "";
   clearButton.disabled = disabled || isDefaultPolicy(policy);
   updateChangeCount();
   updatePatchInfo();
@@ -356,7 +461,7 @@ function downloadJson(payload, filename) {
 function exportPatchset() {
   downloadJson(currentPatchDocument(), "karura_map_patches.json");
   exportHint.innerHTML =
-    'Export downloads a replacement for <code>web/source/karura-map-patches.json</code>.';
+    'Export downloads a replacement for <code>source/karura-map-patches.json</code>.';
 }
 
 
@@ -387,39 +492,39 @@ async function boot() {
 
 
 stateButtons.forEach((button) => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", guard(() => {
     updateSelectedPolicy({ routingState: button.dataset.routingState });
-  });
+  }, "Failed to update routing state"));
 });
 
-bikeabilitySelect.addEventListener("change", () => {
+bikeabilitySelect.addEventListener("change", guard(() => {
   updateSelectedPolicy({
     bikeability: bikeabilitySelect.value === "" ? null : Number(bikeabilitySelect.value),
   });
-});
+}, "Failed to update bikeability"));
 
-directionSelect.addEventListener("change", () => {
+directionSelect.addEventListener("change", guard(() => {
   updateSelectedPolicy({ bicycleDirection: directionSelect.value });
-});
+}, "Failed to update direction"));
 
-availabilitySelect.addEventListener("change", () => {
-  updateSelectedPolicy({ availability: availabilitySelect.value });
-});
+unavailableUntilInput.addEventListener("change", guard(() => {
+  updateSelectedPolicy({ unavailableUntil: unavailableUntilInput.value || null });
+}, "Failed to update availability"));
 
-clearButton.addEventListener("click", () => {
+clearButton.addEventListener("click", guard(() => {
   if (appState.selectedWayId == null) {
     return;
   }
   setWayPolicy(appState.editorState, appState.selectedWayId, defaultWayPolicy());
   updateWayStyle(appState.selectedWayId);
   updateControls();
-});
+}, "Failed to reset contig policy"));
 
-exportButton.addEventListener("click", exportPatchset);
+exportButton.addEventListener("click", guard(exportPatchset, "Failed to export patch file"));
 
-importButton.addEventListener("click", () => importInput.click());
+importButton.addEventListener("click", guard(() => importInput.click(), "Failed to open import dialog"));
 
-importInput.addEventListener("change", async () => {
+importInput.addEventListener("change", guardAsync(async () => {
   const [file] = importInput.files || [];
   if (!file) {
     return;
@@ -427,13 +532,9 @@ importInput.addEventListener("change", async () => {
   try {
     await importPatchset(file);
     clearError();
-  } catch (error) {
-    showError(error instanceof Error ? error.message : String(error));
   } finally {
     importInput.value = "";
   }
-});
+}, "Failed to import patch file"));
 
-boot().catch((error) => {
-  showError(error instanceof Error ? error.message : String(error));
-});
+guardAsync(boot, "Failed to load editor")();

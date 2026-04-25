@@ -22,7 +22,7 @@ from .download_karura_map import (
     point_in_ring,
     write_json,
 )
-from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON
+from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel
 
 
 def parse_args() -> argparse.Namespace:
@@ -350,8 +350,8 @@ def main() -> None:
     patched = apply_patchset(
         karura_map,
         patchset=patchset,
-        source_map=str(args.map_json),
-        patchset_path=str(args.patches_json),
+        source_map=repo_rel(args.map_json),
+        patchset_path=repo_rel(args.patches_json),
         fill_segment_gaps=args.fill_segment_gaps,
     )
     write_json(args.output, patched.to_dict())

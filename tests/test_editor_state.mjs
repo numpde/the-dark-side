@@ -41,7 +41,7 @@ test("normalizePatchset extracts managed policy patches and preserves others", (
     routingState: "exclude",
     bikeability: 2,
     bicycleDirection: "both",
-    availability: "default",
+    unavailableUntil: null,
   });
 });
 
@@ -52,7 +52,7 @@ test("setWayPolicy removes default policy from managed state", () => {
     routingState: "include",
     bikeability: 4,
     bicycleDirection: "forward",
-    availability: "temporarily_unavailable",
+    unavailableUntil: "2026-05-10",
   });
   assert.notDeepEqual(policyForWay(editorState, 11), defaultWayPolicy());
   setWayPolicy(editorState, 11, defaultWayPolicy());
@@ -78,7 +78,7 @@ test("buildPatchsetDocument preserves passthrough patches and emits canonical po
     routingState: "include",
     bikeability: 5,
     bicycleDirection: "backward",
-    availability: "temporarily_unavailable",
+    unavailableUntil: "2026-05-10",
   });
 
   const doc = buildPatchsetDocument(editorState);
@@ -93,7 +93,7 @@ test("buildPatchsetDocument preserves passthrough patches and emits canonical po
       [POLICY_TAGS.routingState]: "include",
       [POLICY_TAGS.bikeability]: "5",
       [POLICY_TAGS.bicycleDirection]: "backward",
-      [POLICY_TAGS.availability]: "temporarily_unavailable",
+      [POLICY_TAGS.unavailableUntil]: "2026-05-10",
     },
   });
 });
@@ -111,13 +111,37 @@ test("normalizePatchset sanitizes invalid managed policy values", () => {
           [POLICY_TAGS.routingState]: "sideways",
           [POLICY_TAGS.bikeability]: "99",
           [POLICY_TAGS.bicycleDirection]: "uphill-only",
-          [POLICY_TAGS.availability]: "soon",
+          [POLICY_TAGS.unavailableUntil]: "soon",
         },
       },
     ],
   });
 
   assert.deepEqual(policyForWay(editorState, 77), defaultWayPolicy());
+});
+
+
+test("normalizePatchset migrates legacy temporary unavailability to far-future unavailable-until", () => {
+  const editorState = normalizePatchset({
+    meta: { patchset_id: "karura-map-patches-v1" },
+    patches: [
+      {
+        id: "editor-policy-contig-88",
+        op: "update_contig_tags",
+        contig_id: 88,
+        set: {
+          [POLICY_TAGS.legacyAvailability]: "temporarily_unavailable",
+        },
+      },
+    ],
+  });
+
+  assert.deepEqual(policyForWay(editorState, 88), {
+    routingState: "default",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: "9999-12-31",
+  });
 });
 
 

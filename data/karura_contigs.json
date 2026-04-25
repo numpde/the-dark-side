@@ -14643,10 +14643,10 @@
     "edge_count": 1578,
     "graph_mode": "ride",
     "node_count": 3067,
-    "patches_path": "/home/ra/repos/the-dark-side/web/source/karura-map-patches.json",
+    "patches_path": "source/karura-map-patches.json",
     "patchset_id": "karura-map-patches-v1",
     "source_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
-    "source_map": "/home/ra/repos/the-dark-side/data/karura_map_patched.json"
+    "source_map": "data/karura_map_patched.json"
   },
   "nodes": {
     "10597364805": {

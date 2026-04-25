@@ -12,7 +12,7 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
-from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_PATCHES_JSON, include_ride_way, resolve_map_json
+from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_PATCHES_JSON, include_ride_way, repo_rel, resolve_map_json
 
 
 def parse_args() -> argparse.Namespace:
@@ -364,9 +364,9 @@ def main() -> None:
     patchset = load_patchset(args.patches_json)
     contig_graph = build_contigs(
         payload,
-        source_map=str(map_json),
+        source_map=repo_rel(map_json),
         patchset=patchset,
-        patchset_path=str(args.patches_json),
+        patchset_path=repo_rel(args.patches_json),
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(contig_graph, indent=2, sort_keys=True) + "\n")

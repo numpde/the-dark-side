@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-04-25T12:30:45.574344Z",
+    "generated_at": "2026-04-25T19:48:31.086490Z",
     "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
     "junction_catalog_asset_id": "karura-junctions-curated-v1",
     "algorithms": [
@@ -13,7 +13,55 @@
     "candidate_limit_per_run": 2,
     "routes_per_scenario": 12,
     "route_family_count": 48,
-    "elevation_asset_path": "/home/ra/repos/the-dark-side/data/karura_elevation.json"
+    "build_config_path": "source/catalog_build.json",
+    "build_config_digest": "caa3dbfc1515",
+    "build_config": {
+      "algorithms": [
+        "mcts",
+        "beam",
+        "naive"
+      ],
+      "seed_start": 1,
+      "seed_end": 6,
+      "candidate_limit_per_run": 2,
+      "routes_per_scenario": 12,
+      "selection_window": 36,
+      "short_connector_max_length_m": 35.0,
+      "max_overlap_m": 70.0,
+      "max_steps": 256,
+      "random_top_k": 4,
+      "end_stop_probability": 0.7,
+      "end_stop_unused_slack_m": 400.0,
+      "end_finish_unused_slack_m": 250.0,
+      "future_length_weight": 0.08,
+      "connector_length_weight": 0.02,
+      "overlap_penalty_per_m": 12.0,
+      "articulation_penalty": 45.0,
+      "articulation_future_threshold_m": 400.0,
+      "dead_end_penalty": 180.0,
+      "early_finish_penalty": 320.0,
+      "rollout_trials": 250,
+      "keep_best": 5,
+      "beam_width": 80,
+      "beam_branch_factor": 5,
+      "beam_rounds": 200,
+      "beam_selection_pool": 5,
+      "beam_selection_window": 12,
+      "mcts_iterations": 640,
+      "mcts_exploration_weight": 1.0,
+      "mcts_rollout_top_k": 3,
+      "mcts_rollout_samples": 3,
+      "mcts_prior_weight": 0.5,
+      "mcts_loop_completion_bonus": 220.0,
+      "mcts_loop_unused_penalty_per_m": 0.045,
+      "mcts_loop_late_return_bonus": 180.0,
+      "mcts_loop_overlap_penalty_per_m": 4.0,
+      "elevation_profile_spacing_m": 60.0,
+      "elevation_smoothing_window": 3,
+      "elevation_min_step_m": 0.5
+    },
+    "elevation_asset_path": "data/karura_elevation.json",
+    "elevation_asset_matches_graph": true
   },
   "areas": [
     {

@@ -12,6 +12,8 @@ from heapq import heappop, heappush
 from pathlib import Path
 from typing import Iterable
 
+from .karura_common import is_currently_unavailable
+
 
 @dataclass(frozen=True)
 class NodeRecord:
@@ -307,7 +309,7 @@ def can_traverse_contig(
 ) -> tuple[bool, bool]:
     if contig.tags.get("local:routing_state") == "exclude":
         return False, False
-    if contig.tags.get("local:availability") == "temporarily_unavailable":
+    if is_currently_unavailable(contig.tags):
         return False, False
     direction = contig.tags.get("local:bicycle_direction", "both")
     if not contig.is_cycle:

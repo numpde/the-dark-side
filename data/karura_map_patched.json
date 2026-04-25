@@ -1013,12 +1013,12 @@
     "asset_kind": "patched_map",
     "fill_segment_gaps": true,
     "node_count": 3067,
-    "patches_path": "/home/ra/repos/the-dark-side/web/source/karura-map-patches.json",
+    "patches_path": "source/karura-map-patches.json",
     "patchset_asset_kind": "map_patchset",
     "patchset_digest": "048790ac263f",
     "patchset_id": "karura-map-patches-v1",
     "source_asset_id": "karura-map-r13626194-r15417497-20260424T183329146066Z",
-    "source_map": "/home/ra/repos/the-dark-side/data/karura_map.json",
+    "source_map": "data/karura_map.json",
     "way_count": 225
   },
   "nodes": {

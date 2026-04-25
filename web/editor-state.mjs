@@ -2,7 +2,8 @@ export const POLICY_TAGS = {
   routingState: "local:routing_state",
   bikeability: "local:bikeability",
   bicycleDirection: "local:bicycle_direction",
-  availability: "local:availability",
+  unavailableUntil: "local:unavailable_until",
+  legacyAvailability: "local:availability",
 };
 
 
@@ -11,7 +12,7 @@ export function defaultWayPolicy() {
     routingState: "default",
     bikeability: null,
     bicycleDirection: "both",
-    availability: "default",
+    unavailableUntil: null,
   };
 }
 
@@ -42,8 +43,28 @@ function normalizeBicycleDirection(value) {
 }
 
 
-function normalizeAvailability(value) {
-  return value === "temporarily_unavailable" ? value : "default";
+function normalizeUnavailableUntil(value) {
+  if (value == null || value === "") {
+    return null;
+  }
+  const text = String(value).trim();
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+  if (!match) {
+    return null;
+  }
+  const [, yearText, monthText, dayText] = match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const candidate = new Date(Date.UTC(year, month - 1, day));
+  if (
+    candidate.getUTCFullYear() !== year ||
+    candidate.getUTCMonth() !== month - 1 ||
+    candidate.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return text;
 }
 
 
@@ -94,8 +115,8 @@ function applyManagedPatch(policy, patch) {
       next.bikeability = null;
     } else if (key === POLICY_TAGS.bicycleDirection) {
       next.bicycleDirection = "both";
-    } else if (key === POLICY_TAGS.availability) {
-      next.availability = "default";
+    } else if (key === POLICY_TAGS.unavailableUntil || key === POLICY_TAGS.legacyAvailability) {
+      next.unavailableUntil = null;
     }
   }
   for (const [key, value] of Object.entries(patch.set || {})) {
@@ -105,8 +126,10 @@ function applyManagedPatch(policy, patch) {
       next.bikeability = normalizeBikeability(value);
     } else if (key === POLICY_TAGS.bicycleDirection) {
       next.bicycleDirection = normalizeBicycleDirection(value);
-    } else if (key === POLICY_TAGS.availability) {
-      next.availability = normalizeAvailability(value);
+    } else if (key === POLICY_TAGS.unavailableUntil) {
+      next.unavailableUntil = normalizeUnavailableUntil(value);
+    } else if (key === POLICY_TAGS.legacyAvailability && value === "temporarily_unavailable") {
+      next.unavailableUntil = "9999-12-31";
     }
   }
   return next;
@@ -146,13 +169,13 @@ export function setWayPolicy(editorState, wayId, nextPolicy) {
     routingState: normalizeRoutingState(nextPolicy.routingState),
     bikeability: normalizeBikeability(nextPolicy.bikeability),
     bicycleDirection: normalizeBicycleDirection(nextPolicy.bicycleDirection),
-    availability: normalizeAvailability(nextPolicy.availability),
+    unavailableUntil: normalizeUnavailableUntil(nextPolicy.unavailableUntil),
   };
   if (
     normalized.routingState === "default" &&
     normalized.bikeability == null &&
     normalized.bicycleDirection === "both" &&
-    normalized.availability === "default"
+    normalized.unavailableUntil == null
   ) {
     editorState.policyByWayId.delete(Number(wayId));
     return;
@@ -172,8 +195,8 @@ function managedPatchForWay(wayId, policy, nodeIds = []) {
   if (policy.bicycleDirection !== "both") {
     set[POLICY_TAGS.bicycleDirection] = policy.bicycleDirection;
   }
-  if (policy.availability !== "default") {
-    set[POLICY_TAGS.availability] = policy.availability;
+  if (policy.unavailableUntil != null) {
+    set[POLICY_TAGS.unavailableUntil] = policy.unavailableUntil;
   }
   return {
     id: `editor-policy-contig-${wayId}`,

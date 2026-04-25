@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import math
+import shutil
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BASE = REPO_ROOT
 DATA_DIR = REPO_ROOT / "data"
+SOURCE_DIR = REPO_ROOT / "source"
 RAW_JSON = DATA_DIR / "karura_overpass.json"
 MAP_JSON = DATA_DIR / "karura_map.json"
 PATCHED_MAP_JSON = DATA_DIR / "karura_map_patched.json"
@@ -29,23 +33,69 @@ VIEWPORT = REFERENCE_DIR / "karura-viewport.json"
 WEB_DIR = REPO_ROOT / "web"
 WEB_SOURCE_DIR = WEB_DIR / "source"
 WEB_GENERATED_DIR = WEB_DIR / "generated"
-MAP_PATCHES_JSON = WEB_SOURCE_DIR / "karura-map-patches.json"
+MAP_PATCHES_JSON = SOURCE_DIR / "karura-map-patches.json"
+CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
+SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, CATALOG_BUILD_JSON)
 
 R = 6378137.0
 LOCAL_ROUTING_STATE_TAG = "local:routing_state"
 LOCAL_BIKEABILITY_TAG = "local:bikeability"
 LOCAL_BICYCLE_DIRECTION_TAG = "local:bicycle_direction"
 LOCAL_AVAILABILITY_TAG = "local:availability"
+LOCAL_UNAVAILABLE_UNTIL_TAG = "local:unavailable_until"
+KARURA_TIMEZONE = ZoneInfo("Africa/Nairobi")
 
 
 def include_baseline_way(tags: dict[str, str]) -> bool:
     return "highway" in tags or tags.get("amenity") == "parking"
 
 
+def karura_today() -> date:
+    return datetime.now(KARURA_TIMEZONE).date()
+
+
+def parse_iso_date(value: str | None) -> date | None:
+    if value is None:
+        return None
+    try:
+        return date.fromisoformat(str(value))
+    except ValueError:
+        return None
+
+
+def is_currently_unavailable(tags: dict[str, str], *, on_date: date | None = None) -> bool:
+    if tags.get(LOCAL_AVAILABILITY_TAG) == "temporarily_unavailable":
+        return True
+    until = parse_iso_date(tags.get(LOCAL_UNAVAILABLE_UNTIL_TAG))
+    if until is None:
+        return False
+    return (on_date or karura_today()) <= until
+
+
 def resolve_map_json(prefer_patched: bool = True) -> Path:
     if prefer_patched and PATCHED_MAP_JSON.exists():
         return PATCHED_MAP_JSON
     return MAP_JSON
+
+
+def repo_rel(path: Path | str) -> str:
+    candidate = Path(path)
+    try:
+        return str(candidate.resolve().relative_to(REPO_ROOT))
+    except Exception:
+        return str(path)
+
+
+def sync_web_source_assets() -> list[Path]:
+    WEB_SOURCE_DIR.mkdir(parents=True, exist_ok=True)
+    synced: list[Path] = []
+    for source_path in SOURCE_ASSET_PATHS:
+        if not source_path.exists():
+            continue
+        target_path = WEB_SOURCE_DIR / source_path.name
+        shutil.copy2(source_path, target_path)
+        synced.append(target_path)
+    return synced
 
 
 def mercator(lon: float, lat: float) -> tuple[float, float]:
@@ -59,10 +109,9 @@ def mercator(lon: float, lat: float) -> tuple[float, float]:
 
 def include_ride_way(way_id: int, tags: dict[str, str]) -> bool:
     routing_state = tags.get(LOCAL_ROUTING_STATE_TAG)
-    availability = tags.get(LOCAL_AVAILABILITY_TAG)
     if routing_state == "exclude":
         return False
-    if availability == "temporarily_unavailable":
+    if is_currently_unavailable(tags):
         return False
     if routing_state == "include":
         return True

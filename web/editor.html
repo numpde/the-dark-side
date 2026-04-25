@@ -64,11 +64,8 @@
         </label>
 
         <label class="field">
-          <span class="field-label">Availability</span>
-          <select id="availability-select">
-            <option value="default">Default</option>
-            <option value="temporarily_unavailable">Temporarily unavailable</option>
-          </select>
+          <span class="field-label">Unavailable until</span>
+          <input id="unavailable-until-input" type="date" />
         </label>
 
         <div class="footer-row">
@@ -83,8 +80,8 @@
     <section class="patch-info">
       <div class="patch-meta">
         <div><span class="field-label">Loaded patch file</span> <span id="loaded-patch-path">source/karura-map-patches.json</span></div>
-        <div><span class="field-label">Export target</span> <span id="export-target-path">web/source/karura-map-patches.json</span></div>
-        <div id="export-hint" class="patch-hint">Export downloads a replacement for <code>web/source/karura-map-patches.json</code>.</div>
+        <div><span class="field-label">Export target</span> <span id="export-target-path">source/karura-map-patches.json</span></div>
+        <div id="export-hint" class="patch-hint">Export downloads a replacement for <code>source/karura-map-patches.json</code>.</div>
       </div>
       <div class="patch-hint">Preview below shows the current export document: the loaded file plus any edits made on this page.</div>
       <pre id="patch-preview" class="patch-preview"></pre>
@@ -96,6 +93,6 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module" src="./editor.js"></script>
+  <script type="module" src="./editor.js?v=20260425f"></script>
 </body>
 </html>

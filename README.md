@@ -7,8 +7,9 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 ```text
 .
 ├── the_dark_side/        Python package
-├── web/                  Static frontend and generated web data
-├── data/                 Source map and derived graph data
+├── source/               Canonical patch + catalog build inputs
+├── web/                  Static frontend and published/generated web data
+├── data/                 Baseline map, elevation cache, and derived graph data
 ├── curated/              Hand-edited junction and figure catalogs
 ├── assets/
 │   ├── reference/        Screenshot + fitted viewport
@@ -48,7 +49,11 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the static frontend catalog plus the generated GeoJSON/patch assets used by the web app and contig editor into `web/generated/`.
+  Exports the static frontend catalog plus the generated GeoJSON assets used by the web app and contig editor into `web/generated/`, and publishes the canonical `source/*.json` inputs into `web/source/`.
+- `the_dark_side.rebuild_all`
+  Rebuilds the deterministic derived assets from the canonical inputs.
+- `the_dark_side.verify_assets`
+  Verifies that the committed derived assets still match the current canonical inputs.
 
 ## Setup
 
@@ -163,24 +168,34 @@ This writes:
 - `data/benchmarks/karura-route-benchmark.json`
 - `data/benchmarks/karura-route-benchmark.md`
 
-Export the static route catalog used by the frontend app:
+Rebuild the deterministic derived assets from canonical inputs:
 
 ```bash
-python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+python3 -m the_dark_side.rebuild_all
 ```
 
 This writes:
+- `data/karura_map_patched.json`
+- `data/karura_contigs.json`
 - `web/generated/catalog.json`
 - `web/generated/karura-network.geojson`
 - `web/generated/karura-editor-network.geojson`
+- `web/source/karura-map-patches.json`
+- `web/source/catalog_build.json`
 
-Export the route catalog. If `data/karura_elevation.json` exists, elevation gain/loss and GPX `<ele>` values are derived from that local graph asset:
+Rebuild including a refreshed elevation cache:
 
 ```bash
-python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+python3 -m the_dark_side.rebuild_all --with-elevation
 ```
 
-By default the catalog exporter samples `mcts`, `beam`, and `naive` planners, then keeps a diverse subset per scenario.
+Verify that the committed derived assets still match the canonical inputs:
+
+```bash
+python3 -m the_dark_side.verify_assets
+```
+
+The route-catalog build parameters live in `source/catalog_build.json`. By default the exporter samples `mcts`, `beam`, and `naive` planners, then keeps a diverse subset per scenario according to that file.
 
 The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
 The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present in the catalog.
@@ -213,16 +228,17 @@ The editor will:
 - load the current patch file automatically
 - let you mark baseline OSM-highway contigs as `default`, `include`, or `exclude`
 - annotate `bikeability` and allowed bike direction
-- annotate contigs as temporarily unavailable
-- export a replacement for `web/source/karura-map-patches.json`
+- annotate contigs as unavailable until a specific date
+- export a replacement for `source/karura-map-patches.json`
 
 GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes `web/`.
+It also runs on a daily schedule so `unavailable until` dates can expire out of the published route catalog without a manual push.
 
 ## Local patch strategy
 
 The repo treats OpenStreetMap as the upstream base layer, then applies a local override layer for product-specific corrections.
 
-Use `web/source/karura-map-patches.json` for structural fixes and contig policy that should affect the normalized map before graph building. The current patch language supports:
+Use `source/karura-map-patches.json` for structural fixes and contig policy that should affect the normalized map before graph building. The current patch language supports:
 
 - `add_way`
 - `remove_way`
@@ -248,16 +264,26 @@ The intended build order is:
 1. `download_karura_map`
 2. `apply_karura_patches`
 3. `build_karura_contigs`
-4. `build_karura_elevation`
-5. route planning / web export
+4. `build_karura_elevation` when you intentionally refresh the external cache
+5. `export_karura_web_catalog`
 
-`web/source/karura-map-patches.json` is the single source of truth for patch edits. Both the Python pipeline and the browser editor read that same file. After changing it, regenerate and commit the derived assets before pushing:
+Canonical inputs:
+
+- `data/karura_map.json`
+- `source/karura-map-patches.json`
+- `source/catalog_build.json`
+- `curated/karura_junctions.json`
+- `curated/karura_figures.json`
+
+Pinned external cache:
+
+- `data/karura_elevation.json`
+
+Everything else in `data/` and `web/generated/` is derived. After changing a canonical input, regenerate and verify before pushing:
 
 ```bash
-python3 -m the_dark_side.apply_karura_patches
-python3 -m the_dark_side.build_karura_contigs
-python3 -m the_dark_side.build_karura_elevation --provider open-topo-data
-python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 --routes-per-scenario 12 --selection-window 36
+python3 -m the_dark_side.rebuild_all
+python3 -m the_dark_side.verify_assets
 ```
 
 ## Data shape
@@ -282,10 +308,18 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
 - `crossings`: graph nodes with degree other than `2`
 - `contigs`: maximal chains of kept `highway=*` segments between crossings or dead ends
 
-`web/source/karura-map-patches.json` contains local structural edits and contig policy layered on top of the downloaded map asset:
+`source/karura-map-patches.json` contains local structural edits and contig policy layered on top of the downloaded map asset:
 
 - `meta`: patchset metadata
 - `patches`: ordered patch operations
+
+`source/catalog_build.json` contains the canonical route-catalog build parameters:
+
+- planner list
+- seed range
+- candidate limits
+- selection window
+- all planner tuning values that affect the published catalog
 
 `data/karura_map_patched.json` contains the derived patched map asset:
 
