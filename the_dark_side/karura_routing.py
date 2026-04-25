@@ -32,6 +32,7 @@ class ContigRecord:
     way_ids: tuple[int, ...]
     way_names: tuple[str, ...]
     highway_types: dict[str, int]
+    tags: dict[str, str]
 
 
 @dataclass(frozen=True)
@@ -201,6 +202,7 @@ def load_route_graph(path: Path) -> RouteGraph:
             way_ids=tuple(int(way_id) for way_id in contig_payload["way_ids"]),
             way_names=tuple(contig_payload["way_names"]),
             highway_types={str(key): int(value) for key, value in contig_payload["highway_types"].items()},
+            tags={str(key): str(value) for key, value in contig_payload.get("tags", {}).items()},
         )
         contigs[contig.id] = contig
 
@@ -299,7 +301,21 @@ def can_traverse_contig(
     visit_count: int,
     overlap_length_m: float,
     config: PlannerConfig,
+    *,
+    from_node_id: int,
+    to_node_id: int,
 ) -> tuple[bool, bool]:
+    if contig.tags.get("local:routing_state") == "exclude":
+        return False, False
+    if contig.tags.get("local:availability") == "temporarily_unavailable":
+        return False, False
+    direction = contig.tags.get("local:bicycle_direction", "both")
+    if not contig.is_cycle:
+        first_node, second_node = contig.endpoint_node_ids
+        if direction == "forward" and (from_node_id, to_node_id) != (first_node, second_node):
+            return False, False
+        if direction == "backward" and (from_node_id, to_node_id) != (second_node, first_node):
+            return False, False
     if visit_count == 0:
         return True, False
     if visit_count == 1 and is_short_connector(contig, config) and overlap_length_m + contig.length_m <= config.max_overlap_m:
@@ -490,6 +506,8 @@ def move_candidates(
             state.contig_visits.get(contig_id, 0),
             state.overlap_length_m,
             config,
+            from_node_id=state.current_node_id,
+            to_node_id=next_node_id,
         )
         if not allowed:
             continue

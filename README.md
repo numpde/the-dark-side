@@ -48,7 +48,7 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the static frontend catalog plus a contig-network GeoJSON into `web/generated/`.
+  Exports the static frontend catalog plus the generated GeoJSON/patch assets used by the web app and contig editor into `web/generated/`.
 
 ## Setup
 
@@ -150,6 +150,7 @@ Run the GPX export and download-link tests:
 
 ```bash
 node --test tests/test_gpx.mjs
+node --test tests/test_editor_state.mjs
 ```
 
 Run the route benchmark summary:
@@ -171,6 +172,7 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
 This writes:
 - `web/generated/catalog.json`
 - `web/generated/karura-network.geojson`
+- `web/generated/karura-editor-network.geojson`
 
 Export the route catalog. If `data/karura_elevation.json` exists, elevation gain/loss and GPX `<ele>` values are derived from that local graph asset:
 
@@ -196,10 +198,23 @@ Then open:
 http://127.0.0.1:8765/
 ```
 
+The visual contig editor lives at:
+
+```text
+http://127.0.0.1:8765/editor.html
+```
+
 The page will:
 - choose a random route for the selected start/end pair on each refresh
 - render the route over OpenStreetMap with the Karura contig network faintly underneath
 - generate a GPX download in the browser for the current route
+
+The editor will:
+- load the current patch file automatically
+- let you mark baseline OSM-highway contigs as `default`, `include`, or `exclude`
+- annotate `bikeability` and allowed bike direction
+- annotate contigs as temporarily unavailable
+- export a replacement for `web/source/karura-map-patches.json`
 
 GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes `web/`.
 
@@ -207,7 +222,7 @@ GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The wo
 
 The repo treats OpenStreetMap as the upstream base layer, then applies a local override layer for product-specific corrections.
 
-Use `curated/karura_map_patches.json` for structural fixes that should affect the normalized map before graph building. The current patch language supports:
+Use `web/source/karura-map-patches.json` for structural fixes and contig policy that should affect the normalized map before graph building. The current patch language supports:
 
 - `add_way`
 - `remove_way`
@@ -236,7 +251,7 @@ The intended build order is:
 4. `build_karura_elevation`
 5. route planning / web export
 
-Important: `curated/karura_map_patches.json` is not consumed directly by the GitHub Pages workflow. After changing map patches, regenerate and commit the derived assets before pushing:
+`web/source/karura-map-patches.json` is the single source of truth for patch edits. Both the Python pipeline and the browser editor read that same file. After changing it, regenerate and commit the derived assets before pushing:
 
 ```bash
 python3 -m the_dark_side.apply_karura_patches
@@ -260,14 +275,14 @@ python3 -m the_dark_side.export_karura_web_catalog --seed-start 1 --seed-end 6 -
   - `inside_length_m`
   - `bounds`
 
-`segment_pairs` are the clipped segments whose midpoints fall inside the current baseline boundary union.
+`segment_pairs` are the kept segments after boundary clipping. A segment is kept if either endpoint is inside the current baseline boundary union, and short internal gaps between kept runs on the same way are filled by default to preserve topology near the boundary.
 
-`data/karura_contigs.json` contains the collapsed ride graph:
+`data/karura_contigs.json` contains the collapsed baseline highway graph used for routing:
 
 - `crossings`: graph nodes with degree other than `2`
-- `contigs`: maximal chains of rideable segments between crossings or dead ends
+- `contigs`: maximal chains of kept `highway=*` segments between crossings or dead ends
 
-`curated/karura_map_patches.json` contains local structural edits layered on top of the downloaded map asset:
+`web/source/karura-map-patches.json` contains local structural edits and contig policy layered on top of the downloaded map asset:
 
 - `meta`: patchset metadata
 - `patches`: ordered patch operations

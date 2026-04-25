@@ -42,7 +42,10 @@ jobs:
       - name: Run frontend GPX tests
         run: |
           node --test tests/test_gpx.mjs
+          node --test tests/test_editor_state.mjs
           node --check web/app.js
+          node --check web/editor.js
+          node --check web/editor-state.mjs
 
       - name: Export static route catalog
         run: |

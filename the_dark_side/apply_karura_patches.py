@@ -305,6 +305,8 @@ def apply_patchset(
                 inside_karura=inside_karura,
                 fill_segment_gaps=fill_segment_gaps,
             )
+        elif operation == "update_contig_tags":
+            continue
         else:
             raise ValueError(f"unsupported patch op: {operation}")
         applied_patch_ids.append(patch_id)

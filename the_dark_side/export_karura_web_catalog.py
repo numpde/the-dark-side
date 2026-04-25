@@ -13,12 +13,17 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .build_karura_contigs import build_contigs
+from .download_karura_map import load_map
 from .elevation import summarize_elevation_series
 from .karura_common import (
     CONTIGS_JSON,
     ELEVATION_JSON,
+    MAP_JSON,
     JUNCTIONS_JSON,
+    MAP_PATCHES_JSON,
     WEB_GENERATED_DIR,
+    include_editor_way,
 )
 from .karura_routing import (
     PlannerConfig,
@@ -36,6 +41,7 @@ from .karura_routing import (
 
 DEFAULT_CATALOG_JSON = WEB_GENERATED_DIR / "catalog.json"
 DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
+DEFAULT_EDITOR_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-editor-network.geojson"
 DEFAULT_ALGORITHMS = ("mcts", "beam", "naive")
 
 
@@ -93,8 +99,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--elevation-profile-spacing-m", type=float, default=60.0)
     parser.add_argument("--elevation-smoothing-window", type=int, default=3)
     parser.add_argument("--elevation-min-step-m", type=float, default=0.5)
+    parser.add_argument("--editor-map-json", type=Path, default=MAP_JSON)
+    parser.add_argument("--editor-patches-json", type=Path, default=MAP_PATCHES_JSON)
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
     parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
+    parser.add_argument("--output-editor-network", type=Path, default=DEFAULT_EDITOR_NETWORK_GEOJSON)
     return parser.parse_args()
 
 
@@ -265,6 +274,41 @@ def build_route_record(
 
 def network_geojson(graph) -> dict:
     features = []
+    if isinstance(graph, dict):
+        nodes = {
+            int(node_id): {
+                "lat": float(node_payload["lat"]),
+                "lon": float(node_payload["lon"]),
+            }
+            for node_id, node_payload in graph["nodes"].items()
+        }
+        contigs = graph["contigs"]
+        for contig in contigs:
+            coordinates = [
+                [round(nodes[int(node_id)]["lon"], 6), round(nodes[int(node_id)]["lat"], 6)]
+                for node_id in contig["node_ids"]
+            ]
+            features.append(
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "contig_id": contig["id"],
+                        "length_m": round(float(contig["length_m"]), 3),
+                        "segment_count": int(contig["segment_count"]),
+                        "way_names": list(contig["way_names"]),
+                        "way_ids": list(contig["way_ids"]),
+                        "endpoint_node_ids": list(contig["endpoint_node_ids"]),
+                        "node_ids": list(contig["node_ids"]),
+                        "tags": dict(contig.get("tags", {})),
+                    },
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": coordinates,
+                    },
+                }
+            )
+        return {"type": "FeatureCollection", "features": features}
+
     for contig in graph.contigs.values():
         coordinates = [
             [round(graph.nodes[node_id].lon, 6), round(graph.nodes[node_id].lat, 6)]
@@ -278,6 +322,10 @@ def network_geojson(graph) -> dict:
                     "length_m": round(contig.length_m, 3),
                     "segment_count": contig.segment_count,
                     "way_names": list(contig.way_names),
+                    "way_ids": list(contig.way_ids),
+                    "endpoint_node_ids": list(contig.endpoint_node_ids),
+                    "node_ids": list(contig.node_ids),
+                    "tags": dict(contig.tags),
                 },
                 "geometry": {
                     "type": "LineString",
@@ -286,6 +334,18 @@ def network_geojson(graph) -> dict:
             }
         )
     return {"type": "FeatureCollection", "features": features}
+
+
+def load_patch_snapshot(path: Path) -> dict:
+    if not path.exists():
+        return {
+            "meta": {
+                "asset_kind": "map_patchset",
+                "patchset_id": "karura-map-patches-v1",
+            },
+            "patches": [],
+        }
+    return json.loads(path.read_text())
 
 
 def load_elevation_asset(path: Path | None) -> dict[int, float]:
@@ -379,6 +439,16 @@ def main() -> None:
     config = build_config(args)
     node_elevations = load_elevation_asset(args.elevation_json)
     graph = load_route_graph(args.contigs_json)
+    editor_map = load_map(args.editor_map_json)
+    patch_snapshot = load_patch_snapshot(args.editor_patches_json)
+    editor_graph_payload = build_contigs(
+        editor_map.to_dict(),
+        source_map=str(args.editor_map_json),
+        patchset=patch_snapshot,
+        patchset_path=str(args.editor_patches_json),
+        include_way=include_editor_way,
+        graph_mode="editor",
+    )
     junction_catalog = load_junction_catalog(args.junctions_json)
     junction_defs = junction_catalog["junctions"]
     junction_ids = [junction["id"] for junction in junction_defs]
@@ -499,6 +569,7 @@ def main() -> None:
                 "name": "Karura Forest",
                 "bounds": area_bounds(graph),
                 "network_path": args.output_network.name,
+                "editor_network_path": args.output_editor_network.name,
                 "junctions": [
                     {
                         "id": junction["id"],
@@ -517,11 +588,13 @@ def main() -> None:
 
     write_json(args.output_catalog, catalog_payload)
     write_json(args.output_network, network_geojson(graph))
+    write_json(args.output_editor_network, network_geojson(editor_graph_payload))
     print(
         json.dumps(
             {
                 "catalog": str(args.output_catalog),
                 "network": str(args.output_network),
+                "editor_network": str(args.output_editor_network),
                 "area_count": len(catalog_payload["areas"]),
                 "scenario_count": len(catalog_scenarios),
                 "route_count": sum(scenario["route_count"] for scenario in catalog_scenarios),

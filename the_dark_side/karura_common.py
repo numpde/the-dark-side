@@ -19,7 +19,6 @@ BENCHMARKS_DIR = DATA_DIR / "benchmarks"
 ELEVATION_CACHE_DIR = DATA_DIR / "elevation_cache"
 CURATED_DIR = REPO_ROOT / "curated"
 JUNCTIONS_JSON = CURATED_DIR / "karura_junctions.json"
-MAP_PATCHES_JSON = CURATED_DIR / "karura_map_patches.json"
 ROUTING_OVERRIDES_JSON = CURATED_DIR / "karura_routing_overrides.json"
 ASSETS_DIR = REPO_ROOT / "assets"
 REFERENCE_DIR = ASSETS_DIR / "reference"
@@ -28,21 +27,19 @@ FIGURES_DIR = ASSETS_DIR / "figures"
 SCREENSHOT = REFERENCE_DIR / "karura-source-screenshot.png"
 VIEWPORT = REFERENCE_DIR / "karura-viewport.json"
 WEB_DIR = REPO_ROOT / "web"
+WEB_SOURCE_DIR = WEB_DIR / "source"
 WEB_GENERATED_DIR = WEB_DIR / "generated"
+MAP_PATCHES_JSON = WEB_SOURCE_DIR / "karura-map-patches.json"
 
 R = 6378137.0
-RIDEABLE = {
-    "cycleway",
-    "footway",
-    "path",
-    "residential",
-    "service",
-    "steps",
-    "track",
-    "unclassified",
-}
-SKIP_SERVICE_TYPES = {"parking_aisle"}
-EXCLUDED_WAY_IDS = {643633767}
+LOCAL_ROUTING_STATE_TAG = "local:routing_state"
+LOCAL_BIKEABILITY_TAG = "local:bikeability"
+LOCAL_BICYCLE_DIRECTION_TAG = "local:bicycle_direction"
+LOCAL_AVAILABILITY_TAG = "local:availability"
+
+
+def include_baseline_way(tags: dict[str, str]) -> bool:
+    return "highway" in tags or tags.get("amenity") == "parking"
 
 
 def resolve_map_json(prefer_patched: bool = True) -> Path:
@@ -61,8 +58,18 @@ def mercator(lon: float, lat: float) -> tuple[float, float]:
 
 
 def include_ride_way(way_id: int, tags: dict[str, str]) -> bool:
-    if way_id in EXCLUDED_WAY_IDS:
+    routing_state = tags.get(LOCAL_ROUTING_STATE_TAG)
+    availability = tags.get(LOCAL_AVAILABILITY_TAG)
+    if routing_state == "exclude":
         return False
+    if availability == "temporarily_unavailable":
+        return False
+    if routing_state == "include":
+        return True
     if tags.get("local:context_only") == "yes":
         return False
-    return tags.get("highway") in RIDEABLE and tags.get("service") not in SKIP_SERVICE_TYPES
+    return include_baseline_way(tags)
+
+
+def include_editor_way(_way_id: int, tags: dict[str, str]) -> bool:
+    return include_baseline_way(tags)

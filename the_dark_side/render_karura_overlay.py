@@ -12,10 +12,10 @@ from PIL import Image, ImageDraw, ImageOps
 from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
-    EXCLUDED_WAY_IDS,
     MAP_PATCHES_JSON,
     SCREENSHOT,
     VIEWPORT,
+    include_editor_way,
     include_ride_way,
     mercator,
     resolve_map_json,
@@ -44,10 +44,8 @@ def parse_args():
 
 
 def include_way(way_id, tags, mode):
-    if way_id in EXCLUDED_WAY_IDS:
-        return False
     if mode == "all":
-        return True
+        return include_editor_way(way_id, tags)
     return include_ride_way(way_id, tags)
 
 
