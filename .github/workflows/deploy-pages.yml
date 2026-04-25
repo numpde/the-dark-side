@@ -35,6 +35,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
       - name: Run frontend GPX tests
         run: |
           node --test tests/test_gpx.mjs
