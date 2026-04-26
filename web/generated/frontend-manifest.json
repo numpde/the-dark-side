@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T20:51:46.383121Z",
+    "generated_at": "2026-04-26T20:53:56.812985Z",
     "asset_kind": "frontend_manifest"
   },
   "modules": {
-    "app_version": "875de4465d54",
+    "app_version": "e4649d37db5e",
     "editor_version": "e24d83e657a5"
   }
 }

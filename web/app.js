@@ -16,8 +16,9 @@ const {
   recentRoutesForScenario,
   rememberRouteForScenario,
   requireScenario,
-  junctionById,
+  junctionsForScenario,
   scenarioLabelText,
+  resolveCanonicalSelection,
 } = await import(`./route-scenarios.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -185,10 +186,7 @@ function currentJunctions() {
   if (!scenario || !appState.area) {
     return { startJunction: null, endJunction: null };
   }
-  return {
-    startJunction: junctionById(appState.area, scenario.start_junction_id),
-    endJunction: junctionById(appState.area, scenario.end_junction_id),
-  };
+  return junctionsForScenario(appState.area, scenario);
 }
 
 
@@ -397,40 +395,6 @@ function updateUrl() {
 }
 
 
-function canonicalSelectionFromQuery() {
-  const query = new URLSearchParams(window.location.search);
-  const areas = appState.manifest.areas;
-  const requestedAreaId = query.get("area");
-  const requestedArea = areas.find((item) => item.id === requestedAreaId);
-  const area = requestedArea ?? areas[0];
-  const requestedStart = query.get("start");
-  const requestedEnd = query.get("end");
-  const matchedScenario = area.scenarios.find(
-    (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
-  );
-  const scenario = matchedScenario ?? area.scenarios[0];
-  const canonical = {
-    areaId: area.id,
-    startJunctionId: scenario.start_junction_id,
-    endJunctionId: scenario.end_junction_id,
-  };
-  const queryState = {
-    areaId: requestedAreaId,
-    startJunctionId: requestedStart,
-    endJunctionId: requestedEnd,
-  };
-  return {
-    area,
-    scenario,
-    canonical,
-    canonicalized:
-      queryState.areaId !== canonical.areaId
-      || queryState.startJunctionId !== canonical.startJunctionId
-      || queryState.endJunctionId !== canonical.endJunctionId,
-  };
-}
-
-
 function replaceUrlWithSelection(selection) {
   const query = new URLSearchParams(window.location.search);
   query.set("area", selection.areaId);
@@ -474,7 +438,7 @@ function populateJunctionSelectors(area, requestedStart, requestedEnd) {
 
 
 function syncSelectorsFromQuery() {
-  const resolved = canonicalSelectionFromQuery();
+  const resolved = resolveCanonicalSelection(appState.manifest, window.location.search);
   appState.area = resolved.area;
   populateAreaOptions();
   areaSelect.value = appState.area.id;

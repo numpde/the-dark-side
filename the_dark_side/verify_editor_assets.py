@@ -151,6 +151,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/app.js", app_js, r'function requireScenario\(')
     assert_not_regex("web/app.js", app_js, r'function junctionById\(')
     assert_not_regex("web/app.js", app_js, r'function scenarioLabelText\(')
+    assert_not_regex("web/app.js", app_js, r'function canonicalSelectionFromQuery\(')
 
     assert_regex("web/planner-client.mjs", planner_client_js, r'export function createPlannerClient\(')
     assert_contains("web/planner-client.mjs", planner_client_js, "parsePlannerWorkerResponse(event.data)")
@@ -160,7 +161,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function recentRoutesForScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function rememberRouteForScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function requireScenario\(')
-    assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function junctionById\(')
+    assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function junctionsForScenario\(')
+    assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveCanonicalSelection\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function scenarioLabelText\(')
     assert_not_regex("web/route-scenarios.mjs", route_scenarios_js, r'function setScenarioLabelParts\(')
 
