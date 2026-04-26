@@ -8,6 +8,7 @@ import unittest
 
 from the_dark_side.export_karura_web_catalog import (
     RouteRecord,
+    build_catalog_payload,
     canonicalize_route_node_ids,
     dedupe_records,
     family_id_for,
@@ -103,6 +104,26 @@ class ExportCatalogNormalizationTest(unittest.TestCase):
 
         self.assertEqual(elevations, {})
         self.assertFalse(matches)
+
+    def test_debug_catalog_payload_is_flattened(self) -> None:
+        args = parse_export_args(
+            [
+                "--algorithm", "naive",
+                "--seed-start", "1",
+                "--seed-end", "1",
+                "--candidate-limit-per-run", "1",
+                "--routes-per-scenario", "1",
+                "--selection-window", "1",
+            ]
+        )
+
+        payload = build_catalog_payload(args)
+
+        self.assertNotIn("areas", payload)
+        self.assertIn("junctions", payload)
+        self.assertIn("route_families", payload)
+        self.assertIn("scenarios", payload)
+        self.assertEqual(payload["meta"]["area_id"], "karura")
 
     def test_selected_routes_do_not_traverse_excluded_or_unavailable_contigs(self) -> None:
         args = parse_export_args(

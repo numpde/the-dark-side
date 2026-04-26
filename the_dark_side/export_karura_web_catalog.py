@@ -466,26 +466,22 @@ def build_catalog_payload(args: argparse.Namespace) -> dict:
             "build_config": build_config_payload,
             "elevation_asset_path": repo_rel(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
             "elevation_asset_matches_graph": elevation_matches_graph,
+            "area_id": "karura",
+            "area_name": "Karura Forest",
+            "bounds": area_bounds(graph),
         },
-        "areas": [
+        "junctions": [
             {
-                "id": "karura",
-                "name": "Karura Forest",
-                "bounds": area_bounds(graph),
-                "junctions": [
-                    {
-                        "id": junction["id"],
-                        "name": junction["name"],
-                        "lat": round(float(junction["location"]["lat"]), 6),
-                        "lon": round(float(junction["location"]["lon"]), 6),
-                        "tags": junction.get("tags", []),
-                    }
-                    for junction in junction_defs
-                ],
-                "route_families": route_families,
-                "scenarios": catalog_scenarios,
+                "id": junction["id"],
+                "name": junction["name"],
+                "lat": round(float(junction["location"]["lat"]), 6),
+                "lon": round(float(junction["location"]["lon"]), 6),
+                "tags": junction.get("tags", []),
             }
+            for junction in junction_defs
         ],
+        "route_families": route_families,
+        "scenarios": catalog_scenarios,
     }
 
     return catalog_payload
@@ -504,10 +500,10 @@ def main() -> None:
         json.dumps(
             {
                 "catalog": str(args.output_catalog),
-                "area_count": len(payload["areas"]),
-                "scenario_count": len(payload["areas"][0]["scenarios"]),
-                "route_count": sum(scenario["route_count"] for scenario in payload["areas"][0]["scenarios"]),
-                "route_family_count": len(payload["areas"][0]["route_families"]),
+                "area_count": 1,
+                "scenario_count": len(payload["scenarios"]),
+                "route_count": sum(scenario["route_count"] for scenario in payload["scenarios"]),
+                "route_family_count": len(payload["route_families"]),
             },
             indent=2,
         )
