@@ -5,7 +5,7 @@
   "scripts": {
     "serve:web": "python3 -m http.server 8765 --directory web",
     "check:web": "for f in web/*.js web/*.mjs; do node --check \"$f\"; done",
-    "test:web": "node --test tests/test_gpx.mjs && node --test tests/test_editor_state.mjs && node --test tests/test_route_planner.mjs && node --test tests/test_route_scenarios.mjs",
+    "test:web": "node --test tests/test_gpx.mjs && node --test tests/test_editor_state.mjs && node --test tests/test_planner_worker_contracts.mjs && node --test tests/test_route_planner.mjs && node --test tests/test_route_scenarios.mjs",
     "test:e2e": "playwright test",
     "test:frontend": "npm run test:web && npm run check:web && npm run test:e2e"
   },

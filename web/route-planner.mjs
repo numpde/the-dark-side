@@ -627,6 +627,14 @@ export function planBrowserRoute(graph, options) {
       config.mcts_progress_interval_iterations,
       "planner config.mcts_progress_interval_iterations",
     ),
+    elevation_smoothing_window: requireInteger(
+      config.elevation_smoothing_window,
+      "planner config.elevation_smoothing_window",
+    ),
+    elevation_min_step_m: requireFiniteNumber(
+      config.elevation_min_step_m,
+      "planner config.elevation_min_step_m",
+    ),
   };
   const loopMode = startNodeId === endNodeId;
   const root = {

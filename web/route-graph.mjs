@@ -232,8 +232,8 @@ function buildRouteNodeIds(graph, steps) {
 }
 
 function summarizeRouteElevations(coordinates, elevations, config) {
-  const smoothed = movingAverage(elevations, config.elevation_smoothing_window || 3);
-  const { gain, loss } = computeGainLoss(smoothed, config.elevation_min_step_m || 0.5);
+  const smoothed = movingAverage(elevations, config.elevation_smoothing_window);
+  const { gain, loss } = computeGainLoss(smoothed, config.elevation_min_step_m);
   return {
     elevationsM: smoothed.map((value) => Math.round(value * 10) / 10),
     elevationGainM: Math.round(gain * 10) / 10,

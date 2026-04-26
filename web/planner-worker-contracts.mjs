@@ -61,7 +61,7 @@ export function validatePlannerRoutePayload(payload, label = "worker route paylo
   requireFiniteNumber(route.unique_length_m, `${label}.unique_length_m`);
   requireFiniteNumber(route.overlap_length_m, `${label}.overlap_length_m`);
   requireInteger(route.step_count, `${label}.step_count`);
-  requireIntegerArray(route.repeated_contig_ids ?? [], `${label}.repeated_contig_ids`);
+  requireIntegerArray(route.repeated_contig_ids, `${label}.repeated_contig_ids`);
   if (!Array.isArray(route.bounds) || route.bounds.length !== 4) {
     throw new Error(`${label}.bounds must contain four numbers`);
   }
