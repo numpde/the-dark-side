@@ -184,6 +184,98 @@ def load_required_junction_catalog(path: Path, *, label: str) -> dict:
     return validate_junction_catalog_document(load_required_json(path, label=label), label=label)
 
 
+def validate_junction_bindings_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    require_nonempty_string(meta.get("graph_asset_id"), label=f"{label}.meta.graph_asset_id")
+    require_nonempty_string(
+        meta.get("junction_catalog_asset_id"),
+        label=f"{label}.meta.junction_catalog_asset_id",
+    )
+    bindings = require_json_array(document.get("bindings"), label=f"{label}.bindings")
+    for index, binding in enumerate(bindings):
+        item = require_json_object(binding, label=f"{label}.bindings[{index}]")
+        require_nonempty_string(item.get("junction_id"), label=f"{label}.bindings[{index}].junction_id")
+        graph_node_id = item.get("graph_node_id")
+        if not isinstance(graph_node_id, int):
+            raise ValueError(f"{label}.bindings[{index}].graph_node_id must be an integer")
+        incident_contig_ids = require_json_array(
+            item.get("incident_contig_ids"),
+            label=f"{label}.bindings[{index}].incident_contig_ids",
+        )
+        for contig_index, contig_id in enumerate(incident_contig_ids):
+            if not isinstance(contig_id, int):
+                raise ValueError(
+                    f"{label}.bindings[{index}].incident_contig_ids[{contig_index}] must be an integer"
+                )
+        distance_m = item.get("distance_m")
+        if not isinstance(distance_m, (int, float)):
+            raise ValueError(f"{label}.bindings[{index}].distance_m must be numeric")
+    return document
+
+
+def load_required_junction_bindings(path: Path, *, label: str) -> dict:
+    return validate_junction_bindings_document(load_required_json(path, label=label), label=label)
+
+
+def validate_figure_catalog_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    figures = require_json_array(document.get("figures"), label=f"{label}.figures")
+    for figure_index, figure in enumerate(figures):
+        item = require_json_object(figure, label=f"{label}.figures[{figure_index}]")
+        require_nonempty_string(item.get("id"), label=f"{label}.figures[{figure_index}].id")
+        require_nonempty_string(item.get("kind"), label=f"{label}.figures[{figure_index}].kind")
+        require_nonempty_string(
+            item.get("output_path"),
+            label=f"{label}.figures[{figure_index}].output_path",
+        )
+        header = require_json_object(item.get("header"), label=f"{label}.figures[{figure_index}].header")
+        require_nonempty_string(header.get("title"), label=f"{label}.figures[{figure_index}].header.title")
+        require_nonempty_string(
+            header.get("subtitle"),
+            label=f"{label}.figures[{figure_index}].header.subtitle",
+        )
+        items = require_json_array(item.get("items"), label=f"{label}.figures[{figure_index}].items")
+        for item_index, figure_item in enumerate(items):
+            figure_entry = require_json_object(
+                figure_item,
+                label=f"{label}.figures[{figure_index}].items[{item_index}]",
+            )
+            require_nonempty_string(
+                figure_entry.get("junction_id"),
+                label=f"{label}.figures[{figure_index}].items[{item_index}].junction_id",
+            )
+            color = require_json_array(
+                figure_entry.get("color"),
+                label=f"{label}.figures[{figure_index}].items[{item_index}].color",
+            )
+            if len(color) != 4 or any(not isinstance(value, int) for value in color):
+                raise ValueError(
+                    f"{label}.figures[{figure_index}].items[{item_index}].color must be a 4-element integer array"
+                )
+            for coord_key in ("label_dx", "label_dy"):
+                coord_value = figure_entry.get(coord_key)
+                if not isinstance(coord_value, (int, float)):
+                    raise ValueError(
+                        f"{label}.figures[{figure_index}].items[{item_index}].{coord_key} must be numeric"
+                    )
+            subtitle_template = figure_entry.get("subtitle_template")
+            if subtitle_template is not None and not isinstance(subtitle_template, str):
+                raise ValueError(
+                    f"{label}.figures[{figure_index}].items[{item_index}].subtitle_template must be a string"
+                )
+    return document
+
+
+def load_required_figure_catalog(path: Path, *, label: str) -> dict:
+    return validate_figure_catalog_document(load_required_json(path, label=label), label=label)
+
+
 def digest_paths(paths: tuple[Path, ...] | list[Path]) -> str:
     digest = hashlib.sha256()
     for path in paths:

@@ -17,6 +17,7 @@ from .karura_common import (
     VIEWPORT,
     include_editor_way,
     include_ride_way,
+    load_required_patchset,
     mercator,
     resolve_map_json,
 )
@@ -94,9 +95,9 @@ def parse_contigs(path):
 
 
 def parse_patches(path):
-    payload = json.loads(path.read_text())
+    payload = load_required_patchset(path, label="patchset file")
     patch_items = []
-    for patch in payload.get("patches", []):
+    for patch in payload["patches"]:
         if not patch.get("enabled", True):
             continue
         if patch.get("op") != "add_way":

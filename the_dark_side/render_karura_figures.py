@@ -9,7 +9,19 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .karura_common import CONTIGS_JSON, CURATED_DIR, DEBUG_DIR, FIGURES_DIR, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON, VIEWPORT, mercator
+from .karura_common import (
+    CONTIGS_JSON,
+    CURATED_DIR,
+    DEBUG_DIR,
+    FIGURES_DIR,
+    JUNCTION_BINDINGS_JSON,
+    JUNCTIONS_JSON,
+    VIEWPORT,
+    load_required_figure_catalog,
+    load_required_junction_bindings,
+    load_required_junction_catalog,
+    mercator,
+)
 
 
 FIGURES_JSON = CURATED_DIR / "karura_figures.json"
@@ -94,35 +106,31 @@ def draw_label(
 
 
 def resolve_figure(payload: dict, figure_id: str) -> dict:
-    for figure in payload.get("figures", []):
+    for figure in payload["figures"]:
         if figure["id"] == figure_id:
             return figure
     raise KeyError(f"Figure '{figure_id}' not found")
 
 
 def resolve_junction_binding(bindings: dict, junction_id: str) -> dict:
-    for binding in bindings.get("bindings", []):
-        if binding.get("junction_id") == junction_id:
+    for binding in bindings["bindings"]:
+        if binding["junction_id"] == junction_id:
             return binding
     raise KeyError(f"Junction '{junction_id}' has no derived binding")
 
 
-def load_payload(path: Path) -> dict:
-    return json.loads(path.read_text())
-
-
 def main() -> None:
     args = parse_args()
-    figures_payload = load_payload(args.figures_json)
+    figures_payload = load_required_figure_catalog(args.figures_json, label="figure catalog")
     figure = resolve_figure(figures_payload, args.figure_id)
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
     viewport = json.loads(args.viewport.read_text())["viewport"]
-    contigs = load_payload(args.contigs_json)
+    contigs = json.loads(args.contigs_json.read_text())
     nodes = {int(node_id): node for node_id, node in contigs["nodes"].items()}
 
-    junctions_payload = load_payload(args.junctions_json)
-    junction_bindings = load_payload(args.junction_bindings_json)
+    junctions_payload = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     if junction_bindings["meta"]["graph_asset_id"] != contigs["meta"]["asset_id"]:
         raise RuntimeError(
             f"Junction bindings are for graph '{junction_bindings['meta']['graph_asset_id']}' "
@@ -139,7 +147,7 @@ def main() -> None:
     draw.text((68, 56), figure["header"]["title"], fill=(20, 20, 20, 255), font=header_font)
     draw.text((72, 118), figure["header"]["subtitle"], fill=(60, 60, 60, 255), font=subtitle_font)
 
-    for item in figure.get("items", []):
+    for item in figure["items"]:
         junction = junctions[item["junction_id"]]
         junction_ref = resolve_junction_binding(junction_bindings, junction["id"])
         node = nodes[junction_ref["graph_node_id"]]

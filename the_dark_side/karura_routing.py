@@ -236,17 +236,17 @@ def load_junction_bindings(path: Path) -> dict:
 
 
 def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict) -> JunctionRef:
-    junction = next((entry for entry in payload.get("junctions", []) if entry["id"] == junction_id), None)
+    junction = next((entry for entry in payload["junctions"] if entry["id"] == junction_id), None)
     if junction is None:
         raise KeyError(f"Junction '{junction_id}' not found")
 
-    bindings_graph_asset_id = bindings_payload.get("meta", {}).get("graph_asset_id")
+    bindings_graph_asset_id = bindings_payload["meta"]["graph_asset_id"]
     if bindings_graph_asset_id != graph_asset_id:
         raise KeyError(
             f"Junction bindings asset is for graph '{bindings_graph_asset_id}', expected '{graph_asset_id}'"
         )
-    for binding in bindings_payload.get("bindings", []):
-        if binding.get("junction_id") == junction_id:
+    for binding in bindings_payload["bindings"]:
+        if binding["junction_id"] == junction_id:
             return JunctionRef(
                 junction_id=junction["id"],
                 name=junction["name"],

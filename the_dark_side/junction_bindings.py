@@ -2,13 +2,18 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
-from .karura_common import JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, load_required_junction_catalog, repo_rel
+from .karura_common import (
+    JUNCTIONS_JSON,
+    JUNCTION_BINDINGS_JSON,
+    load_required_junction_bindings,
+    load_required_junction_catalog,
+    repo_rel,
+)
 
 
 R = 6371000.0
@@ -21,18 +26,12 @@ def haversine_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
     lat2_r = radians(lat2)
     value = sin(dlat / 2) ** 2 + cos(lat1_r) * cos(lat2_r) * sin(dlon / 2) ** 2
     return 2 * R * asin(sqrt(value))
-
-
-def load_json(path: Path) -> dict[str, Any]:
-    return json.loads(path.read_text())
-
-
 def load_junction_catalog(path: Path = JUNCTIONS_JSON) -> dict[str, Any]:
     return load_required_junction_catalog(path, label="junction catalog")
 
 
 def load_junction_bindings(path: Path = JUNCTION_BINDINGS_JSON) -> dict[str, Any]:
-    return load_json(path)
+    return load_required_junction_bindings(path, label="junction bindings")
 
 
 def nearest_graph_node(graph, *, lat: float, lon: float) -> tuple[int, float]:
@@ -56,7 +55,7 @@ def build_junction_bindings(
     graph_path: Path | None = None,
 ) -> dict[str, Any]:
     bindings: list[dict[str, Any]] = []
-    for junction in junction_catalog.get("junctions", []):
+    for junction in junction_catalog["junctions"]:
         location = junction["location"]
         graph_node_id, distance_m = nearest_graph_node(
             graph,
