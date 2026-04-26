@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 import argparse
+import json
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -12,6 +13,7 @@ from .asset_contracts import (
     load_required_figure_catalog,
     load_required_junction_bindings,
     load_required_junction_catalog,
+    load_route_graph_document,
 )
 from .karura_common import (
     CONTIGS_JSON,
@@ -118,7 +120,7 @@ def main() -> None:
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
     viewport = load_viewport(args.viewport)
-    contigs = json.loads(args.contigs_json.read_text())
+    contigs = load_route_graph_document(args.contigs_json, label="route graph")
     nodes = {int(node_id): node for node_id, node in contigs["nodes"].items()}
 
     junctions_payload = load_required_junction_catalog(args.junctions_json, label="junction catalog")

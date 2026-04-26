@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 from PIL import Image, ImageOps
@@ -14,7 +15,19 @@ BASE_IMAGE_ALPHA = 0.7
 
 
 def load_viewport(path: Path) -> dict:
-    return json.loads(path.read_text())["viewport"]
+    payload = json.loads(path.read_text())
+    if not isinstance(payload, dict):
+        raise ValueError("viewport document must be a JSON object")
+    viewport = payload.get("viewport")
+    if not isinstance(viewport, dict):
+        raise ValueError("viewport document.viewport must be an object")
+    normalized = dict(viewport)
+    for key in ("center_x", "center_y", "meters_per_px"):
+        value = normalized.get(key)
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(float(value)):
+            raise ValueError(f"viewport document.viewport.{key} must be a finite number")
+        normalized[key] = float(value)
+    return normalized
 
 
 def prepare_base_image(path: Path, *, alpha: float = BASE_IMAGE_ALPHA) -> Image.Image:

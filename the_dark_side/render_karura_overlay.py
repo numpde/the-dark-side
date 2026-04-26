@@ -9,7 +9,8 @@ from pathlib import Path
 
 from PIL import ImageDraw
 
-from .asset_contracts import load_required_patchset
+from .asset_contracts import load_required_patchset, load_route_graph_document
+from .download_karura_map import load_map
 from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
@@ -49,20 +50,19 @@ def include_way(way_id, tags, mode):
 
 
 def parse_map(path, mode):
-    payload = json.loads(path.read_text())
+    karura_map = load_map(path)
     nodes = {
-        int(node_id): mercator(node["lon"], node["lat"])
-        for node_id, node in payload["nodes"].items()
+        int(node_id): mercator(node.lon, node.lat)
+        for node_id, node in karura_map.nodes.items()
     }
 
     filtered = []
-    for way_id_text, way in payload["ways"].items():
-        way_id = int(way_id_text)
-        tags = way["tags"]
+    for way_id, way in karura_map.ways.items():
+        tags = way.tags
         if not include_way(way_id, tags, mode):
             continue
         segments = []
-        for first_id, second_id in way["segment_pairs"]:
+        for first_id, second_id in way.segment_pairs:
             if first_id not in nodes or second_id not in nodes:
                 continue
             segments.append((nodes[first_id], nodes[second_id]))
@@ -73,7 +73,7 @@ def parse_map(path, mode):
 
 
 def parse_contigs(path):
-    payload = json.loads(path.read_text())
+    payload = load_route_graph_document(path, label="route graph")
     nodes = {
         int(node_id): mercator(node["lon"], node["lat"])
         for node_id, node in payload["nodes"].items()
