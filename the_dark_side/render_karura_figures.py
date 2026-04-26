@@ -23,6 +23,7 @@ from .karura_common import (
     VIEWPORT,
     print_json_document,
 )
+from .karura_routing import resolve_junction_ref
 from .render_support import load_viewport, project_lon_lat
 
 
@@ -104,14 +105,6 @@ def resolve_figure(payload: dict, figure_id: str) -> dict:
             return figure
     raise KeyError(f"Figure '{figure_id}' not found")
 
-
-def resolve_junction_binding(bindings: dict, junction_id: str) -> dict:
-    for binding in bindings["bindings"]:
-        if binding["junction_id"] == junction_id:
-            return binding
-    raise KeyError(f"Junction '{junction_id}' has no derived binding")
-
-
 def main() -> None:
     args = parse_args()
     figures_payload = load_required_figure_catalog(args.figures_json, label="figure catalog")
@@ -124,12 +117,6 @@ def main() -> None:
 
     junctions_payload = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
-    if junction_bindings["meta"]["graph_asset_id"] != contigs["meta"]["asset_id"]:
-        raise RuntimeError(
-            f"Junction bindings are for graph '{junction_bindings['meta']['graph_asset_id']}' "
-            f"but loaded contigs '{contigs['meta']['asset_id']}'"
-        )
-    junctions = {junction["id"]: junction for junction in junctions_payload["junctions"]}
 
     title_font = load_font(42)
     subtitle_font = load_font(24)
@@ -141,17 +128,27 @@ def main() -> None:
     draw.text((72, 118), figure["header"]["subtitle"], fill=(60, 60, 60, 255), font=subtitle_font)
 
     for item in figure["items"]:
-        junction = junctions[item["junction_id"]]
-        junction_ref = resolve_junction_binding(junction_bindings, junction["id"])
-        node = nodes[junction_ref["graph_node_id"]]
+        junction_ref = resolve_junction_ref(
+            junctions_payload,
+            item["junction_id"],
+            contigs["meta"]["asset_id"],
+            junction_bindings,
+        )
+        node = nodes[junction_ref.graph_node_id]
         point = project_lon_lat(node["lon"], node["lat"], viewport, overlay.size)
         color = tuple(item["color"])
         draw_marker(draw, point, color)
         draw_label(
             draw,
             point=point,
-            title=junction["name"],
-            subtitle=item.get("subtitle_template", "{graph_node_id}").format(**junction_ref),
+            title=junction_ref.name,
+            subtitle=item.get("subtitle_template", "{graph_node_id}").format(
+                graph_node_id=junction_ref.graph_node_id,
+                incident_contig_ids=list(junction_ref.incident_contig_ids),
+                junction_id=junction_ref.junction_id,
+                name=junction_ref.name,
+                **junction_ref.location,
+            ),
             color=color,
             label_dx=item["label_dx"],
             label_dy=item["label_dy"],
