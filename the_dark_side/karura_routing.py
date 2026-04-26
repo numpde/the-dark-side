@@ -373,6 +373,23 @@ def orient_contig_node_ids(contig: ContigRecord, from_node_id: int, to_node_id: 
     )
 
 
+def resolve_route_asset_graph_path(route_payload: dict, route_json: Path) -> Path:
+    graph_path = Path(route_payload["meta"]["graph_path"])
+    if not graph_path.is_absolute():
+        graph_path = (route_json.parent / graph_path).resolve()
+    return graph_path
+
+
+def load_route_asset_graph(route_payload: dict, route_json: Path) -> RouteGraph:
+    graph = load_route_graph(resolve_route_asset_graph_path(route_payload, route_json))
+    expected_graph_asset_id = route_payload["meta"]["graph_asset_id"]
+    if graph.asset_id != expected_graph_asset_id:
+        raise RuntimeError(
+            f"Route file expects graph asset '{expected_graph_asset_id}', got '{graph.asset_id}'"
+        )
+    return graph
+
+
 def build_route_node_ids(graph: RouteGraph, steps: Iterable[RouteStep]) -> list[int]:
     route_node_ids: list[int] = []
     for step in steps:

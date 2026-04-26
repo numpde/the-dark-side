@@ -14,6 +14,7 @@ from the_dark_side.karura_routing import (
     RouteCandidate,
     RouteGraph,
     RouteStep,
+    load_route_asset_graph,
     route_asset_payload,
 )
 
@@ -138,6 +139,56 @@ class RouteAssetTest(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, r"route asset\.config must not be empty"):
                 load_route_asset_document(route_path, label="route asset")
+
+    def test_load_route_asset_graph_resolves_relative_path_and_checks_asset_id(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            graph_path = tmpdir / "graph.json"
+            route_path = tmpdir / "route.json"
+
+            graph_path.write_text(
+                json.dumps(
+                    {
+                        "meta": {"asset_id": "graph-1", "asset_kind": "contig_graph"},
+                        "nodes": {
+                            "1": {"lat": -1.0, "lon": 36.0},
+                            "2": {"lat": -1.001, "lon": 36.001},
+                        },
+                        "crossings": {
+                            "1": {"degree": 1},
+                            "2": {"degree": 1},
+                        },
+                        "contigs": [
+                            {
+                                "id": 10,
+                                "endpoint_node_ids": [1, 2],
+                                "node_ids": [1, 2],
+                                "length_m": 150.0,
+                                "is_cycle": False,
+                                "segment_count": 1,
+                                "way_ids": [10],
+                                "way_names": ["Path 10"],
+                                "highway_types": {"path": 1},
+                                "tags": {},
+                            }
+                        ],
+                    }
+                )
+            )
+
+            route_payload = self.build_sample_route_asset()
+            route_payload["meta"]["graph_path"] = "graph.json"
+            route_path.write_text(json.dumps(route_payload))
+
+            loaded_payload = load_route_asset_document(route_path, label="route asset")
+            graph = load_route_asset_graph(loaded_payload, route_path)
+            self.assertEqual(graph.asset_id, "graph-1")
+
+            route_payload["meta"]["graph_asset_id"] = "graph-2"
+            route_path.write_text(json.dumps(route_payload))
+            loaded_payload = load_route_asset_document(route_path, label="route asset")
+            with self.assertRaisesRegex(RuntimeError, "expects graph asset 'graph-2'"):
+                load_route_asset_graph(loaded_payload, route_path)
 
 
 if __name__ == "__main__":

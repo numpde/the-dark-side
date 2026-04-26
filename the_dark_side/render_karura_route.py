@@ -12,7 +12,7 @@ from PIL import ImageDraw
 
 from .asset_contracts import load_route_asset_document
 from .karura_common import SCREENSHOT, VIEWPORT, print_json_document
-from .karura_routing import load_route_graph
+from .karura_routing import load_route_asset_graph, orient_contig_node_ids
 from .render_support import load_viewport, prepare_base_image, project_lon_lat
 
 
@@ -32,18 +32,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--hide-background-contigs", action="store_true")
     return parser.parse_args()
-
-
-def resolve_graph_from_route(route_payload: dict, route_json: Path):
-    graph_path = Path(route_payload["meta"]["graph_path"])
-    if not graph_path.is_absolute():
-        graph_path = (route_json.parent / graph_path).resolve()
-    graph = load_route_graph(graph_path)
-    if graph.asset_id != route_payload["meta"]["graph_asset_id"]:
-        raise RuntimeError(
-            f"Route file expects graph asset '{route_payload['meta']['graph_asset_id']}', got '{graph.asset_id}'"
-        )
-    return graph
 
 
 def default_output(route_json: Path, route_payload: dict, route_index: int) -> Path:
@@ -77,7 +65,7 @@ def segment_length(a: tuple[float, float], b: tuple[float, float]) -> float:
 def main() -> None:
     args = parse_args()
     route_payload = load_route_asset_document(args.route_json, label="route asset")
-    graph = resolve_graph_from_route(route_payload, args.route_json)
+    graph = load_route_asset_graph(route_payload, args.route_json)
     viewport = load_viewport(args.viewport)
     image = prepare_base_image(args.screenshot)
     draw = ImageDraw.Draw(image, "RGBA")
@@ -100,10 +88,11 @@ def main() -> None:
     traversed_length = 0.0
     for step in route["steps"]:
         contig = graph.contigs[int(step["contig_id"])]
-        if contig.node_ids[0] == int(step["from_node_id"]) and contig.node_ids[-1] == int(step["to_node_id"]):
-            oriented = list(contig.node_ids)
-        else:
-            oriented = list(reversed(contig.node_ids))
+        oriented = orient_contig_node_ids(
+            contig,
+            int(step["from_node_id"]),
+            int(step["to_node_id"]),
+        )
         points = [
             project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
             for node_id in oriented
