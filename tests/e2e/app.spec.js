@@ -48,6 +48,40 @@ test("route app canonicalizes invalid query params to a valid scenario", async (
   await expect(page).not.toHaveURL(/missing-area|bogus-start|bogus-end/);
 });
 
+test("route app canonicalizes invalid selector pairs to a valid scenario", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.locator("#new-route-button")).toBeEnabled();
+
+  const candidate = await page.evaluate(async () => {
+    const manifest = await fetch("./generated/app-manifest.json", { cache: "no-store" }).then((response) => response.json());
+    const areaId = document.querySelector("#area-select").value;
+    const currentEnd = document.querySelector("#end-select").value;
+    const area = manifest.areas.find((item) => item.id === areaId);
+    for (const scenario of area.scenarios) {
+      const invalidWithCurrentEnd = !area.scenarios.some(
+        (item) => item.start_junction_id === scenario.start_junction_id && item.end_junction_id === currentEnd
+      );
+      if (invalidWithCurrentEnd) {
+        const expected = area.scenarios.find((item) => item.start_junction_id === scenario.start_junction_id);
+        return {
+          newStart: scenario.start_junction_id,
+          expectedEnd: expected.end_junction_id,
+        };
+      }
+    }
+    return null;
+  });
+
+  test.skip(!candidate, "all start/end pairs are already valid in this manifest");
+
+  await page.locator("#start-select").selectOption(candidate.newStart);
+  await expect(page.locator("#end-select")).toHaveValue(candidate.expectedEnd);
+  await expect(page).toHaveURL(new RegExp(`start=${candidate.newStart}`));
+  await expect(page).toHaveURL(new RegExp(`end=${candidate.expectedEnd}`));
+  await expect(page.locator("#new-route-button")).toBeEnabled();
+});
+
 test("editor shell loads and resolves editor provenance", async ({ page }) => {
   await page.goto("/editor.html");
 

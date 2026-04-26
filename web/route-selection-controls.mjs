@@ -8,7 +8,11 @@ function requireModuleVersion() {
 
 const MODULE_VERSION = requireModuleVersion();
 const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
-const { requireScenario, resolveCanonicalSelection } = await import(`./route-scenarios.mjs${moduleSuffix}`);
+const {
+  requireScenario,
+  resolveCanonicalSelection,
+  resolveScenarioSelection,
+} = await import(`./route-scenarios.mjs${moduleSuffix}`);
 
 export function installSelectionPlaceholders(areaSelect, startSelect, endSelect) {
   areaSelect.innerHTML = "<option>Loading…</option>";
@@ -57,6 +61,17 @@ export function syncSelectorsFromQuery(manifest, search, areaSelect, startSelect
     resolved.scenario.start_junction_id,
     resolved.scenario.end_junction_id
   );
+  return resolved;
+}
+
+export function canonicalizeSelectorScenario(startSelect, endSelect, area, preferredAnchor) {
+  const resolved = resolveScenarioSelection(area, {
+    startJunctionId: startSelect.value,
+    endJunctionId: endSelect.value,
+    preferredAnchor,
+  });
+  startSelect.value = resolved.scenario.start_junction_id;
+  endSelect.value = resolved.scenario.end_junction_id;
   return resolved;
 }
 

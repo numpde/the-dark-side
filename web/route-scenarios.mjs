@@ -74,10 +74,11 @@ export function resolveCanonicalSelection(manifest, search) {
   const area = requestedArea ?? areas[0];
   const requestedStart = query.get("start");
   const requestedEnd = query.get("end");
-  const matchedScenario = area.scenarios.find(
-    (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
-  );
-  const scenario = matchedScenario ?? area.scenarios[0];
+  const { scenario } = resolveScenarioSelection(area, {
+    startJunctionId: requestedStart,
+    endJunctionId: requestedEnd,
+    preferredAnchor: "exact",
+  });
   const canonical = {
     areaId: area.id,
     startJunctionId: scenario.start_junction_id,
@@ -96,5 +97,43 @@ export function resolveCanonicalSelection(manifest, search) {
       queryState.areaId !== canonical.areaId
       || queryState.startJunctionId !== canonical.startJunctionId
       || queryState.endJunctionId !== canonical.endJunctionId,
+  };
+}
+
+export function resolveScenarioSelection(
+  area,
+  {
+    startJunctionId = null,
+    endJunctionId = null,
+    preferredAnchor = "exact",
+  } = {},
+) {
+  const exactScenario = findScenario(area, startJunctionId, endJunctionId);
+  if (exactScenario) {
+    return {
+      scenario: exactScenario,
+      canonicalized: false,
+    };
+  }
+
+  const byStart = startJunctionId
+    ? area.scenarios.find((item) => item.start_junction_id === startJunctionId) || null
+    : null;
+  const byEnd = endJunctionId
+    ? area.scenarios.find((item) => item.end_junction_id === endJunctionId) || null
+    : null;
+
+  let scenario = area.scenarios[0];
+  if (preferredAnchor === "start" && byStart) {
+    scenario = byStart;
+  } else if (preferredAnchor === "end" && byEnd) {
+    scenario = byEnd;
+  } else {
+    scenario = byStart || byEnd || area.scenarios[0];
+  }
+
+  return {
+    scenario,
+    canonicalized: true,
   };
 }

@@ -21,6 +21,7 @@ const {
   clearError,
 } = await import(`./route-shell-view.mjs${moduleSuffix}`);
 const {
+  canonicalizeSelectorScenario,
   populateJunctionSelectors,
   syncSelectorsFromQuery,
   replaceUrlWithSelection,
@@ -296,9 +297,11 @@ function bindControls() {
   });
 
   startSelect.addEventListener("change", () => {
+    canonicalizeSelectorScenario(startSelect, endSelect, appState.area, "start");
     chooseRoute();
   });
   endSelect.addEventListener("change", () => {
+    canonicalizeSelectorScenario(startSelect, endSelect, appState.area, "end");
     chooseRoute();
   });
   newRouteButton.addEventListener("click", () => {

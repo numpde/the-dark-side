@@ -176,6 +176,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/app.js", app_js, r'function populateAreaOptions\(')
     assert_not_regex("web/app.js", app_js, r'function populateJunctionSelectors\(')
     assert_not_regex("web/app.js", app_js, r'function syncSelectionControlsFromQuery\(')
+    assert_not_regex("web/app.js", app_js, r'function resolveScenarioSelection\(')
     assert_not_regex("web/app.js", app_js, r'function nextRouteSeed\(')
     assert_not_regex("web/app.js", app_js, r'function ensurePlannerClient\(')
     assert_not_regex("web/app.js", app_js, r'function sendWorkerMessage\(')
@@ -201,6 +202,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function requireScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function junctionsForScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveCanonicalSelection\(')
+    assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveScenarioSelection\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function scenarioLabelText\(')
     assert_not_regex("web/route-scenarios.mjs", route_scenarios_js, r'function setScenarioLabelParts\(')
 
@@ -217,6 +219,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function installSelectionPlaceholders\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateJunctionSelectors\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncSelectorsFromQuery\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function canonicalizeSelectorScenario\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function replaceUrlWithSelection\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncUrlFromSelectors\(')
     assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'function renderRouteSummary\(')
