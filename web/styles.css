@@ -122,6 +122,12 @@ button,
   transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
 }
 
+button:disabled,
+select:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+
 button {
   border: none;
   background: linear-gradient(135deg, var(--fern), var(--fern-deep));
@@ -134,6 +140,11 @@ button {
   color: var(--ink);
   background: rgba(255, 255, 255, 0.7);
   font-weight: 700;
+}
+
+.download-link.disabled {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 button:hover,

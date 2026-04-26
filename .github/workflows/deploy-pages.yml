@@ -43,13 +43,16 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Run frontend GPX tests
+      - name: Run frontend JS checks
         run: |
           node --test tests/test_gpx.mjs
           node --test tests/test_editor_state.mjs
+          node --test tests/test_route_planner.mjs
           node --check web/app.js
           node --check web/editor.js
           node --check web/editor-state.mjs
+          node --check web/route-planner.mjs
+          node --check web/route-worker.js
 
       - name: Run Python asset tests
         run: |

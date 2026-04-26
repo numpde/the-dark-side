@@ -1,6 +1,6 @@
 # the-dark-side
 
-Static route generator and GitHub Pages app for long, low-overlap bike routes through Karura Forest.
+Static GitHub Pages app and route-planning toolkit for long, low-overlap bike routes through Karura Forest.
 
 ## Layout
 
@@ -52,13 +52,13 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the static frontend catalog plus the generated GeoJSON assets used by the web app and contig editor into `web/generated/`, and publishes the canonical `source/*.json` inputs into `web/source/`.
+  Exports the precomputed/debug route catalog plus the generated GeoJSON assets used by the web app and contig editor into `web/generated/`, and publishes the canonical `source/*.json` inputs into `web/source/`.
 - `the_dark_side.rebuild_editor_assets`
   Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
 - `the_dark_side.verify_editor_assets`
   Verifies that the editor-facing derived assets match the current canonical inputs.
 - `the_dark_side.rebuild_app_assets`
-  Rebuilds the editor assets, then exports the published route catalog and app-facing network assets.
+  Rebuilds the editor assets, then exports the app-facing graph/manifests used by the browser-side planner.
 - `the_dark_side.verify_app_assets`
   Verifies the editor assets, elevation cache binding, and published app assets.
 - `the_dark_side.rebuild_all`
@@ -148,7 +148,7 @@ The current MCTS defaults are tuned toward longer coverage-heavy routes:
 - `--mcts-loop-late-return-bonus 180`
 - `--mcts-loop-overlap-penalty-per-m 4`
 
-These one-off route assets are debug output only. The canonical product output is `web/generated/catalog.json`.
+These one-off route assets are debug output only. The published app now composes routes in the browser from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
 
 Render the top route from one of those debug assets:
 
@@ -168,6 +168,24 @@ Run the GPX export and download-link tests:
 node --test tests/test_gpx.mjs
 node --test tests/test_editor_state.mjs
 ```
+
+For local frontend development, install the dev-only Node tooling once:
+
+```bash
+npm install
+```
+
+Then use:
+
+```bash
+npm run serve:web
+npm run test:web
+npm run check:web
+npm run test:e2e
+npm run test:frontend
+```
+
+This does not change deployment; GitHub Pages still serves plain static files from `web/`.
 
 Run the route benchmark summary:
 
@@ -201,7 +219,6 @@ python3 -m the_dark_side.rebuild_app_assets
 ```
 
 This writes:
-- `web/generated/catalog.json`
 - `web/generated/karura-network.geojson`
 - `web/generated/app-manifest.json`
 
@@ -223,10 +240,10 @@ Verify the published app assets:
 python3 -m the_dark_side.verify_app_assets
 ```
 
-The route-catalog build parameters live in `source/catalog_build.json`. By default the exporter samples `mcts`, `beam`, and `naive` planners, then keeps a diverse subset per scenario according to that file.
+The browser-planner build parameters live in `source/catalog_build.json`. The published app uses a bounded seeded beam planner in a Web Worker; `rebuild_app_assets` exports the graph and the planner config needed by that worker.
 
 The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
-The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present in the catalog.
+The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present on the generated route graph.
 
 Serve the frontend locally:
 
@@ -248,7 +265,7 @@ http://127.0.0.1:8765/editor.html
 ```
 
 The page will:
-- choose a random route for the selected start/end pair on each refresh
+- choose a fresh seeded route for the selected start/end pair on each refresh
 - render the route over OpenStreetMap with the Karura contig network faintly underneath
 - generate a GPX download in the browser for the current route
 
@@ -259,8 +276,8 @@ The editor will:
 - annotate contigs as unavailable until a specific date
 - export a replacement for `source/karura-map-patches.json`
 
-GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow re-exports the static catalog and publishes `web/`.
-It also runs on a daily schedule so `unavailable until` dates can expire out of the published route catalog without a manual push.
+GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow rebuilds the editor/app assets, verifies provenance, and publishes `web/`.
+It also runs on a daily schedule so `unavailable until` dates can expire out of the published browser-planner graph without a manual push.
 
 ## Local patch strategy
 
@@ -342,13 +359,13 @@ python3 -m the_dark_side.verify_app_assets
 - `meta`: patchset metadata
 - `patches`: ordered patch operations
 
-`source/catalog_build.json` contains the canonical route-catalog build parameters:
+`source/catalog_build.json` contains the canonical browser-planner build parameters:
 
 - planner list
 - seed range
 - candidate limits
 - selection window
-- all planner tuning values that affect the published catalog
+- all planner tuning values that affect the published app graph/manifests
 
 `data/karura_map_patched.json` contains the derived patched map asset:
 
@@ -373,22 +390,21 @@ python3 -m the_dark_side.verify_app_assets
 - `figures` contains stable figure ids
 - figure items reference stable curated entities such as `junction_id`
 
-`web/generated/catalog.json` contains the static frontend bundle:
+`web/generated/catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app.
 
+`web/generated/app-manifest.json` contains the live route-app bootstrap payload:
+
+- `planner` contains the browser-side algorithm id, network asset paths, and bounded planner config
 - `areas` contains the currently supported areas, starting with `karura`
 - each area contains:
   - `junctions`
-  - `route_families`
   - `scenarios`
-  - a `network_path` to the generated GeoJSON overlay
-- each `route_family` stores one canonical route geometry normalized up to reversal
-- each scenario contains a prefiltered, diverse route pool as directional references into those shared route families
-- route family records may also contain:
-  - `elevation_gain_m`
-  - `elevation_loss_m`
-  - `elevation_min_m`
-  - `elevation_max_m`
-  - `elevations_m` aligned with `coordinates`
-  - `elevation_profile` as `[distance_m, elevation_m]` pairs for charting
+  - `bounds`
+
+`web/generated/karura-network.geojson` contains the contig graph used by the browser planner:
+
+- one feature per ride-graph contig
+- `node_ids`, `endpoint_node_ids`, `way_ids`, `tags`, and `length_m`
+- `elevations_m` aligned with the feature geometry when the pinned elevation cache matches the current graph
 
 `web/generated/editor-manifest.json` and `web/generated/app-manifest.json` expose the active graph asset ids, patch digest, build config digest, and generated timestamps so stale assets are visible in the UI and CI.

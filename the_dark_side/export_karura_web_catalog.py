@@ -380,7 +380,7 @@ def build_route_record(
     )
 
 
-def network_geojson(graph, *, meta: dict | None = None) -> dict:
+def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[int, float] | None = None) -> dict:
     features = []
     if isinstance(graph, dict):
         nodes = {
@@ -396,6 +396,12 @@ def network_geojson(graph, *, meta: dict | None = None) -> dict:
                 [round(nodes[int(node_id)]["lon"], 6), round(nodes[int(node_id)]["lat"], 6)]
                 for node_id in contig["node_ids"]
             ]
+            elevations = None
+            if node_elevations:
+                try:
+                    elevations = [round(float(node_elevations[int(node_id)]), 1) for node_id in contig["node_ids"]]
+                except KeyError:
+                    elevations = None
             features.append(
                 {
                     "type": "Feature",
@@ -408,6 +414,7 @@ def network_geojson(graph, *, meta: dict | None = None) -> dict:
                         "endpoint_node_ids": list(contig["endpoint_node_ids"]),
                         "node_ids": list(contig["node_ids"]),
                         "tags": dict(contig.get("tags", {})),
+                        **({"elevations_m": elevations} if elevations is not None else {}),
                     },
                     "geometry": {
                         "type": "LineString",
@@ -422,6 +429,12 @@ def network_geojson(graph, *, meta: dict | None = None) -> dict:
             [round(graph.nodes[node_id].lon, 6), round(graph.nodes[node_id].lat, 6)]
             for node_id in contig.node_ids
         ]
+        elevations = None
+        if node_elevations:
+            try:
+                elevations = [round(float(node_elevations[node_id]), 1) for node_id in contig.node_ids]
+            except KeyError:
+                elevations = None
         features.append(
             {
                 "type": "Feature",
@@ -434,6 +447,7 @@ def network_geojson(graph, *, meta: dict | None = None) -> dict:
                     "endpoint_node_ids": list(contig.endpoint_node_ids),
                     "node_ids": list(contig.node_ids),
                     "tags": dict(contig.tags),
+                    **({"elevations_m": elevations} if elevations is not None else {}),
                 },
                 "geometry": {
                     "type": "LineString",
@@ -769,6 +783,7 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
             "asset_kind": graph.asset_kind,
             "source_path": repo_rel(args.contigs_json),
         },
+        node_elevations=node_elevations if elevation_matches_graph else None,
     )
     return {
         "catalog": catalog_payload,

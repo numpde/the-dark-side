@@ -8,8 +8,8 @@ import argparse
 import json
 from pathlib import Path
 
-from .build_config import catalog_build_config_digest, load_catalog_build_config
-from .export_karura_web_catalog import build_export_payloads, parse_args as parse_export_args
+from .build_config import load_catalog_build_config
+from .export_karura_web_catalog import load_elevation_asset, network_geojson
 from .karura_common import (
     APP_MANIFEST_JSON,
     CATALOG_BUILD_JSON,
@@ -21,8 +21,9 @@ from .karura_common import (
     MAP_PATCHES_JSON,
     PATCHED_MAP_JSON,
     WEB_GENERATED_DIR,
-    repo_rel,
 )
+from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
+from .rebuild_app_assets import build_app_manifest
 from .verify_editor_assets import parse_args as parse_editor_args, verify_editor_assets
 
 
@@ -36,7 +37,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
     parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument("--output-catalog", type=Path, default=WEB_GENERATED_DIR / "catalog.json")
     parser.add_argument("--output-network", type=Path, default=WEB_GENERATED_DIR / "karura-network.geojson")
     parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
     parser.add_argument("--output-editor-manifest", type=Path, default=WEB_GENERATED_DIR / "editor-manifest.json")
@@ -69,25 +69,6 @@ def assert_equal(label: str, actual, expected) -> None:
         raise SystemExit(f"{label} is stale; rebuild app assets and commit the derived output")
 
 
-def build_expected_app_manifest(args: argparse.Namespace, export_payloads: dict[str, dict], editor_verification: dict) -> dict:
-    config = load_catalog_build_config(args.build_config_json)
-    config_digest = catalog_build_config_digest(config)
-    catalog_meta = export_payloads["catalog"]["meta"]
-    return {
-        "meta": {
-            "asset_kind": "app_manifest",
-            "graph_asset_id": catalog_meta["graph_asset_id"],
-            "ride_graph_asset_id": catalog_meta["graph_asset_id"],
-            "editor_graph_asset_id": editor_verification["editor_graph_asset_id"],
-            "junction_bindings_asset_id": catalog_meta["junction_bindings_asset_id"],
-            "catalog_build_path": repo_rel(args.build_config_json),
-            "catalog_build_digest": config_digest,
-            "catalog_asset_graph_id": catalog_meta["graph_asset_id"],
-            "elevation_asset_matches_graph": catalog_meta["elevation_asset_matches_graph"],
-        }
-    }
-
-
 def verify_app_assets(args: argparse.Namespace) -> dict:
     editor_args = parse_editor_args(
         [
@@ -115,33 +96,42 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
                 f"{args.elevation_json} does not match current contig graph; rebuild elevation and commit the updated cache"
             )
 
-    export_args = parse_export_args(
-        [
-            "--build-config-json", str(args.build_config_json),
-            "--contigs-json", str(args.contigs_json),
-            "--junctions-json", str(args.junctions_json),
-            "--junction-bindings-json", str(args.junction_bindings_json),
-            "--editor-map-json", str(args.patched_map_json),
-            "--editor-patches-json", str(args.patches_json),
-            "--elevation-json", str(args.elevation_json),
-            "--output-catalog", str(args.output_catalog),
-            "--output-network", str(args.output_network),
-            "--output-editor-network", str(args.output_editor_network),
-        ]
+    graph = load_route_graph(args.contigs_json)
+    build_config_payload = load_catalog_build_config(args.build_config_json)
+    node_elevations, elevation_matches_graph = load_elevation_asset(
+        args.elevation_json,
+        expected_graph_asset_id=graph.asset_id,
     )
-    expected_export = build_export_payloads(export_args)
-    actual_catalog = load_json(args.output_catalog)
+    expected_network = network_geojson(
+        graph,
+        meta={
+            "graph_asset_id": graph.asset_id,
+            "asset_kind": graph.asset_kind,
+            "source_path": "data/karura_contigs.json",
+        },
+        node_elevations=node_elevations if elevation_matches_graph else None,
+    )
+    junction_catalog = load_junction_catalog(args.junctions_json)
+    junction_bindings = load_junction_bindings(args.junction_bindings_json)
     actual_network = load_json(args.output_network)
     actual_manifest = load_json(args.output_app_manifest)
-    assert_equal(str(args.output_catalog), normalized(actual_catalog), normalized(expected_export["catalog"]))
-    assert_equal(str(args.output_network), actual_network, expected_export["network"])
-    expected_manifest = build_expected_app_manifest(args, expected_export, editor_verification)
+    assert_equal(str(args.output_network), actual_network, expected_network)
+    expected_manifest = build_app_manifest(
+        args,
+        editor_manifest=load_json(args.output_editor_manifest),
+        graph=graph,
+        junction_catalog=junction_catalog,
+        junction_bindings=junction_bindings,
+        build_config_payload=build_config_payload,
+        elevation_matches_graph=elevation_matches_graph,
+    )
     assert_equal(str(args.output_app_manifest), normalized(actual_manifest), normalized(expected_manifest))
     return {
         "verified": True,
-        "graph_asset_id": actual_catalog["meta"]["graph_asset_id"],
-        "junction_bindings_asset_id": actual_catalog["meta"]["junction_bindings_asset_id"],
-        "catalog_build_digest": actual_catalog["meta"]["build_config_digest"],
+        "graph_asset_id": actual_manifest["meta"]["graph_asset_id"],
+        "editor_graph_asset_id": actual_manifest["meta"]["editor_graph_asset_id"],
+        "junction_bindings_asset_id": actual_manifest["meta"]["junction_bindings_asset_id"],
+        "catalog_build_digest": actual_manifest["meta"]["catalog_build_digest"],
     }
 
 

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T09:31:06.123090Z",
+    "generated_at": "2026-04-26T11:08:08.320737Z",
     "asset_kind": "app_manifest",
     "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
@@ -8,7 +8,103 @@
     "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "catalog_build_path": "source/catalog_build.json",
     "catalog_build_digest": "caa3dbfc1515",
-    "catalog_asset_graph_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "elevation_asset_matches_graph": true
-  }
+  },
+  "planner": {
+    "algorithm": "browser-beam-v1",
+    "network_path": "karura-network.geojson",
+    "editor_network_path": "karura-editor-network.geojson",
+    "config": {
+      "short_connector_max_length_m": 35.0,
+      "max_overlap_m": 70.0,
+      "max_steps": 256,
+      "random_top_k": 4,
+      "end_stop_unused_slack_m": 400.0,
+      "end_finish_unused_slack_m": 250.0,
+      "future_length_weight": 0.08,
+      "connector_length_weight": 0.02,
+      "overlap_penalty_per_m": 12.0,
+      "articulation_penalty": 45.0,
+      "articulation_future_threshold_m": 400.0,
+      "dead_end_penalty": 180.0,
+      "early_finish_penalty": 320.0,
+      "beam_width": 32,
+      "beam_branch_factor": 3,
+      "beam_rounds": 96,
+      "beam_selection_pool": 5,
+      "beam_selection_window": 12,
+      "elevation_smoothing_window": 3,
+      "elevation_min_step_m": 0.5
+    }
+  },
+  "areas": [
+    {
+      "id": "karura",
+      "name": "Karura Forest",
+      "bounds": [
+        36.793039,
+        -1.261402,
+        36.860715,
+        -1.222037
+      ],
+      "junctions": [
+        {
+          "id": "family_trail_west",
+          "kind": "junction",
+          "location": {
+            "lat": -1.2472386,
+            "lon": 36.8177062
+          },
+          "name": "Family Trail west junction",
+          "notes": "Selected junction at the west end of Family Trail.",
+          "tags": [
+            "family-trail",
+            "west"
+          ],
+          "graph_node_id": 13075347358
+        },
+        {
+          "id": "kiambu_side_exit",
+          "kind": "junction",
+          "location": {
+            "lat": -1.2398552,
+            "lon": 36.8439087
+          },
+          "name": "Kiambu-side exit junction",
+          "notes": "Chosen Kiambu-side exit junction near the gate labeled Gate C.",
+          "tags": [
+            "kiambu-side",
+            "exit"
+          ],
+          "graph_node_id": 6159312406
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "family_trail_west__to__family_trail_west",
+          "start_junction_id": "family_trail_west",
+          "end_junction_id": "family_trail_west",
+          "is_loop": true
+        },
+        {
+          "id": "family_trail_west__to__kiambu_side_exit",
+          "start_junction_id": "family_trail_west",
+          "end_junction_id": "kiambu_side_exit",
+          "is_loop": false
+        },
+        {
+          "id": "kiambu_side_exit__to__family_trail_west",
+          "start_junction_id": "kiambu_side_exit",
+          "end_junction_id": "family_trail_west",
+          "is_loop": false
+        },
+        {
+          "id": "kiambu_side_exit__to__kiambu_side_exit",
+          "start_junction_id": "kiambu_side_exit",
+          "end_junction_id": "kiambu_side_exit",
+          "is_loop": true
+        }
+      ]
+    }
+  ]
 }

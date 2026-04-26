@@ -1,9 +1,6 @@
 import { wireGpxDownload } from "./gpx.mjs";
 
-const catalogUrl = new URL("./generated/catalog.json", window.location.href);
-const networkUrls = {
-  karura: new URL("./generated/karura-network.geojson", window.location.href),
-};
+const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
 
 const areaSelect = document.getElementById("area-select");
 const startSelect = document.getElementById("start-select");
@@ -15,7 +12,7 @@ const downloadLink = document.getElementById("download-link");
 const LOOP_ARROW_INTERVAL_MS = 1000;
 
 let appState = {
-  catalog: null,
+  manifest: null,
   area: null,
   network: null,
   route: null,
@@ -25,34 +22,45 @@ let appState = {
   markerLayer: null,
   gpxUrl: null,
   loopArrowPhase: 0,
+  plannerWorker: null,
+  plannerReady: false,
+  routeStatus: "booting",
+  workerRequestId: 0,
+  activeRouteRequestId: 0,
+  pendingWorkerRequests: new Map(),
+  routeSeedCounter: Math.floor(Math.random() * 1_000_000),
 };
 
 
-function cloneProfile(profile) {
-  return Array.isArray(profile) ? profile.map(([distance, elevation]) => [distance, elevation]) : [];
+function networkUrlForArea() {
+  return new URL(`./generated/${appState.manifest.planner.network_path}`, window.location.href);
 }
 
 
-function reverseProfile(profile) {
-  if (!Array.isArray(profile) || !profile.length) {
-    return [];
-  }
-  const totalDistance = profile[profile.length - 1][0];
-  return [...profile]
-    .reverse()
-    .map(([distance, elevation]) => [
-      Math.round((totalDistance - distance) * 1000) / 1000,
-      elevation,
-    ]);
+function nextRouteSeed() {
+  appState.routeSeedCounter += 1;
+  return appState.routeSeedCounter;
 }
 
 
-function buildRouteFamilyIndex(area) {
-  const index = {};
-  for (const family of area.route_families || []) {
-    index[family.id] = family;
+function setControlsDisabled(disabled) {
+  areaSelect.disabled = disabled;
+  startSelect.disabled = disabled;
+  endSelect.disabled = disabled;
+  newRouteButton.disabled = disabled || appState.routeStatus === "loading";
+  downloadLink.classList.toggle("disabled", disabled || !appState.route);
+  if (disabled || !appState.route) {
+    downloadLink.removeAttribute("href");
   }
-  area.routeFamilyIndex = index;
+}
+
+
+function installShellPlaceholders() {
+  scenarioLabel.textContent = "Loading routes…";
+  areaSelect.innerHTML = "<option>Loading…</option>";
+  startSelect.innerHTML = "<option>Loading…</option>";
+  endSelect.innerHTML = "<option>Loading…</option>";
+  setControlsDisabled(true);
 }
 
 
@@ -118,65 +126,39 @@ function scenarioLabelText(scenario, area) {
 }
 
 
-function randomRoute(routes, previousRouteId) {
-  if (!routes.length) {
-    return null;
-  }
-  if (routes.length === 1) {
-    return routes[0];
-  }
-  let next = routes[Math.floor(Math.random() * routes.length)];
-  while (next.id === previousRouteId) {
-    next = routes[Math.floor(Math.random() * routes.length)];
-  }
-  return next;
-}
-
-
-function materializeRoute(routeRef, area) {
-  const family = area.routeFamilyIndex?.[routeRef.family_id];
-  if (!family) {
-    throw new Error(`Missing route family: ${routeRef.family_id}`);
-  }
-
-  const route = {
-    ...family,
-    id: routeRef.id,
-    family_id: routeRef.family_id,
-    direction: routeRef.direction,
-    algorithm: routeRef.algorithm,
-    seed: routeRef.seed,
-    candidate_rank: routeRef.candidate_rank,
-    quality_score: routeRef.quality_score,
-    coordinates: family.coordinates.map(([lon, lat]) => [lon, lat]),
-    elevations_m: Array.isArray(family.elevations_m) ? [...family.elevations_m] : undefined,
-    elevation_profile: cloneProfile(family.elevation_profile),
-    repeated_contig_ids: Array.isArray(family.repeated_contig_ids) ? [...family.repeated_contig_ids] : [],
-  };
-
-  if (routeRef.direction === "reverse") {
-    route.coordinates.reverse();
-    if (Array.isArray(route.elevations_m)) {
-      route.elevations_m.reverse();
-    }
-    route.elevation_profile = reverseProfile(family.elevation_profile);
-    const gain = route.elevation_gain_m;
-    route.elevation_gain_m = route.elevation_loss_m;
-    route.elevation_loss_m = gain;
-  }
-
-  return route;
-}
-
-
 function currentScenario() {
   if (!appState.area) {
     return null;
   }
   return appState.area.scenarios.find(
-    (item) =>
-      item.id === scenarioId(startSelect.value, endSelect.value)
+    (item) => item.id === scenarioId(startSelect.value, endSelect.value)
   );
+}
+
+
+function currentJunctions() {
+  const scenario = currentScenario();
+  if (!scenario || !appState.area) {
+    return { startJunction: null, endJunction: null };
+  }
+  return {
+    startJunction: appState.area.junctions.find((item) => item.id === scenario.start_junction_id) || null,
+    endJunction: appState.area.junctions.find((item) => item.id === scenario.end_junction_id) || null,
+  };
+}
+
+
+function junctionLatLon(junction) {
+  if (!junction) {
+    return null;
+  }
+  if (typeof junction.lat === "number" && typeof junction.lon === "number") {
+    return [junction.lat, junction.lon];
+  }
+  if (junction.location && typeof junction.location.lat === "number" && typeof junction.location.lon === "number") {
+    return [junction.location.lat, junction.location.lon];
+  }
+  return null;
 }
 
 
@@ -189,6 +171,12 @@ function ensureMap() {
     preferCanvas: true,
   });
   map.setView([-1.2418, 36.8315], 14);
+  map.createPane("network-pane");
+  map.getPane("network-pane").style.zIndex = "350";
+  map.createPane("route-pane");
+  map.getPane("route-pane").style.zIndex = "450";
+  map.createPane("marker-pane");
+  map.getPane("marker-pane").style.zIndex = "500";
   L.control.zoom({ position: "bottomright" }).addTo(map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -213,6 +201,7 @@ function renderNetwork() {
       weight: 2,
       opacity: 0.33,
     },
+    pane: "network-pane",
   }).addTo(map);
 }
 
@@ -254,27 +243,35 @@ function renderRoute() {
         weight: 6,
         opacity: 0.92,
         lineCap: "round",
+        pane: "route-pane",
       }
     ).addTo(routeLayer);
   });
 
   const markerLayer = L.layerGroup();
-  const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
-  const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
-  L.circleMarker([startJunction.lat, startJunction.lon], {
-    radius: 7,
-    color: "#ffffff",
-    weight: 3,
-    fillColor: "#2d8c4d",
-    fillOpacity: 1,
-  }).bindTooltip(`Start: ${startJunction.name}`, { direction: "top" }).addTo(markerLayer);
-  L.circleMarker([endJunction.lat, endJunction.lon], {
-    radius: 7,
-    color: "#ffffff",
-    weight: 3,
-    fillColor: "#245ac9",
-    fillOpacity: 1,
-  }).bindTooltip(`End: ${endJunction.name}`, { direction: "top" }).addTo(markerLayer);
+  const { startJunction, endJunction } = currentJunctions();
+  const startLatLon = junctionLatLon(startJunction);
+  const endLatLon = junctionLatLon(endJunction);
+  if (startJunction && startLatLon) {
+    L.circleMarker(startLatLon, {
+      radius: 7,
+      color: "#ffffff",
+      weight: 3,
+      fillColor: "#2d8c4d",
+      fillOpacity: 1,
+      pane: "marker-pane",
+    }).bindTooltip(`Start: ${startJunction.name}`, { direction: "top" }).addTo(markerLayer);
+  }
+  if (endJunction && endLatLon) {
+    L.circleMarker(endLatLon, {
+      radius: 7,
+      color: "#ffffff",
+      weight: 3,
+      fillColor: "#245ac9",
+      fillOpacity: 1,
+      pane: "marker-pane",
+    }).bindTooltip(`End: ${endJunction.name}`, { direction: "top" }).addTo(markerLayer);
+  }
 
   routeLayer.addTo(map);
   markerLayer.addTo(map);
@@ -288,11 +285,23 @@ function renderRoute() {
 
 
 function updateRouteStats() {
-  const route = appState.route;
   const scenario = currentScenario();
-  if (!route || !scenario) {
+  if (!scenario || !appState.area) {
+    scenarioLabel.textContent = "Loading routes…";
     return;
   }
+
+  if (appState.routeStatus === "loading") {
+    scenarioLabel.textContent = `${scenarioLabelText(scenario, appState.area)}…`;
+    return;
+  }
+
+  const route = appState.route;
+  if (!route) {
+    scenarioLabel.textContent = scenarioLabelText(scenario, appState.area);
+    return;
+  }
+
   const hasGain = typeof route.elevation_gain_m === "number";
   const hasLoss = typeof route.elevation_loss_m === "number";
   let summaryText = `${scenarioLabelText(scenario, appState.area)}, ${formatDistance(route.unique_length_m)}`;
@@ -312,11 +321,16 @@ function updateDownloadLink() {
   const route = appState.route;
   const scenario = currentScenario();
   if (!route || !scenario) {
+    if (appState.gpxUrl) {
+      URL.revokeObjectURL(appState.gpxUrl);
+      appState.gpxUrl = null;
+    }
+    downloadLink.removeAttribute("href");
+    downloadLink.classList.add("disabled");
     return;
   }
 
-  const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
-  const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
+  const { startJunction, endJunction } = currentJunctions();
   const download = wireGpxDownload(downloadLink, {
     route,
     startJunction,
@@ -324,12 +338,14 @@ function updateDownloadLink() {
     previousUrl: appState.gpxUrl,
   });
   appState.gpxUrl = download.url;
+  downloadLink.classList.remove("disabled");
 }
 
 
 function updateSummary() {
   updateRouteStats();
   updateDownloadLink();
+  newRouteButton.disabled = !appState.plannerReady || appState.routeStatus === "loading";
 }
 
 
@@ -342,23 +358,9 @@ function updateUrl() {
 }
 
 
-function chooseRoute() {
-  const scenario = currentScenario();
-  if (!scenario) {
-    appState.route = null;
-    return;
-  }
-  const routeRef = randomRoute(scenario.routes, appState.route?.id);
-  appState.route = routeRef ? materializeRoute(routeRef, appState.area) : null;
-  updateUrl();
-  updateSummary();
-  renderRoute();
-}
-
-
 function populateAreaOptions() {
   areaSelect.innerHTML = "";
-  appState.catalog.areas.forEach((area) => {
+  appState.manifest.areas.forEach((area) => {
     const option = document.createElement("option");
     option.value = area.id;
     option.textContent = area.name;
@@ -383,9 +385,8 @@ function populateJunctionSelectors(area, requestedStart, requestedEnd) {
   });
 
   const exactScenario = area.scenarios.find(
-    (item) =>
-      item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
-  ) ?? area.scenarios[0];
+    (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
+  ) || area.scenarios[0];
 
   startSelect.value = exactScenario.start_junction_id;
   endSelect.value = exactScenario.end_junction_id;
@@ -394,8 +395,8 @@ function populateJunctionSelectors(area, requestedStart, requestedEnd) {
 
 function syncSelectorsFromQuery() {
   const query = new URLSearchParams(window.location.search);
-  const requestedAreaId = query.get("area") || appState.catalog.areas[0].id;
-  appState.area = appState.catalog.areas.find((item) => item.id === requestedAreaId) ?? appState.catalog.areas[0];
+  const requestedAreaId = query.get("area") || appState.manifest.areas[0].id;
+  appState.area = appState.manifest.areas.find((item) => item.id === requestedAreaId) || appState.manifest.areas[0];
   populateAreaOptions();
   areaSelect.value = appState.area.id;
 
@@ -406,49 +407,184 @@ function syncSelectorsFromQuery() {
 
 
 async function loadAreaNetwork() {
-  const networkUrl = networkUrls[appState.area.id];
-  if (!networkUrl) {
-    appState.network = null;
-    return;
-  }
-  const response = await fetch(networkUrl);
+  const response = await fetch(networkUrlForArea());
   if (!response.ok) {
     throw new Error(`Failed to load network overlay: ${response.status}`);
   }
-  appState.network = await response.json();
+  return response.json();
+}
+
+
+function ensurePlannerWorker() {
+  if (appState.plannerWorker) {
+    return appState.plannerWorker;
+  }
+  const worker = new Worker(new URL("./route-worker.js", import.meta.url), { type: "module" });
+  worker.addEventListener("message", (event) => {
+    const { requestId, type, payload } = event.data || {};
+    const pending = appState.pendingWorkerRequests.get(requestId);
+    if (!pending) {
+      return;
+    }
+    appState.pendingWorkerRequests.delete(requestId);
+    if (type === "error") {
+      pending.reject(new Error(payload?.message || "Worker error"));
+      return;
+    }
+    pending.resolve(payload);
+  });
+  worker.addEventListener("error", (event) => {
+    for (const pending of appState.pendingWorkerRequests.values()) {
+      pending.reject(event.error || new Error(event.message || "Worker failed"));
+    }
+    appState.pendingWorkerRequests.clear();
+  });
+  appState.plannerWorker = worker;
+  return worker;
+}
+
+
+function sendWorkerMessage(type, payload) {
+  const worker = ensurePlannerWorker();
+  const requestId = ++appState.workerRequestId;
+  return new Promise((resolve, reject) => {
+    appState.pendingWorkerRequests.set(requestId, { resolve, reject });
+    worker.postMessage({ type, requestId, payload });
+  });
+}
+
+
+async function initializePlanner(networkPayload) {
+  appState.plannerReady = false;
+  await sendWorkerMessage("init", {
+    network: networkPayload,
+    config: appState.manifest.planner.config,
+  });
+  appState.plannerReady = true;
+  clearError();
+}
+
+
+async function chooseRoute() {
+  const scenario = currentScenario();
+  updateUrl();
+  if (!scenario || !appState.plannerReady || !appState.area) {
+    appState.route = null;
+    updateSummary();
+    renderRoute();
+    return;
+  }
+
+  const { startJunction, endJunction } = currentJunctions();
+  const requestId = ++appState.activeRouteRequestId;
+  const seed = nextRouteSeed();
+  appState.routeStatus = "loading";
+  appState.route = null;
+  updateSummary();
+  renderRoute();
+
+  try {
+    const route = await sendWorkerMessage("plan", {
+      routeId: `browser-${scenario.id}-seed${seed}`,
+      seed,
+      startNodeId: startJunction.graph_node_id,
+      endNodeId: endJunction.graph_node_id,
+    });
+    if (requestId !== appState.activeRouteRequestId) {
+      return;
+    }
+    appState.route = route;
+    appState.routeStatus = "ready";
+    updateSummary();
+    renderRoute();
+    clearError();
+  } catch (error) {
+    if (requestId !== appState.activeRouteRequestId) {
+      return;
+    }
+    appState.route = null;
+    appState.routeStatus = "error";
+    updateSummary();
+    renderRoute();
+    showError(error.message || String(error));
+  }
+}
+
+
+async function loadArea(area) {
+  appState.plannerReady = false;
+  appState.routeStatus = "loading";
+  appState.route = null;
+  appState.network = null;
+  updateSummary();
+  renderRoute();
   renderNetwork();
+  setControlsDisabled(true);
+
+  const networkPayload = await loadAreaNetwork();
+  await initializePlanner(networkPayload);
+  appState.network = networkPayload;
+  renderNetwork();
+  setControlsDisabled(false);
+  await chooseRoute();
+}
+
+
+function bindControls() {
+  areaSelect.addEventListener("change", async () => {
+    appState.area = appState.manifest.areas.find((item) => item.id === areaSelect.value) || appState.manifest.areas[0];
+    areaSelect.value = appState.area.id;
+    populateJunctionSelectors(
+      appState.area,
+      appState.area.scenarios[0].start_junction_id,
+      appState.area.scenarios[0].end_junction_id
+    );
+    try {
+      await loadArea(appState.area);
+    } catch (error) {
+      appState.routeStatus = "error";
+      updateSummary();
+      showError(error.message || String(error));
+    }
+  });
+
+  startSelect.addEventListener("change", () => {
+    chooseRoute();
+  });
+  endSelect.addEventListener("change", () => {
+    chooseRoute();
+  });
+  newRouteButton.addEventListener("click", () => {
+    chooseRoute();
+  });
 }
 
 
 async function boot() {
+  clearError();
+  installShellPlaceholders();
+  ensureMap();
+  bindControls();
+
   try {
-    clearError();
-    const response = await fetch(catalogUrl);
+    const response = await fetch(appManifestUrl);
     if (!response.ok) {
-      throw new Error(`Failed to load route catalog: ${response.status}`);
+      throw new Error(`Failed to load app manifest: ${response.status}`);
     }
-    appState.catalog = await response.json();
-    appState.catalog.areas.forEach(buildRouteFamilyIndex);
-    syncSelectorsFromQuery();
-    await loadAreaNetwork();
-    chooseRoute();
-
-    areaSelect.addEventListener("change", async () => {
-      appState.area = appState.catalog.areas.find((item) => item.id === areaSelect.value) ?? appState.catalog.areas[0];
-      areaSelect.value = appState.area.id;
-      populateJunctionSelectors(
-        appState.area,
-        appState.area.scenarios[0].start_junction_id,
-        appState.area.scenarios[0].end_junction_id
-      );
-      await loadAreaNetwork();
-      chooseRoute();
-    });
-
-    startSelect.addEventListener("change", chooseRoute);
-    endSelect.addEventListener("change", chooseRoute);
-    newRouteButton.addEventListener("click", chooseRoute);
+    appState.manifest = await response.json();
   } catch (error) {
+    showError(error.message || String(error));
+    scenarioLabel.textContent = "Failed to load routes";
+    return;
+  }
+
+  syncSelectorsFromQuery();
+
+  try {
+    await loadArea(appState.area);
+  } catch (error) {
+    appState.routeStatus = "error";
+    updateSummary();
     showError(error.message || String(error));
   }
 }

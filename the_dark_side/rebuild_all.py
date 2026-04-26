@@ -34,7 +34,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
     parser.add_argument("--elevation-cache-json", type=Path, default=ELEVATION_CACHE_DIR / "graph_node_elevations.json")
     parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument("--output-catalog", type=Path, default=WEB_GENERATED_DIR / "catalog.json")
     parser.add_argument("--output-network", type=Path, default=WEB_GENERATED_DIR / "karura-network.geojson")
     parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
     parser.add_argument(
@@ -66,7 +65,6 @@ def main() -> None:
         "--junction-bindings-json", str(args.junction_bindings_json),
         "--build-config-json", str(args.build_config_json),
         "--elevation-json", str(args.elevation_json),
-        "--output-catalog", str(args.output_catalog),
         "--output-network", str(args.output_network),
         "--output-editor-network", str(args.output_editor_network),
         "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",

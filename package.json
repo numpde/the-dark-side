@@ -1,0 +1,15 @@
+{
+  "name": "the-dark-side-dev",
+  "private": true,
+  "description": "Dev-only frontend tooling for the-dark-side static app.",
+  "scripts": {
+    "serve:web": "python3 -m http.server 8765 --directory web",
+    "check:web": "node --check web/app.js && node --check web/editor.js && node --check web/editor-state.mjs && node --check web/route-planner.mjs && node --check web/route-worker.js",
+    "test:web": "node --test tests/test_gpx.mjs && node --test tests/test_editor_state.mjs && node --test tests/test_route_planner.mjs",
+    "test:e2e": "playwright test",
+    "test:frontend": "npm run test:web && npm run check:web && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
