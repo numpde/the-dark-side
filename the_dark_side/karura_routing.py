@@ -173,11 +173,6 @@ class MctsTreeNode:
     children: list["MctsTreeNode"] = field(default_factory=list)
     unexpanded_moves: list[MoveCandidate] | None = None
 
-
-def load_route_asset(path: Path) -> dict:
-    return load_route_asset_document(path, label="route asset")
-
-
 def load_route_graph(path: Path) -> RouteGraph:
     payload = load_route_graph_document(path, label="route graph")
     crossings = {int(node_id): node for node_id, node in payload["crossings"].items()}

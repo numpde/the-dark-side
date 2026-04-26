@@ -7,8 +7,8 @@ from __future__ import annotations
 import argparse
 import json
 
-from .asset_contracts import load_required_junction_catalog
-from .apply_karura_patches import apply_patchset, load_patchset
+from .asset_contracts import load_required_junction_catalog, load_required_patchset
+from .apply_karura_patches import apply_patchset
 from .asset_pipeline_cli import add_editor_asset_args
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map, write_json
@@ -36,7 +36,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def rebuild_patched_map(args: argparse.Namespace) -> dict:
     baseline_map = load_map(args.map_json)
-    patchset = load_patchset(args.patches_json)
+    patchset = load_required_patchset(args.patches_json, label="patchset file")
     patched = apply_patchset(
         baseline_map,
         patchset=patchset,
@@ -50,7 +50,7 @@ def rebuild_patched_map(args: argparse.Namespace) -> dict:
 
 
 def rebuild_contigs(args: argparse.Namespace, patched_payload: dict) -> dict:
-    patchset = load_patchset(args.patches_json)
+    patchset = load_required_patchset(args.patches_json, label="patchset file")
     contig_graph = build_contigs(
         patched_payload,
         source_map=repo_rel(args.patched_map_json),

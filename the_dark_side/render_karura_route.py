@@ -11,8 +11,9 @@ from pathlib import Path
 
 from PIL import ImageDraw
 
+from .asset_contracts import load_route_asset_document
 from .karura_common import SCREENSHOT, VIEWPORT
-from .karura_routing import load_route_asset, load_route_graph
+from .karura_routing import load_route_graph
 from .render_support import load_viewport, prepare_base_image, project_lon_lat
 
 
@@ -76,7 +77,7 @@ def segment_length(a: tuple[float, float], b: tuple[float, float]) -> float:
 
 def main() -> None:
     args = parse_args()
-    route_payload = load_route_asset(args.route_json)
+    route_payload = load_route_asset_document(args.route_json, label="route asset")
     graph = resolve_graph_from_route(route_payload, args.route_json)
     viewport = load_viewport(args.viewport)
     image = prepare_base_image(args.screenshot)

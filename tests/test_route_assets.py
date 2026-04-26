@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from the_dark_side.asset_contracts import validate_route_asset_document
+from the_dark_side.asset_contracts import load_route_asset_document, validate_route_asset_document
 from the_dark_side.karura_routing import (
     ContigRecord,
     JunctionRef,
@@ -14,7 +14,6 @@ from the_dark_side.karura_routing import (
     RouteCandidate,
     RouteGraph,
     RouteStep,
-    load_route_asset,
     route_asset_payload,
 )
 
@@ -138,7 +137,7 @@ class RouteAssetTest(unittest.TestCase):
                 )
             )
             with self.assertRaisesRegex(ValueError, r"route asset\.config must not be empty"):
-                load_route_asset(route_path)
+                load_route_asset_document(route_path, label="route asset")
 
 
 if __name__ == "__main__":

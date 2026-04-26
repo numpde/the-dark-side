@@ -6,7 +6,8 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 
-from the_dark_side.junction_bindings import build_junction_bindings, load_junction_bindings, load_junction_catalog
+from the_dark_side.asset_contracts import load_required_junction_bindings, load_required_junction_catalog
+from the_dark_side.junction_bindings import build_junction_bindings
 from the_dark_side.karura_routing import resolve_junction_ref
 
 
@@ -72,7 +73,7 @@ class JunctionBindingsTest(unittest.TestCase):
             catalog_path = Path(tmpdir) / "junctions.json"
             catalog_path.write_text(json.dumps({"meta": {"asset_id": "junction-catalog-1"}, "junctions": []}))
             with self.assertRaisesRegex(ValueError, r"junction catalog\.meta\.asset_kind"):
-                load_junction_catalog(catalog_path)
+                load_required_junction_catalog(catalog_path, label="junction catalog")
 
     def test_load_junction_bindings_rejects_malformed_document(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -90,7 +91,7 @@ class JunctionBindingsTest(unittest.TestCase):
                 )
             )
             with self.assertRaisesRegex(ValueError, r"junction bindings\.meta\.junction_catalog_asset_id"):
-                load_junction_bindings(bindings_path)
+                load_required_junction_bindings(bindings_path, label="junction bindings")
 
 
 if __name__ == "__main__":

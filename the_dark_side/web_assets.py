@@ -105,12 +105,8 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
     return {"type": "FeatureCollection", "meta": meta or {}, "features": features}
 
 
-def load_patch_snapshot(path: Path) -> dict:
-    return load_required_patchset(path, label="patchset file")
-
-
 def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
-    patch_snapshot = load_patch_snapshot(editor_patches_json)
+    patch_snapshot = load_required_patchset(editor_patches_json, label="patchset file")
     editor_graph_payload = build_contigs(
         editor_map_payload,
         source_map=repo_rel(editor_map_json),

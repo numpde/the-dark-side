@@ -10,9 +10,9 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
-from .asset_contracts import load_required_junction_catalog
+from .asset_contracts import load_required_junction_catalog, load_required_patchset
 from .asset_pipeline_cli import add_editor_asset_args
-from .apply_karura_patches import apply_patchset, load_patchset
+from .apply_karura_patches import apply_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .junction_bindings import build_junction_bindings
@@ -428,7 +428,7 @@ def verify_frontend_bootstrap_contract() -> None:
 
 def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:
     baseline_map = load_map(args.map_json)
-    patchset = load_patchset(args.patches_json)
+    patchset = load_required_patchset(args.patches_json, label="patchset file")
     expected_patched_map = apply_patchset(
         baseline_map,
         patchset=patchset,

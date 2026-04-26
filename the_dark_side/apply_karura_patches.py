@@ -45,11 +45,6 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-
-def load_patchset(path: Path) -> dict[str, Any]:
-    return load_required_patchset(path, label="patchset file")
-
-
 def patchset_digest(
     *,
     source_asset_id: str | None,
@@ -359,7 +354,7 @@ def apply_patchset(
 def main() -> None:
     args = parse_args()
     karura_map = load_map(args.map_json)
-    patchset = load_patchset(args.patches_json)
+    patchset = load_required_patchset(args.patches_json, label="patchset file")
     patched = apply_patchset(
         karura_map,
         patchset=patchset,

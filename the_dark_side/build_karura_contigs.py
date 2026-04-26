@@ -133,11 +133,6 @@ def contig_record(
         "bounds": edge_bounds(nodes, path_node_ids),
     }
 
-
-def load_patchset(path: Path) -> dict:
-    return load_required_patchset(path, label="patchset file")
-
-
 def validate_contig_policy_patch(patch: dict[str, Any]) -> None:
     patch_label = str(patch.get("id", f"contig-{patch.get('contig_id', '?')}"))
     patch_set = patch.get("set")
@@ -393,7 +388,7 @@ def main() -> None:
     args = parse_args()
     map_json = args.map_json or resolve_map_json()
     payload = json.loads(map_json.read_text())
-    patchset = load_patchset(args.patches_json)
+    patchset = load_required_patchset(args.patches_json, label="patchset file")
     contig_graph = build_contigs(
         payload,
         source_map=repo_rel(map_json),
