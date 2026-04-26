@@ -14,7 +14,13 @@ const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
 const {
-  installSelectionPlaceholders,
+  setControlsDisabled,
+  updateRouteSurfaceState,
+  installShellPlaceholders,
+  showError,
+  clearError,
+} = await import(`./route-shell-view.mjs${moduleSuffix}`);
+const {
   populateJunctionSelectors,
   syncSelectorsFromQuery,
   replaceUrlWithSelection,
@@ -73,46 +79,8 @@ function nextRouteSeed() {
   return appState.routeSeedCounter;
 }
 
-
-function setControlsDisabled(disabled) {
-  areaSelect.disabled = disabled;
-  startSelect.disabled = disabled;
-  endSelect.disabled = disabled;
-  newRouteButton.disabled = disabled || appState.routeStatus === "loading";
-  downloadLink.classList.toggle("disabled", disabled || !appState.route);
-  if (disabled || !appState.route) {
-    downloadLink.removeAttribute("href");
-  }
-}
-
 function routeSurfaceIsInvalidated() {
   return appState.routeStatus === "loading" && Boolean(appState.route);
-}
-
-function updateRouteSurfaceState() {
-  const invalidated = routeSurfaceIsInvalidated();
-  routeStrip.classList.toggle("is-stale", invalidated);
-  buttonRow.classList.toggle("is-stale", invalidated);
-  mapElement.classList.toggle("is-stale", invalidated);
-}
-
-
-function installShellPlaceholders() {
-  setSummaryText(scenarioLabel, "Loading routes…");
-  installSelectionPlaceholders(areaSelect, startSelect, endSelect);
-  setControlsDisabled(true);
-}
-
-
-function showError(message) {
-  errorCard.textContent = message;
-  errorCard.classList.remove("hidden");
-}
-
-
-function clearError() {
-  errorCard.textContent = "";
-  errorCard.classList.add("hidden");
 }
 
 
@@ -198,8 +166,12 @@ function updateDownloadLink() {
 function updateSummary() {
   updateRouteStats();
   updateDownloadLink();
-  newRouteButton.disabled = !appState.plannerReady || appState.routeStatus === "loading";
-  updateRouteSurfaceState();
+  setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    disabled: !appState.plannerReady,
+    isLoading: appState.routeStatus === "loading",
+    hasRoute: Boolean(appState.route),
+  });
+  updateRouteSurfaceState(routeStrip, buttonRow, mapElement, routeSurfaceIsInvalidated());
 }
 
 
@@ -220,7 +192,7 @@ function ensurePlannerClient() {
     moduleVersion: MODULE_VERSION,
     parsePlannerWorkerResponse,
     onUnhandledError: (error) => {
-      showError(error.message || String(error));
+      showError(errorCard, error.message || String(error));
     },
   });
   return appState.plannerClient;
@@ -239,7 +211,7 @@ async function initializePlanner(networkPayload) {
     config: appState.manifest.planner.config,
   });
   appState.plannerReady = true;
-  clearError();
+  clearError(errorCard);
 }
 
 
@@ -282,7 +254,7 @@ async function chooseRoute() {
     rememberRouteForScenario(appState.routeHistoryByScenario, appState.area, scenario, route);
     updateSummary();
     renderRoute();
-    clearError();
+    clearError(errorCard);
   } catch (error) {
     if (requestId !== appState.activeRouteRequestId) {
       return;
@@ -295,7 +267,7 @@ async function chooseRoute() {
     if (!hadRoute) {
       renderRoute();
     }
-    showError(error.message || String(error));
+    showError(errorCard, error.message || String(error));
   }
 }
 
@@ -308,13 +280,21 @@ async function loadArea(area) {
   updateSummary();
   renderRoute();
   renderNetwork();
-  setControlsDisabled(true);
+  setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    disabled: true,
+    isLoading: true,
+    hasRoute: false,
+  });
 
   const networkPayload = await loadAreaNetwork();
   await initializePlanner(networkPayload);
   appState.network = networkPayload;
   renderNetwork();
-  setControlsDisabled(false);
+  setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    disabled: false,
+    isLoading: false,
+    hasRoute: Boolean(appState.route),
+  });
   await chooseRoute();
 }
 
@@ -339,7 +319,7 @@ function bindControls() {
     } catch (error) {
       appState.routeStatus = "error";
       updateSummary();
-      showError(error.message || String(error));
+      showError(errorCard, error.message || String(error));
     }
   });
 
@@ -356,8 +336,13 @@ function bindControls() {
 
 
 async function boot() {
-  clearError();
-  installShellPlaceholders();
+  clearError(errorCard);
+  installShellPlaceholders(scenarioLabel, areaSelect, startSelect, endSelect);
+  setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    disabled: true,
+    isLoading: false,
+    hasRoute: false,
+  });
   ensureRouteMapView().ensureMap();
   bindControls();
 
@@ -368,7 +353,7 @@ async function boot() {
     }
     appState.manifest = validateAppManifest(await response.json());
   } catch (error) {
-    showError(error.message || String(error));
+    showError(errorCard, error.message || String(error));
     setSummaryText(scenarioLabel, "Failed to load routes");
     return;
   }
@@ -391,7 +376,7 @@ async function boot() {
   } catch (error) {
     appState.routeStatus = "error";
     updateSummary();
-    showError(error.message || String(error));
+    showError(errorCard, error.message || String(error));
   }
 }
 
