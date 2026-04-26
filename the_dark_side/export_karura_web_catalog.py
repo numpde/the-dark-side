@@ -20,9 +20,9 @@ from .build_config import (
     add_planner_config_args,
     catalog_build_config_digest,
     catalog_build_kwargs_from_namespace,
-    load_catalog_build_config,
     normalize_catalog_build_config,
     planner_config_kwargs_from_namespace,
+    resolve_build_config_defaults,
 )
 from .elevation import summarize_elevation_series
 from .karura_common import (
@@ -41,15 +41,14 @@ from .karura_common import (
 )
 from .karura_routing import (
     PlannerConfig,
+    PLANNER_NAMES,
     RouteCandidate,
     build_route_node_ids,
     contig_jaccard_similarity,
     load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
-    plan_route_naive,
-    plan_route_beam,
-    plan_route_mcts,
+    planner_for,
     resolve_junction_ref,
 )
 from .web_assets import (
@@ -85,17 +84,17 @@ class RouteRecord:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    pre_parser = argparse.ArgumentParser(add_help=False)
-    pre_parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
-    pre_args, remaining = pre_parser.parse_known_args(argv)
-    build_defaults = load_catalog_build_config(pre_args.build_config_json)
+    build_config_json, build_defaults, remaining = resolve_build_config_defaults(
+        argv,
+        default_path=CATALOG_BUILD_JSON,
+    )
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--build-config-json", type=Path, default=pre_args.build_config_json)
+    parser.add_argument("--build-config-json", type=Path, default=build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
-    parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), action="append")
+    parser.add_argument("--algorithm", choices=PLANNER_NAMES, action="append")
     add_debug_catalog_args(parser, build_defaults)
     add_planner_config_args(parser, build_defaults)
     parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
@@ -126,18 +125,6 @@ def effective_build_config(args: argparse.Namespace) -> dict:
     )
     payload["algorithms"] = list(args.algorithm)
     return normalize_catalog_build_config(payload)
-
-
-def planner_for(name: str):
-    if name == "naive":
-        return plan_route_naive
-    if name == "beam":
-        return plan_route_beam
-    if name == "mcts":
-        return plan_route_mcts
-    raise KeyError(name)
-
-
 def route_coordinates(graph, candidate: RouteCandidate) -> list[list[float]]:
     node_ids = build_route_node_ids(graph, candidate.steps)
     coords: list[list[float]] = []

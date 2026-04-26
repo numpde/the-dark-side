@@ -280,6 +280,17 @@ def load_catalog_build_config(path: Path) -> dict[str, Any]:
     return normalize_catalog_build_config(json.loads(path.read_text()))
 
 
+def resolve_build_config_defaults(
+    argv: list[str] | None,
+    *,
+    default_path: Path,
+) -> tuple[Path, dict[str, Any], list[str]]:
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument("--build-config-json", type=Path, default=default_path)
+    pre_args, remaining = pre_parser.parse_known_args(argv)
+    return pre_args.build_config_json, load_catalog_build_config(pre_args.build_config_json), remaining
+
+
 def catalog_build_config_digest(config: dict[str, Any]) -> str:
     normalized = json.dumps(config, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha1(normalized).hexdigest()[:12]

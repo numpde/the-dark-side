@@ -12,17 +12,16 @@ from dataclasses import asdict
 from pathlib import Path
 import random
 
-from .build_config import add_planner_config_args, load_catalog_build_config, planner_config_kwargs_from_namespace
+from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
 from .karura_common import BENCHMARKS_DIR, CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
 from .karura_routing import (
     PlannerConfig,
+    PLANNER_NAMES,
     RouteCandidate,
     load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
-    plan_route_beam,
-    plan_route_mcts,
-    plan_route_naive,
+    planner_for,
     resolve_junction_ref,
     write_json,
 )
@@ -33,17 +32,17 @@ SCENARIOS = {
     "loop_family": ("family_trail_west", "family_trail_west"),
     "loop_kiambu": ("kiambu_side_exit", "kiambu_side_exit"),
 }
-ALGORITHMS = ("naive", "beam", "mcts")
+ALGORITHMS = PLANNER_NAMES
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    pre_parser = argparse.ArgumentParser(add_help=False)
-    pre_parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
-    pre_args, remaining = pre_parser.parse_known_args(argv)
-    planner_defaults = load_catalog_build_config(pre_args.build_config_json)
+    build_config_json, planner_defaults, remaining = resolve_build_config_defaults(
+        argv,
+        default_path=CATALOG_BUILD_JSON,
+    )
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--build-config-json", type=Path, default=pre_args.build_config_json)
+    parser.add_argument("--build-config-json", type=Path, default=build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
@@ -59,16 +58,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def build_config(args: argparse.Namespace) -> PlannerConfig:
     return PlannerConfig(**planner_config_kwargs_from_namespace(args))
-
-
-def planner_for(name: str):
-    if name == "naive":
-        return plan_route_naive
-    if name == "beam":
-        return plan_route_beam
-    if name == "mcts":
-        return plan_route_mcts
-    raise KeyError(name)
 
 
 def median(values: list[float]) -> float:

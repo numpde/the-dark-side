@@ -1303,6 +1303,21 @@ def plan_route_mcts(
     return reorder_seeded_candidates(candidates, rng=rng, config=config)
 
 
+PLANNER_NAMES = ("naive", "beam", "mcts")
+
+
+def planner_for(name: str):
+    planners = {
+        "naive": plan_route_naive,
+        "beam": plan_route_beam,
+        "mcts": plan_route_mcts,
+    }
+    try:
+        return planners[name]
+    except KeyError:
+        raise KeyError(name) from None
+
+
 def route_candidate_to_dict(graph: RouteGraph, candidate: RouteCandidate) -> dict:
     steps = [asdict(step) for step in candidate.steps]
     route_node_ids = build_route_node_ids(graph, candidate.steps)
