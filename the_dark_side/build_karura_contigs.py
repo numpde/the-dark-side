@@ -20,7 +20,7 @@ from .karura_common import (
     LOCAL_UNAVAILABLE_UNTIL_TAG,
     MAP_PATCHES_JSON,
     include_ride_way,
-    load_required_json,
+    load_required_patchset,
     parse_iso_date,
     repo_rel,
     resolve_map_json,
@@ -135,7 +135,7 @@ def contig_record(
 
 
 def load_patchset(path: Path) -> dict:
-    return load_required_json(path, label="patchset file")
+    return load_required_patchset(path, label="patchset file")
 
 
 def validate_contig_policy_patch(patch: dict[str, Any]) -> None:

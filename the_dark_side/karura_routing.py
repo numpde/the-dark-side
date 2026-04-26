@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Iterable
 
 from .junction_bindings import load_junction_bindings as load_junction_bindings_payload
-from .karura_common import is_currently_unavailable
+from .karura_common import is_currently_unavailable, load_required_junction_catalog
 
 
 @dataclass(frozen=True)
@@ -228,7 +228,7 @@ def load_route_graph(path: Path) -> RouteGraph:
 
 
 def load_junction_catalog(path: Path) -> dict:
-    return load_payload(path)
+    return load_required_junction_catalog(path, label="junction catalog")
 
 
 def load_junction_bindings(path: Path) -> dict:

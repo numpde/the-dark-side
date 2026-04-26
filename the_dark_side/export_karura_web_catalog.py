@@ -34,7 +34,7 @@ from .karura_common import (
     WEB_SOURCE_DIR,
     WEB_GENERATED_DIR,
     include_editor_way,
-    load_required_json,
+    load_required_patchset,
     sync_web_source_assets,
 )
 from .karura_routing import (
@@ -456,7 +456,7 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
 
 
 def load_patch_snapshot(path: Path) -> dict:
-    return load_required_json(path, label="patchset file")
+    return load_required_patchset(path, label="patchset file")
 
 
 def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:

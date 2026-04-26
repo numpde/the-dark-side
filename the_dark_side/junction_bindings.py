@@ -8,7 +8,7 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
-from .karura_common import JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, repo_rel
+from .karura_common import JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, load_required_junction_catalog, repo_rel
 
 
 R = 6371000.0
@@ -28,7 +28,7 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def load_junction_catalog(path: Path = JUNCTIONS_JSON) -> dict[str, Any]:
-    return load_json(path)
+    return load_required_junction_catalog(path, label="junction catalog")
 
 
 def load_junction_bindings(path: Path = JUNCTION_BINDINGS_JSON) -> dict[str, Any]:
@@ -85,4 +85,3 @@ def build_junction_bindings(
         },
         "bindings": bindings,
     }
-

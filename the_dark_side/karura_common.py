@@ -128,6 +128,62 @@ def load_required_json(path: Path, *, label: str) -> dict:
     return json.loads(path.read_text())
 
 
+def require_json_object(payload: object, *, label: str) -> dict:
+    if not isinstance(payload, dict):
+        raise ValueError(f"{label} must be a JSON object")
+    return payload
+
+
+def require_json_array(payload: object, *, label: str) -> list:
+    if not isinstance(payload, list):
+        raise ValueError(f"{label} must be a JSON array")
+    return payload
+
+
+def require_nonempty_string(value: object, *, label: str) -> str:
+    if not isinstance(value, str) or value == "":
+        raise ValueError(f"{label} must be a non-empty string")
+    return value
+
+
+def validate_patchset_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    require_nonempty_string(meta.get("patchset_id"), label=f"{label}.meta.patchset_id")
+    require_json_array(document.get("patches"), label=f"{label}.patches")
+    return document
+
+
+def load_required_patchset(path: Path, *, label: str) -> dict:
+    return validate_patchset_document(load_required_json(path, label=label), label=label)
+
+
+def validate_junction_catalog_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    junctions = require_json_array(document.get("junctions"), label=f"{label}.junctions")
+    for index, junction in enumerate(junctions):
+        item = require_json_object(junction, label=f"{label}.junctions[{index}]")
+        require_nonempty_string(item.get("id"), label=f"{label}.junctions[{index}].id")
+        require_nonempty_string(item.get("name"), label=f"{label}.junctions[{index}].name")
+        location = require_json_object(item.get("location"), label=f"{label}.junctions[{index}].location")
+        lat = location.get("lat")
+        lon = location.get("lon")
+        if not isinstance(lat, (int, float)) or not isinstance(lon, (int, float)):
+            raise ValueError(f"{label}.junctions[{index}].location must contain numeric lat/lon")
+        tags = item.get("tags")
+        if tags is not None:
+            require_json_array(tags, label=f"{label}.junctions[{index}].tags")
+    return document
+
+
+def load_required_junction_catalog(path: Path, *, label: str) -> dict:
+    return validate_junction_catalog_document(load_required_json(path, label=label), label=label)
+
+
 def digest_paths(paths: tuple[Path, ...] | list[Path]) -> str:
     digest = hashlib.sha256()
     for path in paths:

@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 from types import SimpleNamespace
 import unittest
 
-from the_dark_side.junction_bindings import build_junction_bindings
+from the_dark_side.junction_bindings import build_junction_bindings, load_junction_catalog
 from the_dark_side.karura_routing import resolve_junction_ref
 
 
@@ -63,6 +66,13 @@ class JunctionBindingsTest(unittest.TestCase):
         }
         with self.assertRaises(TypeError):
             resolve_junction_ref(catalog, "alpha", "graph-1")
+
+    def test_load_junction_catalog_rejects_malformed_document(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            catalog_path = Path(tmpdir) / "junctions.json"
+            catalog_path.write_text(json.dumps({"meta": {"asset_id": "junction-catalog-1"}, "junctions": []}))
+            with self.assertRaisesRegex(ValueError, r"junction catalog\.meta\.asset_kind"):
+                load_junction_catalog(catalog_path)
 
 
 if __name__ == "__main__":
