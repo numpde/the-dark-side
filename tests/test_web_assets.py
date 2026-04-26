@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
 from the_dark_side.web_assets import network_geojson
@@ -28,6 +31,16 @@ class WebAssetsTest(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, r"Missing elevation values for node ids: 2"):
             network_geojson(payload, node_elevations={1: 1800.0})
+
+    def test_load_elevation_asset_rejects_malformed_payloads(self) -> None:
+        from the_dark_side.web_assets import load_elevation_asset
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "elevation.json"
+            path.write_text(json.dumps({"meta": {"graph_asset_id": "graph-a"}, "nodes": []}))
+
+            with self.assertRaisesRegex(ValueError, r"elevation asset\.nodes must be a JSON object"):
+                load_elevation_asset(path, expected_graph_asset_id="graph-a")
 
 
 if __name__ == "__main__":
