@@ -165,6 +165,7 @@ def verify_frontend_bootstrap_contract() -> None:
     contract_primitives_js = (WEB_GENERATED_DIR.parent / "contract-primitives.mjs").read_text()
     route_graph_js = (WEB_GENERATED_DIR.parent / "route-graph.mjs").read_text()
     route_network_contracts_js = (WEB_GENERATED_DIR.parent / "route-network-contracts.mjs").read_text()
+    route_selection_js = (WEB_GENERATED_DIR.parent / "route-selection.mjs").read_text()
 
     assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'from "\./contract-primitives\.mjs"')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireContract\(')
@@ -205,6 +206,20 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-graph.mjs", route_graph_js, r'function moveCandidates\(')
 
     assert_regex(
+        "web/route-selection.mjs",
+        route_selection_js,
+        r'from "\./contract-primitives\.mjs"',
+    )
+    assert_regex("web/route-selection.mjs", route_selection_js, r'export function normalizeRouteHistory\(')
+    assert_regex(
+        "web/route-selection.mjs",
+        route_selection_js,
+        r'export function pickHistoryAwarePrimaryCandidate\(',
+    )
+    assert_not_regex("web/route-selection.mjs", route_selection_js, r'function moveCandidates\(')
+    assert_not_regex("web/route-selection.mjs", route_selection_js, r'function rolloutRoute\(')
+
+    assert_regex(
         "web/route-network-contracts.mjs",
         route_network_contracts_js,
         r'from "\./contract-primitives\.mjs"',
@@ -235,6 +250,14 @@ def verify_frontend_bootstrap_contract() -> None:
         route_planner_js,
         r'import\s*\{\s*buildGraphFromGeoJson,\s*buildRoutePayload\s*\}\s*from\s*"\./route-graph\.mjs"',
     )
+    assert_regex(
+        "web/route-planner.mjs",
+        route_planner_js,
+        r'from\s*"\./route-selection\.mjs"',
+    )
+    assert_contains("web/route-planner.mjs", route_planner_js, "normalizeRouteHistory,")
+    assert_contains("web/route-planner.mjs", route_planner_js, "pickHistoryAwarePrimaryCandidate,")
+    assert_contains("web/route-planner.mjs", route_planner_js, "sampleWeighted,")
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'export function buildGraphFromGeoJson\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function failNetwork\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireArray\(')
@@ -245,6 +268,9 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function normalizeFeature\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function summarizeRouteElevations\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function buildRoutePayload\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function normalizeRouteHistory\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function buildDiverseCandidatePool\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function pickHistoryAwarePrimaryCandidate\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_time_budget_ms:\s*requireFiniteNumber\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")
