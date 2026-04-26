@@ -8,12 +8,8 @@ function requireModuleVersion() {
 
 const MODULE_VERSION = requireModuleVersion();
 const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
-const {
-  requireObject,
-  requireInteger,
-  requireString,
-  validateAppManifest,
-} = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -577,37 +573,10 @@ function ensurePlannerWorker() {
     }
     appState.pendingWorkerRequests.clear();
   }
-  function parseWorkerMessage(event) {
-    const data = requireObject(event.data, "worker message");
-    const type = requireString(data.type, "worker message type");
-    const requestId = requireInteger(data.requestId, "worker requestId");
-    if (type === "error") {
-      const payload = requireObject(data.payload, "worker error payload");
-      return {
-        requestId,
-        type,
-        payload: {
-          message: requireString(payload.message, "worker error payload.message"),
-        },
-      };
-    }
-    if (type === "progress") {
-      return {
-        requestId,
-        type,
-        payload: requireObject(data.payload, "worker progress payload"),
-      };
-    }
-    return {
-      requestId,
-      type,
-      payload: requireObject(data.payload, "worker payload"),
-    };
-  }
   worker.addEventListener("message", (event) => {
     let message;
     try {
-      message = parseWorkerMessage(event);
+      message = parsePlannerWorkerResponse(event.data);
     } catch (error) {
       rejectPendingWorkerRequests(error instanceof Error ? error : new Error(String(error)));
       showError(error instanceof Error ? error.message : String(error));

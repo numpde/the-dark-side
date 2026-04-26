@@ -1,6 +1,7 @@
 const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v");
 const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
 let plannerModule = null;
+let workerContracts = null;
 let plannerLoadError = MODULE_VERSION
   ? null
   : new Error("Route worker is missing required module version");
@@ -27,49 +28,10 @@ function postWorkerProgress(requestId, payload) {
   });
 }
 
-function requireObject(value, label) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`${label} must be an object`);
-  }
-  return value;
-}
-
-function requireString(value, label) {
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`${label} must be a non-empty string`);
-  }
-  return value;
-}
-
-function requireInteger(value, label) {
-  if (!Number.isInteger(value)) {
-    throw new Error(`${label} must be an integer`);
-  }
-  return value;
-}
-
-function requireRouteHistory(value, label) {
-  if (value == null) {
-    return [];
-  }
-  if (!Array.isArray(value) || value.some((item) => !Array.isArray(item))) {
-    throw new Error(`${label} must be an array of contig-id sequences`);
-  }
-  return value;
-}
-
-function parseWorkerRequest(event) {
-  const data = requireObject(event.data, "Worker request");
-  const type = requireString(data.type, "Worker request type");
-  const requestId = requireInteger(data.requestId, "Worker request requestId");
-  const payload = requireObject(data.payload, "Worker request payload");
-  return { type, requestId, payload };
-}
-
 function handleMessage(event) {
   let message;
   try {
-    message = parseWorkerRequest(event);
+    message = workerContracts.parsePlannerWorkerRequest(event.data);
   } catch (error) {
     postWorkerError(undefined, error);
     return;
@@ -82,8 +44,7 @@ function handleMessage(event) {
     }
     const { buildGraphFromGeoJson, planBrowserRoute } = plannerModule;
     if (type === "init") {
-      const network = requireObject(payload.network, "Route worker init payload.network");
-      const config = requireObject(payload.config, "Route worker init payload.config");
+      const { network, config } = workerContracts.validatePlannerWorkerInitPayload(payload);
       graph = buildGraphFromGeoJson(network);
       plannerConfig = config;
       self.postMessage({
@@ -101,20 +62,20 @@ function handleMessage(event) {
       if (!graph || !plannerConfig) {
         throw new Error("Route worker is not initialized");
       }
-      const routeId = requireString(payload.routeId, "Route worker plan payload.routeId");
-      const startNodeId = requireInteger(payload.startNodeId, "Route worker plan payload.startNodeId");
-      const endNodeId = requireInteger(payload.endNodeId, "Route worker plan payload.endNodeId");
-      const seed = requireInteger(payload.seed, "Route worker plan payload.seed");
+      const {
+        routeId,
+        startNodeId,
+        endNodeId,
+        seed,
+        recentRouteContigSequences,
+      } = workerContracts.validatePlannerWorkerPlanPayload(payload);
       const route = planBrowserRoute(graph, {
         startNodeId,
         endNodeId,
         seed,
         config: plannerConfig,
         routeId,
-        recentRouteContigSequences: requireRouteHistory(
-          payload.recentRouteContigSequences,
-          "Route worker plan payload.recentRouteContigSequences",
-        ),
+        recentRouteContigSequences,
         onProgress: (partialRoute) => {
           postWorkerProgress(requestId, partialRoute);
         },
@@ -134,7 +95,7 @@ function handleMessage(event) {
 }
 
 self.addEventListener("message", (event) => {
-  if (!plannerModule && !plannerLoadError) {
+  if ((!plannerModule || !workerContracts) && !plannerLoadError) {
     pendingEvents.push(event);
     return;
   }
@@ -146,7 +107,10 @@ self.addEventListener("message", (event) => {
     if (plannerLoadError) {
       throw plannerLoadError;
     }
-    plannerModule = await import(`./route-planner.mjs${moduleSuffix}`);
+    [workerContracts, plannerModule] = await Promise.all([
+      import(`./planner-worker-contracts.mjs${moduleSuffix}`),
+      import(`./route-planner.mjs${moduleSuffix}`),
+    ]);
     while (pendingEvents.length) {
       handleMessage(pendingEvents.shift());
     }
@@ -155,7 +119,9 @@ self.addEventListener("message", (event) => {
     while (pendingEvents.length) {
       const event = pendingEvents.shift();
       try {
-        const { requestId } = parseWorkerRequest(event);
+        const { requestId } = workerContracts
+          ? workerContracts.parsePlannerWorkerRequest(event.data)
+          : { requestId: undefined };
         postWorkerError(requestId, plannerLoadError);
       } catch {
         postWorkerError(undefined, plannerLoadError);
