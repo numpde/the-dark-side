@@ -12,6 +12,7 @@ from the_dark_side.build_config import (
     load_catalog_build_config,
 )
 from the_dark_side.benchmark_karura_routes import parse_args as parse_benchmark_args
+from the_dark_side.export_karura_web_catalog import parse_args as parse_export_args
 from the_dark_side.plan_karura_route import parse_args as parse_plan_args
 
 
@@ -102,6 +103,28 @@ class BuildConfigTest(unittest.TestCase):
 
         self.assertEqual(args.mcts_iterations, 777)
         self.assertEqual(args.keep_best, 9)
+
+    def test_export_cli_reads_defaults_from_canonical_build_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "catalog_build.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "debug_catalog": {
+                            "routes_per_scenario": 4,
+                            "selection_window": 11,
+                        },
+                        "planner": {
+                            "beam_width": 71,
+                        },
+                    }
+                )
+            )
+            args = parse_export_args(["--build-config-json", str(path)])
+
+        self.assertEqual(args.routes_per_scenario, 4)
+        self.assertEqual(args.selection_window, 11)
+        self.assertEqual(args.beam_width, 71)
 
 
 if __name__ == "__main__":

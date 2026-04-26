@@ -52,7 +52,7 @@ Static GitHub Pages app and route-planning toolkit for long, low-overlap bike ro
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the precomputed/debug route catalog into `data/routes/`, and provides shared GeoJSON/export helpers used by the editor/app rebuild pipeline.
+  Exports the precomputed/debug route catalog into `data/routes/`.
 - `the_dark_side.rebuild_editor_assets`
   Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
 - `the_dark_side.verify_editor_assets`

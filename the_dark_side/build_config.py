@@ -20,6 +20,15 @@ DEBUG_CATALOG_KEYS = (
     "elevation_profile_spacing_m",
 )
 
+DEBUG_CATALOG_ARG_SPECS: tuple[tuple[str, str, type], ...] = (
+    ("seed_start", "--seed-start", int),
+    ("seed_end", "--seed-end", int),
+    ("candidate_limit_per_run", "--candidate-limit-per-run", int),
+    ("routes_per_scenario", "--routes-per-scenario", int),
+    ("selection_window", "--selection-window", int),
+    ("elevation_profile_spacing_m", "--elevation-profile-spacing-m", float),
+)
+
 PLANNER_KEYS = (
     "short_connector_max_length_m",
     "max_overlap_m",
@@ -281,5 +290,22 @@ def add_planner_config_args(parser: argparse.ArgumentParser, defaults: dict[str,
         parser.add_argument(flag, type=value_type, default=defaults[field_name])
 
 
+def add_debug_catalog_args(parser: argparse.ArgumentParser, defaults: dict[str, Any]) -> None:
+    for field_name, flag, value_type in DEBUG_CATALOG_ARG_SPECS:
+        parser.add_argument(flag, type=value_type, default=defaults[field_name])
+
+
 def planner_config_kwargs_from_namespace(args: argparse.Namespace) -> dict[str, Any]:
     return {field_name: getattr(args, field_name) for field_name in PLANNER_CONFIG_KEYS}
+
+
+def catalog_build_kwargs_from_namespace(
+    args: argparse.Namespace,
+    *,
+    include_browser_runtime: bool = False,
+    keys: tuple[str, ...] | None = None,
+) -> dict[str, Any]:
+    selected_keys = list(keys) if keys is not None else list(DEBUG_CATALOG_KEYS) + list(PLANNER_KEYS)
+    if include_browser_runtime:
+        selected_keys.extend(BROWSER_RUNTIME_KEYS)
+    return {field_name: getattr(args, field_name) for field_name in selected_keys}

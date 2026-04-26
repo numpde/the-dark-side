@@ -14,9 +14,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .build_config import (
+    DEBUG_CATALOG_KEYS,
+    PLANNER_KEYS,
+    add_debug_catalog_args,
+    add_planner_config_args,
     catalog_build_config_digest,
+    catalog_build_kwargs_from_namespace,
     load_catalog_build_config,
     normalize_catalog_build_config,
+    planner_config_kwargs_from_namespace,
 )
 from .elevation import summarize_elevation_series
 from .karura_common import (
@@ -90,59 +96,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), action="append")
-    parser.add_argument("--seed-start", type=int, default=build_defaults["seed_start"])
-    parser.add_argument("--seed-end", type=int, default=build_defaults["seed_end"])
-    parser.add_argument("--candidate-limit-per-run", type=int, default=build_defaults["candidate_limit_per_run"])
-    parser.add_argument("--routes-per-scenario", type=int, default=build_defaults["routes_per_scenario"])
-    parser.add_argument("--selection-window", type=int, default=build_defaults["selection_window"])
-    parser.add_argument("--short-connector-max-length-m", type=float, default=build_defaults["short_connector_max_length_m"])
-    parser.add_argument("--max-overlap-m", type=float, default=build_defaults["max_overlap_m"])
-    parser.add_argument("--max-steps", type=int, default=build_defaults["max_steps"])
-    parser.add_argument("--random-top-k", type=int, default=build_defaults["random_top_k"])
-    parser.add_argument("--end-stop-probability", type=float, default=build_defaults["end_stop_probability"])
-    parser.add_argument("--end-stop-unused-slack-m", type=float, default=build_defaults["end_stop_unused_slack_m"])
-    parser.add_argument("--end-finish-unused-slack-m", type=float, default=build_defaults["end_finish_unused_slack_m"])
-    parser.add_argument("--future-length-weight", type=float, default=build_defaults["future_length_weight"])
-    parser.add_argument("--connector-length-weight", type=float, default=build_defaults["connector_length_weight"])
-    parser.add_argument("--overlap-penalty-per-m", type=float, default=build_defaults["overlap_penalty_per_m"])
-    parser.add_argument("--articulation-penalty", type=float, default=build_defaults["articulation_penalty"])
-    parser.add_argument(
-        "--articulation-future-threshold-m",
-        type=float,
-        default=build_defaults["articulation_future_threshold_m"],
-    )
-    parser.add_argument("--dead-end-penalty", type=float, default=build_defaults["dead_end_penalty"])
-    parser.add_argument("--early-finish-penalty", type=float, default=build_defaults["early_finish_penalty"])
-    parser.add_argument("--rollout-trials", type=int, default=build_defaults["rollout_trials"])
-    parser.add_argument("--keep-best", type=int, default=build_defaults["keep_best"])
-    parser.add_argument("--beam-width", type=int, default=build_defaults["beam_width"])
-    parser.add_argument("--beam-branch-factor", type=int, default=build_defaults["beam_branch_factor"])
-    parser.add_argument("--beam-rounds", type=int, default=build_defaults["beam_rounds"])
-    parser.add_argument("--beam-selection-pool", type=int, default=build_defaults["beam_selection_pool"])
-    parser.add_argument("--beam-selection-window", type=int, default=build_defaults["beam_selection_window"])
-    parser.add_argument("--mcts-iterations", type=int, default=build_defaults["mcts_iterations"])
-    parser.add_argument("--mcts-exploration-weight", type=float, default=build_defaults["mcts_exploration_weight"])
-    parser.add_argument("--mcts-rollout-top-k", type=int, default=build_defaults["mcts_rollout_top_k"])
-    parser.add_argument("--mcts-rollout-samples", type=int, default=build_defaults["mcts_rollout_samples"])
-    parser.add_argument("--mcts-prior-weight", type=float, default=build_defaults["mcts_prior_weight"])
-    parser.add_argument("--mcts-loop-completion-bonus", type=float, default=build_defaults["mcts_loop_completion_bonus"])
-    parser.add_argument(
-        "--mcts-loop-unused-penalty-per-m",
-        type=float,
-        default=build_defaults["mcts_loop_unused_penalty_per_m"],
-    )
-    parser.add_argument("--mcts-loop-late-return-bonus", type=float, default=build_defaults["mcts_loop_late_return_bonus"])
-    parser.add_argument(
-        "--mcts-loop-overlap-penalty-per-m",
-        type=float,
-        default=build_defaults["mcts_loop_overlap_penalty_per_m"],
-    )
+    add_debug_catalog_args(parser, build_defaults)
+    add_planner_config_args(parser, build_defaults)
     parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument(
-        "--elevation-profile-spacing-m",
-        type=float,
-        default=build_defaults["elevation_profile_spacing_m"],
-    )
     parser.add_argument(
         "--elevation-smoothing-window",
         type=int,
@@ -160,84 +116,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_config(args: argparse.Namespace) -> PlannerConfig:
-    return PlannerConfig(
-        short_connector_max_length_m=args.short_connector_max_length_m,
-        max_overlap_m=args.max_overlap_m,
-        max_steps=args.max_steps,
-        random_top_k=args.random_top_k,
-        end_stop_probability=args.end_stop_probability,
-        end_stop_unused_slack_m=args.end_stop_unused_slack_m,
-        end_finish_unused_slack_m=args.end_finish_unused_slack_m,
-        future_length_weight=args.future_length_weight,
-        connector_length_weight=args.connector_length_weight,
-        overlap_penalty_per_m=args.overlap_penalty_per_m,
-        articulation_penalty=args.articulation_penalty,
-        articulation_future_threshold_m=args.articulation_future_threshold_m,
-        dead_end_penalty=args.dead_end_penalty,
-        early_finish_penalty=args.early_finish_penalty,
-        rollout_trials=args.rollout_trials,
-        keep_best=args.keep_best,
-        beam_width=args.beam_width,
-        beam_branch_factor=args.beam_branch_factor,
-        beam_rounds=args.beam_rounds,
-        beam_selection_pool=args.beam_selection_pool,
-        beam_selection_window=args.beam_selection_window,
-        mcts_iterations=args.mcts_iterations,
-        mcts_exploration_weight=args.mcts_exploration_weight,
-        mcts_rollout_top_k=args.mcts_rollout_top_k,
-        mcts_rollout_samples=args.mcts_rollout_samples,
-        mcts_prior_weight=args.mcts_prior_weight,
-        mcts_loop_completion_bonus=args.mcts_loop_completion_bonus,
-        mcts_loop_unused_penalty_per_m=args.mcts_loop_unused_penalty_per_m,
-        mcts_loop_late_return_bonus=args.mcts_loop_late_return_bonus,
-        mcts_loop_overlap_penalty_per_m=args.mcts_loop_overlap_penalty_per_m,
-    )
+    return PlannerConfig(**planner_config_kwargs_from_namespace(args))
 
 
 def effective_build_config(args: argparse.Namespace) -> dict:
-    return normalize_catalog_build_config(
-        {
-            "algorithms": list(args.algorithm),
-            "seed_start": args.seed_start,
-            "seed_end": args.seed_end,
-            "candidate_limit_per_run": args.candidate_limit_per_run,
-            "routes_per_scenario": args.routes_per_scenario,
-            "selection_window": args.selection_window,
-            "short_connector_max_length_m": args.short_connector_max_length_m,
-            "max_overlap_m": args.max_overlap_m,
-            "max_steps": args.max_steps,
-            "random_top_k": args.random_top_k,
-            "end_stop_probability": args.end_stop_probability,
-            "end_stop_unused_slack_m": args.end_stop_unused_slack_m,
-            "end_finish_unused_slack_m": args.end_finish_unused_slack_m,
-            "future_length_weight": args.future_length_weight,
-            "connector_length_weight": args.connector_length_weight,
-            "overlap_penalty_per_m": args.overlap_penalty_per_m,
-            "articulation_penalty": args.articulation_penalty,
-            "articulation_future_threshold_m": args.articulation_future_threshold_m,
-            "dead_end_penalty": args.dead_end_penalty,
-            "early_finish_penalty": args.early_finish_penalty,
-            "rollout_trials": args.rollout_trials,
-            "keep_best": args.keep_best,
-            "beam_width": args.beam_width,
-            "beam_branch_factor": args.beam_branch_factor,
-            "beam_rounds": args.beam_rounds,
-            "beam_selection_pool": args.beam_selection_pool,
-            "beam_selection_window": args.beam_selection_window,
-            "mcts_iterations": args.mcts_iterations,
-            "mcts_exploration_weight": args.mcts_exploration_weight,
-            "mcts_rollout_top_k": args.mcts_rollout_top_k,
-            "mcts_rollout_samples": args.mcts_rollout_samples,
-            "mcts_prior_weight": args.mcts_prior_weight,
-            "mcts_loop_completion_bonus": args.mcts_loop_completion_bonus,
-            "mcts_loop_unused_penalty_per_m": args.mcts_loop_unused_penalty_per_m,
-            "mcts_loop_late_return_bonus": args.mcts_loop_late_return_bonus,
-            "mcts_loop_overlap_penalty_per_m": args.mcts_loop_overlap_penalty_per_m,
-            "elevation_profile_spacing_m": args.elevation_profile_spacing_m,
-            "elevation_smoothing_window": args.elevation_smoothing_window,
-            "elevation_min_step_m": args.elevation_min_step_m,
-        }
+    payload = catalog_build_kwargs_from_namespace(
+        args,
+        keys=tuple(key for key in DEBUG_CATALOG_KEYS + PLANNER_KEYS if key != "algorithms"),
     )
+    payload["algorithms"] = list(args.algorithm)
+    return normalize_catalog_build_config(payload)
 
 
 def planner_for(name: str):
