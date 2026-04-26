@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Export a precomputed debug route catalog and shared web graph payloads."""
+"""Debug/oracle tool: export a precomputed route catalog."""
 
 from __future__ import annotations
 
@@ -28,16 +28,11 @@ from .karura_common import (
     CATALOG_BUILD_JSON,
     CONTIGS_JSON,
     ELEVATION_JSON,
-    PATCHED_MAP_JSON,
     JUNCTIONS_JSON,
     JUNCTION_BINDINGS_JSON,
-    MAP_PATCHES_JSON,
     ROUTE_CATALOG_JSON,
     repo_rel,
     utc_now_z,
-    WEB_SOURCE_DIR,
-    WEB_GENERATED_DIR,
-    sync_web_source_assets,
 )
 from .karura_routing import (
     PlannerConfig,
@@ -52,16 +47,12 @@ from .karura_routing import (
     resolve_junction_ref,
 )
 from .web_assets import (
-    build_editor_graph_payload,
     load_elevation_asset,
-    network_geojson,
     write_json,
 )
 
 
 DEFAULT_CATALOG_JSON = ROUTE_CATALOG_JSON
-DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
-DEFAULT_EDITOR_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-editor-network.geojson"
 
 
 @dataclass(frozen=True)
@@ -89,7 +80,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default_path=CATALOG_BUILD_JSON,
     )
 
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog="Offline/debug tool only. The published app composes routes in the browser and does not consume this catalog.",
+    )
     parser.add_argument("--build-config-json", type=Path, default=build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
@@ -104,11 +98,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=build_defaults["elevation_smoothing_window"],
     )
     parser.add_argument("--elevation-min-step-m", type=float, default=build_defaults["elevation_min_step_m"])
-    parser.add_argument("--editor-map-json", type=Path, default=PATCHED_MAP_JSON)
-    parser.add_argument("--editor-patches-json", type=Path, default=MAP_PATCHES_JSON)
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
-    parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
-    parser.add_argument("--output-editor-network", type=Path, default=DEFAULT_EDITOR_NETWORK_GEOJSON)
     args = parser.parse_args(remaining)
     args.algorithm = args.algorithm or list(build_defaults["algorithms"])
     return args
@@ -330,10 +320,6 @@ def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
         args.elevation_json,
         expected_graph_asset_id=graph.asset_id,
     )
-    editor_graph_payload, editor_network = build_editor_graph_payload(
-        editor_map_json=args.editor_map_json,
-        editor_patches_json=args.editor_patches_json,
-    )
     junction_catalog = load_junction_catalog(args.junctions_json)
     junction_bindings = load_junction_bindings(args.junction_bindings_json)
     junction_defs = junction_catalog["junctions"]
@@ -393,8 +379,6 @@ def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
         "graph": graph,
         "node_elevations": node_elevations,
         "elevation_matches_graph": elevation_matches_graph,
-        "editor_graph_payload": editor_graph_payload,
-        "editor_network": editor_network,
         "junction_catalog": junction_catalog,
         "junction_bindings": junction_bindings,
         "junction_defs": junction_defs,
@@ -410,7 +394,6 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
     graph = planned["graph"]
     node_elevations = planned["node_elevations"]
     elevation_matches_graph = planned["elevation_matches_graph"]
-    editor_network = planned["editor_network"]
     junction_catalog = planned["junction_catalog"]
     junction_bindings = planned["junction_bindings"]
     junction_defs = planned["junction_defs"]
@@ -489,7 +472,6 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
                 "id": "karura",
                 "name": "Karura Forest",
                 "bounds": area_bounds(graph),
-                "network_path": args.output_network.name,
                 "junctions": [
                     {
                         "id": junction["id"],
@@ -506,28 +488,12 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
         ],
     }
 
-    route_network = network_geojson(
-        graph,
-        meta={
-            "graph_asset_id": graph.asset_id,
-            "asset_kind": graph.asset_kind,
-            "source_path": repo_rel(args.contigs_json),
-        },
-        node_elevations=node_elevations if elevation_matches_graph else None,
-    )
-    return {
-        "catalog": catalog_payload,
-        "network": route_network,
-        "editor_network": editor_network,
-    }
+    return {"catalog": catalog_payload}
 
 
 def export_catalog(args: argparse.Namespace) -> dict[str, dict]:
-    sync_web_source_assets()
     payloads = build_export_payloads(args)
     write_json(args.output_catalog, payloads["catalog"])
-    write_json(args.output_network, payloads["network"])
-    write_json(args.output_editor_network, payloads["editor_network"])
     return payloads
 
 
@@ -538,9 +504,6 @@ def main() -> None:
         json.dumps(
             {
                 "catalog": str(args.output_catalog),
-                "network": str(args.output_network),
-                "editor_network": str(args.output_editor_network),
-                "published_sources": [str(path) for path in sorted(WEB_SOURCE_DIR.glob("*.json"))],
                 "area_count": len(payloads["catalog"]["areas"]),
                 "scenario_count": len(payloads["catalog"]["areas"][0]["scenarios"]),
                 "route_count": sum(scenario["route_count"] for scenario in payloads["catalog"]["areas"][0]["scenarios"]),

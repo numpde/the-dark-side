@@ -39,12 +39,14 @@ Static GitHub Pages app and route-planning toolkit for long, low-overlap bike ro
   - `data/karura_junction_bindings.json`
 - `the_dark_side.karura_routing`
   Shared graph/junction loaders plus route planners.
+- Browser planner
+  Product path: the published app composes routes client-side from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
 - `the_dark_side.elevation`
   Elevation clients plus helpers for graph and route profile summarization.
 - `the_dark_side.plan_karura_route`
-  Debug tool: generates one-off route candidates between curated junctions under `data/routes/`.
+  Debug/oracle tool: generates one-off Python-planned route candidates between curated junctions under `data/routes/`.
 - `the_dark_side.benchmark_karura_routes`
-  Benchmarks route planners across seeds and scenarios.
+  Debug/oracle tool: benchmarks the Python route planners across seeds and scenarios.
 - `the_dark_side.render_karura_overlay`
   Renders debug overlays from `data/karura_map.json`.
 - `the_dark_side.render_karura_figures`
@@ -52,7 +54,7 @@ Static GitHub Pages app and route-planning toolkit for long, low-overlap bike ro
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the precomputed/debug route catalog into `data/routes/`.
+  Debug/oracle tool: exports only the precomputed route catalog into `data/routes/`.
 - `the_dark_side.rebuild_editor_assets`
   Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
 - `the_dark_side.verify_editor_assets`
@@ -130,7 +132,7 @@ Render the curated junction figure:
 python3 -m the_dark_side.render_karura_figures --figure-id junctions_primary
 ```
 
-Generate route candidates for debugging:
+Generate route candidates for debugging or planner comparison:
 
 ```bash
 python3 -m the_dark_side.plan_karura_route --algorithm naive
@@ -138,7 +140,7 @@ python3 -m the_dark_side.plan_karura_route --algorithm beam
 python3 -m the_dark_side.plan_karura_route --algorithm mcts
 ```
 
-These debug planners now take their defaults from `source/catalog_build.json`. To try an alternate tuning document without changing the canonical source, pass `--build-config-json /path/to/catalog_build.json`.
+These Python planners are offline debug/oracle tools. They now take their defaults from `source/catalog_build.json`. To try an alternate tuning document without changing the canonical source, pass `--build-config-json /path/to/catalog_build.json`.
 
 The current MCTS defaults are tuned toward longer coverage-heavy routes:
 
@@ -150,7 +152,7 @@ The current MCTS defaults are tuned toward longer coverage-heavy routes:
 - `--mcts-loop-late-return-bonus 180`
 - `--mcts-loop-overlap-penalty-per-m 4`
 
-These one-off route assets are debug output only. The published app now composes routes in the browser from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
+These one-off route assets are debug/oracle output only. The published app composes routes in the browser from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
 
 Render the top route from one of those debug assets:
 
@@ -395,7 +397,7 @@ python3 -m the_dark_side.verify_app_assets
 - `figures` contains stable figure ids
 - figure items reference stable curated entities such as `junction_id`
 
-`data/routes/karura-route-catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app and is not part of the Pages artifact.
+`data/routes/karura-route-catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app, is not part of the Pages artifact, and does not rebuild app/editor runtime assets.
 
 `web/generated/app-manifest.json` contains the live route-app bootstrap payload:
 
