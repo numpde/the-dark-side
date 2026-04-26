@@ -2,6 +2,7 @@ const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v") || "";
 const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
 const {
   buildPatchsetDocument,
+  emptyPatchset,
   defaultWayPolicy,
   normalizePatchset,
   policyForWay,
@@ -101,7 +102,7 @@ const appState = {
   selectedWayId: null,
   selectedOverlay: null,
   endpointLayer: null,
-  editorState: normalizePatchset(null),
+  editorState: normalizePatchset(emptyPatchset()),
   loadedPatchLabel: "–",
   editorManifest: null,
 };
@@ -223,7 +224,11 @@ function patchesUrlFromManifest() {
 function canonicalPatchFilename() {
   const path = canonicalPatchPath();
   const parts = path.split("/");
-  return parts[parts.length - 1] || "karura-map-patches.json";
+  const filename = parts[parts.length - 1];
+  if (!filename) {
+    throw new Error(`Editor manifest has invalid meta.patchset_path: ${path}`);
+  }
+  return filename;
 }
 
 

@@ -43,6 +43,27 @@ class JunctionBindingsTest(unittest.TestCase):
         self.assertEqual(ref.incident_contig_ids, (7,))
         self.assertEqual(ref.name, "Alpha")
 
+    def test_resolve_requires_bindings_instead_of_legacy_asset_refs(self) -> None:
+        catalog = {
+            "meta": {"asset_id": "junction-catalog-1", "asset_kind": "junction_catalog"},
+            "junctions": [
+                {
+                    "id": "alpha",
+                    "name": "Alpha",
+                    "location": {"lat": -1.0, "lon": 36.0},
+                    "asset_refs": [
+                        {
+                            "asset_id": "graph-1",
+                            "graph_node_id": 10,
+                            "incident_contig_ids": [7],
+                        }
+                    ],
+                }
+            ],
+        }
+        with self.assertRaises(TypeError):
+            resolve_junction_ref(catalog, "alpha", "graph-1")
+
 
 if __name__ == "__main__":
     unittest.main()

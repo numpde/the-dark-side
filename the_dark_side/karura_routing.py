@@ -235,40 +235,23 @@ def load_junction_bindings(path: Path) -> dict:
     return load_junction_bindings_payload(path)
 
 
-def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict | None = None) -> JunctionRef:
+def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict) -> JunctionRef:
     junction = next((entry for entry in payload.get("junctions", []) if entry["id"] == junction_id), None)
     if junction is None:
         raise KeyError(f"Junction '{junction_id}' not found")
 
-    if bindings_payload is not None:
-        bindings_graph_asset_id = bindings_payload.get("meta", {}).get("graph_asset_id")
-        if bindings_graph_asset_id != graph_asset_id:
-            raise KeyError(
-                f"Junction bindings asset is for graph '{bindings_graph_asset_id}', expected '{graph_asset_id}'"
-            )
-        for binding in bindings_payload.get("bindings", []):
-            if binding.get("junction_id") == junction_id:
-                return JunctionRef(
-                    junction_id=junction["id"],
-                    name=junction["name"],
-                    graph_node_id=int(binding["graph_node_id"]),
-                    incident_contig_ids=tuple(int(contig_id) for contig_id in binding["incident_contig_ids"]),
-                    location={
-                        "lat": float(junction["location"]["lat"]),
-                        "lon": float(junction["location"]["lon"]),
-                    },
-                    notes=junction.get("notes", ""),
-                    tags=tuple(junction.get("tags", [])),
-                )
-        raise KeyError(f"Junction '{junction_id}' has no binding for asset '{graph_asset_id}'")
-
-    for ref in junction.get("asset_refs", []):
-        if ref.get("asset_id") == graph_asset_id:
+    bindings_graph_asset_id = bindings_payload.get("meta", {}).get("graph_asset_id")
+    if bindings_graph_asset_id != graph_asset_id:
+        raise KeyError(
+            f"Junction bindings asset is for graph '{bindings_graph_asset_id}', expected '{graph_asset_id}'"
+        )
+    for binding in bindings_payload.get("bindings", []):
+        if binding.get("junction_id") == junction_id:
             return JunctionRef(
                 junction_id=junction["id"],
                 name=junction["name"],
-                graph_node_id=int(ref["graph_node_id"]),
-                incident_contig_ids=tuple(int(contig_id) for contig_id in ref["incident_contig_ids"]),
+                graph_node_id=int(binding["graph_node_id"]),
+                incident_contig_ids=tuple(int(contig_id) for contig_id in binding["incident_contig_ids"]),
                 location={
                     "lat": float(junction["location"]["lat"]),
                     "lon": float(junction["location"]["lon"]),
@@ -276,7 +259,7 @@ def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, b
                 notes=junction.get("notes", ""),
                 tags=tuple(junction.get("tags", [])),
             )
-    raise KeyError(f"Junction '{junction_id}' has no ref for asset '{graph_asset_id}'")
+    raise KeyError(f"Junction '{junction_id}' has no binding for asset '{graph_asset_id}'")
 
 
 def update_node_degrees(nodes: dict[int, NodeRecord], adjacency: dict[int, list[tuple[int, int]]]) -> None:

@@ -85,10 +85,40 @@ function requirePatchsetObject(rawPatchset) {
   if (!Array.isArray(rawPatchset.patches)) {
     throw new Error("Patchset must contain a patches array");
   }
-  if (rawPatchset.meta != null && (typeof rawPatchset.meta !== "object" || Array.isArray(rawPatchset.meta))) {
-    throw new Error("Patchset meta must be an object when present");
+  const meta = requirePlainObject(rawPatchset.meta, "Patchset meta");
+  if (typeof meta.asset_kind !== "string" || meta.asset_kind.length === 0) {
+    throw new Error("Patchset meta.asset_kind must be a non-empty string");
+  }
+  if (typeof meta.patchset_id !== "string" || meta.patchset_id.length === 0) {
+    throw new Error("Patchset meta.patchset_id must be a non-empty string");
   }
   return rawPatchset;
+}
+
+
+function requirePlainObject(value, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`${label} must be an object`);
+  }
+  return value;
+}
+
+
+function requireStringArray(value, label) {
+  if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) {
+    throw new Error(`${label} must be an array of strings`);
+  }
+  return value;
+}
+
+
+function validateManagedPatchShape(patch) {
+  if (patch.set != null) {
+    requirePlainObject(patch.set, `Patch ${patch.id || "(unnamed)"} set`);
+  }
+  if (patch.remove != null) {
+    requireStringArray(patch.remove, `Patch ${patch.id || "(unnamed)"} remove`);
+  }
 }
 
 
@@ -112,10 +142,12 @@ function splitManagedPatch(patch) {
     return { managedPatch: null, residualPatch: patch ?? null };
   }
 
+  validateManagedPatchShape(patch);
+
   const managedNames = managedTagNamesSet();
   const managedSet = {};
   const residualSet = {};
-  for (const [key, value] of Object.entries(patch.set || {})) {
+  for (const [key, value] of Object.entries(patch.set ?? {})) {
     if (managedNames.has(key)) {
       managedSet[key] = value;
     } else {
@@ -125,7 +157,7 @@ function splitManagedPatch(patch) {
 
   const managedRemove = [];
   const residualRemove = [];
-  for (const key of patch.remove || []) {
+  for (const key of patch.remove ?? []) {
     if (managedNames.has(key)) {
       managedRemove.push(key);
     } else {
@@ -169,7 +201,7 @@ function splitManagedPatch(patch) {
 
 function applyManagedPatch(policy, patch) {
   const next = { ...policy };
-  for (const key of patch.remove || []) {
+  for (const key of patch.remove ?? []) {
     if (key === POLICY_TAGS.routingState) {
       next.routingState = "default";
     } else if (key === POLICY_TAGS.bikeability) {
@@ -180,7 +212,7 @@ function applyManagedPatch(policy, patch) {
       next.unavailableUntil = null;
     }
   }
-  for (const [key, value] of Object.entries(patch.set || {})) {
+  for (const [key, value] of Object.entries(patch.set ?? {})) {
     if (key === POLICY_TAGS.routingState) {
       next.routingState = normalizeRoutingState(value);
     } else if (key === POLICY_TAGS.bikeability) {
@@ -198,11 +230,11 @@ function applyManagedPatch(policy, patch) {
 
 
 export function normalizePatchset(rawPatchset) {
-  const patchset = rawPatchset == null ? emptyPatchset() : requirePatchsetObject(rawPatchset);
+  const patchset = requirePatchsetObject(rawPatchset);
   const passthroughPatches = [];
   const policyByWayId = new Map();
 
-  for (const patch of patchset.patches || []) {
+  for (const patch of patchset.patches) {
     const { managedPatch, residualPatch } = splitManagedPatch(patch);
     if (residualPatch) {
       passthroughPatches.push(residualPatch);
@@ -216,7 +248,7 @@ export function normalizePatchset(rawPatchset) {
   }
 
   return {
-    meta: { ...(patchset.meta || emptyPatchset().meta) },
+    meta: { ...patchset.meta },
     passthroughPatches,
     policyByWayId,
   };

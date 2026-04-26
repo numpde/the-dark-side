@@ -142,6 +142,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'fetch\(appManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
     assert_regex("web/app.js", app_js, r'validateAppManifest\(await response\.json\(\)\)')
     assert_regex("web/app.js", app_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
+    assert_regex("web/app.js", app_js, r'function requireScenario\(')
+    assert_regex("web/app.js", app_js, r'function junctionById\(')
     assert_regex("web/app.js", app_js, r'planner\?\.\s*network_version')
     assert_regex("web/app.js", app_js, r'await import\(`\./gpx\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'workerUrl\.searchParams\.set\("v", MODULE_VERSION\)')
@@ -149,6 +151,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_contains("web/app.js", app_js, "generated/catalog.json")
     assert_not_contains("web/app.js", app_js, "junction.lat")
     assert_not_contains("web/app.js", app_js, "junction.lon")
+    assert_not_contains("web/app.js", app_js, "|| area.scenarios[0]")
+    assert_not_contains("web/app.js", app_js, "return scenario.id")
 
     assert_regex("web/editor.js", editor_js, r'new URL\("\./generated/editor-manifest\.json", window\.location\.href\)')
     assert_regex("web/editor.js", editor_js, r'fetchJson\(editorManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')

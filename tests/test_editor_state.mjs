@@ -5,6 +5,7 @@ import {
   POLICY_TAGS,
   buildPatchsetDocument,
   defaultWayPolicy,
+  emptyPatchset,
   normalizePatchset,
   policyForWay,
   setWayPolicy,
@@ -13,7 +14,7 @@ import {
 
 test("normalizePatchset extracts managed policy patches and preserves others", () => {
   const raw = {
-    meta: { patchset_id: "karura-map-patches-v1" },
+    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
     patches: [
       {
         id: "editor-policy-contig-10",
@@ -48,7 +49,7 @@ test("normalizePatchset extracts managed policy patches and preserves others", (
 
 test("normalizePatchset splits mixed contig tag patches into managed policy and passthrough tags", () => {
   const editorState = normalizePatchset({
-    meta: { patchset_id: "karura-map-patches-v1" },
+    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
     patches: [
       {
         id: "editor-policy-contig-55",
@@ -115,7 +116,7 @@ test("normalizePatchset splits mixed contig tag patches into managed policy and 
 
 
 test("setWayPolicy removes default policy from managed state", () => {
-  const editorState = normalizePatchset({ meta: {}, patches: [] });
+  const editorState = normalizePatchset(emptyPatchset());
   setWayPolicy(editorState, 11, {
     routingState: "include",
     bikeability: 4,
@@ -130,7 +131,7 @@ test("setWayPolicy removes default policy from managed state", () => {
 
 test("buildPatchsetDocument preserves passthrough patches and emits canonical policy patch", () => {
   const editorState = normalizePatchset({
-    meta: { patchset_id: "karura-map-patches-v1" },
+    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
     patches: [
       {
         id: "passthrough",
@@ -178,7 +179,7 @@ test("buildPatchsetDocument preserves passthrough patches and emits canonical po
 
 test("normalizePatchset sanitizes invalid managed policy values", () => {
   const editorState = normalizePatchset({
-    meta: { patchset_id: "karura-map-patches-v1" },
+    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
     patches: [
       {
         id: "editor-policy-contig-77",
@@ -199,19 +200,56 @@ test("normalizePatchset sanitizes invalid managed policy values", () => {
 
 test("normalizePatchset rejects malformed patchset documents instead of treating them as empty", () => {
   assert.throws(
-    () => normalizePatchset({ meta: {} }),
+    () => normalizePatchset({ meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" } }),
     /Patchset must contain a patches array/
   );
   assert.throws(
     () => normalizePatchset([]),
     /Patchset must be a JSON object/
   );
+  assert.throws(
+    () => normalizePatchset({ meta: {}, patches: [] }),
+    /Patchset meta\.asset_kind must be a non-empty string/
+  );
+  assert.deepEqual(normalizePatchset(emptyPatchset()).passthroughPatches, []);
+});
+
+
+test("normalizePatchset rejects malformed managed contig tag patch shapes", () => {
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-12",
+          op: "update_contig_tags",
+          contig_id: 12,
+          set: ["not", "an", "object"],
+        },
+      ],
+    }),
+    /set must be an object/
+  );
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-13",
+          op: "update_contig_tags",
+          contig_id: 13,
+          remove: "local:routing_state",
+        },
+      ],
+    }),
+    /remove must be an array of strings/
+  );
 });
 
 
 test("normalizePatchset migrates legacy temporary unavailability to far-future unavailable-until", () => {
   const editorState = normalizePatchset({
-    meta: { patchset_id: "karura-map-patches-v1" },
+    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
     patches: [
       {
         id: "editor-policy-contig-88",
@@ -234,7 +272,7 @@ test("normalizePatchset migrates legacy temporary unavailability to far-future u
 
 
 test("buildPatchsetDocument includes contig node ids when available", () => {
-  const editorState = normalizePatchset({ meta: {}, patches: [] });
+  const editorState = normalizePatchset(emptyPatchset());
   setWayPolicy(editorState, 9, { routingState: "exclude" });
   const featureById = new Map([
     [
@@ -260,7 +298,7 @@ test("buildPatchsetDocument includes contig node ids when available", () => {
 });
 
 test("buildPatchsetDocument rejects managed policies for contigs missing from the current graph", () => {
-  const editorState = normalizePatchset({ meta: {}, patches: [] });
+  const editorState = normalizePatchset(emptyPatchset());
   setWayPolicy(editorState, 404, { routingState: "exclude" });
 
   assert.throws(

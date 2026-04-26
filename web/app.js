@@ -232,13 +232,35 @@ function scenarioId(startJunctionId, endJunctionId) {
   return `${startJunctionId}__to__${endJunctionId}`;
 }
 
+function findScenario(area, startJunctionId, endJunctionId) {
+  if (!area) {
+    return null;
+  }
+  return area.scenarios.find(
+    (item) => item.start_junction_id === startJunctionId && item.end_junction_id === endJunctionId
+  ) || null;
+}
+
+function requireScenario(area, startJunctionId, endJunctionId, label = "scenario selection") {
+  const scenario = findScenario(area, startJunctionId, endJunctionId);
+  if (!scenario) {
+    throw new Error(`Invalid ${label}: ${startJunctionId} -> ${endJunctionId}`);
+  }
+  return scenario;
+}
+
+function junctionById(area, junctionId) {
+  const junction = area.junctions.find((item) => item.id === junctionId);
+  if (!junction) {
+    throw new Error(`Unknown junction id ${junctionId}`);
+  }
+  return junction;
+}
+
 
 function scenarioLabelText(scenario, area) {
-  const start = area.junctions.find((item) => item.id === scenario.start_junction_id);
-  const end = area.junctions.find((item) => item.id === scenario.end_junction_id);
-  if (!start || !end) {
-    return scenario.id;
-  }
+  const start = junctionById(area, scenario.start_junction_id);
+  const end = junctionById(area, scenario.end_junction_id);
   if (scenario.is_loop) {
     return `${start.name} loop`;
   }
@@ -250,9 +272,7 @@ function currentScenario() {
   if (!appState.area) {
     return null;
   }
-  return appState.area.scenarios.find(
-    (item) => item.id === scenarioId(startSelect.value, endSelect.value)
-  );
+  return requireScenario(appState.area, startSelect.value, endSelect.value);
 }
 
 
@@ -261,14 +281,9 @@ function currentJunctions() {
   if (!scenario || !appState.area) {
     return { startJunction: null, endJunction: null };
   }
-  const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
-  const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
-  if (!startJunction || !endJunction) {
-    throw new Error(`Scenario ${scenario.id} references unknown junctions`);
-  }
   return {
-    startJunction,
-    endJunction,
+    startJunction: junctionById(appState.area, scenario.start_junction_id),
+    endJunction: junctionById(appState.area, scenario.end_junction_id),
   };
 }
 
@@ -481,12 +496,14 @@ function canonicalSelectionFromQuery() {
   const query = new URLSearchParams(window.location.search);
   const areas = appState.manifest.areas;
   const requestedAreaId = query.get("area");
-  const area = areas.find((item) => item.id === requestedAreaId) || areas[0];
+  const requestedArea = areas.find((item) => item.id === requestedAreaId);
+  const area = requestedArea ?? areas[0];
   const requestedStart = query.get("start");
   const requestedEnd = query.get("end");
-  const scenario = area.scenarios.find(
+  const matchedScenario = area.scenarios.find(
     (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
-  ) || area.scenarios[0];
+  );
+  const scenario = matchedScenario ?? area.scenarios[0];
   const canonical = {
     areaId: area.id,
     startJunctionId: scenario.start_junction_id,
@@ -544,9 +561,7 @@ function populateJunctionSelectors(area, requestedStart, requestedEnd) {
     endSelect.append(endOption);
   });
 
-  const exactScenario = area.scenarios.find(
-    (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
-  ) || area.scenarios[0];
+  const exactScenario = requireScenario(area, requestedStart, requestedEnd, "junction selector state");
 
   startSelect.value = exactScenario.start_junction_id;
   endSelect.value = exactScenario.end_junction_id;
