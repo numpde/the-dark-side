@@ -6,9 +6,13 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
 from .asset_pipeline_cli import add_app_asset_args
-from .build_config import load_catalog_build_config
+from .build_config import (
+    BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS,
+    load_catalog_build_config,
+)
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_editor_assets import verify_editor_assets
@@ -49,16 +53,7 @@ def validate_manifest_schema(manifest: dict) -> None:
         raise SystemExit("app manifest is stale; missing planner.network_version")
     if not isinstance(config, dict):
         raise SystemExit("app manifest is stale; missing planner.config object")
-    numeric_config_fields = (
-        "selection_pool",
-        "selection_window",
-        "mcts_iterations",
-        "mcts_rollout_top_k",
-        "mcts_rollout_samples",
-        "mcts_time_budget_ms",
-        "mcts_progress_interval_iterations",
-    )
-    for field_name in numeric_config_fields:
+    for field_name in BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS:
         if not isinstance(config.get(field_name), (int, float)):
             raise SystemExit(f"app manifest is stale; missing numeric planner.config.{field_name}")
     areas = manifest.get("areas")

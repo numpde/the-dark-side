@@ -140,6 +140,45 @@ BROWSER_RUNTIME_KEYS = (
     "browser_mcts_progress_interval_iterations",
 )
 
+BROWSER_PLANNER_CONFIG_KEYS = (
+    "short_connector_max_length_m",
+    "max_overlap_m",
+    "max_steps",
+    "random_top_k",
+    "end_stop_probability",
+    "end_stop_unused_slack_m",
+    "end_finish_unused_slack_m",
+    "future_length_weight",
+    "connector_length_weight",
+    "overlap_penalty_per_m",
+    "articulation_penalty",
+    "articulation_future_threshold_m",
+    "dead_end_penalty",
+    "early_finish_penalty",
+    "mcts_exploration_weight",
+    "mcts_prior_weight",
+    "mcts_loop_completion_bonus",
+    "mcts_loop_unused_penalty_per_m",
+    "mcts_loop_late_return_bonus",
+    "mcts_loop_overlap_penalty_per_m",
+    "elevation_smoothing_window",
+    "elevation_min_step_m",
+)
+
+BROWSER_PLANNER_RUNTIME_MAP: tuple[tuple[str, str, type], ...] = (
+    ("selection_pool", "browser_selection_pool", int),
+    ("selection_window", "browser_selection_window", int),
+    ("mcts_iterations", "browser_mcts_iterations", int),
+    ("mcts_rollout_top_k", "browser_mcts_rollout_top_k", int),
+    ("mcts_rollout_samples", "browser_mcts_rollout_samples", int),
+    ("mcts_time_budget_ms", "browser_mcts_time_budget_ms", float),
+    ("mcts_progress_interval_iterations", "browser_mcts_progress_interval_iterations", int),
+)
+
+BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS = tuple(
+    field_name for field_name, _source_key, _value_type in BROWSER_PLANNER_RUNTIME_MAP
+)
+
 
 DEFAULT_CATALOG_BUILD_CONFIG: dict[str, Any] = {
     "algorithms": ["mcts", "beam", "naive"],
@@ -320,3 +359,13 @@ def catalog_build_kwargs_from_namespace(
     if include_browser_runtime:
         selected_keys.extend(BROWSER_RUNTIME_KEYS)
     return {field_name: getattr(args, field_name) for field_name in selected_keys}
+
+
+def browser_planner_config_from_build_config(build_config: dict[str, Any]) -> dict[str, Any]:
+    planner_config = {
+        key: build_config[key]
+        for key in BROWSER_PLANNER_CONFIG_KEYS
+    }
+    for field_name, source_key, value_type in BROWSER_PLANNER_RUNTIME_MAP:
+        planner_config[field_name] = value_type(build_config[source_key])
+    return planner_config

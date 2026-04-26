@@ -9,7 +9,11 @@ import json
 from datetime import datetime, timezone
 
 from .asset_pipeline_cli import add_app_asset_args, editor_rebuild_argv_from_namespace
-from .build_config import catalog_build_config_digest, load_catalog_build_config
+from .build_config import (
+    browser_planner_config_from_build_config,
+    catalog_build_config_digest,
+    load_catalog_build_config,
+)
 from .karura_common import (
     APP_MANIFEST_JSON,
     EDITOR_MANIFEST_JSON,
@@ -48,45 +52,7 @@ def build_app_manifest(
         binding["junction_id"]: int(binding["graph_node_id"])
         for binding in junction_bindings.get("bindings", [])
     }
-    planner_config = {
-        key: build_config_payload[key]
-        for key in (
-            "short_connector_max_length_m",
-            "max_overlap_m",
-            "max_steps",
-            "random_top_k",
-            "end_stop_probability",
-            "end_stop_unused_slack_m",
-            "end_finish_unused_slack_m",
-            "future_length_weight",
-            "connector_length_weight",
-            "overlap_penalty_per_m",
-            "articulation_penalty",
-            "articulation_future_threshold_m",
-            "dead_end_penalty",
-            "early_finish_penalty",
-            "mcts_iterations",
-            "mcts_exploration_weight",
-            "mcts_rollout_top_k",
-            "mcts_rollout_samples",
-            "mcts_prior_weight",
-            "mcts_loop_completion_bonus",
-            "mcts_loop_unused_penalty_per_m",
-            "mcts_loop_late_return_bonus",
-            "mcts_loop_overlap_penalty_per_m",
-            "elevation_smoothing_window",
-            "elevation_min_step_m",
-        )
-    }
-    planner_config["selection_pool"] = int(build_config_payload["browser_selection_pool"])
-    planner_config["selection_window"] = int(build_config_payload["browser_selection_window"])
-    planner_config["mcts_iterations"] = int(build_config_payload["browser_mcts_iterations"])
-    planner_config["mcts_rollout_top_k"] = int(build_config_payload["browser_mcts_rollout_top_k"])
-    planner_config["mcts_rollout_samples"] = int(build_config_payload["browser_mcts_rollout_samples"])
-    planner_config["mcts_time_budget_ms"] = float(build_config_payload["browser_mcts_time_budget_ms"])
-    planner_config["mcts_progress_interval_iterations"] = int(
-        build_config_payload["browser_mcts_progress_interval_iterations"]
-    )
+    planner_config = browser_planner_config_from_build_config(build_config_payload)
     junction_defs = junction_catalog["junctions"]
     scenarios = [
         {

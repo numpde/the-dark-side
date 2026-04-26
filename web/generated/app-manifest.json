@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T19:13:12.523140Z",
+    "generated_at": "2026-04-26T19:16:21.678812Z",
     "asset_kind": "app_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
@@ -28,10 +28,7 @@
       "articulation_future_threshold_m": 400.0,
       "dead_end_penalty": 180.0,
       "early_finish_penalty": 320.0,
-      "mcts_iterations": 320,
       "mcts_exploration_weight": 1.0,
-      "mcts_rollout_top_k": 3,
-      "mcts_rollout_samples": 2,
       "mcts_prior_weight": 0.5,
       "mcts_loop_completion_bonus": 220.0,
       "mcts_loop_unused_penalty_per_m": 0.045,
@@ -41,6 +38,9 @@
       "elevation_min_step_m": 0.5,
       "selection_pool": 5,
       "selection_window": 12,
+      "mcts_iterations": 320,
+      "mcts_rollout_top_k": 3,
+      "mcts_rollout_samples": 2,
       "mcts_time_budget_ms": 350.0,
       "mcts_progress_interval_iterations": 24
     }

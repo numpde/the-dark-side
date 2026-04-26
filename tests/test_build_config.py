@@ -6,8 +6,10 @@ import tempfile
 import unittest
 
 from the_dark_side.build_config import (
+    BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS,
     DEFAULT_CATALOG_BUILD_SOURCE,
     DEFAULT_CATALOG_BUILD_CONFIG,
+    browser_planner_config_from_build_config,
     catalog_build_config_digest,
     load_catalog_build_config,
 )
@@ -46,6 +48,21 @@ class BuildConfigTest(unittest.TestCase):
         self.assertIn("browser_runtime", DEFAULT_CATALOG_BUILD_SOURCE)
         self.assertIn("planner", DEFAULT_CATALOG_BUILD_SOURCE)
         self.assertIn("debug_catalog", DEFAULT_CATALOG_BUILD_SOURCE)
+
+    def test_browser_planner_config_projection_uses_explicit_runtime_fields(self) -> None:
+        config = dict(DEFAULT_CATALOG_BUILD_CONFIG)
+        config["browser_selection_pool"] = 9
+        config["browser_selection_window"] = 14
+        config["browser_mcts_iterations"] = 123
+        config["browser_mcts_time_budget_ms"] = 456.0
+        projected = browser_planner_config_from_build_config(config)
+
+        self.assertEqual(projected["selection_pool"], 9)
+        self.assertEqual(projected["selection_window"], 14)
+        self.assertEqual(projected["mcts_iterations"], 123)
+        self.assertEqual(projected["mcts_time_budget_ms"], 456.0)
+        for field_name in BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS:
+            self.assertIn(field_name, projected)
 
     def test_load_catalog_build_config_rejects_non_object(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
