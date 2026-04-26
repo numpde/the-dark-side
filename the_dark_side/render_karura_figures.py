@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 import argparse
-import json
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -20,8 +19,8 @@ from .karura_common import (
     load_required_figure_catalog,
     load_required_junction_bindings,
     load_required_junction_catalog,
-    mercator,
 )
+from .render_support import load_viewport, project_lon_lat
 
 
 FIGURES_JSON = CURATED_DIR / "karura_figures.json"
@@ -47,15 +46,6 @@ def load_font(size: int) -> ImageFont.ImageFont:
         return ImageFont.truetype("DejaVuSans.ttf", size=size)
     except OSError:
         return ImageFont.load_default()
-
-
-def project_point(lon: float, lat: float, viewport: dict, size: tuple[int, int]) -> tuple[float, float]:
-    x, y = mercator(lon, lat)
-    width, height = size
-    return (
-        (x - viewport["center_x"]) / viewport["meters_per_px"] + width / 2,
-        (viewport["center_y"] - y) / viewport["meters_per_px"] + height / 2,
-    )
 
 
 def draw_marker(draw: ImageDraw.ImageDraw, point: tuple[float, float], color: tuple[int, int, int, int]) -> None:
@@ -125,7 +115,7 @@ def main() -> None:
     figure = resolve_figure(figures_payload, args.figure_id)
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
-    viewport = json.loads(args.viewport.read_text())["viewport"]
+    viewport = load_viewport(args.viewport)
     contigs = json.loads(args.contigs_json.read_text())
     nodes = {int(node_id): node for node_id, node in contigs["nodes"].items()}
 
@@ -151,7 +141,7 @@ def main() -> None:
         junction = junctions[item["junction_id"]]
         junction_ref = resolve_junction_binding(junction_bindings, junction["id"])
         node = nodes[junction_ref["graph_node_id"]]
-        point = project_point(node["lon"], node["lat"], viewport, overlay.size)
+        point = project_lon_lat(node["lon"], node["lat"], viewport, overlay.size)
         color = tuple(item["color"])
         draw_marker(draw, point, color)
         draw_label(
