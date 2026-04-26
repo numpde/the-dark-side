@@ -174,8 +174,6 @@ class MctsTreeNode:
     reward_sum: float = 0.0
     children: list["MctsTreeNode"] = field(default_factory=list)
     unexpanded_moves: list[MoveCandidate] | None = None
-def asset_index(payload: dict) -> dict[str, dict]:
-    return {asset["id"]: asset for asset in payload["assets"]}
 
 
 def validate_route_graph_document(payload: object, *, label: str) -> dict:
@@ -253,21 +251,21 @@ def validate_route_asset_document(payload: object, *, label: str) -> dict:
     require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
     require_nonempty_string(meta.get("algorithm"), label=f"{label}.meta.algorithm")
     require_nonempty_string(meta.get("graph_asset_id"), label=f"{label}.meta.graph_asset_id")
+    require_nonempty_string(meta.get("graph_path"), label=f"{label}.meta.graph_path")
     require_nonempty_string(
         meta.get("junction_catalog_asset_id"),
         label=f"{label}.meta.junction_catalog_asset_id",
     )
+    junction_bindings_asset_id = meta.get("junction_bindings_asset_id")
+    if junction_bindings_asset_id is not None:
+        require_nonempty_string(
+            junction_bindings_asset_id,
+            label=f"{label}.meta.junction_bindings_asset_id",
+        )
     require_nonempty_string(meta.get("start_junction_id"), label=f"{label}.meta.start_junction_id")
     require_nonempty_string(meta.get("end_junction_id"), label=f"{label}.meta.end_junction_id")
     if not isinstance(meta.get("seed"), int):
         raise ValueError(f"{label}.meta.seed must be an integer")
-
-    assets = require_json_array(document.get("assets"), label=f"{label}.assets")
-    for index, asset in enumerate(assets):
-        item = require_json_object(asset, label=f"{label}.assets[{index}]")
-        require_nonempty_string(item.get("id"), label=f"{label}.assets[{index}].id")
-        require_nonempty_string(item.get("kind"), label=f"{label}.assets[{index}].kind")
-        require_nonempty_string(item.get("path"), label=f"{label}.assets[{index}].path")
 
     config = require_json_object(document.get("config"), label=f"{label}.config")
     if not config:
@@ -1339,8 +1337,6 @@ def route_candidate_to_dict(graph: RouteGraph, candidate: RouteCandidate) -> dic
 def route_asset_payload(
     *,
     graph_path: Path,
-    junctions_path: Path,
-    junction_bindings_path: Path | None,
     graph: RouteGraph,
     junction_catalog: dict,
     start_ref: JunctionRef,
@@ -1357,29 +1353,6 @@ def route_asset_payload(
         f"{start_ref.junction_id}-to-{end_ref.junction_id}-seed{seed}"
     )
     return {
-        "assets": [
-            {
-                "id": graph.asset_id,
-                "kind": graph.asset_kind,
-                "path": str(graph_path),
-            },
-            {
-                "id": junction_catalog_meta["asset_id"],
-                "kind": junction_catalog_meta["asset_kind"],
-                "path": str(junctions_path),
-            },
-        ]
-        + (
-            []
-            if junction_bindings_path is None
-            else [
-                {
-                    "id": f"karura-junction-bindings-for-{graph.asset_id}",
-                    "kind": "junction_bindings",
-                    "path": str(junction_bindings_path),
-                }
-            ]
-        ),
         "meta": {
             "asset_id": asset_id,
             "asset_kind": "route_candidates",
@@ -1387,10 +1360,8 @@ def route_asset_payload(
             "algorithm": algorithm,
             "seed": seed,
             "graph_asset_id": graph.asset_id,
+            "graph_path": str(graph_path),
             "junction_catalog_asset_id": junction_catalog_meta["asset_id"],
-            "junction_bindings_asset_id": None
-            if junction_bindings_path is None
-            else f"karura-junction-bindings-for-{graph.asset_id}",
             "start_junction_id": start_ref.junction_id,
             "end_junction_id": end_ref.junction_id,
         },

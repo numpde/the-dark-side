@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Plan long low-overlap Karura routes between curated junctions."""
+"""Debug/oracle tool: plan Karura route candidates between curated junctions."""
 
 from __future__ import annotations
 
@@ -31,7 +31,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default_path=CATALOG_BUILD_JSON,
     )
 
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog="Offline/debug tool only. The published app composes routes in the browser.",
+    )
     parser.add_argument("--build-config-json", type=Path, default=build_config_json)
     parser.add_argument("--algorithm", choices=PLANNER_NAMES, default="naive")
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
@@ -77,12 +80,8 @@ def main() -> None:
 
     output = args.output or default_output(args)
     graph_ref_path = Path(os.path.relpath(args.contigs_json.resolve(), output.parent.resolve()))
-    junctions_ref_path = Path(os.path.relpath(args.junctions_json.resolve(), output.parent.resolve()))
-    junction_bindings_ref_path = Path(os.path.relpath(args.junction_bindings_json.resolve(), output.parent.resolve()))
     payload = route_asset_payload(
         graph_path=graph_ref_path,
-        junctions_path=junctions_ref_path,
-        junction_bindings_path=junction_bindings_ref_path,
         graph=graph,
         junction_catalog=junction_catalog,
         start_ref=start_ref,

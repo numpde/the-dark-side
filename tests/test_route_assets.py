@@ -83,8 +83,6 @@ class RouteAssetTest(unittest.TestCase):
         )
         return route_asset_payload(
             graph_path=Path("data/karura_contigs.json"),
-            junctions_path=Path("curated/karura_junctions.json"),
-            junction_bindings_path=Path("data/karura_junction_bindings.json"),
             graph=graph,
             junction_catalog=junction_catalog,
             start_ref=start,
@@ -110,12 +108,12 @@ class RouteAssetTest(unittest.TestCase):
                             "asset_kind": "route_candidates",
                             "algorithm": "naive",
                             "graph_asset_id": "graph-1",
+                            "graph_path": "data/karura_contigs.json",
                             "junction_catalog_asset_id": "junction-catalog-1",
                             "start_junction_id": "alpha",
                             "end_junction_id": "beta",
                             "seed": 7,
                         },
-                        "assets": [],
                         "config": {},
                         "start": {
                             "junction_id": "alpha",

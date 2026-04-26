@@ -12,7 +12,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageOps
 
 from .karura_common import SCREENSHOT, VIEWPORT, mercator
-from .karura_routing import asset_index, load_route_asset, load_route_graph
+from .karura_routing import load_route_asset, load_route_graph
 
 
 BASE_IMAGE_ALPHA = 0.7
@@ -53,14 +53,14 @@ def prepare_base_image(path: Path) -> Image.Image:
 
 
 def resolve_graph_from_route(route_payload: dict, route_json: Path):
-    assets = asset_index(route_payload)
-    graph_asset = assets[route_payload["meta"]["graph_asset_id"]]
-    graph_path = Path(graph_asset["path"])
+    graph_path = Path(route_payload["meta"]["graph_path"])
     if not graph_path.is_absolute():
         graph_path = (route_json.parent / graph_path).resolve()
     graph = load_route_graph(graph_path)
-    if graph.asset_id != graph_asset["id"]:
-        raise RuntimeError(f"Route file expects graph asset '{graph_asset['id']}', got '{graph.asset_id}'")
+    if graph.asset_id != route_payload["meta"]["graph_asset_id"]:
+        raise RuntimeError(
+            f"Route file expects graph asset '{route_payload['meta']['graph_asset_id']}', got '{graph.asset_id}'"
+        )
     return graph
 
 
