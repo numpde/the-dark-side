@@ -8,6 +8,7 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
+from .asset_contracts import load_required_json
 from .karura_common import mercator
 
 
@@ -15,9 +16,7 @@ BASE_IMAGE_ALPHA = 0.7
 
 
 def load_viewport(path: Path) -> dict:
-    payload = json.loads(path.read_text())
-    if not isinstance(payload, dict):
-        raise ValueError("viewport document must be a JSON object")
+    payload = load_required_json(path, label="viewport document")
     viewport = payload.get("viewport")
     if not isinstance(viewport, dict):
         raise ValueError("viewport document.viewport must be an object")

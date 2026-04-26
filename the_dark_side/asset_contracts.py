@@ -9,7 +9,7 @@ from pathlib import Path
 def load_required_json(path: Path, *, label: str) -> dict:
     if not path.exists():
         raise FileNotFoundError(f"missing {label}: {path}")
-    return json.loads(path.read_text())
+    return require_json_object(json.loads(path.read_text()), label=label)
 
 
 def require_json_object(payload: object, *, label: str) -> dict:

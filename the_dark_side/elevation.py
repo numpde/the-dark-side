@@ -11,6 +11,7 @@ import urllib.request
 from hashlib import sha1
 from pathlib import Path
 
+from .asset_contracts import load_required_json
 from .karura_common import write_json_document
 
 
@@ -241,7 +242,7 @@ class OpenMeteoElevationClient:
         if cache_path and cache_path.exists():
             self.cache = {
                 str(key): float(value)
-                for key, value in json.loads(cache_path.read_text()).items()
+                for key, value in load_required_json(cache_path, label="elevation point cache").items()
             }
 
     @staticmethod
@@ -348,7 +349,7 @@ class OpenTopoDataElevationClient:
         if cache_path and cache_path.exists():
             self.cache = {
                 str(key): [float(value) for value in values]
-                for key, values in json.loads(cache_path.read_text()).items()
+                for key, values in load_required_json(cache_path, label="elevation profile cache").items()
             }
 
     def persist_cache(self) -> None:

@@ -9,6 +9,8 @@ import math
 from pathlib import Path
 from typing import Any
 
+from .asset_contracts import load_required_json
+
 
 DEBUG_CATALOG_KEYS = (
     "algorithms",
@@ -314,9 +316,7 @@ def normalize_catalog_build_config(raw: dict[str, Any] | None) -> dict[str, Any]
 
 
 def load_catalog_build_config(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        raise FileNotFoundError(f"missing catalog build config: {path}")
-    return normalize_catalog_build_config(json.loads(path.read_text()))
+    return normalize_catalog_build_config(load_required_json(path, label="catalog build config"))
 
 
 def resolve_build_config_defaults(

@@ -7,7 +7,7 @@ from __future__ import annotations
 import argparse
 
 from .asset_contracts import load_required_elevation_asset
-from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog, load_required_json
 from .asset_pipeline_cli import add_app_asset_args
 from .build_config import (
     BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS,
@@ -15,7 +15,7 @@ from .build_config import (
 )
 from .karura_routing import load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
-from .verify_helpers import assert_equal, load_json, normalized
+from .verify_helpers import assert_equal, normalized
 from .verify_editor_assets import verify_editor_assets
 from .karura_common import print_json_document
 from .web_assets import load_elevation_asset, network_geojson
@@ -117,8 +117,8 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
     )
     junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
-    actual_network = load_json(args.output_network)
-    actual_manifest = load_json(args.output_app_manifest)
+    actual_network = load_required_json(args.output_network, label="published route network")
+    actual_manifest = load_required_json(args.output_app_manifest, label="published app manifest")
     validate_manifest_schema(actual_manifest)
     if actual_manifest["meta"].get("elevation_asset_matches_graph") is not True:
         raise SystemExit("app manifest is stale; elevation_asset_matches_graph must be true for published app assets")
@@ -126,7 +126,7 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
     assert_equal(str(args.output_network), actual_network, expected_network, rebuild_hint=rebuild_hint)
     expected_manifest = build_app_manifest(
         args,
-        editor_manifest=load_json(args.output_editor_manifest),
+        editor_manifest=load_required_json(args.output_editor_manifest, label="published editor manifest"),
         graph=graph,
         junction_catalog=junction_catalog,
         junction_bindings=junction_bindings,

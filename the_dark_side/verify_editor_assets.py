@@ -9,7 +9,7 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
-from .asset_contracts import load_required_junction_catalog, load_required_patchset
+from .asset_contracts import load_required_junction_catalog, load_required_patchset, load_required_json
 from .asset_pipeline_cli import add_editor_asset_args
 from .apply_karura_patches import apply_patchset
 from .build_karura_contigs import build_contigs
@@ -32,7 +32,7 @@ from .karura_common import (
 )
 from .karura_common import include_ride_way
 from .rebuild_editor_assets import build_editor_manifest, build_frontend_manifest
-from .verify_helpers import assert_equal, load_json, normalized
+from .verify_helpers import assert_equal, normalized
 from .web_assets import build_editor_graph_payload_from_map
 
 
@@ -491,12 +491,12 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
         expected_manifest,
         expected_frontend_manifest,
     ) = build_expected(args)
-    actual_patched_map = load_json(args.patched_map_json)
-    actual_contigs = load_json(args.contigs_json)
-    actual_bindings = load_json(args.junction_bindings_json)
-    actual_editor_network = load_json(args.output_editor_network)
-    actual_manifest = load_json(args.output_editor_manifest)
-    actual_frontend_manifest = load_json(output_frontend_manifest)
+    actual_patched_map = load_required_json(args.patched_map_json, label="patched map")
+    actual_contigs = load_required_json(args.contigs_json, label="contig graph")
+    actual_bindings = load_required_json(args.junction_bindings_json, label="junction bindings")
+    actual_editor_network = load_required_json(args.output_editor_network, label="editor network")
+    actual_manifest = load_required_json(args.output_editor_manifest, label="editor manifest")
+    actual_frontend_manifest = load_required_json(output_frontend_manifest, label="frontend manifest")
     rebuild_hint = "rebuild editor assets and commit the derived output"
     assert_equal(str(args.patched_map_json), actual_patched_map, expected_patched_map, rebuild_hint=rebuild_hint)
     assert_equal(str(args.contigs_json), actual_contigs, expected_contigs, rebuild_hint=rebuild_hint)

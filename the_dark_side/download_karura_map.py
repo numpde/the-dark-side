@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .asset_contracts import load_required_json
 from .karura_common import (
     MAP_JSON as DEFAULT_MAP_JSON,
     RAW_JSON as DEFAULT_RAW_JSON,
@@ -443,7 +444,7 @@ def build_map(
 
 
 def load_map(path: Path) -> KaruraMap:
-    payload = json.loads(path.read_text())
+    payload = load_required_json(path, label="map document")
     boundary_payload = payload["boundary"]
     boundary = BoundaryRecord(
         relation_id=int(boundary_payload["relation_id"]),
