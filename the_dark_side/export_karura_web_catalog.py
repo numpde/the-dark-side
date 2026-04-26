@@ -386,7 +386,7 @@ def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
     }
 
 
-def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
+def build_catalog_payload(args: argparse.Namespace) -> dict:
     planned = plan_catalog_records(args)
     algorithms = planned["algorithms"]
     build_config_payload = planned["build_config_payload"]
@@ -488,26 +488,26 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
         ],
     }
 
-    return {"catalog": catalog_payload}
+    return catalog_payload
 
 
-def export_catalog(args: argparse.Namespace) -> dict[str, dict]:
-    payloads = build_export_payloads(args)
-    write_json(args.output_catalog, payloads["catalog"])
-    return payloads
+def export_catalog(args: argparse.Namespace) -> dict:
+    payload = build_catalog_payload(args)
+    write_json(args.output_catalog, payload)
+    return payload
 
 
 def main() -> None:
     args = parse_args()
-    payloads = export_catalog(args)
+    payload = export_catalog(args)
     print(
         json.dumps(
             {
                 "catalog": str(args.output_catalog),
-                "area_count": len(payloads["catalog"]["areas"]),
-                "scenario_count": len(payloads["catalog"]["areas"][0]["scenarios"]),
-                "route_count": sum(scenario["route_count"] for scenario in payloads["catalog"]["areas"][0]["scenarios"]),
-                "route_family_count": len(payloads["catalog"]["areas"][0]["route_families"]),
+                "area_count": len(payload["areas"]),
+                "scenario_count": len(payload["areas"][0]["scenarios"]),
+                "route_count": sum(scenario["route_count"] for scenario in payload["areas"][0]["scenarios"]),
+                "route_family_count": len(payload["areas"][0]["route_families"]),
             },
             indent=2,
         )
