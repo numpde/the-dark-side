@@ -1,5 +1,15 @@
-import { installSelectionPlaceholders } from "./route-selection-controls.mjs";
-import { setSummaryText } from "./route-summary-view.mjs";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route shell view module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { installSelectionPlaceholders } = await import(`./route-selection-controls.mjs${moduleSuffix}`);
+const { setSummaryText } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 
 export function setControlsDisabled(
   areaSelect,

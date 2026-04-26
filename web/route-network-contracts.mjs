@@ -1,10 +1,20 @@
-import {
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route network contracts module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const {
   requireArray,
   requireCoordinatePair,
   requireFiniteNumber,
   requireInteger,
   requireObject,
-} from "./contract-primitives.mjs";
+} = await import(`./contract-primitives.mjs${moduleSuffix}`);
 
 function roundCoordinate(value) {
   return Math.round(value * 1_000_000) / 1_000_000;

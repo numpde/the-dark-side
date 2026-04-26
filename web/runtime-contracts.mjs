@@ -1,10 +1,20 @@
-import {
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Runtime contracts module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const {
   requireArray,
   requireFiniteNumber,
   requireInteger,
   requireObject,
   requireString,
-} from "./contract-primitives.mjs";
+} = await import(`./contract-primitives.mjs${moduleSuffix}`);
 
 export {
   requireArray,

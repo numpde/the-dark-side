@@ -1,4 +1,14 @@
-import { requireScenario, resolveCanonicalSelection } from "./route-scenarios.mjs";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route selection controls module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireScenario, resolveCanonicalSelection } = await import(`./route-scenarios.mjs${moduleSuffix}`);
 
 export function installSelectionPlaceholders(areaSelect, startSelect, endSelect) {
   areaSelect.innerHTML = "<option>Loading…</option>";

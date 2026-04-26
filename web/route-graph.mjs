@@ -1,4 +1,14 @@
-import { normalizeRouteNetworkFeatureCollection } from "./route-network-contracts.mjs";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route graph module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { normalizeRouteNetworkFeatureCollection } = await import(`./route-network-contracts.mjs${moduleSuffix}`);
 
 function haversineMeters(lonA, latA, lonB, latB) {
   const toRad = Math.PI / 180;

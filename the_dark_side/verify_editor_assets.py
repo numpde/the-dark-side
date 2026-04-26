@@ -185,13 +185,16 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_contains("web/planner-client.mjs", planner_client_js, 'workerUrl.searchParams.set("v", moduleVersion)')
     assert_not_contains("web/planner-client.mjs", planner_client_js, 'new URL("./generated/app-manifest.json"')
 
-    assert_regex("web/route-runtime.mjs", route_runtime_js, r'import\s*\{\s*createPlannerClient\s*\}\s*from\s*"\./planner-client\.mjs"')
+    assert_regex("web/route-runtime.mjs", route_runtime_js, r'function requireModuleVersion\(\)')
+    assert_regex("web/route-runtime.mjs", route_runtime_js, r'throw new Error\("Route runtime module is missing required module version"\)')
+    assert_regex("web/route-runtime.mjs", route_runtime_js, r'await import\(`\./planner-client\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-runtime.mjs", route_runtime_js, r'export function createRouteRuntime\(')
     assert_regex("web/route-runtime.mjs", route_runtime_js, r'get plannerReady\(\)')
     assert_regex("web/route-runtime.mjs", route_runtime_js, r'nextRouteSeed\(\)')
     assert_regex("web/route-runtime.mjs", route_runtime_js, r'initializePlanner\(')
     assert_regex("web/route-runtime.mjs", route_runtime_js, r'requestRoute\(')
     assert_not_regex("web/route-runtime.mjs", route_runtime_js, r'function renderRouteSummary\(')
+    assert_not_regex("web/route-runtime.mjs", route_runtime_js, r'^import .* from "\./')
 
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function recentRoutesForScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function rememberRouteForScenario\(')
@@ -208,22 +211,28 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
     assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
 
-    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'import\s*\{\s*requireScenario,\s*resolveCanonicalSelection\s*\}\s*from\s*"\./route-scenarios\.mjs"')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'function requireModuleVersion\(\)')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'throw new Error\("Route selection controls module is missing required module version"\)')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function installSelectionPlaceholders\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateJunctionSelectors\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncSelectorsFromQuery\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function replaceUrlWithSelection\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncUrlFromSelectors\(')
     assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'function renderRouteSummary\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'^import .* from "\./')
 
-    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'import\s*\{\s*installSelectionPlaceholders\s*\}\s*from\s*"\./route-selection-controls\.mjs"')
-    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'import\s*\{\s*setSummaryText\s*\}\s*from\s*"\./route-summary-view\.mjs"')
+    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'function requireModuleVersion\(\)')
+    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'throw new Error\("Route shell view module is missing required module version"\)')
+    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./route-selection-controls\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./route-summary-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function setControlsDisabled\(')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function updateRouteSurfaceState\(')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function installShellPlaceholders\(')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function showError\(')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function clearError\(')
     assert_not_regex("web/route-shell-view.mjs", route_shell_view_js, r'function renderRouteSummary\(')
+    assert_not_regex("web/route-shell-view.mjs", route_shell_view_js, r'^import .* from "\./')
 
     assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function setSummaryText\(')
     assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function renderRouteSummary\(')
@@ -258,18 +267,31 @@ def verify_frontend_bootstrap_contract() -> None:
     route_network_contracts_js = (WEB_GENERATED_DIR.parent / "route-network-contracts.mjs").read_text()
     route_selection_js = (WEB_GENERATED_DIR.parent / "route-selection.mjs").read_text()
 
-    assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'from "\./contract-primitives\.mjs"')
+    assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireModuleVersion\(\)')
+    assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'throw new Error\("Runtime contracts module is missing required module version"\)')
+    assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireContract\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireObject\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireArray\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireString\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireFiniteNumber\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireInteger\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'^import .* from "\./')
 
     assert_regex(
         "web/planner-worker-contracts.mjs",
         worker_contracts_js,
-        r'from "\./contract-primitives\.mjs"',
+        r'function requireModuleVersion\(\)',
+    )
+    assert_regex(
+        "web/planner-worker-contracts.mjs",
+        worker_contracts_js,
+        r'throw new Error\("Planner worker contracts module is missing required module version"\)',
+    )
+    assert_regex(
+        "web/planner-worker-contracts.mjs",
+        worker_contracts_js,
+        r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)',
     )
     assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireObject\(')
     assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireString\(')
@@ -277,6 +299,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireFiniteNumber\(')
     assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireCoordinatePair\(')
     assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireIntegerArray\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'^import .* from "\./')
 
     assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireObject\(')
     assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireArray\(')
@@ -289,18 +312,23 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex(
         "web/route-graph.mjs",
         route_graph_js,
-        r'import\s*\{\s*normalizeRouteNetworkFeatureCollection\s*\}\s*from\s*"\./route-network-contracts\.mjs"',
+        r'function requireModuleVersion\(\)',
     )
+    assert_regex("web/route-graph.mjs", route_graph_js, r'throw new Error\("Route graph module is missing required module version"\)')
+    assert_regex("web/route-graph.mjs", route_graph_js, r'await import\(`\./route-network-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-graph.mjs", route_graph_js, r'export function buildGraphFromGeoJson\(')
     assert_regex("web/route-graph.mjs", route_graph_js, r'export function buildRoutePayload\(')
     assert_not_regex("web/route-graph.mjs", route_graph_js, r'function makeRng\(')
     assert_not_regex("web/route-graph.mjs", route_graph_js, r'function moveCandidates\(')
+    assert_not_regex("web/route-graph.mjs", route_graph_js, r'^import .* from "\./')
 
     assert_regex(
         "web/route-selection.mjs",
         route_selection_js,
-        r'from "\./contract-primitives\.mjs"',
+        r'function requireModuleVersion\(\)',
     )
+    assert_regex("web/route-selection.mjs", route_selection_js, r'throw new Error\("Route selection module is missing required module version"\)')
+    assert_regex("web/route-selection.mjs", route_selection_js, r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-selection.mjs", route_selection_js, r'export function normalizeRouteHistory\(')
     assert_regex(
         "web/route-selection.mjs",
@@ -309,18 +337,22 @@ def verify_frontend_bootstrap_contract() -> None:
     )
     assert_not_regex("web/route-selection.mjs", route_selection_js, r'function moveCandidates\(')
     assert_not_regex("web/route-selection.mjs", route_selection_js, r'function rolloutRoute\(')
+    assert_not_regex("web/route-selection.mjs", route_selection_js, r'^import .* from "\./')
 
     assert_regex(
         "web/route-network-contracts.mjs",
         route_network_contracts_js,
-        r'from "\./contract-primitives\.mjs"',
+        r'function requireModuleVersion\(\)',
     )
+    assert_regex("web/route-network-contracts.mjs", route_network_contracts_js, r'throw new Error\("Route network contracts module is missing required module version"\)')
+    assert_regex("web/route-network-contracts.mjs", route_network_contracts_js, r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)')
     assert_regex(
         "web/route-network-contracts.mjs",
         route_network_contracts_js,
         r'export function normalizeRouteNetworkFeatureCollection\(',
     )
     assert_not_regex("web/route-network-contracts.mjs", route_network_contracts_js, r'function roundMeters\(')
+    assert_not_regex("web/route-network-contracts.mjs", route_network_contracts_js, r'^import .* from "\./')
 
     assert_regex("web/route-worker.js", route_worker_js, r'new Error\("Route worker is missing required module version"\)')
     assert_regex("web/route-worker.js", route_worker_js, r'import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
@@ -335,17 +367,12 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-worker.js", route_worker_js, r'function parseWorkerRequest\(')
     assert_not_contains("web/route-worker.js", route_worker_js, 'searchParams.get("v") || ""')
     route_planner_js = (WEB_GENERATED_DIR.parent / "route-planner.mjs").read_text()
-    assert_regex("web/route-planner.mjs", route_planner_js, r'import\s*\{\s*karuraTodayString,\s*isCurrentlyUnavailable\s*\}\s*from\s*"\./karura-policy\.mjs"')
-    assert_regex(
-        "web/route-planner.mjs",
-        route_planner_js,
-        r'import\s*\{\s*buildGraphFromGeoJson,\s*buildRoutePayload\s*\}\s*from\s*"\./route-graph\.mjs"',
-    )
-    assert_regex(
-        "web/route-planner.mjs",
-        route_planner_js,
-        r'from\s*"\./route-selection\.mjs"',
-    )
+    assert_regex("web/route-planner.mjs", route_planner_js, r'function requireModuleVersion\(\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'throw new Error\("Route planner module is missing required module version"\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./karura-policy\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./route-graph\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./route-selection\.mjs\$\{moduleSuffix\}`\)')
     assert_contains("web/route-planner.mjs", route_planner_js, "normalizeRouteHistory,")
     assert_contains("web/route-planner.mjs", route_planner_js, "pickHistoryAwarePrimaryCandidate,")
     assert_contains("web/route-planner.mjs", route_planner_js, "sampleWeighted,")
@@ -367,6 +394,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_progress_interval_iterations == null")
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'^import .* from "\./')
 
 
 def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:

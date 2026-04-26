@@ -1,13 +1,23 @@
-import { requireFiniteNumber, requireInteger } from "./contract-primitives.mjs";
-import { karuraTodayString, isCurrentlyUnavailable } from "./karura-policy.mjs";
-import { buildGraphFromGeoJson, buildRoutePayload } from "./route-graph.mjs";
-import {
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route planner module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireFiniteNumber, requireInteger } = await import(`./contract-primitives.mjs${moduleSuffix}`);
+const { karuraTodayString, isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
+const { buildGraphFromGeoJson, buildRoutePayload } = await import(`./route-graph.mjs${moduleSuffix}`);
+const {
   normalizeRouteHistory,
   pickHistoryAwarePrimaryCandidate,
   sampleWeighted,
-} from "./route-selection.mjs";
+} = await import(`./route-selection.mjs${moduleSuffix}`);
 
-export { buildGraphFromGeoJson } from "./route-graph.mjs";
+export { buildGraphFromGeoJson };
 
 function makeRng(seed) {
   let state = (seed >>> 0) || 1;

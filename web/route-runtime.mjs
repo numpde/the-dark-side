@@ -1,4 +1,14 @@
-import { createPlannerClient } from "./planner-client.mjs";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Route runtime module is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 
 export function createRouteRuntime({
   moduleVersion,
