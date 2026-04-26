@@ -15,6 +15,24 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
+def rounded_contig_elevations(node_ids: list[int] | tuple[int, ...], node_elevations: dict[int, float] | None) -> list[float] | None:
+    if not node_elevations:
+        return None
+    elevations = []
+    missing_node_ids = []
+    for node_id in node_ids:
+        if int(node_id) not in node_elevations:
+            missing_node_ids.append(int(node_id))
+            continue
+        elevations.append(round(float(node_elevations[int(node_id)]), 1))
+    if missing_node_ids:
+        raise ValueError(
+            "Missing elevation values for node ids: "
+            + ", ".join(str(node_id) for node_id in missing_node_ids)
+        )
+    return elevations
+
+
 def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[int, float] | None = None) -> dict:
     features = []
     if isinstance(graph, dict):
@@ -31,12 +49,7 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
                 [round(nodes[int(node_id)]["lon"], 6), round(nodes[int(node_id)]["lat"], 6)]
                 for node_id in contig["node_ids"]
             ]
-            elevations = None
-            if node_elevations:
-                try:
-                    elevations = [round(float(node_elevations[int(node_id)]), 1) for node_id in contig["node_ids"]]
-                except KeyError:
-                    elevations = None
+            elevations = rounded_contig_elevations(contig["node_ids"], node_elevations)
             features.append(
                 {
                     "type": "Feature",
@@ -64,12 +77,7 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
             [round(graph.nodes[node_id].lon, 6), round(graph.nodes[node_id].lat, 6)]
             for node_id in contig.node_ids
         ]
-        elevations = None
-        if node_elevations:
-            try:
-                elevations = [round(float(node_elevations[node_id]), 1) for node_id in contig.node_ids]
-            except KeyError:
-                elevations = None
+        elevations = rounded_contig_elevations(contig.node_ids, node_elevations)
         features.append(
             {
                 "type": "Feature",
