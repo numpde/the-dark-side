@@ -48,6 +48,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "contract-primitives.mjs",
     WEB_DIR / "gpx.mjs",
     WEB_DIR / "karura-policy.mjs",
+    WEB_DIR / "module-context.mjs",
     WEB_DIR / "planner-client.mjs",
     WEB_DIR / "planner-worker-contracts.mjs",
     WEB_DIR / "route-controller.mjs",
@@ -69,6 +70,7 @@ EDITOR_MODULE_PATHS = (
     WEB_DIR / "editor.js",
     WEB_DIR / "editor-state.mjs",
     WEB_DIR / "karura-policy.mjs",
+    WEB_DIR / "module-context.mjs",
     WEB_DIR / "runtime-contracts.mjs",
 )
 

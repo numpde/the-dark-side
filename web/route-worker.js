@@ -1,10 +1,8 @@
-const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v");
-const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route worker");
 let plannerModule = null;
 let workerContracts = null;
-let plannerLoadError = MODULE_VERSION
-  ? null
-  : new Error("Route worker is missing required module version");
+let plannerLoadError = null;
 const pendingEvents = [];
 
 let graph = null;
@@ -111,6 +109,11 @@ self.addEventListener("message", (event) => {
       import(`./planner-worker-contracts.mjs${moduleSuffix}`),
       import(`./route-planner.mjs${moduleSuffix}`),
     ]);
+    self.postMessage({
+      type: "booted",
+      requestId: 0,
+      payload: {},
+    });
     while (pendingEvents.length) {
       handleMessage(pendingEvents.shift());
     }

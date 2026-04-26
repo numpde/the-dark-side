@@ -1,13 +1,5 @@
-function requireModuleVersion() {
-  const version = new URL(import.meta.url).searchParams.get("v");
-  if (!version) {
-    throw new Error("Editor runtime is missing required module version");
-  }
-  return version;
-}
-
-const MODULE_VERSION = requireModuleVersion();
-const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
 const {
   buildPatchsetDocument,
   emptyPatchset,

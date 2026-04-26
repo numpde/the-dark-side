@@ -13,12 +13,21 @@ export function createPlannerClient({
 
   let nextRequestId = 0;
   const pendingRequests = new Map();
+  let workerBooted = false;
+  let resolveWorkerBooted;
+  let rejectWorkerBooted;
+  const workerBootedPromise = new Promise((resolve, reject) => {
+    resolveWorkerBooted = resolve;
+    rejectWorkerBooted = reject;
+  });
 
-  function rejectPendingRequests(error) {
+  function failWorker(error) {
+    rejectWorkerBooted?.(error);
     for (const pending of pendingRequests.values()) {
       pending.reject(error);
     }
     pendingRequests.clear();
+    onUnhandledError?.(error);
   }
 
   worker.addEventListener("message", (event) => {
@@ -27,11 +36,15 @@ export function createPlannerClient({
       message = parsePlannerWorkerResponse(event.data);
     } catch (error) {
       const normalized = error instanceof Error ? error : new Error(String(error));
-      rejectPendingRequests(normalized);
-      onUnhandledError?.(normalized);
+      failWorker(normalized);
       return;
     }
     const { requestId, type, payload } = message;
+    if (type === "booted") {
+      workerBooted = true;
+      resolveWorkerBooted?.();
+      return;
+    }
     const pending = pendingRequests.get(requestId);
     if (!pending) {
       return;
@@ -50,12 +63,14 @@ export function createPlannerClient({
 
   worker.addEventListener("error", (event) => {
     const normalized = event.error || new Error(event.message || "Worker failed");
-    rejectPendingRequests(normalized);
-    onUnhandledError?.(normalized);
+    failWorker(normalized);
   });
 
   return {
-    request(type, payload, { onProgress = null } = {}) {
+    async request(type, payload, { onProgress = null } = {}) {
+      if (!workerBooted) {
+        await workerBootedPromise;
+      }
       const requestId = ++nextRequestId;
       return new Promise((resolve, reject) => {
         pendingRequests.set(requestId, { resolve, reject, onProgress });

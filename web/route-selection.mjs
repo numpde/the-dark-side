@@ -1,13 +1,5 @@
-function requireModuleVersion() {
-  const version = new URL(import.meta.url).searchParams.get("v");
-  if (!version) {
-    throw new Error("Route selection module is missing required module version");
-  }
-  return version;
-}
-
-const MODULE_VERSION = requireModuleVersion();
-const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route selection module");
 const { requireInteger } = await import(`./contract-primitives.mjs${moduleSuffix}`);
 
 export function sampleWeighted(items, weights, random) {

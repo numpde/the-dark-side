@@ -16,10 +16,12 @@ from .build_config import (
 from .karura_common import (
     APP_MANIFEST_JSON,
     EDITOR_MANIFEST_JSON,
+    FRONTEND_MANIFEST_JSON,
     repo_rel,
     utc_now_z,
 )
 from .rebuild_editor_assets import (
+    build_frontend_manifest,
     parse_args as parse_editor_args,
     rebuild_editor_assets as rebuild_editor_bundle,
 )
@@ -144,6 +146,7 @@ def rebuild_app_assets(
     write_export_json(args.output_network, route_network)
     junction_catalog = load_junction_catalog(args.junctions_json)
     junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    frontend_manifest = build_frontend_manifest()
     app_manifest = build_app_manifest(
         args,
         editor_manifest=editor_bundle["editor_manifest"],
@@ -153,10 +156,12 @@ def rebuild_app_assets(
         build_config_payload=build_config_payload,
         elevation_matches_graph=elevation_matches_graph,
     )
+    write_export_json(FRONTEND_MANIFEST_JSON, frontend_manifest)
     write_export_json(args.output_app_manifest, app_manifest)
     return {
         "route_network": route_network,
         "app_manifest": app_manifest,
+        "frontend_manifest": frontend_manifest,
         "editor_bundle": editor_bundle,
         "elevation_matches_graph": elevation_matches_graph,
     }

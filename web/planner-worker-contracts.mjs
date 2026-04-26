@@ -1,13 +1,5 @@
-function requireModuleVersion() {
-  const version = new URL(import.meta.url).searchParams.get("v");
-  if (!version) {
-    throw new Error("Planner worker contracts module is missing required module version");
-  }
-  return version;
-}
-
-const MODULE_VERSION = requireModuleVersion();
-const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Planner worker contracts module");
 const {
   requireCoordinatePair,
   requireFiniteNumber,
@@ -98,6 +90,15 @@ export function parsePlannerWorkerResponse(data) {
   const message = requireObject(data, "worker message");
   const type = requireString(message.type, "worker message type");
   const requestId = requireInteger(message.requestId, "worker requestId");
+
+  if (type === "booted") {
+    requireObject(message.payload, "worker booted payload");
+    return {
+      requestId,
+      type,
+      payload: {},
+    };
+  }
 
   if (type === "error") {
     const payload = requireObject(message.payload, "worker error payload");

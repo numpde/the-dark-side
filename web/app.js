@@ -1,13 +1,5 @@
-function requireModuleVersion() {
-  const version = new URL(import.meta.url).searchParams.get("v");
-  if (!version) {
-    throw new Error("App runtime is missing required module version");
-  }
-  return version;
-}
-
-const MODULE_VERSION = requireModuleVersion();
-const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "App runtime");
 const { createRouteController } = await import(`./route-controller.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
