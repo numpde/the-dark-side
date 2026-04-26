@@ -8,11 +8,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .asset_contracts import (
-    load_required_figure_catalog,
-    load_required_junction_bindings,
-    load_required_junction_catalog,
-)
+from .asset_contracts import load_required_figure_catalog
 from .karura_common import (
     CONTIGS_JSON,
     CURATED_DIR,
@@ -22,7 +18,7 @@ from .karura_common import (
     VIEWPORT,
     print_json_document,
 )
-from .karura_routing import load_route_graph, resolve_junction_ref
+from .karura_routing import load_graph_junction_context, resolve_context_junction_ref
 from .render_support import load_viewport, project_lon_lat
 
 
@@ -111,10 +107,12 @@ def main() -> None:
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
     viewport = load_viewport(args.viewport)
-    graph = load_route_graph(args.contigs_json)
-
-    junctions_payload = load_required_junction_catalog(args.junctions_json, label="junction catalog")
-    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
+    context = load_graph_junction_context(
+        contigs_json=args.contigs_json,
+        junctions_json=args.junctions_json,
+        junction_bindings_json=args.junction_bindings_json,
+    )
+    graph = context.graph
 
     title_font = load_font(42)
     subtitle_font = load_font(24)
@@ -126,12 +124,7 @@ def main() -> None:
     draw.text((72, 118), figure["header"]["subtitle"], fill=(60, 60, 60, 255), font=subtitle_font)
 
     for item in figure["items"]:
-        junction_ref = resolve_junction_ref(
-            junctions_payload,
-            item["junction_id"],
-            graph.asset_id,
-            junction_bindings,
-        )
+        junction_ref = resolve_context_junction_ref(context, item["junction_id"])
         node = graph.nodes[junction_ref.graph_node_id]
         point = project_lon_lat(node.lon, node.lat, viewport, overlay.size)
         color = tuple(item["color"])

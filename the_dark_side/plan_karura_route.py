@@ -9,15 +9,14 @@ import os
 from pathlib import Path
 import random
 
-from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
 from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR, print_json_document, write_json_document
 from .karura_routing import (
     PlannerConfig,
-    load_route_graph,
+    load_graph_junction_context,
     planner_for,
     PLANNER_NAMES,
-    resolve_junction_ref,
+    resolve_context_junction_ref,
     route_asset_payload,
 )
 
@@ -60,11 +59,14 @@ def default_output(args: argparse.Namespace) -> Path:
 def main() -> None:
     args = parse_args()
     config = build_config(args)
-    graph = load_route_graph(args.contigs_json)
-    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
-    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
-    start_ref = resolve_junction_ref(junction_catalog, args.start_junction, graph.asset_id, junction_bindings)
-    end_ref = resolve_junction_ref(junction_catalog, args.end_junction, graph.asset_id, junction_bindings)
+    context = load_graph_junction_context(
+        contigs_json=args.contigs_json,
+        junctions_json=args.junctions_json,
+        junction_bindings_json=args.junction_bindings_json,
+    )
+    graph = context.graph
+    start_ref = resolve_context_junction_ref(context, args.start_junction)
+    end_ref = resolve_context_junction_ref(context, args.end_junction)
     rng = random.Random(args.seed)
     planner = planner_for(args.algorithm)
     candidates = planner(
@@ -80,7 +82,7 @@ def main() -> None:
     payload = route_asset_payload(
         graph_path=graph_ref_path,
         graph=graph,
-        junction_catalog=junction_catalog,
+        junction_catalog=context.junction_catalog,
         start_ref=start_ref,
         end_ref=end_ref,
         algorithm=args.algorithm,

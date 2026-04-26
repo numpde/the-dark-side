@@ -12,16 +12,15 @@ from dataclasses import asdict
 from pathlib import Path
 import random
 
-from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
 from .karura_common import BENCHMARKS_DIR, CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON, write_json_document
 from .karura_routing import (
     PlannerConfig,
     PLANNER_NAMES,
     RouteCandidate,
-    load_route_graph,
+    load_graph_junction_context,
     planner_for,
-    resolve_junction_ref,
+    resolve_context_junction_ref,
 )
 
 
@@ -198,15 +197,18 @@ def main() -> None:
     scenarios = args.scenario or list(SCENARIOS)
     algorithms = args.algorithm or list(ALGORITHMS)
     seeds = list(range(args.seed_start, args.seed_end + 1))
-    graph = load_route_graph(args.contigs_json)
-    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
-    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
+    context = load_graph_junction_context(
+        contigs_json=args.contigs_json,
+        junctions_json=args.junctions_json,
+        junction_bindings_json=args.junction_bindings_json,
+    )
+    graph = context.graph
 
     results: dict[str, dict] = {}
     for scenario_name in scenarios:
         start_junction, end_junction = SCENARIOS[scenario_name]
-        start_ref = resolve_junction_ref(junction_catalog, start_junction, graph.asset_id, junction_bindings)
-        end_ref = resolve_junction_ref(junction_catalog, end_junction, graph.asset_id, junction_bindings)
+        start_ref = resolve_context_junction_ref(context, start_junction)
+        end_ref = resolve_context_junction_ref(context, end_junction)
         scenario_result = {
             "start_junction_id": start_junction,
             "end_junction_id": end_junction,
@@ -244,7 +246,7 @@ def main() -> None:
     payload = {
         "meta": {
             "graph_asset_id": graph.asset_id,
-            "junction_catalog_asset_id": junction_catalog["meta"]["asset_id"],
+            "junction_catalog_asset_id": context.junction_catalog["meta"]["asset_id"],
             "seed_start": args.seed_start,
             "seed_end": args.seed_end,
             "algorithms": algorithms,

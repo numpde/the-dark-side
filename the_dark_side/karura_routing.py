@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import Iterable
 
 from .asset_contracts import (
+    load_required_junction_bindings,
+    load_required_junction_catalog,
     load_route_graph_document,
 )
 from .karura_common import (
@@ -96,6 +98,13 @@ class RouteGraph:
     contigs: dict[int, ContigRecord]
     adjacency: dict[int, list[tuple[int, int]]]
     articulation_points: set[int]
+
+
+@dataclass(frozen=True)
+class GraphJunctionContext:
+    graph: RouteGraph
+    junction_catalog: dict
+    junction_bindings: dict
 
 
 @dataclass(frozen=True)
@@ -245,6 +254,36 @@ def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, b
                 tags=tuple(junction.get("tags", [])),
             )
     raise KeyError(f"Junction '{junction_id}' has no binding for asset '{graph_asset_id}'")
+
+
+def load_graph_junction_context(
+    *,
+    contigs_json: Path,
+    junctions_json: Path,
+    junction_bindings_json: Path,
+) -> GraphJunctionContext:
+    graph = load_route_graph(contigs_json)
+    junction_catalog = load_required_junction_catalog(junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(junction_bindings_json, label="junction bindings")
+    bindings_graph_asset_id = junction_bindings["meta"]["graph_asset_id"]
+    if bindings_graph_asset_id != graph.asset_id:
+        raise KeyError(
+            f"Junction bindings asset is for graph '{bindings_graph_asset_id}', expected '{graph.asset_id}'"
+        )
+    return GraphJunctionContext(
+        graph=graph,
+        junction_catalog=junction_catalog,
+        junction_bindings=junction_bindings,
+    )
+
+
+def resolve_context_junction_ref(context: GraphJunctionContext, junction_id: str) -> JunctionRef:
+    return resolve_junction_ref(
+        context.junction_catalog,
+        junction_id,
+        context.graph.asset_id,
+        context.junction_bindings,
+    )
 
 
 def update_node_degrees(nodes: dict[int, NodeRecord], adjacency: dict[int, list[tuple[int, int]]]) -> None:
