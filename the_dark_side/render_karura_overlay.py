@@ -7,7 +7,7 @@ import json
 import random
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import ImageDraw
 
 from .karura_common import (
     CONTIGS_JSON,
@@ -21,6 +21,7 @@ from .karura_common import (
     mercator,
     resolve_map_json,
 )
+from .render_support import load_viewport, prepare_base_image, project_mercator_point
 
 
 OUT_BY_MODE = {
@@ -29,9 +30,6 @@ OUT_BY_MODE = {
     "contigs": DEBUG_DIR / "karura-contigs-random-overlay.png",
     "patches": DEBUG_DIR / "karura-patches-random-overlay.png",
 }
-BASE_IMAGE_ALPHA = 0.7
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=("ride", "all", "contigs", "patches"), default="ride")
@@ -117,26 +115,9 @@ def parse_patches(path):
     return patch_items
 
 
-def project_point(xy, viewport, size):
-    w, h = size
-    return (
-        (xy[0] - viewport["center_x"]) / viewport["meters_per_px"] + w / 2,
-        (viewport["center_y"] - xy[1]) / viewport["meters_per_px"] + h / 2,
-    )
-
-
-def prepare_base_image(path):
-    source = Image.open(path).convert("RGBA")
-    grayscale = ImageOps.grayscale(source).convert("RGBA")
-    grayscale.putalpha(int(round(255 * BASE_IMAGE_ALPHA)))
-    canvas = Image.new("RGBA", source.size, (255, 255, 255, 255))
-    canvas.alpha_composite(grayscale)
-    return canvas
-
-
 def main():
     args = parse_args()
-    viewport = json.loads(args.viewport.read_text())["viewport"]
+    viewport = load_viewport(args.viewport)
     img = prepare_base_image(args.screenshot)
     draw = ImageDraw.Draw(img, "RGBA")
 
@@ -161,8 +142,8 @@ def main():
                 220,
             )
         for idx, (a, b) in enumerate(segments):
-            p0 = project_point(a, viewport, img.size)
-            p1 = project_point(b, viewport, img.size)
+            p0 = project_mercator_point(a, viewport, img.size)
+            p1 = project_mercator_point(b, viewport, img.size)
             if contig_color is None:
                 # Deterministic but varied colors for graph inspection.
                 color = (

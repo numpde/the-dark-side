@@ -9,13 +9,13 @@ import json
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import ImageDraw
 
-from .karura_common import SCREENSHOT, VIEWPORT, mercator
+from .karura_common import SCREENSHOT, VIEWPORT
 from .karura_routing import load_route_asset, load_route_graph
+from .render_support import load_viewport, prepare_base_image, project_lon_lat
 
 
-BASE_IMAGE_ALPHA = 0.7
 ROUTE_START_COLOR = (36, 96, 220, 235)
 ROUTE_END_COLOR = (230, 40, 40, 235)
 BACKGROUND_CONTIG_COLOR = (80, 80, 80, 100)
@@ -32,24 +32,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--hide-background-contigs", action="store_true")
     return parser.parse_args()
-
-
-def project_point(lon: float, lat: float, viewport: dict, size: tuple[int, int]) -> tuple[float, float]:
-    x, y = mercator(lon, lat)
-    width, height = size
-    return (
-        (x - viewport["center_x"]) / viewport["meters_per_px"] + width / 2,
-        (viewport["center_y"] - y) / viewport["meters_per_px"] + height / 2,
-    )
-
-
-def prepare_base_image(path: Path) -> Image.Image:
-    source = Image.open(path).convert("RGBA")
-    grayscale = ImageOps.grayscale(source).convert("RGBA")
-    grayscale.putalpha(int(round(255 * BASE_IMAGE_ALPHA)))
-    canvas = Image.new("RGBA", source.size, (255, 255, 255, 255))
-    canvas.alpha_composite(grayscale)
-    return canvas
 
 
 def resolve_graph_from_route(route_payload: dict, route_json: Path):
@@ -96,7 +78,7 @@ def main() -> None:
     args = parse_args()
     route_payload = load_route_asset(args.route_json)
     graph = resolve_graph_from_route(route_payload, args.route_json)
-    viewport = json.loads(args.viewport.read_text())["viewport"]
+    viewport = load_viewport(args.viewport)
     image = prepare_base_image(args.screenshot)
     draw = ImageDraw.Draw(image, "RGBA")
 
@@ -109,7 +91,7 @@ def main() -> None:
     if not args.hide_background_contigs:
         for contig in graph.contigs.values():
             points = [
-                project_point(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
+                project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
                 for node_id in contig.node_ids
             ]
             draw.line(points, fill=BACKGROUND_CONTIG_COLOR, width=3)
@@ -123,7 +105,7 @@ def main() -> None:
         else:
             oriented = list(reversed(contig.node_ids))
         points = [
-            project_point(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
+            project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
             for node_id in oriented
         ]
         for first, second in zip(points, points[1:]):
@@ -137,8 +119,8 @@ def main() -> None:
 
     start_node = graph.nodes[int(route_payload["start"]["graph_node_id"])]
     end_node = graph.nodes[int(route_payload["end"]["graph_node_id"])]
-    draw_marker(draw, project_point(start_node.lon, start_node.lat, viewport, image.size), START_COLOR)
-    draw_marker(draw, project_point(end_node.lon, end_node.lat, viewport, image.size), END_COLOR)
+    draw_marker(draw, project_lon_lat(start_node.lon, start_node.lat, viewport, image.size), START_COLOR)
+    draw_marker(draw, project_lon_lat(end_node.lon, end_node.lat, viewport, image.size), END_COLOR)
 
     output = args.output or default_output(args.route_json, route_payload, args.route_index)
     output.parent.mkdir(parents=True, exist_ok=True)
