@@ -22,7 +22,7 @@ from .download_karura_map import (
     point_in_ring,
     write_json,
 )
-from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel
+from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, load_required_json, repo_rel
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,15 +46,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def load_patchset(path: Path) -> dict[str, Any]:
-    if not path.exists():
-        return {
-            "meta": {
-                "patchset_id": "karura-map-patches-empty",
-                "asset_kind": "map_patchset",
-            },
-            "patches": [],
-        }
-    return json.loads(path.read_text())
+    return load_required_json(path, label="patchset file")
 
 
 def patchset_digest(

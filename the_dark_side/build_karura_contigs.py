@@ -12,7 +12,14 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
-from .karura_common import CONTIGS_JSON as DEFAULT_OUT_JSON, MAP_PATCHES_JSON, include_ride_way, repo_rel, resolve_map_json
+from .karura_common import (
+    CONTIGS_JSON as DEFAULT_OUT_JSON,
+    MAP_PATCHES_JSON,
+    include_ride_way,
+    load_required_json,
+    repo_rel,
+    resolve_map_json,
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -123,15 +130,7 @@ def contig_record(
 
 
 def load_patchset(path: Path) -> dict:
-    if not path.exists():
-        return {
-            "meta": {
-                "asset_kind": "map_patchset",
-                "patchset_id": "karura-map-patches-v1",
-            },
-            "patches": [],
-        }
-    return json.loads(path.read_text())
+    return load_required_json(path, label="patchset file")
 
 
 def apply_contig_policy_patchset(contig_graph: dict, patchset: dict[str, Any]) -> tuple[list[str], str]:

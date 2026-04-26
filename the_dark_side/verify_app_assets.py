@@ -23,8 +23,8 @@ from .karura_common import (
     WEB_GENERATED_DIR,
 )
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
-from .rebuild_app_assets import build_app_manifest
-from .verify_editor_assets import parse_args as parse_editor_args, verify_editor_assets
+from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
+from .verify_editor_assets import verify_editor_assets
 
 
 def parse_args() -> argparse.Namespace:
@@ -69,21 +69,49 @@ def assert_equal(label: str, actual, expected) -> None:
         raise SystemExit(f"{label} is stale; rebuild app assets and commit the derived output")
 
 
+def validate_manifest_schema(manifest: dict) -> None:
+    areas = manifest.get("areas")
+    if not isinstance(areas, list) or not areas:
+        raise SystemExit("app manifest is stale; missing non-empty areas list")
+    for area in areas:
+        if not isinstance(area, dict):
+            raise SystemExit("app manifest is stale; area entries must be objects")
+        junctions = area.get("junctions")
+        if not isinstance(junctions, list) or not junctions:
+            raise SystemExit("app manifest is stale; area is missing non-empty junctions list")
+        junction_ids = set()
+        for junction in junctions:
+            if not isinstance(junction, dict):
+                raise SystemExit("app manifest is stale; junction entries must be objects")
+            if "lat" in junction or "lon" in junction:
+                raise SystemExit("app manifest is stale; junctions must use location.lat/lon, not top-level lat/lon")
+            location = junction.get("location")
+            if not isinstance(location, dict):
+                raise SystemExit("app manifest is stale; junction is missing location object")
+            if not isinstance(location.get("lat"), (int, float)) or not isinstance(location.get("lon"), (int, float)):
+                raise SystemExit("app manifest is stale; junction location must contain numeric lat/lon")
+            if not isinstance(junction.get("graph_node_id"), int):
+                raise SystemExit("app manifest is stale; junction is missing integer graph_node_id")
+            junction_id = junction.get("id")
+            if not isinstance(junction_id, str) or not junction_id:
+                raise SystemExit("app manifest is stale; junction is missing string id")
+            junction_ids.add(junction_id)
+        scenarios = area.get("scenarios")
+        if not isinstance(scenarios, list) or not scenarios:
+            raise SystemExit("app manifest is stale; area is missing non-empty scenarios list")
+        for scenario in scenarios:
+            if not isinstance(scenario, dict):
+                raise SystemExit("app manifest is stale; scenario entries must be objects")
+            start_junction_id = scenario.get("start_junction_id")
+            end_junction_id = scenario.get("end_junction_id")
+            if start_junction_id not in junction_ids or end_junction_id not in junction_ids:
+                raise SystemExit("app manifest is stale; scenario references unknown junction ids")
+            if not isinstance(scenario.get("is_loop"), bool):
+                raise SystemExit("app manifest is stale; scenario is missing boolean is_loop")
+
+
 def verify_app_assets(args: argparse.Namespace) -> dict:
-    editor_args = parse_editor_args(
-        [
-            "--map-json", str(args.map_json),
-            "--patches-json", str(args.patches_json),
-            "--patched-map-json", str(args.patched_map_json),
-            "--contigs-json", str(args.contigs_json),
-            "--junctions-json", str(args.junctions_json),
-            "--junction-bindings-json", str(args.junction_bindings_json),
-            "--output-editor-network", str(args.output_editor_network),
-            "--output-editor-manifest", str(args.output_editor_manifest),
-            "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",
-            "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
-        ]
-    )
+    editor_args = editor_args_from_app_args(args)
     editor_verification = verify_editor_assets(editor_args)
 
     if args.elevation_json.exists():
@@ -95,6 +123,10 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
             raise SystemExit(
                 f"{args.elevation_json} does not match current contig graph; rebuild elevation and commit the updated cache"
             )
+    else:
+        raise SystemExit(
+            f"missing elevation cache: {args.elevation_json}; rebuild elevation and commit the updated cache"
+        )
 
     graph = load_route_graph(args.contigs_json)
     build_config_payload = load_catalog_build_config(args.build_config_json)
@@ -115,6 +147,9 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
     junction_bindings = load_junction_bindings(args.junction_bindings_json)
     actual_network = load_json(args.output_network)
     actual_manifest = load_json(args.output_app_manifest)
+    validate_manifest_schema(actual_manifest)
+    if actual_manifest["meta"].get("elevation_asset_matches_graph") is not True:
+        raise SystemExit("app manifest is stale; elevation_asset_matches_graph must be true for published app assets")
     assert_equal(str(args.output_network), actual_network, expected_network)
     expected_manifest = build_app_manifest(
         args,
@@ -128,7 +163,7 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
     assert_equal(str(args.output_app_manifest), normalized(actual_manifest), normalized(expected_manifest))
     return {
         "verified": True,
-        "graph_asset_id": actual_manifest["meta"]["graph_asset_id"],
+        "ride_graph_asset_id": actual_manifest["meta"]["ride_graph_asset_id"],
         "editor_graph_asset_id": actual_manifest["meta"]["editor_graph_asset_id"],
         "junction_bindings_asset_id": actual_manifest["meta"]["junction_bindings_asset_id"],
         "catalog_build_digest": actual_manifest["meta"]["catalog_build_digest"],

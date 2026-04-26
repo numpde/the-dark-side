@@ -106,6 +106,33 @@ const appState = {
   editorManifest: null,
 };
 
+function requireObject(value, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`Editor manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function requireString(value, label) {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`Editor manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function validateEditorManifest(manifest) {
+  const normalized = requireObject(manifest, "root object");
+  const meta = requireObject(normalized.meta, "meta");
+  const editor = requireObject(normalized.editor, "editor");
+  requireString(meta.editor_graph_asset_id, "meta.editor_graph_asset_id");
+  requireString(meta.patchset_path, "meta.patchset_path");
+  requireString(meta.patchset_digest, "meta.patchset_digest");
+  requireString(meta.generated_at, "meta.generated_at");
+  requireString(editor.network_path, "editor.network_path");
+  requireString(editor.network_version, "editor.network_version");
+  return normalized;
+}
+
 
 function showError(message) {
   errorBox.textContent = message;
@@ -151,19 +178,12 @@ function isCurrentlyUnavailable(policy) {
 }
 
 
-async function fetchJson(url, fallback, init) {
-  try {
-    const response = await fetch(url, init);
-    if (!response.ok) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-    return await response.json();
-  } catch (error) {
-    if (fallback !== undefined) {
-      return fallback;
-    }
-    throw error;
+async function fetchJson(url, init) {
+  const response = await fetch(url, init);
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`);
   }
+  return await response.json();
 }
 
 
@@ -394,11 +414,8 @@ function updatePatchInfo() {
   exportTargetPath.textContent = canonicalPatchPath();
   exportHint.innerHTML =
     `Export downloads a replacement for <code>${canonicalPatchPath()}</code>.`;
-  editorGraphAsset.textContent =
-    appState.editorManifest?.meta?.editor_graph_asset_id ||
-    appState.editorManifest?.meta?.graph_asset_id ||
-    "–";
-  editorGeneratedAt.textContent = appState.editorManifest?.meta?.generated_at || "–";
+  editorGraphAsset.textContent = appState.editorManifest.meta.editor_graph_asset_id;
+  editorGeneratedAt.textContent = appState.editorManifest.meta.generated_at;
   patchPreview.textContent = `${JSON.stringify(currentPatchDocument(), null, 2)}\n`;
 }
 
@@ -517,14 +534,13 @@ async function importPatchset(file) {
 
 
 async function boot() {
-  const editorManifest = await fetchJson(editorManifestUrl, null, { cache: "no-store" });
+  const editorManifest = validateEditorManifest(
+    await fetchJson(editorManifestUrl, { cache: "no-store" })
+  );
   appState.editorManifest = editorManifest;
   const [waysGeojson, patchset] = await Promise.all([
     fetchJson(waysUrlFromManifest()),
-    fetchJson(patchesUrlFromManifest(), {
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [],
-    }),
+    fetchJson(patchesUrlFromManifest()),
   ]);
 
   appState.editorState = normalizePatchset(patchset);

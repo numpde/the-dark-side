@@ -20,10 +20,12 @@ from .karura_common import (
     PATCHED_MAP_JSON,
     WEB_GENERATED_DIR,
 )
-from .rebuild_app_assets import main as rebuild_app_main
+from .rebuild_app_assets import parse_args as parse_app_args, rebuild_app_assets
+from .rebuild_editor_assets import parse_args as parse_editor_args, rebuild_editor_assets
+import json
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--map-json", type=Path, default=MAP_JSON)
     parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
@@ -48,15 +50,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--with-elevation", action="store_true")
     parser.add_argument("--elevation-provider", choices=("open-topo-data", "open-meteo"), default="open-topo-data")
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
-def main() -> None:
-    args = parse_args()
-    import sys
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
 
-    argv = [
-        "rebuild_app_assets",
+    rebuild_app_argv = [
         "--map-json", str(args.map_json),
         "--patches-json", str(args.patches_json),
         "--patched-map-json", str(args.patched_map_json),
@@ -70,34 +70,45 @@ def main() -> None:
         "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",
         "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
     ]
-    old_argv = sys.argv
-    try:
-        sys.argv = argv
-        rebuild_app_main()
-    finally:
-        sys.argv = old_argv
-
+    editor_bundle = None
     if args.with_elevation:
+        editor_bundle = rebuild_editor_assets(
+            parse_editor_args(
+                [
+                    "--map-json", str(args.map_json),
+                    "--patches-json", str(args.patches_json),
+                    "--patched-map-json", str(args.patched_map_json),
+                    "--contigs-json", str(args.contigs_json),
+                    "--junctions-json", str(args.junctions_json),
+                    "--junction-bindings-json", str(args.junction_bindings_json),
+                    "--output-editor-network", str(args.output_editor_network),
+                    "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",
+                    "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
+                ]
+            )
+        )
         elevation_argv = [
-            "build_karura_elevation",
             "--contigs-json", str(args.contigs_json),
             "--provider", str(args.elevation_provider),
             "--cache-json", str(args.elevation_cache_json),
             "--output", str(args.elevation_json),
         ]
-        old_argv = sys.argv
-        try:
-            sys.argv = elevation_argv
-            rebuild_elevation_main()
-        finally:
-            sys.argv = old_argv
-
-        old_argv = sys.argv
-        try:
-            sys.argv = argv
-            rebuild_app_main()
-        finally:
-            sys.argv = old_argv
+        rebuild_elevation_main(elevation_argv)
+    app_args = parse_app_args(rebuild_app_argv)
+    app_bundle = rebuild_app_assets(app_args, editor_bundle=editor_bundle)
+    print(
+        json.dumps(
+            {
+                "network": str(app_args.output_network),
+                "editor_network": str(app_args.output_editor_network),
+                "editor_manifest": str(app_args.output_editor_manifest),
+                "app_manifest": str(app_args.output_app_manifest),
+                "network_feature_count": len(app_bundle["route_network"]["features"]),
+                "elevation_refreshed": args.with_elevation,
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

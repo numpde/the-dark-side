@@ -116,7 +116,7 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
         "meta": {
             "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "asset_kind": "editor_manifest",
-            "graph_asset_id": contig_payload["meta"]["asset_id"],
+            "ride_graph_asset_id": contig_payload["meta"]["asset_id"],
             "editor_graph_asset_id": editor_graph_payload["meta"]["asset_id"],
             "patched_map_asset_id": patched_payload["meta"]["asset_id"],
             "junction_bindings_asset_id": bindings_payload["meta"]["asset_id"],
@@ -145,16 +145,36 @@ def build_frontend_manifest() -> dict:
     }
 
 
-def main() -> None:
-    args = parse_args()
+def rebuild_editor_assets(args: argparse.Namespace) -> dict[str, dict]:
     sync_web_source_assets()
     patched_payload = rebuild_patched_map(args)
     contig_payload = rebuild_contigs(args, patched_payload)
     bindings_payload = rebuild_junction_bindings(args, contig_payload)
-    editor_graph_payload, _ = rebuild_editor_network(args)
-    manifest = build_editor_manifest(args, patched_payload, contig_payload, bindings_payload, editor_graph_payload)
+    editor_graph_payload, editor_network = rebuild_editor_network(args)
+    manifest = build_editor_manifest(
+        args,
+        patched_payload,
+        contig_payload,
+        bindings_payload,
+        editor_graph_payload,
+    )
+    frontend_manifest = build_frontend_manifest()
     write_export_json(args.output_editor_manifest, manifest)
-    write_export_json(FRONTEND_MANIFEST_JSON, build_frontend_manifest())
+    write_export_json(FRONTEND_MANIFEST_JSON, frontend_manifest)
+    return {
+        "patched_payload": patched_payload,
+        "contig_payload": contig_payload,
+        "bindings_payload": bindings_payload,
+        "editor_graph_payload": editor_graph_payload,
+        "editor_network": editor_network,
+        "editor_manifest": manifest,
+        "frontend_manifest": frontend_manifest,
+    }
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
+    bundle = rebuild_editor_assets(args)
     print(
         json.dumps(
             {
@@ -163,8 +183,8 @@ def main() -> None:
                 "junction_bindings": str(args.junction_bindings_json),
                 "editor_network": str(args.output_editor_network),
                 "editor_manifest": str(args.output_editor_manifest),
-                "contig_count": contig_payload["meta"]["contig_count"],
-                "editor_contig_count": editor_graph_payload["meta"]["contig_count"],
+                "contig_count": bundle["contig_payload"]["meta"]["contig_count"],
+                "editor_contig_count": bundle["editor_graph_payload"]["meta"]["contig_count"],
             },
             indent=2,
         )

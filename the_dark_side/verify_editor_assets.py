@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -71,12 +72,99 @@ def assert_equal(label: str, actual, expected) -> None:
         raise SystemExit(f"{label} is stale; rebuild editor assets and commit the derived output")
 
 
+def assert_contains(label: str, haystack: str, needle: str) -> None:
+    if needle not in haystack:
+        raise SystemExit(f"{label} is stale; expected to find {needle!r}")
+
+
+def assert_not_contains(label: str, haystack: str, needle: str) -> None:
+    if needle in haystack:
+        raise SystemExit(f"{label} is stale; unexpected legacy reference {needle!r}")
+
+
+def assert_regex(label: str, haystack: str, pattern: str) -> None:
+    if not re.search(pattern, haystack, flags=re.MULTILINE | re.DOTALL):
+        raise SystemExit(f"{label} is stale; expected to match /{pattern}/")
+
+
+def assert_not_regex(label: str, haystack: str, pattern: str) -> None:
+    if re.search(pattern, haystack, flags=re.MULTILINE | re.DOTALL):
+        raise SystemExit(f"{label} is stale; unexpected legacy pattern /{pattern}/")
+
+
+def extract_single_inline_module_script(path: Path) -> str:
+    html = path.read_text()
+    matches = re.findall(
+        r"<script\s+type=\"module\">(.*?)</script>",
+        html,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    if len(matches) != 1:
+        raise SystemExit(f"{path} is stale; expected exactly one inline module bootstrap script")
+    return matches[0]
+
+
 def verify_sources_synced() -> None:
     for canonical_path in SOURCE_ASSET_PATHS:
         expected_path = WEB_SOURCE_DIR / canonical_path.name
         if not expected_path.exists():
             raise SystemExit(f"missing published source asset: {expected_path}; run rebuild_editor_assets and commit")
         assert_equal(str(expected_path), expected_path.read_text(), canonical_path.read_text())
+
+
+def verify_frontend_bootstrap_contract() -> None:
+    index_bootstrap = extract_single_inline_module_script(WEB_GENERATED_DIR.parent / "index.html")
+    editor_bootstrap = extract_single_inline_module_script(WEB_GENERATED_DIR.parent / "editor.html")
+    app_js = (WEB_GENERATED_DIR.parent / "app.js").read_text()
+    editor_js = (WEB_GENERATED_DIR.parent / "editor.js").read_text()
+
+    assert_regex(
+        "web/index.html",
+        index_bootstrap,
+        r'fetch\(\s*"\./generated/frontend-manifest\.json"\s*,\s*\{\s*cache:\s*"no-store"\s*\}\s*\)',
+    )
+    assert_regex("web/index.html", index_bootstrap, r'manifest\?\.\s*modules\?\.\s*app_version')
+    assert_regex("web/index.html", index_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.app_version"\)')
+    assert_regex("web/index.html", index_bootstrap, r'const specifier = `\./app\.js\?v=\$\{encodeURIComponent\(version\)\}`')
+    assert_not_regex("web/index.html", index_bootstrap, r'"\./app\.js"')
+
+    assert_regex(
+        "web/editor.html",
+        editor_bootstrap,
+        r'fetch\(\s*"\./generated/frontend-manifest\.json"\s*,\s*\{\s*cache:\s*"no-store"\s*\}\s*\)',
+    )
+    assert_regex("web/editor.html", editor_bootstrap, r'manifest\?\.\s*modules\?\.\s*editor_version')
+    assert_regex("web/editor.html", editor_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.editor_version"\)')
+    assert_regex("web/editor.html", editor_bootstrap, r'const specifier = `\./editor\.js\?v=\$\{encodeURIComponent\(version\)\}`')
+    assert_not_regex("web/editor.html", editor_bootstrap, r'"\./editor\.js"')
+
+    assert_regex("web/app.js", app_js, r'new URL\("\./generated/app-manifest\.json", window\.location\.href\)')
+    assert_regex("web/app.js", app_js, r'fetch\(appManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
+    assert_regex("web/app.js", app_js, r'validateAppManifest\(await response\.json\(\)\)')
+    assert_regex("web/app.js", app_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
+    assert_regex("web/app.js", app_js, r'planner\?\.\s*network_version')
+    assert_regex("web/app.js", app_js, r'await import\(`\./gpx\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/app.js", app_js, r'workerUrl\.searchParams\.set\("v", MODULE_VERSION\)')
+    assert_not_contains("web/app.js", app_js, "generated/karura-network.geojson")
+    assert_not_contains("web/app.js", app_js, "generated/catalog.json")
+    assert_not_contains("web/app.js", app_js, "junction.lat")
+    assert_not_contains("web/app.js", app_js, "junction.lon")
+
+    assert_regex("web/editor.js", editor_js, r'new URL\("\./generated/editor-manifest\.json", window\.location\.href\)')
+    assert_regex("web/editor.js", editor_js, r'fetchJson\(editorManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
+    assert_regex("web/editor.js", editor_js, r'validateEditorManifest\(')
+    assert_regex("web/editor.js", editor_js, r'editorManifest\?\.\s*editor\?\.\s*network_version')
+    assert_regex("web/editor.js", editor_js, r'editorManifest\?\.\s*meta\?\.\s*patchset_path')
+    assert_regex("web/editor.js", editor_js, r'await import\(`\./editor-state\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/editor.js", editor_js, r'await import\(`\./karura-policy\.mjs\$\{moduleSuffix\}`\)')
+    assert_not_contains("web/editor.js", editor_js, "generated/karura-editor-network.geojson")
+    assert_not_contains("web/editor.js", editor_js, "source/karura-map-patches.json")
+    assert_not_contains("web/editor.js", editor_js, '|| "–"')
+
+    route_worker_js = (WEB_GENERATED_DIR.parent / "route-worker.js").read_text()
+    assert_regex("web/route-worker.js", route_worker_js, r'await import\(`\./route-planner\.mjs\$\{moduleSuffix\}`\)')
+    route_planner_js = (WEB_GENERATED_DIR.parent / "route-planner.mjs").read_text()
+    assert_regex("web/route-planner.mjs", route_planner_js, r'import\s*\{\s*karuraTodayString,\s*isCurrentlyUnavailable\s*\}\s*from\s*"\./karura-policy\.mjs"')
 
 
 def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:
@@ -133,7 +221,9 @@ def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, di
 
 
 def verify_editor_assets(args: argparse.Namespace) -> dict:
+    output_frontend_manifest = getattr(args, "output_frontend_manifest", FRONTEND_MANIFEST_JSON)
     verify_sources_synced()
+    verify_frontend_bootstrap_contract()
     (
         expected_patched_map,
         expected_contigs,
@@ -147,16 +237,16 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
     actual_bindings = load_json(args.junction_bindings_json)
     actual_editor_network = load_json(args.output_editor_network)
     actual_manifest = load_json(args.output_editor_manifest)
-    actual_frontend_manifest = load_json(args.output_frontend_manifest)
+    actual_frontend_manifest = load_json(output_frontend_manifest)
     assert_equal(str(args.patched_map_json), actual_patched_map, expected_patched_map)
     assert_equal(str(args.contigs_json), actual_contigs, expected_contigs)
     assert_equal(str(args.junction_bindings_json), normalized(actual_bindings), normalized(expected_bindings))
     assert_equal(str(args.output_editor_network), actual_editor_network, expected_editor_network)
     assert_equal(str(args.output_editor_manifest), normalized(actual_manifest), normalized(expected_manifest))
-    assert_equal(str(args.output_frontend_manifest), normalized(actual_frontend_manifest), normalized(expected_frontend_manifest))
+    assert_equal(str(output_frontend_manifest), normalized(actual_frontend_manifest), normalized(expected_frontend_manifest))
     return {
         "verified": True,
-        "graph_asset_id": actual_contigs["meta"]["asset_id"],
+        "ride_graph_asset_id": actual_contigs["meta"]["asset_id"],
         "editor_graph_asset_id": actual_manifest["meta"]["editor_graph_asset_id"],
         "junction_bindings_asset_id": actual_bindings["meta"]["asset_id"],
         "editor_manifest": str(args.output_editor_manifest),

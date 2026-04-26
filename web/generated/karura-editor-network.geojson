@@ -4,8 +4,7 @@
     "graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "graph_mode": "editor",
     "source_map_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
-    "patchset_id": "karura-map-patches-v1",
-    "patches_path": "source/karura-map-patches.json"
+    "patchset_id": "karura-map-patches-v1"
   },
   "features": [
     {

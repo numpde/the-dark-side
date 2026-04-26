@@ -24,6 +24,16 @@ test("route app shell loads and route controls become usable", async ({ page }) 
   await expect(page.locator("#download-link")).toHaveAttribute("href", /blob:/);
 });
 
+test("route app canonicalizes invalid query params to a valid scenario", async ({ page }) => {
+  await page.goto("/?area=missing-area&start=bogus-start&end=bogus-end");
+
+  await expect(page.getByRole("heading", { name: "Random bike routes" })).toBeVisible();
+  await expect(page.locator("#new-route-button")).toBeEnabled();
+  await expect(page.locator("#scenario-label")).toContainText("km");
+  await expect(page).toHaveURL(/area=karura/);
+  await expect(page).not.toHaveURL(/missing-area|bogus-start|bogus-end/);
+});
+
 test("editor shell loads and resolves editor provenance", async ({ page }) => {
   await page.goto("/editor.html");
 

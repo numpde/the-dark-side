@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import hashlib
+import json
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -107,13 +108,24 @@ def repo_rel(path: Path | str) -> str:
 def sync_web_source_assets() -> list[Path]:
     WEB_SOURCE_DIR.mkdir(parents=True, exist_ok=True)
     synced: list[Path] = []
+    missing: list[Path] = []
     for source_path in SOURCE_ASSET_PATHS:
         if not source_path.exists():
+            missing.append(source_path)
             continue
         target_path = WEB_SOURCE_DIR / source_path.name
         shutil.copy2(source_path, target_path)
         synced.append(target_path)
+    if missing:
+        missing_paths = ", ".join(repo_rel(path) for path in missing)
+        raise FileNotFoundError(f"missing canonical source assets: {missing_paths}")
     return synced
+
+
+def load_required_json(path: Path, *, label: str) -> dict:
+    if not path.exists():
+        raise FileNotFoundError(f"missing {label}: {path}")
+    return json.loads(path.read_text())
 
 
 def digest_paths(paths: tuple[Path, ...] | list[Path]) -> str:

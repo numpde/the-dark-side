@@ -20,7 +20,6 @@ from .karura_common import (
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
     ELEVATION_JSON,
-    FRONTEND_MANIFEST_JSON,
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     MAP_JSON,
@@ -28,22 +27,16 @@ from .karura_common import (
     PATCHED_MAP_JSON,
     WEB_GENERATED_DIR,
     repo_rel,
-    sync_web_source_assets,
 )
 from .rebuild_editor_assets import (
-    build_frontend_manifest,
-    build_editor_manifest,
     parse_args as parse_editor_args,
-    rebuild_contigs,
-    rebuild_editor_network,
-    rebuild_junction_bindings,
-    rebuild_patched_map,
+    rebuild_editor_assets as rebuild_editor_bundle,
 )
 from .build_config import catalog_build_config_digest, load_catalog_build_config
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--map-json", type=Path, default=MAP_JSON)
     parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
@@ -67,7 +60,7 @@ def parse_args() -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=False,
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 def build_app_manifest(
@@ -128,7 +121,6 @@ def build_app_manifest(
         "meta": {
             "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "asset_kind": "app_manifest",
-            "graph_asset_id": graph.asset_id,
             "ride_graph_asset_id": graph.asset_id,
             "editor_graph_asset_id": editor_manifest["meta"]["editor_graph_asset_id"],
             "junction_bindings_asset_id": junction_bindings["meta"]["asset_id"],
@@ -165,11 +157,8 @@ def build_app_manifest(
     }
 
 
-def main() -> None:
-    args = parse_args()
-    sync_web_source_assets()
-    # Reuse the editor rebuild path first.
-    editor_args = parse_editor_args(
+def editor_args_from_app_args(args: argparse.Namespace) -> argparse.Namespace:
+    return parse_editor_args(
         [
             "--map-json", str(args.map_json),
             "--patches-json", str(args.patches_json),
@@ -183,19 +172,30 @@ def main() -> None:
             "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
         ]
     )
-    patched_payload = rebuild_patched_map(editor_args)
-    contig_payload = rebuild_contigs(editor_args, patched_payload)
-    bindings_payload = rebuild_junction_bindings(editor_args, contig_payload)
-    editor_graph_payload, _ = rebuild_editor_network(editor_args)
-    editor_manifest = build_editor_manifest(editor_args, patched_payload, contig_payload, bindings_payload, editor_graph_payload)
-    write_export_json(args.output_editor_manifest, editor_manifest)
-    write_export_json(FRONTEND_MANIFEST_JSON, build_frontend_manifest())
+
+
+def rebuild_app_assets(
+    args: argparse.Namespace,
+    *,
+    editor_bundle: dict[str, dict] | None = None,
+) -> dict[str, object]:
+    if editor_bundle is None:
+        editor_bundle = rebuild_editor_bundle(editor_args_from_app_args(args))
+
     graph = load_route_graph(args.contigs_json)
     build_config_payload = load_catalog_build_config(args.build_config_json)
     node_elevations, elevation_matches_graph = load_elevation_asset(
         args.elevation_json,
         expected_graph_asset_id=graph.asset_id,
     )
+    if not elevation_matches_graph:
+        if not args.elevation_json.exists():
+            raise FileNotFoundError(
+                f"missing elevation cache: {args.elevation_json}; rebuild elevation before publishing app assets"
+            )
+        raise RuntimeError(
+            f"{args.elevation_json} does not match current contig graph; rebuild elevation before publishing app assets"
+        )
     route_network = network_geojson(
         graph,
         meta={
@@ -210,7 +210,7 @@ def main() -> None:
     junction_bindings = load_junction_bindings(args.junction_bindings_json)
     app_manifest = build_app_manifest(
         args,
-        editor_manifest=editor_manifest,
+        editor_manifest=editor_bundle["editor_manifest"],
         graph=graph,
         junction_catalog=junction_catalog,
         junction_bindings=junction_bindings,
@@ -218,6 +218,17 @@ def main() -> None:
         elevation_matches_graph=elevation_matches_graph,
     )
     write_export_json(args.output_app_manifest, app_manifest)
+    return {
+        "route_network": route_network,
+        "app_manifest": app_manifest,
+        "editor_bundle": editor_bundle,
+        "elevation_matches_graph": elevation_matches_graph,
+    }
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
+    bundle = rebuild_app_assets(args)
     print(
         json.dumps(
             {
@@ -225,7 +236,7 @@ def main() -> None:
                 "editor_network": str(args.output_editor_network),
                 "editor_manifest": str(args.output_editor_manifest),
                 "app_manifest": str(args.output_app_manifest),
-                "network_feature_count": len(route_network["features"]),
+                "network_feature_count": len(bundle["route_network"]["features"]),
             },
             indent=2,
         )

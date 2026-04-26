@@ -22,10 +22,8 @@ from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .elevation import summarize_elevation_series
 from .karura_common import (
-    APP_MANIFEST_JSON,
     CATALOG_BUILD_JSON,
     CONTIGS_JSON,
-    EDITOR_MANIFEST_JSON,
     ELEVATION_JSON,
     PATCHED_MAP_JSON,
     JUNCTIONS_JSON,
@@ -36,6 +34,7 @@ from .karura_common import (
     WEB_SOURCE_DIR,
     WEB_GENERATED_DIR,
     include_editor_way,
+    load_required_json,
     sync_web_source_assets,
 )
 from .karura_routing import (
@@ -153,8 +152,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
     parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
     parser.add_argument("--output-editor-network", type=Path, default=DEFAULT_EDITOR_NETWORK_GEOJSON)
-    parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
-    parser.add_argument("--output-app-manifest", type=Path, default=APP_MANIFEST_JSON)
     args = parser.parse_args(remaining)
     args.algorithm = args.algorithm or list(build_defaults["algorithms"])
     return args
@@ -459,15 +456,7 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
 
 
 def load_patch_snapshot(path: Path) -> dict:
-    if not path.exists():
-        return {
-            "meta": {
-                "asset_kind": "map_patchset",
-                "patchset_id": "karura-map-patches-v1",
-            },
-            "patches": [],
-        }
-    return json.loads(path.read_text())
+    return load_required_json(path, label="patchset file")
 
 
 def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
@@ -487,7 +476,6 @@ def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_
             "graph_mode": editor_graph_payload["meta"]["graph_mode"],
             "source_map_asset_id": editor_graph_payload["meta"]["source_asset_id"],
             "patchset_id": editor_graph_payload["meta"].get("patchset_id"),
-            "patches_path": editor_graph_payload["meta"].get("patches_path"),
         },
     )
     return editor_graph_payload, editor_network

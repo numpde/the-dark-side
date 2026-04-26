@@ -33,6 +33,115 @@ let appState = {
   routeSeedCounter: Math.floor(Math.random() * 1_000_000),
 };
 
+function requireObject(value, label) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`App manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function requireArray(value, label) {
+  if (!Array.isArray(value)) {
+    throw new Error(`App manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function requireString(value, label) {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`App manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function requireFiniteNumber(value, label) {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new Error(`App manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function requireInteger(value, label) {
+  if (!Number.isInteger(value)) {
+    throw new Error(`App manifest is missing valid ${label}`);
+  }
+  return value;
+}
+
+function validateJunction(junction, index) {
+  const normalized = requireObject(junction, `areas[0].junctions[${index}]`);
+  const location = requireObject(normalized.location, `areas[0].junctions[${index}].location`);
+  requireString(normalized.id, `areas[0].junctions[${index}].id`);
+  requireString(normalized.name, `areas[0].junctions[${index}].name`);
+  requireFiniteNumber(location.lat, `areas[0].junctions[${index}].location.lat`);
+  requireFiniteNumber(location.lon, `areas[0].junctions[${index}].location.lon`);
+  requireInteger(normalized.graph_node_id, `areas[0].junctions[${index}].graph_node_id`);
+  requireArray(normalized.tags ?? [], `areas[0].junctions[${index}].tags`);
+  return normalized;
+}
+
+function validateScenario(scenario, index, junctionIds) {
+  const normalized = requireObject(scenario, `areas[0].scenarios[${index}]`);
+  requireString(normalized.id, `areas[0].scenarios[${index}].id`);
+  const startJunctionId = requireString(
+    normalized.start_junction_id,
+    `areas[0].scenarios[${index}].start_junction_id`
+  );
+  const endJunctionId = requireString(
+    normalized.end_junction_id,
+    `areas[0].scenarios[${index}].end_junction_id`
+  );
+  if (!junctionIds.has(startJunctionId)) {
+    throw new Error(`App manifest scenario ${normalized.id} references unknown start junction ${startJunctionId}`);
+  }
+  if (!junctionIds.has(endJunctionId)) {
+    throw new Error(`App manifest scenario ${normalized.id} references unknown end junction ${endJunctionId}`);
+  }
+  if (typeof normalized.is_loop !== "boolean") {
+    throw new Error(`App manifest is missing valid areas[0].scenarios[${index}].is_loop`);
+  }
+  return normalized;
+}
+
+function validateArea(area, index) {
+  const normalized = requireObject(area, `areas[${index}]`);
+  requireString(normalized.id, `areas[${index}].id`);
+  requireString(normalized.name, `areas[${index}].name`);
+  requireArray(normalized.bounds, `areas[${index}].bounds`);
+  if (normalized.bounds.length !== 4) {
+    throw new Error(`App manifest is missing valid areas[${index}].bounds`);
+  }
+  normalized.bounds.forEach((value, boundsIndex) => {
+    requireFiniteNumber(value, `areas[${index}].bounds[${boundsIndex}]`);
+  });
+  const junctions = requireArray(normalized.junctions, `areas[${index}].junctions`);
+  if (junctions.length === 0) {
+    throw new Error(`App manifest must contain at least one junction in areas[${index}]`);
+  }
+  junctions.forEach(validateJunction);
+  const junctionIds = new Set(junctions.map((junction) => junction.id));
+  const scenarios = requireArray(normalized.scenarios, `areas[${index}].scenarios`);
+  if (scenarios.length === 0) {
+    throw new Error(`App manifest must contain at least one scenario in areas[${index}]`);
+  }
+  scenarios.forEach((scenario, scenarioIndex) => validateScenario(scenario, scenarioIndex, junctionIds));
+  return normalized;
+}
+
+function validateAppManifest(manifest) {
+  const normalized = requireObject(manifest, "root object");
+  requireObject(normalized.meta ?? {}, "meta");
+  const planner = requireObject(normalized.planner, "planner");
+  requireString(planner.network_path, "planner.network_path");
+  requireObject(planner.config, "planner.config");
+  const areas = requireArray(normalized.areas, "areas");
+  if (areas.length === 0) {
+    throw new Error("App manifest must contain at least one area");
+  }
+  areas.forEach(validateArea);
+  return normalized;
+}
+
 
 function networkUrlForArea() {
   const relativePath = appState.manifest?.planner?.network_path;
@@ -152,9 +261,14 @@ function currentJunctions() {
   if (!scenario || !appState.area) {
     return { startJunction: null, endJunction: null };
   }
+  const startJunction = appState.area.junctions.find((item) => item.id === scenario.start_junction_id);
+  const endJunction = appState.area.junctions.find((item) => item.id === scenario.end_junction_id);
+  if (!startJunction || !endJunction) {
+    throw new Error(`Scenario ${scenario.id} references unknown junctions`);
+  }
   return {
-    startJunction: appState.area.junctions.find((item) => item.id === scenario.start_junction_id) || null,
-    endJunction: appState.area.junctions.find((item) => item.id === scenario.end_junction_id) || null,
+    startJunction,
+    endJunction,
   };
 }
 
@@ -163,13 +277,7 @@ function junctionLatLon(junction) {
   if (!junction) {
     return null;
   }
-  if (typeof junction.lat === "number" && typeof junction.lon === "number") {
-    return [junction.lat, junction.lon];
-  }
-  if (junction.location && typeof junction.location.lat === "number" && typeof junction.location.lon === "number") {
-    return [junction.location.lat, junction.location.lon];
-  }
-  return null;
+  return [junction.location.lat, junction.location.lon];
 }
 
 
@@ -369,6 +477,47 @@ function updateUrl() {
 }
 
 
+function canonicalSelectionFromQuery() {
+  const query = new URLSearchParams(window.location.search);
+  const areas = appState.manifest.areas;
+  const requestedAreaId = query.get("area");
+  const area = areas.find((item) => item.id === requestedAreaId) || areas[0];
+  const requestedStart = query.get("start");
+  const requestedEnd = query.get("end");
+  const scenario = area.scenarios.find(
+    (item) => item.start_junction_id === requestedStart && item.end_junction_id === requestedEnd
+  ) || area.scenarios[0];
+  const canonical = {
+    areaId: area.id,
+    startJunctionId: scenario.start_junction_id,
+    endJunctionId: scenario.end_junction_id,
+  };
+  const queryState = {
+    areaId: requestedAreaId,
+    startJunctionId: requestedStart,
+    endJunctionId: requestedEnd,
+  };
+  return {
+    area,
+    scenario,
+    canonical,
+    canonicalized:
+      queryState.areaId !== canonical.areaId
+      || queryState.startJunctionId !== canonical.startJunctionId
+      || queryState.endJunctionId !== canonical.endJunctionId,
+  };
+}
+
+
+function replaceUrlWithSelection(selection) {
+  const query = new URLSearchParams(window.location.search);
+  query.set("area", selection.areaId);
+  query.set("start", selection.startJunctionId);
+  query.set("end", selection.endJunctionId);
+  window.history.replaceState({}, "", `${window.location.pathname}?${query.toString()}`);
+}
+
+
 function populateAreaOptions() {
   areaSelect.innerHTML = "";
   appState.manifest.areas.forEach((area) => {
@@ -405,15 +554,19 @@ function populateJunctionSelectors(area, requestedStart, requestedEnd) {
 
 
 function syncSelectorsFromQuery() {
-  const query = new URLSearchParams(window.location.search);
-  const requestedAreaId = query.get("area") || appState.manifest.areas[0].id;
-  appState.area = appState.manifest.areas.find((item) => item.id === requestedAreaId) || appState.manifest.areas[0];
+  const resolved = canonicalSelectionFromQuery();
+  appState.area = resolved.area;
   populateAreaOptions();
   areaSelect.value = appState.area.id;
-
-  const requestedStart = query.get("start") || appState.area.scenarios[0].start_junction_id;
-  const requestedEnd = query.get("end") || appState.area.scenarios[0].end_junction_id;
-  populateJunctionSelectors(appState.area, requestedStart, requestedEnd);
+  populateJunctionSelectors(
+    appState.area,
+    resolved.scenario.start_junction_id,
+    resolved.scenario.end_junction_id
+  );
+  if (resolved.canonicalized) {
+    console.warn("Canonicalized invalid route query parameters", resolved.canonical);
+    replaceUrlWithSelection(resolved.canonical);
+  }
 }
 
 
@@ -586,7 +739,7 @@ async function boot() {
     if (!response.ok) {
       throw new Error(`Failed to load app manifest: ${response.status}`);
     }
-    appState.manifest = await response.json();
+    appState.manifest = validateAppManifest(await response.json());
   } catch (error) {
     showError(error.message || String(error));
     scenarioLabel.textContent = "Failed to load routes";

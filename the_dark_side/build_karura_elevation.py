@@ -14,7 +14,7 @@ from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON
 from .karura_routing import load_route_graph
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--provider", choices=("open-topo-data", "open-meteo"), default="open-topo-data")
@@ -24,7 +24,7 @@ def parse_args() -> argparse.Namespace:
         default=ELEVATION_CACHE_DIR / "graph_node_elevations.json",
     )
     parser.add_argument("--output", type=Path, default=ELEVATION_JSON)
-    return parser.parse_args()
+    return parser.parse_args(argv)
 
 
 def provider_for(args: argparse.Namespace):
@@ -40,8 +40,8 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def main() -> None:
-    args = parse_args()
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
     graph = load_route_graph(args.contigs_json)
     provider = provider_for(args)
 

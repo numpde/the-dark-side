@@ -78,6 +78,19 @@ export function emptyPatchset() {
   };
 }
 
+function requirePatchsetObject(rawPatchset) {
+  if (!rawPatchset || typeof rawPatchset !== "object" || Array.isArray(rawPatchset)) {
+    throw new Error("Patchset must be a JSON object");
+  }
+  if (!Array.isArray(rawPatchset.patches)) {
+    throw new Error("Patchset must contain a patches array");
+  }
+  if (rawPatchset.meta != null && (typeof rawPatchset.meta !== "object" || Array.isArray(rawPatchset.meta))) {
+    throw new Error("Patchset meta must be an object when present");
+  }
+  return rawPatchset;
+}
+
 
 function managedTagNames() {
   return new Set(Object.values(POLICY_TAGS));
@@ -185,7 +198,7 @@ function applyManagedPatch(policy, patch) {
 
 
 export function normalizePatchset(rawPatchset) {
-  const patchset = rawPatchset || emptyPatchset();
+  const patchset = rawPatchset == null ? emptyPatchset() : requirePatchsetObject(rawPatchset);
   const passthroughPatches = [];
   const policyByWayId = new Map();
 
@@ -263,7 +276,13 @@ export function buildPatchsetDocument(editorState, featureById = new Map()) {
   const patches = [...editorState.passthroughPatches];
   for (const [wayId, policy] of [...editorState.policyByWayId.entries()].sort((a, b) => a[0] - b[0])) {
     const feature = featureById.get(Number(wayId));
-    const nodeIds = feature?.properties?.node_ids || [];
+    if (!feature) {
+      throw new Error(`Current graph is missing contig ${wayId}; rebuild editor assets before exporting patches`);
+    }
+    const nodeIds = feature.properties?.node_ids;
+    if (!Array.isArray(nodeIds) || nodeIds.length < 2) {
+      throw new Error(`Contig ${wayId} is missing a valid node_ids signature; rebuild editor assets before exporting patches`);
+    }
     patches.push(managedPatchForWay(wayId, policy, nodeIds));
   }
   return {

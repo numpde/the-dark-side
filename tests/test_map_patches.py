@@ -1,15 +1,23 @@
 from __future__ import annotations
 
 from datetime import date
+from pathlib import Path
+import tempfile
 import unittest
 
 from the_dark_side.apply_karura_patches import apply_patchset, build_inside_karura, compute_way_record
 from the_dark_side.build_karura_contigs import build_contigs
-from the_dark_side.karura_common import include_editor_way, include_ride_way, is_currently_unavailable
+from the_dark_side.karura_common import include_editor_way, include_ride_way, is_currently_unavailable, load_required_json
 from the_dark_side.download_karura_map import BoundaryComponent, BoundaryRecord, KaruraMap, NodeRecord
 
 
 class MapPatchPipelineTest(unittest.TestCase):
+    def test_missing_canonical_json_raises_instead_of_falling_back(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            missing_path = Path(tmpdir) / "missing.json"
+            with self.assertRaises(FileNotFoundError):
+                load_required_json(missing_path, label="patchset file")
+
     def build_map(self) -> KaruraMap:
         nodes = {
             1: NodeRecord(id=1, lat=0.0, lon=0.0),

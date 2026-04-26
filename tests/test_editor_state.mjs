@@ -81,7 +81,16 @@ test("normalizePatchset splits mixed contig tag patches into managed policy and 
     },
   ]);
 
-  const doc = buildPatchsetDocument(editorState);
+  const doc = buildPatchsetDocument(editorState, new Map([
+    [
+      55,
+      {
+        properties: {
+          node_ids: [550, 551],
+        },
+      },
+    ],
+  ]));
   assert.deepEqual(doc.patches, [
     {
       id: "editor-policy-contig-55--passthrough",
@@ -96,7 +105,7 @@ test("normalizePatchset splits mixed contig tag patches into managed policy and 
       id: "editor-policy-contig-55",
       op: "update_contig_tags",
       contig_id: 55,
-      node_ids: [],
+      node_ids: [550, 551],
       set: {
         [POLICY_TAGS.routingState]: "exclude",
       },
@@ -140,14 +149,23 @@ test("buildPatchsetDocument preserves passthrough patches and emits canonical po
     unavailableUntil: "2026-05-10",
   });
 
-  const doc = buildPatchsetDocument(editorState);
+  const doc = buildPatchsetDocument(editorState, new Map([
+    [
+      42,
+      {
+        properties: {
+          node_ids: [420, 421],
+        },
+      },
+    ],
+  ]));
   assert.equal(doc.patches.length, 2);
   assert.equal(doc.patches[0].id, "passthrough");
   assert.deepEqual(doc.patches[1], {
     id: "editor-policy-contig-42",
     op: "update_contig_tags",
     contig_id: 42,
-    node_ids: [],
+    node_ids: [420, 421],
     set: {
       [POLICY_TAGS.routingState]: "include",
       [POLICY_TAGS.bikeability]: "5",
@@ -177,6 +195,17 @@ test("normalizePatchset sanitizes invalid managed policy values", () => {
   });
 
   assert.deepEqual(policyForWay(editorState, 77), defaultWayPolicy());
+});
+
+test("normalizePatchset rejects malformed patchset documents instead of treating them as empty", () => {
+  assert.throws(
+    () => normalizePatchset({ meta: {} }),
+    /Patchset must contain a patches array/
+  );
+  assert.throws(
+    () => normalizePatchset([]),
+    /Patchset must be a JSON object/
+  );
 });
 
 
@@ -228,4 +257,14 @@ test("buildPatchsetDocument includes contig node ids when available", () => {
       [POLICY_TAGS.routingState]: "exclude",
     },
   });
+});
+
+test("buildPatchsetDocument rejects managed policies for contigs missing from the current graph", () => {
+  const editorState = normalizePatchset({ meta: {}, patches: [] });
+  setWayPolicy(editorState, 404, { routingState: "exclude" });
+
+  assert.throws(
+    () => buildPatchsetDocument(editorState, new Map()),
+    /Current graph is missing contig 404; rebuild editor assets before exporting patches/
+  );
 });

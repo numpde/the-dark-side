@@ -103,7 +103,10 @@
       }
       const manifest = await response.json();
       const version = manifest?.modules?.editor_version;
-      const specifier = version ? `./editor.js?v=${encodeURIComponent(version)}` : "./editor.js";
+      if (!version) {
+        throw new Error("Frontend manifest is missing modules.editor_version");
+      }
+      const specifier = `./editor.js?v=${encodeURIComponent(version)}`;
       await import(specifier);
     }
 

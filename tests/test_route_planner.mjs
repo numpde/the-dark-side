@@ -130,3 +130,59 @@ test("browser planner returns a non-empty loop for start=end scenarios", () => {
   assert.equal(route.route_node_ids[0], 20);
   assert.equal(route.route_node_ids.at(-1), 20);
 });
+
+test("browser planner rejects malformed network payloads instead of falling back to an empty graph", () => {
+  assert.throws(
+    () => buildGraphFromGeoJson({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            contig_id: 1,
+            endpoint_node_ids: [1, 2],
+            node_ids: [1, 2],
+            length_m: 100,
+            segment_count: 1,
+            way_ids: [1],
+            way_names: [],
+            tags: {},
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [[36.81, -1.24]],
+          },
+        },
+      ],
+    }),
+    /Invalid route network: features\[0\]\.geometry\.coordinates must contain at least two points/
+  );
+});
+
+test("browser planner rejects endpoint mismatches instead of silently inferring them", () => {
+  assert.throws(
+    () => buildGraphFromGeoJson({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            contig_id: 2,
+            endpoint_node_ids: [1, 99],
+            node_ids: [1, 2],
+            length_m: 100,
+            segment_count: 1,
+            way_ids: [2],
+            way_names: [],
+            tags: {},
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [[36.81, -1.24], [36.811, -1.241]],
+          },
+        },
+      ],
+    }),
+    /Invalid route network: features\[0\] endpoint_node_ids must match the first and last node_ids/
+  );
+});
