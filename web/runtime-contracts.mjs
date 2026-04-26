@@ -1,83 +1,18 @@
-function requireContract(context, label, predicate) {
-  if (!predicate()) {
-    throw new Error(`${context} is missing valid ${label}`);
-  }
-}
+import {
+  requireArray,
+  requireFiniteNumber,
+  requireInteger,
+  requireObject,
+  requireString,
+} from "./contract-primitives.mjs";
 
-export function requireObject(value, label, options = {}) {
-  const { context = null } = options;
-  if (context) {
-    requireContract(
-      context,
-      label,
-      () => value && typeof value === "object" && !Array.isArray(value),
-      "object"
-    );
-    return value;
-  }
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`${label} must be an object`);
-  }
-  return value;
-}
-
-export function requireArray(value, label, options = {}) {
-  const { context = null } = options;
-  if (context) {
-    requireContract(context, label, () => Array.isArray(value), "array");
-    return value;
-  }
-  if (!Array.isArray(value)) {
-    throw new Error(`${label} must be an array`);
-  }
-  return value;
-}
-
-export function requireString(value, label, options = {}) {
-  const { context = null } = options;
-  if (context) {
-    requireContract(
-      context,
-      label,
-      () => typeof value === "string" && value.length > 0,
-      "non-empty string"
-    );
-    return value;
-  }
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`${label} must be a non-empty string`);
-  }
-  return value;
-}
-
-export function requireFiniteNumber(value, label, options = {}) {
-  const { context = null } = options;
-  if (context) {
-    requireContract(
-      context,
-      label,
-      () => typeof value === "number" && Number.isFinite(value),
-      "finite number"
-    );
-    return value;
-  }
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    throw new Error(`${label} must be a finite number`);
-  }
-  return value;
-}
-
-export function requireInteger(value, label, options = {}) {
-  const { context = null } = options;
-  if (context) {
-    requireContract(context, label, () => Number.isInteger(value), "integer");
-    return value;
-  }
-  if (!Number.isInteger(value)) {
-    throw new Error(`${label} must be an integer`);
-  }
-  return value;
-}
+export {
+  requireArray,
+  requireFiniteNumber,
+  requireInteger,
+  requireObject,
+  requireString,
+} from "./contract-primitives.mjs";
 
 function validateJunction(junction, index) {
   const context = "App manifest";

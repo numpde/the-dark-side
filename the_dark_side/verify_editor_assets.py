@@ -160,6 +160,38 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_contains("web/editor.js", editor_js, 'searchParams.get("v") || ""')
 
     route_worker_js = (WEB_GENERATED_DIR.parent / "route-worker.js").read_text()
+    runtime_contracts_js = (WEB_GENERATED_DIR.parent / "runtime-contracts.mjs").read_text()
+    worker_contracts_js = (WEB_GENERATED_DIR.parent / "planner-worker-contracts.mjs").read_text()
+    contract_primitives_js = (WEB_GENERATED_DIR.parent / "contract-primitives.mjs").read_text()
+
+    assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'from "\./contract-primitives\.mjs"')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireContract\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireObject\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireArray\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireString\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireFiniteNumber\(')
+    assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireInteger\(')
+
+    assert_regex(
+        "web/planner-worker-contracts.mjs",
+        worker_contracts_js,
+        r'from "\./contract-primitives\.mjs"',
+    )
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireObject\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireString\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireInteger\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireFiniteNumber\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireCoordinatePair\(')
+    assert_not_regex("web/planner-worker-contracts.mjs", worker_contracts_js, r'function requireIntegerArray\(')
+
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireObject\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireArray\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireString\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireFiniteNumber\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireInteger\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireCoordinatePair\(')
+    assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireIntegerArray\(')
+
     assert_regex("web/route-worker.js", route_worker_js, r'new Error\("Route worker is missing required module version"\)')
     assert_regex("web/route-worker.js", route_worker_js, r'import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-worker.js", route_worker_js, r'workerContracts\.parsePlannerWorkerRequest\(event\.data\)')

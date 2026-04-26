@@ -1,47 +1,11 @@
-function requireObject(value, label) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`${label} must be an object`);
-  }
-  return value;
-}
-
-function requireString(value, label) {
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`${label} must be a non-empty string`);
-  }
-  return value;
-}
-
-function requireInteger(value, label) {
-  if (!Number.isInteger(value)) {
-    throw new Error(`${label} must be an integer`);
-  }
-  return value;
-}
-
-function requireFiniteNumber(value, label) {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    throw new Error(`${label} must be a finite number`);
-  }
-  return value;
-}
-
-function requireCoordinatePair(value, label) {
-  if (!Array.isArray(value) || value.length !== 2) {
-    throw new Error(`${label} must be a [lon, lat] coordinate pair`);
-  }
-  return [
-    requireFiniteNumber(value[0], `${label}[0]`),
-    requireFiniteNumber(value[1], `${label}[1]`),
-  ];
-}
-
-function requireIntegerArray(value, label) {
-  if (!Array.isArray(value)) {
-    throw new Error(`${label} must be an array`);
-  }
-  return value.map((item, index) => requireInteger(item, `${label}[${index}]`));
-}
+import {
+  requireCoordinatePair,
+  requireFiniteNumber,
+  requireInteger,
+  requireIntegerArray,
+  requireObject,
+  requireString,
+} from "./contract-primitives.mjs";
 
 export function requireRouteHistory(value, label) {
   if (value == null) {
