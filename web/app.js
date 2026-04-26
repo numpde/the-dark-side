@@ -13,6 +13,7 @@ const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.
 const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
+const { setSummaryText, renderRouteSummary } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 const {
   recentRoutesForScenario,
   rememberRouteForScenario,
@@ -91,7 +92,7 @@ function updateRouteSurfaceState() {
 
 
 function installShellPlaceholders() {
-  setScenarioLabelText("Loading routes…");
+  setSummaryText(scenarioLabel, "Loading routes…");
   areaSelect.innerHTML = "<option>Loading…</option>";
   startSelect.innerHTML = "<option>Loading…</option>";
   endSelect.innerHTML = "<option>Loading…</option>";
@@ -110,48 +111,6 @@ function clearError() {
   errorCard.classList.add("hidden");
 }
 
-
-function formatDistance(lengthM) {
-  return `${(lengthM / 1000).toFixed(2)} km`;
-}
-
-
-function formatElevationChange(lengthM) {
-  return `${lengthM.toFixed(0)} m`;
-}
-
-
-function setScenarioLabelText(text) {
-  scenarioLabel.textContent = text;
-}
-
-
-function setScenarioLabelParts(title, metaText) {
-  scenarioLabel.replaceChildren();
-  const titleSpan = document.createElement("span");
-  titleSpan.className = "scenario-title-main";
-  titleSpan.textContent = title;
-
-  if (!metaText) {
-    scenarioLabel.append(titleSpan);
-    return;
-  }
-
-  const separatorSpan = document.createElement("span");
-  separatorSpan.className = "scenario-title-separator";
-  separatorSpan.textContent = ", ";
-
-  const metaSpan = document.createElement("span");
-  metaSpan.className = "scenario-title-meta";
-  metaSpan.textContent = metaText;
-
-  scenarioLabel.append(titleSpan, separatorSpan, metaSpan);
-}
-
-
-function animatedLoopArrow() {
-  return appState.loopArrowPhase % 2 === 0 ? "↗" : "↘";
-}
 
 function currentScenario() {
   if (!appState.area) {
@@ -197,34 +156,13 @@ function renderRoute() {
 
 function updateRouteStats() {
   const scenario = currentScenario();
-  if (!scenario || !appState.area) {
-    setScenarioLabelText("Loading routes…");
-    return;
-  }
-
-  if (appState.routeStatus === "loading" && !appState.route) {
-    setScenarioLabelText(`${scenarioLabelText(scenario, appState.area)}…`);
-    return;
-  }
-
-  const route = appState.route;
-  if (!route) {
-    setScenarioLabelText(scenarioLabelText(scenario, appState.area));
-    return;
-  }
-
-  const hasGain = typeof route.elevation_gain_m === "number";
-  const hasLoss = typeof route.elevation_loss_m === "number";
-  let metaText = formatDistance(route.unique_length_m);
-  if (scenario.is_loop && hasGain && hasLoss) {
-    const averageChange = (route.elevation_gain_m + route.elevation_loss_m) / 2;
-    metaText += ` (${animatedLoopArrow()} ${formatElevationChange(averageChange)})`;
-  } else if (hasGain || hasLoss) {
-    const upText = hasGain ? formatElevationChange(route.elevation_gain_m) : "—";
-    const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
-    metaText += ` (↗ ${upText}, ↘ ${downText})`;
-  }
-  setScenarioLabelParts(scenarioLabelText(scenario, appState.area), metaText);
+  renderRouteSummary(scenarioLabel, {
+    title: scenario && appState.area ? scenarioLabelText(scenario, appState.area) : null,
+    route: appState.route,
+    routeStatus: appState.routeStatus,
+    isLoop: Boolean(scenario?.is_loop),
+    loopArrowPhase: appState.loopArrowPhase,
+  });
 }
 
 
@@ -493,7 +431,7 @@ async function boot() {
     appState.manifest = validateAppManifest(await response.json());
   } catch (error) {
     showError(error.message || String(error));
-    setScenarioLabelText("Failed to load routes");
+    setSummaryText(scenarioLabel, "Failed to load routes");
     return;
   }
 

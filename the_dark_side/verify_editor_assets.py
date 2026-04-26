@@ -95,6 +95,7 @@ def verify_frontend_bootstrap_contract() -> None:
     planner_client_js = (WEB_GENERATED_DIR.parent / "planner-client.mjs").read_text()
     route_map_view_js = (WEB_GENERATED_DIR.parent / "route-map-view.mjs").read_text()
     route_scenarios_js = (WEB_GENERATED_DIR.parent / "route-scenarios.mjs").read_text()
+    route_summary_view_js = (WEB_GENERATED_DIR.parent / "route-summary-view.mjs").read_text()
 
     assert_regex(
         "web/index.html",
@@ -124,6 +125,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-client\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-map-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/app.js", app_js, r'await import\(`\./route-summary-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'function requireModuleVersion\(\)')
     assert_regex("web/app.js", app_js, r'throw new Error\("App runtime is missing required module version"\)')
     assert_regex("web/app.js", app_js, r'url\.searchParams\.set\("v", appState\.manifest\.planner\.network_version\)')
@@ -157,6 +159,11 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/app.js", app_js, r'function boundsToLeaflet\(')
     assert_not_regex("web/app.js", app_js, r'function junctionLatLon\(')
     assert_not_regex("web/app.js", app_js, r'function ensureMap\(')
+    assert_not_regex("web/app.js", app_js, r'function formatDistance\(')
+    assert_not_regex("web/app.js", app_js, r'function formatElevationChange\(')
+    assert_not_regex("web/app.js", app_js, r'function setScenarioLabelText\(')
+    assert_not_regex("web/app.js", app_js, r'function setScenarioLabelParts\(')
+    assert_not_regex("web/app.js", app_js, r'function animatedLoopArrow\(')
 
     assert_regex("web/planner-client.mjs", planner_client_js, r'export function createPlannerClient\(')
     assert_contains("web/planner-client.mjs", planner_client_js, "parsePlannerWorkerResponse(event.data)")
@@ -177,6 +184,13 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function junctionLatLon\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
     assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
+
+    assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function setSummaryText\(')
+    assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function renderRouteSummary\(')
+    assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'function formatDistance\(')
+    assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'function formatElevationChange\(')
+    assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'function animatedLoopArrow\(')
+    assert_not_regex("web/route-summary-view.mjs", route_summary_view_js, r'function currentScenario\(')
 
     assert_regex("web/editor.js", editor_js, r'new URL\("\./generated/editor-manifest\.json", window\.location\.href\)')
     assert_regex("web/editor.js", editor_js, r'fetchJson\(editorManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
