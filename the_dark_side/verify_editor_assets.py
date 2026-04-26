@@ -31,6 +31,7 @@ from .karura_common import (
 )
 from .karura_common import include_ride_way
 from .rebuild_editor_assets import build_editor_manifest, build_frontend_manifest
+from .verify_helpers import assert_equal, load_json, normalized
 from .web_assets import build_editor_graph_payload_from_map
 
 
@@ -39,21 +40,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     add_editor_asset_args(parser, include_output_editor_manifest=True)
     parser.add_argument("--output-frontend-manifest", type=Path, default=FRONTEND_MANIFEST_JSON)
     return parser.parse_args(argv)
-
-
-def load_json(path: Path) -> dict:
-    return json.loads(path.read_text())
-
-
-def normalized(payload: dict) -> dict:
-    clone = json.loads(json.dumps(payload))
-    clone.get("meta", {}).pop("generated_at", None)
-    return clone
-
-
-def assert_equal(label: str, actual, expected) -> None:
-    if actual != expected:
-        raise SystemExit(f"{label} is stale; rebuild editor assets and commit the derived output")
 
 
 def assert_contains(label: str, haystack: str, needle: str) -> None:
@@ -93,7 +79,12 @@ def verify_sources_synced() -> None:
         expected_path = WEB_SOURCE_DIR / canonical_path.name
         if not expected_path.exists():
             raise SystemExit(f"missing published source asset: {expected_path}; run rebuild_editor_assets and commit")
-        assert_equal(str(expected_path), expected_path.read_text(), canonical_path.read_text())
+        assert_equal(
+            str(expected_path),
+            expected_path.read_text(),
+            canonical_path.read_text(),
+            rebuild_hint="run rebuild_editor_assets and commit",
+        )
 
 
 def verify_frontend_bootstrap_contract() -> None:
@@ -241,12 +232,28 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
     actual_editor_network = load_json(args.output_editor_network)
     actual_manifest = load_json(args.output_editor_manifest)
     actual_frontend_manifest = load_json(output_frontend_manifest)
-    assert_equal(str(args.patched_map_json), actual_patched_map, expected_patched_map)
-    assert_equal(str(args.contigs_json), actual_contigs, expected_contigs)
-    assert_equal(str(args.junction_bindings_json), normalized(actual_bindings), normalized(expected_bindings))
-    assert_equal(str(args.output_editor_network), actual_editor_network, expected_editor_network)
-    assert_equal(str(args.output_editor_manifest), normalized(actual_manifest), normalized(expected_manifest))
-    assert_equal(str(output_frontend_manifest), normalized(actual_frontend_manifest), normalized(expected_frontend_manifest))
+    rebuild_hint = "rebuild editor assets and commit the derived output"
+    assert_equal(str(args.patched_map_json), actual_patched_map, expected_patched_map, rebuild_hint=rebuild_hint)
+    assert_equal(str(args.contigs_json), actual_contigs, expected_contigs, rebuild_hint=rebuild_hint)
+    assert_equal(
+        str(args.junction_bindings_json),
+        normalized(actual_bindings),
+        normalized(expected_bindings),
+        rebuild_hint=rebuild_hint,
+    )
+    assert_equal(str(args.output_editor_network), actual_editor_network, expected_editor_network, rebuild_hint=rebuild_hint)
+    assert_equal(
+        str(args.output_editor_manifest),
+        normalized(actual_manifest),
+        normalized(expected_manifest),
+        rebuild_hint=rebuild_hint,
+    )
+    assert_equal(
+        str(output_frontend_manifest),
+        normalized(actual_frontend_manifest),
+        normalized(expected_frontend_manifest),
+        rebuild_hint=rebuild_hint,
+    )
     return {
         "verified": True,
         "ride_graph_asset_id": actual_contigs["meta"]["asset_id"],

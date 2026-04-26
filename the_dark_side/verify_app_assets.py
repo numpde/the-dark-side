@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 
 from .asset_pipeline_cli import add_app_asset_args
 from .build_config import (
@@ -15,29 +14,15 @@ from .build_config import (
 )
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
+from .verify_helpers import assert_equal, load_json, normalized
 from .verify_editor_assets import verify_editor_assets
 from .web_assets import load_elevation_asset, network_geojson
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     add_app_asset_args(parser)
-    return parser.parse_args()
-
-
-def load_json(path: Path) -> dict:
-    return json.loads(path.read_text())
-
-
-def normalized(payload: dict) -> dict:
-    clone = json.loads(json.dumps(payload))
-    clone.get("meta", {}).pop("generated_at", None)
-    return clone
-
-
-def assert_equal(label: str, actual, expected) -> None:
-    if actual != expected:
-        raise SystemExit(f"{label} is stale; rebuild app assets and commit the derived output")
+    return parser.parse_args(argv)
 
 
 def validate_manifest_schema(manifest: dict) -> None:
@@ -136,7 +121,8 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
     validate_manifest_schema(actual_manifest)
     if actual_manifest["meta"].get("elevation_asset_matches_graph") is not True:
         raise SystemExit("app manifest is stale; elevation_asset_matches_graph must be true for published app assets")
-    assert_equal(str(args.output_network), actual_network, expected_network)
+    rebuild_hint = "rebuild app assets and commit the derived output"
+    assert_equal(str(args.output_network), actual_network, expected_network, rebuild_hint=rebuild_hint)
     expected_manifest = build_app_manifest(
         args,
         editor_manifest=load_json(args.output_editor_manifest),
@@ -146,7 +132,12 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
         build_config_payload=build_config_payload,
         elevation_matches_graph=elevation_matches_graph,
     )
-    assert_equal(str(args.output_app_manifest), normalized(actual_manifest), normalized(expected_manifest))
+    assert_equal(
+        str(args.output_app_manifest),
+        normalized(actual_manifest),
+        normalized(expected_manifest),
+        rebuild_hint=rebuild_hint,
+    )
     return {
         "verified": True,
         "ride_graph_asset_id": actual_manifest["meta"]["ride_graph_asset_id"],
