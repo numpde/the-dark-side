@@ -6,10 +6,9 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 
 from .elevation import OpenMeteoElevationClient, OpenTopoDataElevationClient
-from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON, utc_now_z
+from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON, utc_now_z, write_json_document
 from .karura_routing import load_route_graph
 
 
@@ -32,11 +31,6 @@ def provider_for(args: argparse.Namespace):
     if args.provider == "open-meteo":
         return OpenMeteoElevationClient(cache_path=args.cache_json)
     raise KeyError(args.provider)
-
-
-def write_json(path: Path, payload: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -66,7 +60,7 @@ def main(argv: list[str] | None = None) -> None:
             for node, elevation in zip(sorted_nodes, node_elevations)
         },
     }
-    write_json(args.output, payload)
+    write_json_document(args.output, payload)
     print(
         json.dumps(
             {

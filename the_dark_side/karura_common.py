@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 import hashlib
 import shutil
@@ -124,6 +125,11 @@ def repo_rel(path: Path | str) -> str:
         return str(candidate.resolve().relative_to(REPO_ROOT))
     except Exception:
         return str(path)
+
+
+def write_json_document(path: Path, payload: object, *, sort_keys: bool = False) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=sort_keys) + "\n")
 
 
 def sync_web_source_assets() -> list[Path]:

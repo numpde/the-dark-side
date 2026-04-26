@@ -20,10 +20,9 @@ from .download_karura_map import (
     keep_segment_by_endpoint,
     load_map,
     point_in_ring,
-    write_json,
 )
 from .asset_contracts import load_required_patchset
-from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel
+from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel, write_json_document
 
 
 def parse_args() -> argparse.Namespace:
@@ -363,7 +362,7 @@ def main() -> None:
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     )
-    write_json(args.output, patched.to_dict())
+    write_json_document(args.output, patched.to_dict(), sort_keys=True)
     print(
         json.dumps(
             {

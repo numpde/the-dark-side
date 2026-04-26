@@ -24,6 +24,7 @@ from .karura_common import (
     parse_iso_date,
     repo_rel,
     resolve_map_json,
+    write_json_document,
 )
 
 
@@ -396,7 +397,7 @@ def main() -> None:
         patchset_path=repo_rel(args.patches_json),
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(contig_graph, indent=2, sort_keys=True) + "\n")
+    write_json_document(args.output, contig_graph, sort_keys=True)
     print(
         json.dumps(
             {

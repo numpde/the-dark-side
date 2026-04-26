@@ -11,7 +11,6 @@ from pathlib import Path
 from typing import Iterable
 
 from .asset_contracts import (
-    load_route_asset_document,
     load_route_graph_document,
 )
 from .karura_common import (
@@ -1199,8 +1198,3 @@ def route_asset_payload(
         "end": asdict(end_ref),
         "routes": [route_candidate_to_dict(graph, candidate) for candidate in candidates],
     }
-
-
-def write_json(path: Path, payload: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")

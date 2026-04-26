@@ -14,7 +14,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON, utc_now_z
+from .karura_common import (
+    MAP_JSON as DEFAULT_MAP_JSON,
+    RAW_JSON as DEFAULT_RAW_JSON,
+    utc_now_z,
+    write_json_document,
+)
 
 DEFAULT_RELATION_IDS = [13626194, 15417497]
 DEFAULT_OVERPASS_URL = "https://overpass-api.de/api/interpreter"
@@ -436,11 +441,6 @@ def build_map(
     return KaruraMap(meta=meta, boundary=boundary, nodes=nodes, ways=ways)
 
 
-def write_json(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
-
-
 def load_map(path: Path) -> KaruraMap:
     payload = json.loads(path.read_text())
     boundary_payload = payload["boundary"]
@@ -492,7 +492,7 @@ def main() -> None:
         retries=args.retries,
         pause_seconds=args.pause_seconds,
     )
-    write_json(args.raw_json, payload)
+    write_json_document(args.raw_json, payload, sort_keys=True)
 
     karura_map = build_map(
         payload,
@@ -502,7 +502,7 @@ def main() -> None:
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     )
-    write_json(args.map_json, karura_map.to_dict())
+    write_json_document(args.map_json, karura_map.to_dict(), sort_keys=True)
 
     summary = {
         "relation_ids": args.relation_ids,

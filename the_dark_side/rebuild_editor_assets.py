@@ -11,7 +11,7 @@ from .asset_contracts import load_required_junction_catalog, load_required_patch
 from .apply_karura_patches import apply_patchset
 from .asset_pipeline_cli import add_editor_asset_args
 from .build_karura_contigs import build_contigs
-from .download_karura_map import load_map, write_json
+from .download_karura_map import load_map
 from .junction_bindings import build_junction_bindings
 from .karura_common import (
     APP_MODULE_PATHS,
@@ -23,9 +23,10 @@ from .karura_common import (
     sync_web_source_assets,
     digest_paths,
     utc_now_z,
+    write_json_document,
 )
 from .karura_common import include_ride_way
-from .web_assets import build_editor_graph_payload, write_json as write_export_json
+from .web_assets import build_editor_graph_payload
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -45,7 +46,7 @@ def rebuild_patched_map(args: argparse.Namespace) -> dict:
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     )
-    write_json(args.patched_map_json, patched.to_dict())
+    write_json_document(args.patched_map_json, patched.to_dict(), sort_keys=True)
     return patched.to_dict()
 
 
@@ -59,7 +60,7 @@ def rebuild_contigs(args: argparse.Namespace, patched_payload: dict) -> dict:
         include_way=include_ride_way,
         graph_mode="ride",
     )
-    args.contigs_json.write_text(json.dumps(contig_graph, indent=2, sort_keys=True) + "\n")
+    write_json_document(args.contigs_json, contig_graph, sort_keys=True)
     return contig_graph
 
 
@@ -74,7 +75,7 @@ def rebuild_junction_bindings(args: argparse.Namespace, contig_payload: dict) ->
         junctions_path=args.junctions_json,
         graph_path=args.contigs_json,
     )
-    write_export_json(args.junction_bindings_json, payload)
+    write_json_document(args.junction_bindings_json, payload)
     return payload
 
 
@@ -83,7 +84,7 @@ def rebuild_editor_network(args: argparse.Namespace) -> tuple[dict, dict]:
         editor_map_json=args.patched_map_json,
         editor_patches_json=args.patches_json,
     )
-    write_export_json(args.output_editor_network, editor_network)
+    write_json_document(args.output_editor_network, editor_network)
     return editor_graph_payload, editor_network
 
 
@@ -134,8 +135,8 @@ def rebuild_editor_assets(args: argparse.Namespace) -> dict[str, dict]:
         editor_graph_payload,
     )
     frontend_manifest = build_frontend_manifest()
-    write_export_json(args.output_editor_manifest, manifest)
-    write_export_json(FRONTEND_MANIFEST_JSON, frontend_manifest)
+    write_json_document(args.output_editor_manifest, manifest)
+    write_json_document(FRONTEND_MANIFEST_JSON, frontend_manifest)
     return {
         "patched_payload": patched_payload,
         "contig_payload": contig_payload,

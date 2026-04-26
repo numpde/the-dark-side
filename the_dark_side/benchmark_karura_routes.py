@@ -14,7 +14,7 @@ import random
 
 from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
-from .karura_common import BENCHMARKS_DIR, CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
+from .karura_common import BENCHMARKS_DIR, CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON, write_json_document
 from .karura_routing import (
     PlannerConfig,
     PLANNER_NAMES,
@@ -22,7 +22,6 @@ from .karura_routing import (
     load_route_graph,
     planner_for,
     resolve_junction_ref,
-    write_json,
 )
 
 
@@ -254,7 +253,7 @@ def main() -> None:
         "config": asdict(config),
         "results": results,
     }
-    write_json(json_output, payload)
+    write_json_document(json_output, payload, sort_keys=True)
     md_output.parent.mkdir(parents=True, exist_ok=True)
     md_output.write_text(markdown_report(payload))
 

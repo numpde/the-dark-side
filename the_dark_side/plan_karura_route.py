@@ -12,7 +12,7 @@ import random
 
 from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
-from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR
+from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR, write_json_document
 from .karura_routing import (
     PlannerConfig,
     load_route_graph,
@@ -20,7 +20,6 @@ from .karura_routing import (
     PLANNER_NAMES,
     resolve_junction_ref,
     route_asset_payload,
-    write_json,
 )
 
 
@@ -90,7 +89,7 @@ def main() -> None:
         seed=args.seed,
         candidates=candidates,
     )
-    write_json(output, payload)
+    write_json_document(output, payload, sort_keys=True)
 
     top = payload["routes"][0] if payload["routes"] else None
     summary = {

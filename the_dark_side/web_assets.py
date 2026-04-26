@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from .asset_contracts import load_required_elevation_asset, load_required_patchset
@@ -12,11 +11,6 @@ from .karura_common import (
     include_editor_way,
     repo_rel,
 )
-
-
-def write_json(path: Path, payload: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
 def rounded_contig_elevations(node_ids: list[int] | tuple[int, ...], node_elevations: dict[int, float] | None) -> list[float] | None:

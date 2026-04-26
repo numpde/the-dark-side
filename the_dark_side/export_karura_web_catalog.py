@@ -34,6 +34,7 @@ from .karura_common import (
     ROUTE_CATALOG_JSON,
     repo_rel,
     utc_now_z,
+    write_json_document,
 )
 from .karura_routing import (
     PlannerConfig,
@@ -45,10 +46,7 @@ from .karura_routing import (
     planner_for,
     resolve_junction_ref,
 )
-from .web_assets import (
-    load_elevation_asset,
-    write_json,
-)
+from .web_assets import load_elevation_asset
 
 
 DEFAULT_CATALOG_JSON = ROUTE_CATALOG_JSON
@@ -488,7 +486,7 @@ def build_catalog_payload(args: argparse.Namespace) -> dict:
 
 def export_catalog(args: argparse.Namespace) -> dict:
     payload = build_catalog_payload(args)
-    write_json(args.output_catalog, payload)
+    write_json_document(args.output_catalog, payload)
     return payload
 
 

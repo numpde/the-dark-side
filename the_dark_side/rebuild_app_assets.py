@@ -20,6 +20,7 @@ from .karura_common import (
     FRONTEND_MANIFEST_JSON,
     repo_rel,
     utc_now_z,
+    write_json_document,
 )
 from .rebuild_editor_assets import (
     build_frontend_manifest,
@@ -30,7 +31,6 @@ from .karura_routing import load_route_graph
 from .web_assets import (
     load_elevation_asset,
     network_geojson,
-    write_json as write_export_json,
 )
 
 
@@ -144,7 +144,7 @@ def rebuild_app_assets(
         },
         node_elevations=node_elevations if elevation_matches_graph else None,
     )
-    write_export_json(args.output_network, route_network)
+    write_json_document(args.output_network, route_network)
     junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     frontend_manifest = build_frontend_manifest()
@@ -157,8 +157,8 @@ def rebuild_app_assets(
         build_config_payload=build_config_payload,
         elevation_matches_graph=elevation_matches_graph,
     )
-    write_export_json(FRONTEND_MANIFEST_JSON, frontend_manifest)
-    write_export_json(args.output_app_manifest, app_manifest)
+    write_json_document(FRONTEND_MANIFEST_JSON, frontend_manifest)
+    write_json_document(args.output_app_manifest, app_manifest)
     return {
         "route_network": route_network,
         "app_manifest": app_manifest,

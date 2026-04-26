@@ -11,6 +11,8 @@ import urllib.request
 from hashlib import sha1
 from pathlib import Path
 
+from .karura_common import write_json_document
+
 
 EARTH_RADIUS_M = 6371000.0
 OPEN_METEO_ELEVATION_URL = "https://api.open-meteo.com/v1/elevation"
@@ -249,8 +251,7 @@ class OpenMeteoElevationClient:
     def persist_cache(self) -> None:
         if not self.cache_path:
             return
-        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        self.cache_path.write_text(json.dumps(self.cache, indent=2, sort_keys=True) + "\n")
+        write_json_document(self.cache_path, self.cache, sort_keys=True)
 
     def fetch_batch(self, points: list[list[float]]) -> list[float | None]:
         latitudes = ",".join(f"{lat:.6f}" for lon, lat in points)
@@ -353,8 +354,7 @@ class OpenTopoDataElevationClient:
     def persist_cache(self) -> None:
         if not self.cache_path:
             return
-        self.cache_path.parent.mkdir(parents=True, exist_ok=True)
-        self.cache_path.write_text(json.dumps(self.cache, indent=2, sort_keys=True) + "\n")
+        write_json_document(self.cache_path, self.cache, sort_keys=True)
 
     @staticmethod
     def cache_key(encoded_polyline: str, sample_count: int) -> str:
