@@ -13,7 +13,7 @@ from PIL import ImageDraw
 from .asset_contracts import load_route_asset_document
 from .karura_common import SCREENSHOT, VIEWPORT, print_json_document
 from .karura_routing import load_route_asset_graph, orient_contig_node_ids
-from .render_support import load_viewport, prepare_base_image, project_lon_lat
+from .render_support import load_viewport, prepare_base_image, project_graph_node_ids, project_lon_lat
 
 
 ROUTE_START_COLOR = (36, 96, 220, 235)
@@ -78,10 +78,7 @@ def main() -> None:
 
     if not args.hide_background_contigs:
         for contig in graph.contigs.values():
-            points = [
-                project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
-                for node_id in contig.node_ids
-            ]
+            points = project_graph_node_ids(graph, contig.node_ids, viewport=viewport, size=image.size)
             draw.line(points, fill=BACKGROUND_CONTIG_COLOR, width=3)
 
     route_total_length = max(float(route["total_length_m"]), 1.0)
@@ -93,10 +90,7 @@ def main() -> None:
             int(step["from_node_id"]),
             int(step["to_node_id"]),
         )
-        points = [
-            project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, image.size)
-            for node_id in oriented
-        ]
+        points = project_graph_node_ids(graph, oriented, viewport=viewport, size=image.size)
         for first, second in zip(points, points[1:]):
             piece_length = segment_length(first, second)
             midpoint_length = traversed_length + piece_length / 2

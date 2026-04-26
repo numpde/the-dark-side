@@ -132,3 +132,16 @@ def load_overlay_items_from_patchset(path: Path) -> list[tuple[str, list[tuple[t
         if segments:
             items.append((str(patch["id"]), segments, patch))
     return items
+
+
+def project_graph_node_ids(
+    graph,
+    node_ids: Iterable[int],
+    *,
+    viewport: dict,
+    size: tuple[int, int],
+) -> list[tuple[float, float]]:
+    return [
+        project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, size)
+        for node_id in node_ids
+    ]
