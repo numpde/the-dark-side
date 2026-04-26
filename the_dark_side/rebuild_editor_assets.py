@@ -12,7 +12,6 @@ from pathlib import Path
 from .apply_karura_patches import apply_patchset, load_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map, write_json
-from .export_karura_web_catalog import build_editor_graph_payload, write_json as write_export_json
 from .junction_bindings import build_junction_bindings, load_junction_catalog
 from .karura_common import (
     APP_MODULE_PATHS,
@@ -31,6 +30,7 @@ from .karura_common import (
     digest_paths,
 )
 from .karura_common import include_ride_way
+from .web_assets import build_editor_graph_payload, write_json as write_export_json
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

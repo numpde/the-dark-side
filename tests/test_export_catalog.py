@@ -11,11 +11,11 @@ from the_dark_side.export_karura_web_catalog import (
     canonicalize_route_node_ids,
     dedupe_records,
     family_id_for,
-    load_elevation_asset,
     parse_args as parse_export_args,
     plan_catalog_records,
 )
 from the_dark_side.karura_common import LOCAL_ROUTING_STATE_TAG, is_currently_unavailable
+from the_dark_side.web_assets import load_elevation_asset
 
 
 def dummy_record(*, route_id: str, route_node_ids: tuple[int, ...], quality_score: float, direction_from_family: str) -> RouteRecord:

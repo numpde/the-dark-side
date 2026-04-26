@@ -9,7 +9,6 @@ import json
 from pathlib import Path
 
 from .build_config import load_catalog_build_config
-from .export_karura_web_catalog import load_elevation_asset, network_geojson
 from .karura_common import (
     APP_MANIFEST_JSON,
     CATALOG_BUILD_JSON,
@@ -25,6 +24,7 @@ from .karura_common import (
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_editor_assets import verify_editor_assets
+from .web_assets import load_elevation_asset, network_geojson
 
 
 def parse_args() -> argparse.Namespace:

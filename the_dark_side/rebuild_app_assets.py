@@ -9,11 +9,6 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .export_karura_web_catalog import (
-    load_elevation_asset,
-    network_geojson,
-    write_json as write_export_json,
-)
 from .karura_common import (
     APP_MANIFEST_JSON,
     CATALOG_BUILD_JSON,
@@ -34,6 +29,11 @@ from .rebuild_editor_assets import (
 )
 from .build_config import catalog_build_config_digest, load_catalog_build_config
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
+from .web_assets import (
+    load_elevation_asset,
+    network_geojson,
+    write_json as write_export_json,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

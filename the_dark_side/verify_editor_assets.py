@@ -13,7 +13,6 @@ from types import SimpleNamespace
 from .apply_karura_patches import apply_patchset, load_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
-from .export_karura_web_catalog import build_editor_graph_payload_from_map
 from .junction_bindings import build_junction_bindings, load_junction_catalog
 from .karura_common import (
     CONTIGS_JSON,
@@ -31,6 +30,7 @@ from .karura_common import (
 )
 from .karura_common import include_ride_way
 from .rebuild_editor_assets import build_editor_manifest, build_frontend_manifest
+from .web_assets import build_editor_graph_payload_from_map
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
