@@ -8,8 +8,6 @@ from pathlib import Path
 
 from PIL import ImageDraw
 
-from .asset_contracts import load_required_patchset
-from .download_karura_map import load_map
 from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
@@ -21,14 +19,13 @@ from .karura_common import (
     print_json_document,
     resolve_map_json,
 )
-from .karura_routing import load_route_graph
 from .render_support import (
     load_viewport,
-    mercator_lookup_from_map,
-    mercator_lookup_from_route_graph,
+    load_overlay_items_from_map,
+    load_overlay_items_from_patchset,
+    load_overlay_items_from_route_graph,
     prepare_base_image,
     project_mercator_point,
-    segments_from_node_pairs,
 )
 
 
@@ -56,57 +53,6 @@ def include_way(way_id, tags, mode):
     return include_ride_way(way_id, tags)
 
 
-def parse_map(path, mode):
-    karura_map = load_map(path)
-    nodes = mercator_lookup_from_map(karura_map)
-
-    filtered = []
-    for way_id, way in karura_map.ways.items():
-        tags = way.tags
-        if not include_way(way_id, tags, mode):
-            continue
-        segments = segments_from_node_pairs(way.segment_pairs, node_lookup=nodes)
-        if segments:
-            filtered.append((way_id, segments, tags))
-
-    return filtered
-
-
-def parse_contigs(path):
-    graph = load_route_graph(path)
-    nodes = mercator_lookup_from_route_graph(graph)
-
-    contigs = []
-    for contig in graph.contigs.values():
-        segments = segments_from_node_pairs(
-            zip(contig.node_ids, contig.node_ids[1:]),
-            node_lookup=nodes,
-        )
-        if segments:
-            contigs.append((contig.id, segments, contig))
-
-    return contigs
-
-
-def parse_patches(path):
-    payload = load_required_patchset(path, label="patchset file")
-    patch_items = []
-    for patch in payload["patches"]:
-        if not patch.get("enabled", True):
-            continue
-        if patch.get("op") != "add_way":
-            continue
-        node_lookup = {
-            int(node["id"]): (mercator(float(node["lon"]), float(node["lat"])))
-            for node in patch.get("nodes", [])
-        }
-        node_ids = [int(node_id) for node_id in patch.get("node_ids", [])]
-        segments = segments_from_node_pairs(zip(node_ids, node_ids[1:]), node_lookup=node_lookup)
-        if segments:
-            patch_items.append((str(patch["id"]), segments, patch))
-    return patch_items
-
-
 def main():
     args = parse_args()
     viewport = load_viewport(args.viewport)
@@ -115,11 +61,14 @@ def main():
 
     map_json = args.map_json or resolve_map_json()
     if args.mode == "contigs":
-        ways = parse_contigs(args.contigs_json)
+        ways = load_overlay_items_from_route_graph(args.contigs_json)
     elif args.mode == "patches":
-        ways = parse_patches(args.patches_json)
+        ways = load_overlay_items_from_patchset(args.patches_json)
     else:
-        ways = parse_map(map_json, args.mode)
+        ways = load_overlay_items_from_map(
+            map_json,
+            include_way=lambda way_id, tags: include_way(way_id, tags, args.mode),
+        )
     rng = random.Random(7)
     segment_count = 0
 

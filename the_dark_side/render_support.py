@@ -9,8 +9,10 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
-from .asset_contracts import load_required_json
+from .asset_contracts import load_required_json, load_required_patchset
+from .download_karura_map import load_map
 from .karura_common import mercator
+from .karura_routing import load_route_graph
 
 
 BASE_IMAGE_ALPHA = 0.7
@@ -83,3 +85,50 @@ def segments_from_node_pairs(
             continue
         segments.append((node_lookup[first_id], node_lookup[second_id]))
     return segments
+
+
+def load_overlay_items_from_map(path: Path, *, include_way) -> list[tuple[int, list[tuple[tuple[float, float], tuple[float, float]]], dict]]:
+    karura_map = load_map(path)
+    nodes = mercator_lookup_from_map(karura_map)
+    items = []
+    for way_id, way in karura_map.ways.items():
+        tags = way.tags
+        if not include_way(way_id, tags):
+            continue
+        segments = segments_from_node_pairs(way.segment_pairs, node_lookup=nodes)
+        if segments:
+            items.append((way_id, segments, tags))
+    return items
+
+
+def load_overlay_items_from_route_graph(path: Path) -> list[tuple[int, list[tuple[tuple[float, float], tuple[float, float]]], object]]:
+    graph = load_route_graph(path)
+    nodes = mercator_lookup_from_route_graph(graph)
+    items = []
+    for contig in graph.contigs.values():
+        segments = segments_from_node_pairs(
+            zip(contig.node_ids, contig.node_ids[1:]),
+            node_lookup=nodes,
+        )
+        if segments:
+            items.append((contig.id, segments, contig))
+    return items
+
+
+def load_overlay_items_from_patchset(path: Path) -> list[tuple[str, list[tuple[tuple[float, float], tuple[float, float]]], dict]]:
+    payload = load_required_patchset(path, label="patchset file")
+    items = []
+    for patch in payload["patches"]:
+        if not patch.get("enabled", True):
+            continue
+        if patch.get("op") != "add_way":
+            continue
+        node_lookup = {
+            int(node["id"]): mercator(float(node["lon"]), float(node["lat"]))
+            for node in patch.get("nodes", [])
+        }
+        node_ids = [int(node_id) for node_id in patch.get("node_ids", [])]
+        segments = segments_from_node_pairs(zip(node_ids, node_ids[1:]), node_lookup=node_lookup)
+        if segments:
+            items.append((str(patch["id"]), segments, patch))
+    return items
