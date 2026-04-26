@@ -2,10 +2,15 @@ from __future__ import annotations
 
 import random
 import unittest
+from pathlib import Path
 
-from the_dark_side.karura_common import CONTIGS_JSON, JUNCTIONS_JSON
+from the_dark_side.karura_common import CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
 from the_dark_side.karura_routing import (
+    ContigRecord,
+    NodeRecord,
     PlannerConfig,
+    RouteGraph,
+    load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
     plan_route_beam,
@@ -24,8 +29,9 @@ class RouteDiversityAuditTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.graph = load_route_graph(CONTIGS_JSON)
         cls.junction_catalog = load_junction_catalog(JUNCTIONS_JSON)
-        cls.start = resolve_junction_ref(cls.junction_catalog, "family_trail_west", cls.graph.asset_id)
-        cls.end = resolve_junction_ref(cls.junction_catalog, "kiambu_side_exit", cls.graph.asset_id)
+        cls.junction_bindings = load_junction_bindings(JUNCTION_BINDINGS_JSON)
+        cls.start = resolve_junction_ref(cls.junction_catalog, "family_trail_west", cls.graph.asset_id, cls.junction_bindings)
+        cls.end = resolve_junction_ref(cls.junction_catalog, "kiambu_side_exit", cls.graph.asset_id, cls.junction_bindings)
         cls.config = PlannerConfig(
             rollout_trials=120,
             beam_rounds=160,
@@ -103,6 +109,107 @@ class RouteDiversityAuditTest(unittest.TestCase):
             1,
             "mcts planner should produce more than one distinct top route across the audit seeds",
         )
+
+    def test_planners_avoid_unavailable_contigs(self) -> None:
+        graph = RouteGraph(
+            asset_id="synthetic-policy-graph",
+            asset_kind="contig_graph",
+            source_path=Path("<synthetic>"),
+            nodes={
+                1: NodeRecord(id=1, lat=0.0, lon=0.0, degree=2),
+                2: NodeRecord(id=2, lat=0.0, lon=1.0, degree=2),
+                3: NodeRecord(id=3, lat=1.0, lon=0.0, degree=2),
+                4: NodeRecord(id=4, lat=1.0, lon=1.0, degree=2),
+            },
+            contigs={
+                10: ContigRecord(
+                    id=10,
+                    endpoint_node_ids=(1, 2),
+                    node_ids=(1, 2),
+                    length_m=100.0,
+                    is_cycle=False,
+                    segment_count=1,
+                    way_ids=(10,),
+                    way_names=(),
+                    highway_types={"path": 1},
+                    tags={},
+                ),
+                20: ContigRecord(
+                    id=20,
+                    endpoint_node_ids=(2, 4),
+                    node_ids=(2, 4),
+                    length_m=100.0,
+                    is_cycle=False,
+                    segment_count=1,
+                    way_ids=(20,),
+                    way_names=(),
+                    highway_types={"path": 1},
+                    tags={"local:unavailable_until": "2099-12-31"},
+                ),
+                30: ContigRecord(
+                    id=30,
+                    endpoint_node_ids=(1, 3),
+                    node_ids=(1, 3),
+                    length_m=100.0,
+                    is_cycle=False,
+                    segment_count=1,
+                    way_ids=(30,),
+                    way_names=(),
+                    highway_types={"path": 1},
+                    tags={},
+                ),
+                40: ContigRecord(
+                    id=40,
+                    endpoint_node_ids=(3, 4),
+                    node_ids=(3, 4),
+                    length_m=100.0,
+                    is_cycle=False,
+                    segment_count=1,
+                    way_ids=(40,),
+                    way_names=(),
+                    highway_types={"path": 1},
+                    tags={},
+                ),
+            },
+            adjacency={
+                1: [(10, 2), (30, 3)],
+                2: [(10, 1), (20, 4)],
+                3: [(30, 1), (40, 4)],
+                4: [(20, 2), (40, 3)],
+            },
+            articulation_points=set(),
+        )
+        config = PlannerConfig(
+            rollout_trials=24,
+            beam_rounds=40,
+            beam_width=24,
+            beam_branch_factor=3,
+            beam_selection_pool=3,
+            beam_selection_window=6,
+            mcts_iterations=60,
+            mcts_rollout_samples=2,
+            keep_best=3,
+            max_steps=8,
+        )
+        expected_sequence = (30, 40)
+
+        for algorithm in ("naive", "beam", "mcts"):
+            with self.subTest(algorithm=algorithm):
+                rng = random.Random(7)
+                if algorithm == "naive":
+                    candidates = plan_route_naive(graph, start_node_id=1, end_node_id=4, config=config, rng=rng)
+                elif algorithm == "beam":
+                    candidates = plan_route_beam(graph, start_node_id=1, end_node_id=4, config=config, rng=rng)
+                else:
+                    candidates = plan_route_mcts(graph, start_node_id=1, end_node_id=4, config=config, rng=rng)
+
+                self.assertTrue(candidates, f"{algorithm} returned no candidates on synthetic graph")
+                self.assertTrue(all(candidate.complete for candidate in candidates), f"{algorithm} returned incomplete candidates")
+                self.assertTrue(
+                    all(20 not in candidate.contig_id_sequence for candidate in candidates),
+                    f"{algorithm} returned a route through an unavailable contig",
+                )
+                self.assertEqual(candidates[0].contig_id_sequence, expected_sequence)
 
 
 if __name__ == "__main__":

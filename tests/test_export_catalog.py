@@ -12,7 +12,10 @@ from the_dark_side.export_karura_web_catalog import (
     dedupe_records,
     family_id_for,
     load_elevation_asset,
+    parse_args as parse_export_args,
+    plan_catalog_records,
 )
+from the_dark_side.karura_common import LOCAL_ROUTING_STATE_TAG, is_currently_unavailable
 
 
 def dummy_record(*, route_id: str, route_node_ids: tuple[int, ...], quality_score: float, direction_from_family: str) -> RouteRecord:
@@ -100,6 +103,40 @@ class ExportCatalogNormalizationTest(unittest.TestCase):
 
         self.assertEqual(elevations, {})
         self.assertFalse(matches)
+
+    def test_selected_routes_do_not_traverse_excluded_or_unavailable_contigs(self) -> None:
+        args = parse_export_args(
+            [
+                "--algorithm", "naive",
+                "--algorithm", "beam",
+                "--algorithm", "mcts",
+                "--seed-start", "1",
+                "--seed-end", "1",
+                "--candidate-limit-per-run", "1",
+                "--routes-per-scenario", "1",
+                "--selection-window", "1",
+            ]
+        )
+
+        planned = plan_catalog_records(args)
+        graph = planned["graph"]
+        selected_records_by_scenario = planned["selected_records_by_scenario"]
+        blocked_contig_ids = {
+            contig.id
+            for contig in graph.contigs.values()
+            if contig.tags.get(LOCAL_ROUTING_STATE_TAG) == "exclude"
+            or is_currently_unavailable(contig.tags)
+        }
+
+        self.assertTrue(blocked_contig_ids, "expected at least one excluded or unavailable contig in the current fixture")
+
+        for records in selected_records_by_scenario.values():
+            for record in records:
+                traversed = set(record.candidate.contig_id_sequence)
+                self.assertTrue(
+                    traversed.isdisjoint(blocked_contig_ids),
+                    f"route {record.route_id} traverses blocked contigs {sorted(traversed & blocked_contig_ids)}",
+                )
 
 
 if __name__ == "__main__":

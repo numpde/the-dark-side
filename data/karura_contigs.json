@@ -485,7 +485,9 @@
           2847824295
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         1332841838
       ],
@@ -3069,7 +3071,9 @@
           2068386553
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         1136914474
       ],
@@ -3517,20 +3521,20 @@
     {
       "bounds": [
         36.8322194,
-        -1.2446832,
-        36.8337163,
+        -1.2440992,
+        36.8330424,
         -1.2420622
       ],
       "endpoint_node_ids": [
         748782349,
-        2847945484
+        11952184360
       ],
       "highway_types": {
-        "residential": 18
+        "residential": 6
       },
       "id": 46,
       "is_cycle": false,
-      "length_m": 458.895,
+      "length_m": 264.182,
       "node_ids": [
         748782349,
         747730068,
@@ -3538,21 +3542,9 @@
         11952165188,
         747730105,
         747730086,
-        11952184360,
-        11952184361,
-        11952184362,
-        11952184363,
-        11952184364,
-        747730032,
-        11952184365,
-        11952184366,
-        11952184367,
-        11952184368,
-        11952184369,
-        747730109,
-        2847945484
+        11952184360
       ],
-      "segment_count": 18,
+      "segment_count": 6,
       "segment_pairs": [
         [
           748782349,
@@ -3577,57 +3569,11 @@
         [
           747730086,
           11952184360
-        ],
-        [
-          11952184360,
-          11952184361
-        ],
-        [
-          11952184361,
-          11952184362
-        ],
-        [
-          11952184362,
-          11952184363
-        ],
-        [
-          11952184363,
-          11952184364
-        ],
-        [
-          11952184364,
-          747730032
-        ],
-        [
-          747730032,
-          11952184365
-        ],
-        [
-          11952184365,
-          11952184366
-        ],
-        [
-          11952184366,
-          11952184367
-        ],
-        [
-          11952184367,
-          11952184368
-        ],
-        [
-          11952184368,
-          11952184369
-        ],
-        [
-          11952184369,
-          747730109
-        ],
-        [
-          747730109,
-          2847945484
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         60200210
       ],
@@ -3636,34 +3582,70 @@
     {
       "bounds": [
         36.8325244,
-        -1.2422408,
-        36.8328499,
+        -1.2434983,
+        36.8347637,
         -1.2420622
       ],
       "endpoint_node_ids": [
         748782349,
-        11952165378
+        6503768714
       ],
       "highway_types": {
-        "track": 1
+        "track": 8
       },
       "id": 47,
       "is_cycle": false,
-      "length_m": 41.277,
+      "length_m": 299.861,
       "node_ids": [
         748782349,
-        11952165378
+        11952165378,
+        748782346,
+        1562483598,
+        1562483597,
+        1562490564,
+        11957087623,
+        1562490565,
+        6503768714
       ],
-      "segment_count": 1,
+      "segment_count": 8,
       "segment_pairs": [
         [
           748782349,
           11952165378
+        ],
+        [
+          11952165378,
+          748782346
+        ],
+        [
+          748782346,
+          1562483598
+        ],
+        [
+          1562483598,
+          1562483597
+        ],
+        [
+          1562483597,
+          1562490564
+        ],
+        [
+          1562490564,
+          11957087623
+        ],
+        [
+          11957087623,
+          1562490565
+        ],
+        [
+          1562490565,
+          6503768714
         ]
       ],
       "tags": {},
       "way_ids": [
-        60257575
+        60257575,
+        142776560
       ],
       "way_names": []
     },
@@ -4175,7 +4157,9 @@
           2068386553
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         142776098,
         196510840,
@@ -5212,60 +5196,6 @@
     },
     {
       "bounds": [
-        36.8335124,
-        -1.2434983,
-        36.8347637,
-        -1.2425208
-      ],
-      "endpoint_node_ids": [
-        1562483598,
-        6503768714
-      ],
-      "highway_types": {
-        "track": 5
-      },
-      "id": 74,
-      "is_cycle": false,
-      "length_m": 178.521,
-      "node_ids": [
-        1562483598,
-        1562483597,
-        1562490564,
-        11957087623,
-        1562490565,
-        6503768714
-      ],
-      "segment_count": 5,
-      "segment_pairs": [
-        [
-          1562483598,
-          1562483597
-        ],
-        [
-          1562483597,
-          1562490564
-        ],
-        [
-          1562490564,
-          11957087623
-        ],
-        [
-          11957087623,
-          1562490565
-        ],
-        [
-          1562490565,
-          6503768714
-        ]
-      ],
-      "tags": {},
-      "way_ids": [
-        142776560
-      ],
-      "way_names": []
-    },
-    {
-      "bounds": [
         36.8250104,
         -1.2393893,
         36.8296896,
@@ -5278,7 +5208,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 75,
+      "id": 74,
       "is_cycle": false,
       "length_m": 525.27,
       "node_ids": [
@@ -5329,7 +5259,7 @@
       "highway_types": {
         "unclassified": 1
       },
-      "id": 76,
+      "id": 75,
       "is_cycle": false,
       "length_m": 3.734,
       "node_ids": [
@@ -5365,7 +5295,7 @@
       "highway_types": {
         "unclassified": 3
       },
-      "id": 77,
+      "id": 76,
       "is_cycle": false,
       "length_m": 48.037,
       "node_ids": [
@@ -5411,7 +5341,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 78,
+      "id": 77,
       "is_cycle": false,
       "length_m": 4.654,
       "node_ids": [
@@ -5447,7 +5377,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 79,
+      "id": 78,
       "is_cycle": false,
       "length_m": 16.653,
       "node_ids": [
@@ -5481,7 +5411,7 @@
       "highway_types": {
         "path": 20
       },
-      "id": 80,
+      "id": 79,
       "is_cycle": false,
       "length_m": 390.313,
       "node_ids": [
@@ -5610,7 +5540,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 81,
+      "id": 80,
       "is_cycle": false,
       "length_m": 301.634,
       "node_ids": [
@@ -5692,7 +5622,7 @@
         "footway": 1,
         "path": 22
       },
-      "id": 82,
+      "id": 81,
       "is_cycle": false,
       "length_m": 558.657,
       "node_ids": [
@@ -5816,7 +5746,9 @@
           5518868721
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         142776098,
         575075442,
@@ -5838,7 +5770,7 @@
       "highway_types": {
         "unclassified": 5
       },
-      "id": 83,
+      "id": 82,
       "is_cycle": false,
       "length_m": 67.528,
       "node_ids": [
@@ -5892,7 +5824,7 @@
         6503767383
       ],
       "highway_types": {},
-      "id": 84,
+      "id": 83,
       "is_cycle": false,
       "length_m": 48.525,
       "node_ids": [
@@ -5929,7 +5861,7 @@
         6503767383
       ],
       "highway_types": {},
-      "id": 85,
+      "id": 84,
       "is_cycle": false,
       "length_m": 109.098,
       "node_ids": [
@@ -5983,7 +5915,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 86,
+      "id": 85,
       "is_cycle": false,
       "length_m": 131.553,
       "node_ids": [
@@ -6047,7 +5979,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 87,
+      "id": 86,
       "is_cycle": false,
       "length_m": 24.138,
       "node_ids": [
@@ -6086,7 +6018,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 88,
+      "id": 87,
       "is_cycle": false,
       "length_m": 56.506,
       "node_ids": [
@@ -6140,7 +6072,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 89,
+      "id": 88,
       "is_cycle": false,
       "length_m": 19.318,
       "node_ids": [
@@ -6179,7 +6111,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 90,
+      "id": 89,
       "is_cycle": false,
       "length_m": 83.378,
       "node_ids": [
@@ -6238,7 +6170,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 91,
+      "id": 90,
       "is_cycle": false,
       "length_m": 22.089,
       "node_ids": [
@@ -6274,7 +6206,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 92,
+      "id": 91,
       "is_cycle": false,
       "length_m": 63.033,
       "node_ids": [
@@ -6323,7 +6255,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 93,
+      "id": 92,
       "is_cycle": false,
       "length_m": 70.493,
       "node_ids": [
@@ -6374,7 +6306,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 94,
+      "id": 93,
       "is_cycle": false,
       "length_m": 99.932,
       "node_ids": [
@@ -6435,7 +6367,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 95,
+      "id": 94,
       "is_cycle": false,
       "length_m": 79.313,
       "node_ids": [
@@ -6494,7 +6426,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 96,
+      "id": 95,
       "is_cycle": false,
       "length_m": 8.796,
       "node_ids": [
@@ -6528,7 +6460,7 @@
       "highway_types": {
         "path": 30
       },
-      "id": 97,
+      "id": 96,
       "is_cycle": false,
       "length_m": 607.239,
       "node_ids": [
@@ -6709,7 +6641,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 98,
+      "id": 97,
       "is_cycle": false,
       "length_m": 108.718,
       "node_ids": [
@@ -6756,7 +6688,7 @@
         2068421872
       ],
       "highway_types": {},
-      "id": 99,
+      "id": 98,
       "is_cycle": false,
       "length_m": 72.701,
       "node_ids": [
@@ -6813,7 +6745,7 @@
         2068421872
       ],
       "highway_types": {},
-      "id": 100,
+      "id": 99,
       "is_cycle": false,
       "length_m": 292.084,
       "node_ids": [
@@ -6887,7 +6819,7 @@
       "highway_types": {
         "unclassified": 1
       },
-      "id": 101,
+      "id": 100,
       "is_cycle": false,
       "length_m": 2.363,
       "node_ids": [
@@ -6901,9 +6833,7 @@
           6784413870
         ]
       ],
-      "tags": {
-        "local:routing_state": "exclude"
-      },
+      "tags": {},
       "way_ids": [
         60200207
       ],
@@ -6925,7 +6855,7 @@
       "highway_types": {
         "footway": 43
       },
-      "id": 102,
+      "id": 101,
       "is_cycle": false,
       "length_m": 1248.093,
       "node_ids": [
@@ -7173,7 +7103,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 103,
+      "id": 102,
       "is_cycle": false,
       "length_m": 298.15,
       "node_ids": [
@@ -7236,7 +7166,7 @@
       "highway_types": {
         "path": 21
       },
-      "id": 104,
+      "id": 103,
       "is_cycle": false,
       "length_m": 580.285,
       "node_ids": [
@@ -7372,7 +7302,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 105,
+      "id": 104,
       "is_cycle": false,
       "length_m": 147.134,
       "node_ids": [
@@ -7423,7 +7353,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 106,
+      "id": 105,
       "is_cycle": false,
       "length_m": 338.603,
       "node_ids": [
@@ -7482,7 +7412,7 @@
       "highway_types": {
         "trunk": 1
       },
-      "id": 107,
+      "id": 106,
       "is_cycle": false,
       "length_m": 77.885,
       "node_ids": [
@@ -7518,7 +7448,7 @@
       "highway_types": {
         "track": 2
       },
-      "id": 108,
+      "id": 107,
       "is_cycle": false,
       "length_m": 28.452,
       "node_ids": [
@@ -7557,7 +7487,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 109,
+      "id": 108,
       "is_cycle": false,
       "length_m": 75.488,
       "node_ids": [
@@ -7571,7 +7501,9 @@
           8536024877
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         919077290
       ],
@@ -7591,7 +7523,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 110,
+      "id": 109,
       "is_cycle": false,
       "length_m": 97.648,
       "node_ids": [
@@ -7642,7 +7574,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 111,
+      "id": 110,
       "is_cycle": false,
       "length_m": 120.544,
       "node_ids": [
@@ -7676,7 +7608,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 112,
+      "id": 111,
       "is_cycle": false,
       "length_m": 147.779,
       "node_ids": [
@@ -7752,7 +7684,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 113,
+      "id": 112,
       "is_cycle": false,
       "length_m": 148.835,
       "node_ids": [
@@ -7803,7 +7735,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 114,
+      "id": 113,
       "is_cycle": false,
       "length_m": 251.671,
       "node_ids": [
@@ -7862,7 +7794,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 115,
+      "id": 114,
       "is_cycle": false,
       "length_m": 228.608,
       "node_ids": [
@@ -7941,7 +7873,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 116,
+      "id": 115,
       "is_cycle": false,
       "length_m": 410.347,
       "node_ids": [
@@ -8005,7 +7937,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 117,
+      "id": 116,
       "is_cycle": false,
       "length_m": 110.785,
       "node_ids": [
@@ -8074,7 +8006,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 118,
+      "id": 117,
       "is_cycle": false,
       "length_m": 86.156,
       "node_ids": [
@@ -8108,7 +8040,7 @@
       "highway_types": {
         "path": 15
       },
-      "id": 119,
+      "id": 118,
       "is_cycle": false,
       "length_m": 251.089,
       "node_ids": [
@@ -8212,7 +8144,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 120,
+      "id": 119,
       "is_cycle": false,
       "length_m": 27.57,
       "node_ids": [
@@ -8251,7 +8183,7 @@
       "highway_types": {
         "path": 20
       },
-      "id": 121,
+      "id": 120,
       "is_cycle": false,
       "length_m": 313.425,
       "node_ids": [
@@ -8380,7 +8312,7 @@
       "highway_types": {
         "footway": 49
       },
-      "id": 122,
+      "id": 121,
       "is_cycle": false,
       "length_m": 1071.763,
       "node_ids": [
@@ -8660,7 +8592,7 @@
       "highway_types": {
         "footway": 48
       },
-      "id": 123,
+      "id": 122,
       "is_cycle": false,
       "length_m": 1163.242,
       "node_ids": [
@@ -8931,7 +8863,7 @@
       "highway_types": {
         "footway": 13
       },
-      "id": 124,
+      "id": 123,
       "is_cycle": false,
       "length_m": 266.769,
       "node_ids": [
@@ -9027,7 +8959,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 125,
+      "id": 124,
       "is_cycle": false,
       "length_m": 341.199,
       "node_ids": [
@@ -9118,7 +9050,7 @@
       "highway_types": {
         "path": 23
       },
-      "id": 126,
+      "id": 125,
       "is_cycle": false,
       "length_m": 391.872,
       "node_ids": [
@@ -9264,7 +9196,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 127,
+      "id": 126,
       "is_cycle": false,
       "length_m": 109.485,
       "node_ids": [
@@ -9298,7 +9230,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 128,
+      "id": 127,
       "is_cycle": false,
       "length_m": 186.265,
       "node_ids": [
@@ -9389,7 +9321,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 129,
+      "id": 128,
       "is_cycle": false,
       "length_m": 129.075,
       "node_ids": [
@@ -9433,7 +9365,9 @@
           8231754957
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         280734301
       ],
@@ -9453,7 +9387,7 @@
       "highway_types": {
         "footway": 17
       },
-      "id": 130,
+      "id": 129,
       "is_cycle": false,
       "length_m": 318.472,
       "node_ids": [
@@ -9569,7 +9503,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 131,
+      "id": 130,
       "is_cycle": false,
       "length_m": 160.966,
       "node_ids": [
@@ -9608,9 +9542,7 @@
           6503767379
         ]
       ],
-      "tags": {
-        "local:routing_state": "include"
-      },
+      "tags": {},
       "way_ids": [
         692748277
       ],
@@ -9630,7 +9562,7 @@
       "highway_types": {
         "unclassified": 6
       },
-      "id": 132,
+      "id": 131,
       "is_cycle": false,
       "length_m": 146.508,
       "node_ids": [
@@ -9681,6 +9613,95 @@
     },
     {
       "bounds": [
+        36.832687,
+        -1.2446832,
+        36.8337163,
+        -1.2440992
+      ],
+      "endpoint_node_ids": [
+        2847945484,
+        11952184360
+      ],
+      "highway_types": {
+        "residential": 12
+      },
+      "id": 132,
+      "is_cycle": false,
+      "length_m": 194.713,
+      "node_ids": [
+        2847945484,
+        747730109,
+        11952184369,
+        11952184368,
+        11952184367,
+        11952184366,
+        11952184365,
+        747730032,
+        11952184364,
+        11952184363,
+        11952184362,
+        11952184361,
+        11952184360
+      ],
+      "segment_count": 12,
+      "segment_pairs": [
+        [
+          2847945484,
+          747730109
+        ],
+        [
+          747730109,
+          11952184369
+        ],
+        [
+          11952184369,
+          11952184368
+        ],
+        [
+          11952184368,
+          11952184367
+        ],
+        [
+          11952184367,
+          11952184366
+        ],
+        [
+          11952184366,
+          11952184365
+        ],
+        [
+          11952184365,
+          747730032
+        ],
+        [
+          747730032,
+          11952184364
+        ],
+        [
+          11952184364,
+          11952184363
+        ],
+        [
+          11952184363,
+          11952184362
+        ],
+        [
+          11952184362,
+          11952184361
+        ],
+        [
+          11952184361,
+          11952184360
+        ]
+      ],
+      "tags": {},
+      "way_ids": [
+        60200210
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
         36.841838,
         -1.2521633,
         36.8420879,
@@ -9717,7 +9738,9 @@
           2847945615
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         280734413
       ],
@@ -9756,7 +9779,9 @@
           2847945649
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         280734415
       ],
@@ -9829,7 +9854,9 @@
           6503768700
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:routing_state": "exclude"
+      },
       "way_ids": [
         142776101
       ],
@@ -10203,7 +10230,9 @@
           2847949919
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:unavailable_until": "2026-06-30"
+      },
       "way_ids": [
         280734652
       ],
@@ -11180,7 +11209,9 @@
           2847949919
         ]
       ],
-      "tags": {},
+      "tags": {
+        "local:unavailable_until": "2026-06-30"
+      },
       "way_ids": [
         280734652
       ],
@@ -11188,28 +11219,31 @@
     },
     {
       "bounds": [
-        36.8203615,
-        -1.2425043,
-        36.8204567,
+        36.8203314,
+        -1.2429467,
+        36.8205143,
         -1.2422211
       ],
       "endpoint_node_ids": [
         4803107764,
-        7361764225
+        10597364823
       ],
       "highway_types": {
-        "service": 3
+        "service": 6
       },
       "id": 156,
       "is_cycle": false,
-      "length_m": 33.41,
+      "length_m": 89.742,
       "node_ids": [
         4803107764,
         7361764227,
         7361764226,
-        7361764225
+        7361764225,
+        7361764224,
+        7361764223,
+        10597364823
       ],
-      "segment_count": 3,
+      "segment_count": 6,
       "segment_pairs": [
         [
           4803107764,
@@ -11222,6 +11256,18 @@
         [
           7361764226,
           7361764225
+        ],
+        [
+          7361764225,
+          7361764224
+        ],
+        [
+          7361764224,
+          7361764223
+        ],
+        [
+          7361764223,
+          10597364823
         ]
       ],
       "tags": {},
@@ -11283,93 +11329,6 @@
     },
     {
       "bounds": [
-        36.8201993,
-        -1.24312,
-        36.8213799,
-        -1.2423853
-      ],
-      "endpoint_node_ids": [
-        4803107792,
-        4803107887
-      ],
-      "highway_types": {},
-      "id": 158,
-      "is_cycle": false,
-      "length_m": 282.091,
-      "node_ids": [
-        4803107792,
-        4803107746,
-        4803107747,
-        4803107829,
-        9385598495,
-        9385598496,
-        9385598494,
-        9385598493,
-        9385598492,
-        4803107860,
-        4803107861,
-        4803107871,
-        4803107887
-      ],
-      "segment_count": 12,
-      "segment_pairs": [
-        [
-          4803107792,
-          4803107746
-        ],
-        [
-          4803107746,
-          4803107747
-        ],
-        [
-          4803107747,
-          4803107829
-        ],
-        [
-          4803107829,
-          9385598495
-        ],
-        [
-          9385598495,
-          9385598496
-        ],
-        [
-          9385598496,
-          9385598494
-        ],
-        [
-          9385598494,
-          9385598493
-        ],
-        [
-          9385598493,
-          9385598492
-        ],
-        [
-          9385598492,
-          4803107860
-        ],
-        [
-          4803107860,
-          4803107861
-        ],
-        [
-          4803107861,
-          4803107871
-        ],
-        [
-          4803107871,
-          4803107887
-        ]
-      ],
-      "tags": {},
-      "way_ids": [
-        487923440
-      ],
-      "way_names": []
-    },
-    {
-      "bounds": [
         36.8585562,
         -1.2450674,
         36.8590014,
@@ -11382,7 +11341,7 @@
       "highway_types": {
         "service": 3
       },
-      "id": 159,
+      "id": 158,
       "is_cycle": false,
       "length_m": 60.041,
       "node_ids": [
@@ -11406,9 +11365,7 @@
           8559123483
         ]
       ],
-      "tags": {
-        "local:routing_state": "exclude"
-      },
+      "tags": {},
       "way_ids": [
         524770054
       ],
@@ -11428,7 +11385,7 @@
       "highway_types": {
         "track": 2
       },
-      "id": 160,
+      "id": 159,
       "is_cycle": false,
       "length_m": 417.234,
       "node_ids": [
@@ -11472,7 +11429,7 @@
         "footway": 3,
         "path": 6
       },
-      "id": 161,
+      "id": 160,
       "is_cycle": false,
       "length_m": 319.647,
       "node_ids": [
@@ -11549,7 +11506,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 162,
+      "id": 161,
       "is_cycle": false,
       "length_m": 65.798,
       "node_ids": [
@@ -11595,7 +11552,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 163,
+      "id": 162,
       "is_cycle": false,
       "length_m": 504.471,
       "node_ids": [
@@ -11631,7 +11588,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 164,
+      "id": 163,
       "is_cycle": false,
       "length_m": 314.941,
       "node_ids": [
@@ -11694,7 +11651,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 165,
+      "id": 164,
       "is_cycle": false,
       "length_m": 58.842,
       "node_ids": [
@@ -11728,7 +11685,7 @@
       "highway_types": {
         "residential": 4
       },
-      "id": 166,
+      "id": 165,
       "is_cycle": false,
       "length_m": 49.292,
       "node_ids": [
@@ -11777,7 +11734,7 @@
       "highway_types": {
         "residential": 3
       },
-      "id": 167,
+      "id": 166,
       "is_cycle": false,
       "length_m": 149.373,
       "node_ids": [
@@ -11823,7 +11780,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 168,
+      "id": 167,
       "is_cycle": false,
       "length_m": 3.886,
       "node_ids": [
@@ -11857,7 +11814,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 169,
+      "id": 168,
       "is_cycle": false,
       "length_m": 12.867,
       "node_ids": [
@@ -11891,7 +11848,7 @@
       "highway_types": {
         "path": 41
       },
-      "id": 170,
+      "id": 169,
       "is_cycle": false,
       "length_m": 1259.956,
       "node_ids": [
@@ -12127,7 +12084,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 171,
+      "id": 170,
       "is_cycle": false,
       "length_m": 172.33,
       "node_ids": [
@@ -12161,7 +12118,7 @@
       "highway_types": {
         "track": 3
       },
-      "id": 172,
+      "id": 171,
       "is_cycle": false,
       "length_m": 352.95,
       "node_ids": [
@@ -12200,30 +12157,32 @@
     },
     {
       "bounds": [
-        36.8332616,
-        -1.2439987,
+        36.8330424,
+        -1.2440992,
         36.8347637,
         -1.243471
       ],
       "endpoint_node_ids": [
         6503768714,
-        11952184370
+        11952184360
       ],
       "highway_types": {
-        "footway": 5
+        "footway": 7
       },
-      "id": 173,
+      "id": 172,
       "is_cycle": false,
-      "length_m": 181.173,
+      "length_m": 208.45,
       "node_ids": [
         6503768714,
         11950508029,
         6503768713,
         9385562612,
         11952165171,
-        11952184370
+        11952184370,
+        11952184359,
+        11952184360
       ],
-      "segment_count": 5,
+      "segment_count": 7,
       "segment_pairs": [
         [
           6503768714,
@@ -12244,6 +12203,14 @@
         [
           11952165171,
           11952184370
+        ],
+        [
+          11952184370,
+          11952184359
+        ],
+        [
+          11952184359,
+          11952184360
         ]
       ],
       "tags": {},
@@ -12266,7 +12233,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 174,
+      "id": 173,
       "is_cycle": false,
       "length_m": 88.395,
       "node_ids": [
@@ -12283,6 +12250,40 @@
       "tags": {},
       "way_ids": [
         723312824
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8205143,
+        -1.2430883,
+        36.8206405,
+        -1.2429467
+      ],
+      "endpoint_node_ids": [
+        7361764222,
+        10597364823
+      ],
+      "highway_types": {
+        "service": 1
+      },
+      "id": 174,
+      "is_cycle": false,
+      "length_m": 21.089,
+      "node_ids": [
+        7361764222,
+        10597364823
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
+        [
+          7361764222,
+          10597364823
+        ]
+      ],
+      "tags": {},
+      "way_ids": [
+        431217470
       ],
       "way_names": []
     },
@@ -13682,6 +13683,103 @@
         1422774608
       ],
       "way_names": []
+    },
+    {
+      "bounds": [
+        36.8201993,
+        -1.24312,
+        36.8213799,
+        -1.2423853
+      ],
+      "endpoint_node_ids": [
+        4803107746,
+        4803107746
+      ],
+      "highway_types": {},
+      "id": 194,
+      "is_cycle": true,
+      "length_m": 344.404,
+      "node_ids": [
+        4803107746,
+        4803107747,
+        4803107829,
+        9385598495,
+        9385598496,
+        9385598494,
+        9385598493,
+        9385598492,
+        4803107860,
+        4803107861,
+        4803107871,
+        4803107887,
+        4803107791,
+        4803107792,
+        4803107746
+      ],
+      "segment_count": 14,
+      "segment_pairs": [
+        [
+          4803107746,
+          4803107747
+        ],
+        [
+          4803107747,
+          4803107829
+        ],
+        [
+          4803107829,
+          9385598495
+        ],
+        [
+          9385598495,
+          9385598496
+        ],
+        [
+          9385598496,
+          9385598494
+        ],
+        [
+          9385598494,
+          9385598493
+        ],
+        [
+          9385598493,
+          9385598492
+        ],
+        [
+          9385598492,
+          4803107860
+        ],
+        [
+          4803107860,
+          4803107861
+        ],
+        [
+          4803107861,
+          4803107871
+        ],
+        [
+          4803107871,
+          4803107887
+        ],
+        [
+          4803107887,
+          4803107791
+        ],
+        [
+          4803107791,
+          4803107792
+        ],
+        [
+          4803107792,
+          4803107746
+        ]
+      ],
+      "tags": {},
+      "way_ids": [
+        487923440
+      ],
+      "way_names": []
     }
   ],
   "crossings": {
@@ -13698,7 +13796,7 @@
       "lon": 36.820191
     },
     "10597364823": {
-      "degree": 1,
+      "degree": 3,
       "id": 10597364823,
       "lat": -1.2429467,
       "lon": 36.8205143
@@ -13727,17 +13825,11 @@
       "lat": -1.2413982,
       "lon": 36.8180797
     },
-    "11952165378": {
-      "degree": 1,
-      "id": 11952165378,
-      "lat": -1.2422408,
-      "lon": 36.8328499
-    },
-    "11952184370": {
-      "degree": 1,
-      "id": 11952184370,
-      "lat": -1.2439987,
-      "lon": 36.8332616
+    "11952184360": {
+      "degree": 3,
+      "id": 11952184360,
+      "lat": -1.2440992,
+      "lon": 36.8330424
     },
     "12330717255": {
       "degree": 3,
@@ -13894,12 +13986,6 @@
       "id": 1562475927,
       "lat": -1.245925,
       "lon": 36.838289
-    },
-    "1562483598": {
-      "degree": 1,
-      "id": 1562483598,
-      "lat": -1.2425208,
-      "lon": 36.8335124
     },
     "1562490578": {
       "degree": 3,
@@ -14267,18 +14353,6 @@
       "lat": -1.2422211,
       "lon": 36.8204567
     },
-    "4803107792": {
-      "degree": 1,
-      "id": 4803107792,
-      "lat": -1.2426481,
-      "lon": 36.8201993
-    },
-    "4803107887": {
-      "degree": 1,
-      "id": 4803107887,
-      "lat": -1.24312,
-      "lon": 36.8204461
-    },
     "5106127684": {
       "degree": 1,
       "id": 5106127684,
@@ -14411,11 +14485,11 @@
       "lat": -1.2473092,
       "lon": 36.8172343
     },
-    "7361764225": {
+    "7361764222": {
       "degree": 1,
-      "id": 7361764225,
-      "lat": -1.2425043,
-      "lon": 36.8203615
+      "id": 7361764222,
+      "lat": -1.2430883,
+      "lon": 36.8206405
     },
     "745351446": {
       "degree": 1,
@@ -14613,39 +14687,51 @@
   "meta": {
     "applied_contig_patch_ids": [
       "editor-policy-contig-1",
-      "editor-policy-contig-2",
-      "editor-policy-contig-11",
-      "editor-policy-contig-12",
-      "editor-policy-contig-13",
-      "editor-policy-contig-14",
-      "editor-policy-contig-15",
-      "editor-policy-contig-29",
-      "editor-policy-contig-64",
-      "editor-policy-contig-73",
       "editor-policy-contig-101",
       "editor-policy-contig-102",
       "editor-policy-contig-103",
+      "editor-policy-contig-108",
+      "editor-policy-contig-11",
+      "editor-policy-contig-12",
       "editor-policy-contig-122",
+      "editor-policy-contig-127",
       "editor-policy-contig-128",
+      "editor-policy-contig-13",
       "editor-policy-contig-130",
       "editor-policy-contig-131",
       "editor-policy-contig-132",
+      "editor-policy-contig-133",
+      "editor-policy-contig-134",
+      "editor-policy-contig-136",
+      "editor-policy-contig-14",
+      "editor-policy-contig-15",
+      "editor-policy-contig-141",
+      "editor-policy-contig-155",
       "editor-policy-contig-159",
       "editor-policy-contig-160",
       "editor-policy-contig-172",
-      "editor-policy-contig-181"
+      "editor-policy-contig-181",
+      "editor-policy-contig-2",
+      "editor-policy-contig-29",
+      "editor-policy-contig-36",
+      "editor-policy-contig-46",
+      "editor-policy-contig-56",
+      "editor-policy-contig-6",
+      "editor-policy-contig-64",
+      "editor-policy-contig-73",
+      "editor-policy-contig-81"
     ],
-    "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
+    "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "asset_kind": "contig_graph",
-    "contig_count": 193,
-    "contig_patchset_digest": "89e05155c541",
-    "crossing_count": 154,
-    "edge_count": 1578,
+    "contig_count": 194,
+    "contig_patchset_digest": "f081f05bc9f8",
+    "crossing_count": 150,
+    "edge_count": 1588,
     "graph_mode": "ride",
     "node_count": 3067,
     "patches_path": "source/karura-map-patches.json",
     "patchset_id": "karura-map-patches-v1",
-    "source_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
+    "source_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "source_map": "data/karura_map_patched.json"
   },
   "nodes": {

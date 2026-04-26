@@ -12,6 +12,7 @@ from heapq import heappop, heappush
 from pathlib import Path
 from typing import Iterable
 
+from .junction_bindings import load_junction_bindings as load_junction_bindings_payload
 from .karura_common import is_currently_unavailable
 
 
@@ -230,17 +231,28 @@ def load_junction_catalog(path: Path) -> dict:
     return load_payload(path)
 
 
-def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str) -> JunctionRef:
-    for junction in payload.get("junctions", []):
-        if junction["id"] != junction_id:
-            continue
-        for ref in junction.get("asset_refs", []):
-            if ref.get("asset_id") == graph_asset_id:
+def load_junction_bindings(path: Path) -> dict:
+    return load_junction_bindings_payload(path)
+
+
+def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict | None = None) -> JunctionRef:
+    junction = next((entry for entry in payload.get("junctions", []) if entry["id"] == junction_id), None)
+    if junction is None:
+        raise KeyError(f"Junction '{junction_id}' not found")
+
+    if bindings_payload is not None:
+        bindings_graph_asset_id = bindings_payload.get("meta", {}).get("graph_asset_id")
+        if bindings_graph_asset_id != graph_asset_id:
+            raise KeyError(
+                f"Junction bindings asset is for graph '{bindings_graph_asset_id}', expected '{graph_asset_id}'"
+            )
+        for binding in bindings_payload.get("bindings", []):
+            if binding.get("junction_id") == junction_id:
                 return JunctionRef(
                     junction_id=junction["id"],
                     name=junction["name"],
-                    graph_node_id=int(ref["graph_node_id"]),
-                    incident_contig_ids=tuple(int(contig_id) for contig_id in ref["incident_contig_ids"]),
+                    graph_node_id=int(binding["graph_node_id"]),
+                    incident_contig_ids=tuple(int(contig_id) for contig_id in binding["incident_contig_ids"]),
                     location={
                         "lat": float(junction["location"]["lat"]),
                         "lon": float(junction["location"]["lon"]),
@@ -248,8 +260,23 @@ def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str) -
                     notes=junction.get("notes", ""),
                     tags=tuple(junction.get("tags", [])),
                 )
-        raise KeyError(f"Junction '{junction_id}' has no ref for asset '{graph_asset_id}'")
-    raise KeyError(f"Junction '{junction_id}' not found")
+        raise KeyError(f"Junction '{junction_id}' has no binding for asset '{graph_asset_id}'")
+
+    for ref in junction.get("asset_refs", []):
+        if ref.get("asset_id") == graph_asset_id:
+            return JunctionRef(
+                junction_id=junction["id"],
+                name=junction["name"],
+                graph_node_id=int(ref["graph_node_id"]),
+                incident_contig_ids=tuple(int(contig_id) for contig_id in ref["incident_contig_ids"]),
+                location={
+                    "lat": float(junction["location"]["lat"]),
+                    "lon": float(junction["location"]["lon"]),
+                },
+                notes=junction.get("notes", ""),
+                tags=tuple(junction.get("tags", [])),
+            )
+    raise KeyError(f"Junction '{junction_id}' has no ref for asset '{graph_asset_id}'")
 
 
 def update_node_degrees(nodes: dict[int, NodeRecord], adjacency: dict[int, list[tuple[int, int]]]) -> None:
@@ -378,8 +405,15 @@ def best_connector_plan(
         for contig_id, next_node_id in graph.adjacency.get(node_id, []):
             contig = graph.contigs[contig_id]
             visit_count = visit_counts.get(contig_id, 0)
-            reusable = visit_count == 1 and is_short_connector(contig, config)
-            if visit_count > 1 or (visit_count == 1 and not reusable):
+            allowed, reusable = can_traverse_contig(
+                contig,
+                visit_count,
+                overlap_length_m + overlap_cost,
+                config,
+                from_node_id=node_id,
+                to_node_id=next_node_id,
+            )
+            if not allowed:
                 continue
 
             step_overlap = contig.length_m if reusable else 0.0
@@ -432,28 +466,37 @@ def estimate_reachable_unused_length(
     overlap_length_m: float,
     config: PlannerConfig,
 ) -> float:
-    overlap_remaining = config.max_overlap_m - overlap_length_m
     seen_nodes = {start_node_id}
-    queue = deque([start_node_id])
+    queue = deque([(start_node_id, 0.0)])
+    best_overlap_cost: dict[int, float] = {start_node_id: 0.0}
     seen_contigs: set[int] = set()
     unused_length_m = 0.0
 
     while queue:
-        node_id = queue.popleft()
+        node_id, overlap_cost = queue.popleft()
         for contig_id, next_node_id in graph.adjacency.get(node_id, []):
             contig = graph.contigs[contig_id]
             visit_count = visit_counts.get(contig_id, 0)
-            reusable = visit_count == 1 and is_short_connector(contig, config)
-            if visit_count > 1 or (visit_count == 1 and not reusable):
+            allowed, reused = can_traverse_contig(
+                contig,
+                visit_count,
+                overlap_length_m + overlap_cost,
+                config,
+                from_node_id=node_id,
+                to_node_id=next_node_id,
+            )
+            if not allowed:
                 continue
-            if reusable and contig.length_m > overlap_remaining:
-                continue
+            next_overlap_cost = overlap_cost + (contig.length_m if reused else 0.0)
             if visit_count == 0 and contig_id not in seen_contigs:
                 unused_length_m += contig.length_m
                 seen_contigs.add(contig_id)
+            if next_overlap_cost >= best_overlap_cost.get(next_node_id, float("inf")):
+                continue
+            best_overlap_cost[next_node_id] = next_overlap_cost
             if next_node_id not in seen_nodes:
                 seen_nodes.add(next_node_id)
-                queue.append(next_node_id)
+            queue.append((next_node_id, next_overlap_cost))
 
     return unused_length_m
 
@@ -1140,6 +1183,7 @@ def route_asset_payload(
     *,
     graph_path: Path,
     junctions_path: Path,
+    junction_bindings_path: Path | None,
     graph: RouteGraph,
     junction_catalog: dict,
     start_ref: JunctionRef,
@@ -1167,7 +1211,18 @@ def route_asset_payload(
                 "kind": junction_catalog_meta["asset_kind"],
                 "path": str(junctions_path),
             },
-        ],
+        ]
+        + (
+            []
+            if junction_bindings_path is None
+            else [
+                {
+                    "id": f"karura-junction-bindings-for-{graph.asset_id}",
+                    "kind": "junction_bindings",
+                    "path": str(junction_bindings_path),
+                }
+            ]
+        ),
         "meta": {
             "asset_id": asset_id,
             "asset_kind": "route_candidates",
@@ -1176,6 +1231,9 @@ def route_asset_payload(
             "seed": seed,
             "graph_asset_id": graph.asset_id,
             "junction_catalog_asset_id": junction_catalog_meta["asset_id"],
+            "junction_bindings_asset_id": None
+            if junction_bindings_path is None
+            else f"karura-junction-bindings-for-{graph.asset_id}",
             "start_junction_id": start_ref.junction_id,
             "end_junction_id": end_ref.junction_id,
         },

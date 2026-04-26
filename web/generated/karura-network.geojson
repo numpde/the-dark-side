@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "meta": {
-    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
+    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "asset_kind": "contig_graph",
     "source_path": "data/karura_contigs.json"
   },
@@ -399,7 +399,9 @@
           2847949590,
           2847824295
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -3036,7 +3038,9 @@
           1554843739,
           2068386553
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -3523,15 +3527,15 @@
       "type": "Feature",
       "properties": {
         "contig_id": 46,
-        "length_m": 458.895,
-        "segment_count": 18,
+        "length_m": 264.182,
+        "segment_count": 6,
         "way_names": [],
         "way_ids": [
           60200210
         ],
         "endpoint_node_ids": [
           748782349,
-          2847945484
+          11952184360
         ],
         "node_ids": [
           748782349,
@@ -3540,21 +3544,11 @@
           11952165188,
           747730105,
           747730086,
-          11952184360,
-          11952184361,
-          11952184362,
-          11952184363,
-          11952184364,
-          747730032,
-          11952184365,
-          11952184366,
-          11952184367,
-          11952184368,
-          11952184369,
-          747730109,
-          2847945484
+          11952184360
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -3586,54 +3580,6 @@
           [
             36.833042,
             -1.244099
-          ],
-          [
-            36.83299,
-            -1.244164
-          ],
-          [
-            36.832894,
-            -1.244231
-          ],
-          [
-            36.832819,
-            -1.244326
-          ],
-          [
-            36.832687,
-            -1.244617
-          ],
-          [
-            36.832772,
-            -1.244683
-          ],
-          [
-            36.832987,
-            -1.244662
-          ],
-          [
-            36.833078,
-            -1.244641
-          ],
-          [
-            36.833217,
-            -1.24459
-          ],
-          [
-            36.833315,
-            -1.244524
-          ],
-          [
-            36.833453,
-            -1.244455
-          ],
-          [
-            36.833591,
-            -1.244446
-          ],
-          [
-            36.833716,
-            -1.244398
           ]
         ]
       }
@@ -3642,19 +3588,27 @@
       "type": "Feature",
       "properties": {
         "contig_id": 47,
-        "length_m": 41.277,
-        "segment_count": 1,
+        "length_m": 299.861,
+        "segment_count": 8,
         "way_names": [],
         "way_ids": [
-          60257575
+          60257575,
+          142776560
         ],
         "endpoint_node_ids": [
           748782349,
-          11952165378
+          6503768714
         ],
         "node_ids": [
           748782349,
-          11952165378
+          11952165378,
+          748782346,
+          1562483598,
+          1562483597,
+          1562490564,
+          11957087623,
+          1562490565,
+          6503768714
         ],
         "tags": {}
       },
@@ -3668,6 +3622,34 @@
           [
             36.83285,
             -1.242241
+          ],
+          [
+            36.833143,
+            -1.242384
+          ],
+          [
+            36.833512,
+            -1.242521
+          ],
+          [
+            36.833857,
+            -1.242668
+          ],
+          [
+            36.834039,
+            -1.242817
+          ],
+          [
+            36.834302,
+            -1.243096
+          ],
+          [
+            36.834564,
+            -1.243325
+          ],
+          [
+            36.834764,
+            -1.243498
           ]
         ]
       }
@@ -4102,7 +4084,9 @@
           2068386536,
           2068386553
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -5217,60 +5201,6 @@
       "type": "Feature",
       "properties": {
         "contig_id": 74,
-        "length_m": 178.521,
-        "segment_count": 5,
-        "way_names": [],
-        "way_ids": [
-          142776560
-        ],
-        "endpoint_node_ids": [
-          1562483598,
-          6503768714
-        ],
-        "node_ids": [
-          1562483598,
-          1562483597,
-          1562490564,
-          11957087623,
-          1562490565,
-          6503768714
-        ],
-        "tags": {}
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            36.833512,
-            -1.242521
-          ],
-          [
-            36.833857,
-            -1.242668
-          ],
-          [
-            36.834039,
-            -1.242817
-          ],
-          [
-            36.834302,
-            -1.243096
-          ],
-          [
-            36.834564,
-            -1.243325
-          ],
-          [
-            36.834764,
-            -1.243498
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "contig_id": 75,
         "length_m": 525.27,
         "segment_count": 4,
         "way_names": [
@@ -5321,7 +5251,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 76,
+        "contig_id": 75,
         "length_m": 3.734,
         "segment_count": 1,
         "way_names": [
@@ -5357,7 +5287,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 77,
+        "contig_id": 76,
         "length_m": 48.037,
         "segment_count": 3,
         "way_names": [
@@ -5403,7 +5333,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 78,
+        "contig_id": 77,
         "length_m": 4.654,
         "segment_count": 1,
         "way_names": [
@@ -5439,7 +5369,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 79,
+        "contig_id": 78,
         "length_m": 16.653,
         "segment_count": 1,
         "way_names": [],
@@ -5473,7 +5403,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 80,
+        "contig_id": 79,
         "length_m": 390.313,
         "segment_count": 20,
         "way_names": [],
@@ -5602,7 +5532,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 81,
+        "contig_id": 80,
         "length_m": 301.634,
         "segment_count": 10,
         "way_names": [],
@@ -5683,7 +5613,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 82,
+        "contig_id": 81,
         "length_m": 558.657,
         "segment_count": 23,
         "way_names": [],
@@ -5722,7 +5652,9 @@
           5518866320,
           5518868721
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -5829,7 +5761,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 83,
+        "contig_id": 82,
         "length_m": 67.528,
         "segment_count": 5,
         "way_names": [
@@ -5885,7 +5817,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 84,
+        "contig_id": 83,
         "length_m": 48.525,
         "segment_count": 2,
         "way_names": [],
@@ -5924,7 +5856,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 85,
+        "contig_id": 84,
         "length_m": 109.098,
         "segment_count": 5,
         "way_names": [],
@@ -5978,7 +5910,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 86,
+        "contig_id": 85,
         "length_m": 131.553,
         "segment_count": 7,
         "way_names": [],
@@ -6042,7 +5974,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 87,
+        "contig_id": 86,
         "length_m": 24.138,
         "segment_count": 2,
         "way_names": [],
@@ -6081,7 +6013,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 88,
+        "contig_id": 87,
         "length_m": 56.506,
         "segment_count": 5,
         "way_names": [],
@@ -6135,7 +6067,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 89,
+        "contig_id": 88,
         "length_m": 19.318,
         "segment_count": 2,
         "way_names": [],
@@ -6174,7 +6106,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 90,
+        "contig_id": 89,
         "length_m": 83.378,
         "segment_count": 6,
         "way_names": [],
@@ -6233,7 +6165,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 91,
+        "contig_id": 90,
         "length_m": 22.089,
         "segment_count": 1,
         "way_names": [
@@ -6269,7 +6201,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 92,
+        "contig_id": 91,
         "length_m": 63.033,
         "segment_count": 4,
         "way_names": [],
@@ -6318,7 +6250,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 93,
+        "contig_id": 92,
         "length_m": 70.493,
         "segment_count": 4,
         "way_names": [
@@ -6369,7 +6301,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 94,
+        "contig_id": 93,
         "length_m": 99.932,
         "segment_count": 6,
         "way_names": [
@@ -6430,7 +6362,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 95,
+        "contig_id": 94,
         "length_m": 79.313,
         "segment_count": 6,
         "way_names": [],
@@ -6489,7 +6421,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 96,
+        "contig_id": 95,
         "length_m": 8.796,
         "segment_count": 1,
         "way_names": [],
@@ -6523,7 +6455,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 97,
+        "contig_id": 96,
         "length_m": 607.239,
         "segment_count": 30,
         "way_names": [
@@ -6704,7 +6636,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 98,
+        "contig_id": 97,
         "length_m": 108.718,
         "segment_count": 4,
         "way_names": [],
@@ -6753,7 +6685,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 99,
+        "contig_id": 98,
         "length_m": 72.701,
         "segment_count": 6,
         "way_names": [],
@@ -6812,7 +6744,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 100,
+        "contig_id": 99,
         "length_m": 292.084,
         "segment_count": 9,
         "way_names": [],
@@ -6886,7 +6818,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 101,
+        "contig_id": 100,
         "length_m": 2.363,
         "segment_count": 1,
         "way_names": [
@@ -6903,9 +6835,7 @@
           2068417293,
           6784413870
         ],
-        "tags": {
-          "local:routing_state": "exclude"
-        }
+        "tags": {}
       },
       "geometry": {
         "type": "LineString",
@@ -6924,7 +6854,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 102,
+        "contig_id": 101,
         "length_m": 1248.093,
         "segment_count": 43,
         "way_names": [
@@ -7172,7 +7102,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 103,
+        "contig_id": 102,
         "length_m": 298.15,
         "segment_count": 6,
         "way_names": [
@@ -7235,7 +7165,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 104,
+        "contig_id": 103,
         "length_m": 580.285,
         "segment_count": 21,
         "way_names": [
@@ -7371,7 +7301,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 105,
+        "contig_id": 104,
         "length_m": 147.134,
         "segment_count": 4,
         "way_names": [
@@ -7422,7 +7352,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 106,
+        "contig_id": 105,
         "length_m": 338.603,
         "segment_count": 6,
         "way_names": [],
@@ -7481,7 +7411,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 107,
+        "contig_id": 106,
         "length_m": 77.885,
         "segment_count": 1,
         "way_names": [
@@ -7517,7 +7447,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 108,
+        "contig_id": 107,
         "length_m": 28.452,
         "segment_count": 2,
         "way_names": [],
@@ -7556,7 +7486,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 109,
+        "contig_id": 108,
         "length_m": 75.488,
         "segment_count": 1,
         "way_names": [],
@@ -7571,7 +7501,9 @@
           2639598617,
           8536024877
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -7590,7 +7522,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 110,
+        "contig_id": 109,
         "length_m": 97.648,
         "segment_count": 4,
         "way_names": [
@@ -7641,7 +7573,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 111,
+        "contig_id": 110,
         "length_m": 120.544,
         "segment_count": 1,
         "way_names": [],
@@ -7675,7 +7607,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 112,
+        "contig_id": 111,
         "length_m": 147.779,
         "segment_count": 9,
         "way_names": [
@@ -7751,7 +7683,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 113,
+        "contig_id": 112,
         "length_m": 148.835,
         "segment_count": 4,
         "way_names": [
@@ -7802,7 +7734,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 114,
+        "contig_id": 113,
         "length_m": 251.671,
         "segment_count": 6,
         "way_names": [],
@@ -7861,7 +7793,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 115,
+        "contig_id": 114,
         "length_m": 228.608,
         "segment_count": 10,
         "way_names": [],
@@ -7940,7 +7872,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 116,
+        "contig_id": 115,
         "length_m": 410.347,
         "segment_count": 7,
         "way_names": [],
@@ -8004,7 +7936,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 117,
+        "contig_id": 116,
         "length_m": 110.785,
         "segment_count": 8,
         "way_names": [],
@@ -8073,7 +8005,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 118,
+        "contig_id": 117,
         "length_m": 86.156,
         "segment_count": 1,
         "way_names": [],
@@ -8107,7 +8039,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 119,
+        "contig_id": 118,
         "length_m": 251.089,
         "segment_count": 15,
         "way_names": [],
@@ -8211,7 +8143,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 120,
+        "contig_id": 119,
         "length_m": 27.57,
         "segment_count": 2,
         "way_names": [],
@@ -8250,7 +8182,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 121,
+        "contig_id": 120,
         "length_m": 313.425,
         "segment_count": 20,
         "way_names": [],
@@ -8379,7 +8311,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 122,
+        "contig_id": 121,
         "length_m": 1071.763,
         "segment_count": 49,
         "way_names": [
@@ -8659,7 +8591,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 123,
+        "contig_id": 122,
         "length_m": 1163.242,
         "segment_count": 48,
         "way_names": [
@@ -8930,7 +8862,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 124,
+        "contig_id": 123,
         "length_m": 266.769,
         "segment_count": 13,
         "way_names": [
@@ -9026,7 +8958,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 125,
+        "contig_id": 124,
         "length_m": 341.199,
         "segment_count": 12,
         "way_names": [
@@ -9117,7 +9049,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 126,
+        "contig_id": 125,
         "length_m": 391.872,
         "segment_count": 23,
         "way_names": [
@@ -9263,7 +9195,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 127,
+        "contig_id": 126,
         "length_m": 109.485,
         "segment_count": 1,
         "way_names": [],
@@ -9297,7 +9229,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 128,
+        "contig_id": 127,
         "length_m": 186.265,
         "segment_count": 12,
         "way_names": [],
@@ -9388,7 +9320,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 129,
+        "contig_id": 128,
         "length_m": 129.075,
         "segment_count": 7,
         "way_names": [],
@@ -9409,7 +9341,9 @@
           2847941622,
           8231754957
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -9452,7 +9386,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 130,
+        "contig_id": 129,
         "length_m": 318.472,
         "segment_count": 17,
         "way_names": [],
@@ -9568,7 +9502,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 131,
+        "contig_id": 130,
         "length_m": 160.966,
         "segment_count": 6,
         "way_names": [],
@@ -9588,9 +9522,7 @@
           6503767378,
           6503767379
         ],
-        "tags": {
-          "local:routing_state": "include"
-        }
+        "tags": {}
       },
       "geometry": {
         "type": "LineString",
@@ -9629,7 +9561,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 132,
+        "contig_id": 131,
         "length_m": 146.508,
         "segment_count": 6,
         "way_names": [
@@ -9692,6 +9624,95 @@
     {
       "type": "Feature",
       "properties": {
+        "contig_id": 132,
+        "length_m": 194.713,
+        "segment_count": 12,
+        "way_names": [],
+        "way_ids": [
+          60200210
+        ],
+        "endpoint_node_ids": [
+          2847945484,
+          11952184360
+        ],
+        "node_ids": [
+          2847945484,
+          747730109,
+          11952184369,
+          11952184368,
+          11952184367,
+          11952184366,
+          11952184365,
+          747730032,
+          11952184364,
+          11952184363,
+          11952184362,
+          11952184361,
+          11952184360
+        ],
+        "tags": {}
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.833716,
+            -1.244398
+          ],
+          [
+            36.833591,
+            -1.244446
+          ],
+          [
+            36.833453,
+            -1.244455
+          ],
+          [
+            36.833315,
+            -1.244524
+          ],
+          [
+            36.833217,
+            -1.24459
+          ],
+          [
+            36.833078,
+            -1.244641
+          ],
+          [
+            36.832987,
+            -1.244662
+          ],
+          [
+            36.832772,
+            -1.244683
+          ],
+          [
+            36.832687,
+            -1.244617
+          ],
+          [
+            36.832819,
+            -1.244326
+          ],
+          [
+            36.832894,
+            -1.244231
+          ],
+          [
+            36.83299,
+            -1.244164
+          ],
+          [
+            36.833042,
+            -1.244099
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "contig_id": 133,
         "length_m": 37.84,
         "segment_count": 3,
@@ -9709,7 +9730,9 @@
           2847945604,
           2847945615
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -9752,7 +9775,9 @@
           2847945657,
           2847945649
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -9829,7 +9854,9 @@
           2847945649,
           6503768700
         ],
-        "tags": {}
+        "tags": {
+          "local:routing_state": "exclude"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -10195,7 +10222,9 @@
           11952065150,
           2847949919
         ],
-        "tags": {}
+        "tags": {
+          "local:unavailable_until": "2026-06-30"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -11171,7 +11200,9 @@
           13556268409,
           2847949919
         ],
-        "tags": {}
+        "tags": {
+          "local:unavailable_until": "2026-06-30"
+        }
       },
       "geometry": {
         "type": "LineString",
@@ -11199,21 +11230,24 @@
       "type": "Feature",
       "properties": {
         "contig_id": 156,
-        "length_m": 33.41,
-        "segment_count": 3,
+        "length_m": 89.742,
+        "segment_count": 6,
         "way_names": [],
         "way_ids": [
           431217470
         ],
         "endpoint_node_ids": [
           4803107764,
-          7361764225
+          10597364823
         ],
         "node_ids": [
           4803107764,
           7361764227,
           7361764226,
-          7361764225
+          7361764225,
+          7361764224,
+          7361764223,
+          10597364823
         ],
         "tags": {}
       },
@@ -11235,6 +11269,18 @@
           [
             36.820361,
             -1.242504
+          ],
+          [
+            36.820331,
+            -1.242643
+          ],
+          [
+            36.820365,
+            -1.242779
+          ],
+          [
+            36.820514,
+            -1.242947
           ]
         ]
       }
@@ -11294,95 +11340,6 @@
       "type": "Feature",
       "properties": {
         "contig_id": 158,
-        "length_m": 282.091,
-        "segment_count": 12,
-        "way_names": [],
-        "way_ids": [
-          487923440
-        ],
-        "endpoint_node_ids": [
-          4803107792,
-          4803107887
-        ],
-        "node_ids": [
-          4803107792,
-          4803107746,
-          4803107747,
-          4803107829,
-          9385598495,
-          9385598496,
-          9385598494,
-          9385598493,
-          9385598492,
-          4803107860,
-          4803107861,
-          4803107871,
-          4803107887
-        ],
-        "tags": {}
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            36.820199,
-            -1.242648
-          ],
-          [
-            36.820296,
-            -1.242385
-          ],
-          [
-            36.8205,
-            -1.242541
-          ],
-          [
-            36.820988,
-            -1.242804
-          ],
-          [
-            36.821081,
-            -1.242847
-          ],
-          [
-            36.82135,
-            -1.242857
-          ],
-          [
-            36.82138,
-            -1.242969
-          ],
-          [
-            36.82132,
-            -1.242994
-          ],
-          [
-            36.821094,
-            -1.243034
-          ],
-          [
-            36.82095,
-            -1.243029
-          ],
-          [
-            36.820838,
-            -1.243045
-          ],
-          [
-            36.82065,
-            -1.24312
-          ],
-          [
-            36.820446,
-            -1.24312
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "contig_id": 159,
         "length_m": 60.041,
         "segment_count": 3,
         "way_names": [],
@@ -11399,9 +11356,7 @@
           8559123485,
           8559123483
         ],
-        "tags": {
-          "local:routing_state": "exclude"
-        }
+        "tags": {}
       },
       "geometry": {
         "type": "LineString",
@@ -11428,7 +11383,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 160,
+        "contig_id": 159,
         "length_m": 417.234,
         "segment_count": 2,
         "way_names": [
@@ -11471,7 +11426,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 161,
+        "contig_id": 160,
         "length_m": 319.647,
         "segment_count": 9,
         "way_names": [
@@ -11548,7 +11503,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 162,
+        "contig_id": 161,
         "length_m": 65.798,
         "segment_count": 3,
         "way_names": [
@@ -11594,7 +11549,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 163,
+        "contig_id": 162,
         "length_m": 504.471,
         "segment_count": 1,
         "way_names": [
@@ -11630,7 +11585,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 164,
+        "contig_id": 163,
         "length_m": 314.941,
         "segment_count": 6,
         "way_names": [
@@ -11693,7 +11648,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 165,
+        "contig_id": 164,
         "length_m": 58.842,
         "segment_count": 1,
         "way_names": [],
@@ -11727,7 +11682,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 166,
+        "contig_id": 165,
         "length_m": 49.292,
         "segment_count": 4,
         "way_names": [],
@@ -11776,7 +11731,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 167,
+        "contig_id": 166,
         "length_m": 149.373,
         "segment_count": 3,
         "way_names": [
@@ -11822,7 +11777,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 168,
+        "contig_id": 167,
         "length_m": 3.886,
         "segment_count": 1,
         "way_names": [],
@@ -11856,7 +11811,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 169,
+        "contig_id": 168,
         "length_m": 12.867,
         "segment_count": 1,
         "way_names": [],
@@ -11890,7 +11845,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 170,
+        "contig_id": 169,
         "length_m": 1259.956,
         "segment_count": 41,
         "way_names": [
@@ -12126,7 +12081,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 171,
+        "contig_id": 170,
         "length_m": 172.33,
         "segment_count": 1,
         "way_names": [],
@@ -12160,7 +12115,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 172,
+        "contig_id": 171,
         "length_m": 352.95,
         "segment_count": 3,
         "way_names": [
@@ -12211,16 +12166,16 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 173,
-        "length_m": 181.173,
-        "segment_count": 5,
+        "contig_id": 172,
+        "length_m": 208.45,
+        "segment_count": 7,
         "way_names": [],
         "way_ids": [
           692748289
         ],
         "endpoint_node_ids": [
           6503768714,
-          11952184370
+          11952184360
         ],
         "node_ids": [
           6503768714,
@@ -12228,7 +12183,9 @@
           6503768713,
           9385562612,
           11952165171,
-          11952184370
+          11952184370,
+          11952184359,
+          11952184360
         ],
         "tags": {}
       },
@@ -12258,6 +12215,14 @@
           [
             36.833262,
             -1.243999
+          ],
+          [
+            36.833183,
+            -1.244011
+          ],
+          [
+            36.833042,
+            -1.244099
           ]
         ]
       }
@@ -12265,7 +12230,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 174,
+        "contig_id": 173,
         "length_m": 88.395,
         "segment_count": 1,
         "way_names": [],
@@ -12292,6 +12257,40 @@
           [
             36.817234,
             -1.247309
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 174,
+        "length_m": 21.089,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          431217470
+        ],
+        "endpoint_node_ids": [
+          7361764222,
+          10597364823
+        ],
+        "node_ids": [
+          7361764222,
+          10597364823
+        ],
+        "tags": {}
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820641,
+            -1.243088
+          ],
+          [
+            36.820514,
+            -1.242947
           ]
         ]
       }
@@ -13689,6 +13688,105 @@
           [
             36.820656,
             -1.244442
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 194,
+        "length_m": 344.404,
+        "segment_count": 14,
+        "way_names": [],
+        "way_ids": [
+          487923440
+        ],
+        "endpoint_node_ids": [
+          4803107746,
+          4803107746
+        ],
+        "node_ids": [
+          4803107746,
+          4803107747,
+          4803107829,
+          9385598495,
+          9385598496,
+          9385598494,
+          9385598493,
+          9385598492,
+          4803107860,
+          4803107861,
+          4803107871,
+          4803107887,
+          4803107791,
+          4803107792,
+          4803107746
+        ],
+        "tags": {}
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820296,
+            -1.242385
+          ],
+          [
+            36.8205,
+            -1.242541
+          ],
+          [
+            36.820988,
+            -1.242804
+          ],
+          [
+            36.821081,
+            -1.242847
+          ],
+          [
+            36.82135,
+            -1.242857
+          ],
+          [
+            36.82138,
+            -1.242969
+          ],
+          [
+            36.82132,
+            -1.242994
+          ],
+          [
+            36.821094,
+            -1.243034
+          ],
+          [
+            36.82095,
+            -1.243029
+          ],
+          [
+            36.820838,
+            -1.243045
+          ],
+          [
+            36.82065,
+            -1.24312
+          ],
+          [
+            36.820446,
+            -1.24312
+          ],
+          [
+            36.820258,
+            -1.242948
+          ],
+          [
+            36.820199,
+            -1.242648
+          ],
+          [
+            36.820296,
+            -1.242385
           ]
         ]
       }

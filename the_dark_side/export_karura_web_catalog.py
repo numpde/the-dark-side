@@ -22,11 +22,15 @@ from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .elevation import summarize_elevation_series
 from .karura_common import (
+    APP_MANIFEST_JSON,
     CATALOG_BUILD_JSON,
     CONTIGS_JSON,
+    EDITOR_MANIFEST_JSON,
     ELEVATION_JSON,
     MAP_JSON,
+    PATCHED_MAP_JSON,
     JUNCTIONS_JSON,
+    JUNCTION_BINDINGS_JSON,
     MAP_PATCHES_JSON,
     repo_rel,
     WEB_SOURCE_DIR,
@@ -39,6 +43,7 @@ from .karura_routing import (
     RouteCandidate,
     build_route_node_ids,
     contig_jaccard_similarity,
+    load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
     plan_route_naive,
@@ -82,6 +87,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--build-config-json", type=Path, default=pre_args.build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
+    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), action="append")
     parser.add_argument("--seed-start", type=int, default=build_defaults["seed_start"])
     parser.add_argument("--seed-end", type=int, default=build_defaults["seed_end"])
@@ -142,11 +148,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=build_defaults["elevation_smoothing_window"],
     )
     parser.add_argument("--elevation-min-step-m", type=float, default=build_defaults["elevation_min_step_m"])
-    parser.add_argument("--editor-map-json", type=Path, default=MAP_JSON)
+    parser.add_argument("--editor-map-json", type=Path, default=PATCHED_MAP_JSON)
     parser.add_argument("--editor-patches-json", type=Path, default=MAP_PATCHES_JSON)
     parser.add_argument("--output-catalog", type=Path, default=DEFAULT_CATALOG_JSON)
     parser.add_argument("--output-network", type=Path, default=DEFAULT_NETWORK_GEOJSON)
     parser.add_argument("--output-editor-network", type=Path, default=DEFAULT_EDITOR_NETWORK_GEOJSON)
+    parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
+    parser.add_argument("--output-app-manifest", type=Path, default=APP_MANIFEST_JSON)
     args = parser.parse_args(remaining)
     args.algorithm = args.algorithm or list(build_defaults["algorithms"])
     return args
@@ -448,6 +456,38 @@ def load_patch_snapshot(path: Path) -> dict:
     return json.loads(path.read_text())
 
 
+def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
+    patch_snapshot = load_patch_snapshot(editor_patches_json)
+    editor_graph_payload = build_contigs(
+        editor_map_payload,
+        source_map=repo_rel(editor_map_json),
+        patchset=patch_snapshot,
+        patchset_path=repo_rel(editor_patches_json),
+        include_way=include_editor_way,
+        graph_mode="editor",
+    )
+    editor_network = network_geojson(
+        editor_graph_payload,
+        meta={
+            "graph_asset_id": editor_graph_payload["meta"]["asset_id"],
+            "graph_mode": editor_graph_payload["meta"]["graph_mode"],
+            "source_map_asset_id": editor_graph_payload["meta"]["source_asset_id"],
+            "patchset_id": editor_graph_payload["meta"].get("patchset_id"),
+            "patches_path": editor_graph_payload["meta"].get("patches_path"),
+        },
+    )
+    return editor_graph_payload, editor_network
+
+
+def build_editor_graph_payload(*, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
+    editor_map = load_map(editor_map_json)
+    return build_editor_graph_payload_from_map(
+        editor_map_payload=editor_map.to_dict(),
+        editor_map_json=editor_map_json,
+        editor_patches_json=editor_patches_json,
+    )
+
+
 def load_elevation_asset(path: Path | None, *, expected_graph_asset_id: str | None = None) -> tuple[dict[int, float], bool]:
     if path is None or not path.exists():
         return {}, False
@@ -536,31 +576,25 @@ def write_json(path: Path, payload: dict) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n")
 
 
-def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
+def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
     algorithms = list(args.algorithm)
     build_config_payload = effective_build_config(args)
-    build_config_digest = catalog_build_config_digest(build_config_payload)
     config = build_config(args)
     graph = load_route_graph(args.contigs_json)
     node_elevations, elevation_matches_graph = load_elevation_asset(
         args.elevation_json,
         expected_graph_asset_id=graph.asset_id,
     )
-    editor_map = load_map(args.editor_map_json)
-    patch_snapshot = load_patch_snapshot(args.editor_patches_json)
-    editor_graph_payload = build_contigs(
-        editor_map.to_dict(),
-        source_map=repo_rel(args.editor_map_json),
-        patchset=patch_snapshot,
-        patchset_path=repo_rel(args.editor_patches_json),
-        include_way=include_editor_way,
-        graph_mode="editor",
+    editor_graph_payload, editor_network = build_editor_graph_payload(
+        editor_map_json=args.editor_map_json,
+        editor_patches_json=args.editor_patches_json,
     )
     junction_catalog = load_junction_catalog(args.junctions_json)
+    junction_bindings = load_junction_bindings(args.junction_bindings_json)
     junction_defs = junction_catalog["junctions"]
     junction_ids = [junction["id"] for junction in junction_defs]
     junction_refs = {
-        junction_id: resolve_junction_ref(junction_catalog, junction_id, graph.asset_id)
+        junction_id: resolve_junction_ref(junction_catalog, junction_id, graph.asset_id, junction_bindings)
         for junction_id in junction_ids
     }
 
@@ -607,6 +641,36 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
                 selection_window=args.selection_window,
             )
             selected_records_by_scenario[scenario_id] = selected
+
+    return {
+        "algorithms": algorithms,
+        "build_config_payload": build_config_payload,
+        "graph": graph,
+        "node_elevations": node_elevations,
+        "elevation_matches_graph": elevation_matches_graph,
+        "editor_graph_payload": editor_graph_payload,
+        "editor_network": editor_network,
+        "junction_catalog": junction_catalog,
+        "junction_bindings": junction_bindings,
+        "junction_defs": junction_defs,
+        "selected_records_by_scenario": selected_records_by_scenario,
+    }
+
+
+def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
+    planned = plan_catalog_records(args)
+    algorithms = planned["algorithms"]
+    build_config_payload = planned["build_config_payload"]
+    build_config_digest = catalog_build_config_digest(build_config_payload)
+    graph = planned["graph"]
+    node_elevations = planned["node_elevations"]
+    elevation_matches_graph = planned["elevation_matches_graph"]
+    editor_network = planned["editor_network"]
+    junction_catalog = planned["junction_catalog"]
+    junction_bindings = planned["junction_bindings"]
+    junction_defs = planned["junction_defs"]
+    junction_ids = [junction["id"] for junction in junction_defs]
+    selected_records_by_scenario = planned["selected_records_by_scenario"]
 
     representative_by_family: dict[tuple[int, ...], RouteRecord] = {}
     for records in selected_records_by_scenario.values():
@@ -662,6 +726,7 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
             "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "graph_asset_id": graph.asset_id,
             "junction_catalog_asset_id": junction_catalog["meta"]["asset_id"],
+            "junction_bindings_asset_id": junction_bindings["meta"]["asset_id"],
             "algorithms": algorithms,
             "seed_start": args.seed_start,
             "seed_end": args.seed_end,
@@ -703,16 +768,6 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
             "graph_asset_id": graph.asset_id,
             "asset_kind": graph.asset_kind,
             "source_path": repo_rel(args.contigs_json),
-        },
-    )
-    editor_network = network_geojson(
-        editor_graph_payload,
-        meta={
-            "graph_asset_id": editor_graph_payload["meta"]["asset_id"],
-            "graph_mode": editor_graph_payload["meta"]["graph_mode"],
-            "source_map_asset_id": editor_graph_payload["meta"]["source_asset_id"],
-            "patchset_id": editor_graph_payload["meta"].get("patchset_id"),
-            "patches_path": editor_graph_payload["meta"].get("patches_path"),
         },
     )
     return {
