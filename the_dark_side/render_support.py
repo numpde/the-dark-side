@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+from collections.abc import Iterable
 from pathlib import Path
 
 from PIL import Image, ImageOps
@@ -48,3 +49,30 @@ def project_mercator_point(xy: tuple[float, float], viewport: dict, size: tuple[
 
 def project_lon_lat(lon: float, lat: float, viewport: dict, size: tuple[int, int]) -> tuple[float, float]:
     return project_mercator_point(mercator(lon, lat), viewport, size)
+
+
+def mercator_lookup_from_map(karura_map) -> dict[int, tuple[float, float]]:
+    return {
+        int(node_id): mercator(node.lon, node.lat)
+        for node_id, node in karura_map.nodes.items()
+    }
+
+
+def mercator_lookup_from_graph_document(payload: dict) -> dict[int, tuple[float, float]]:
+    return {
+        int(node_id): mercator(node["lon"], node["lat"])
+        for node_id, node in payload["nodes"].items()
+    }
+
+
+def segments_from_node_pairs(
+    node_pairs: Iterable[tuple[int, int]],
+    *,
+    node_lookup: dict[int, tuple[float, float]],
+) -> list[tuple[tuple[float, float], tuple[float, float]]]:
+    segments: list[tuple[tuple[float, float], tuple[float, float]]] = []
+    for first_id, second_id in node_pairs:
+        if first_id not in node_lookup or second_id not in node_lookup:
+            continue
+        segments.append((node_lookup[first_id], node_lookup[second_id]))
+    return segments

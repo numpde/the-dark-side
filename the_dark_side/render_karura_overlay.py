@@ -18,11 +18,17 @@ from .karura_common import (
     VIEWPORT,
     include_editor_way,
     include_ride_way,
-    mercator,
     print_json_document,
     resolve_map_json,
 )
-from .render_support import load_viewport, prepare_base_image, project_mercator_point
+from .render_support import (
+    load_viewport,
+    mercator_lookup_from_graph_document,
+    mercator_lookup_from_map,
+    prepare_base_image,
+    project_mercator_point,
+    segments_from_node_pairs,
+)
 
 
 OUT_BY_MODE = {
@@ -51,21 +57,14 @@ def include_way(way_id, tags, mode):
 
 def parse_map(path, mode):
     karura_map = load_map(path)
-    nodes = {
-        int(node_id): mercator(node.lon, node.lat)
-        for node_id, node in karura_map.nodes.items()
-    }
+    nodes = mercator_lookup_from_map(karura_map)
 
     filtered = []
     for way_id, way in karura_map.ways.items():
         tags = way.tags
         if not include_way(way_id, tags, mode):
             continue
-        segments = []
-        for first_id, second_id in way.segment_pairs:
-            if first_id not in nodes or second_id not in nodes:
-                continue
-            segments.append((nodes[first_id], nodes[second_id]))
+        segments = segments_from_node_pairs(way.segment_pairs, node_lookup=nodes)
         if segments:
             filtered.append((way_id, segments, tags))
 
@@ -74,18 +73,11 @@ def parse_map(path, mode):
 
 def parse_contigs(path):
     payload = load_route_graph_document(path, label="route graph")
-    nodes = {
-        int(node_id): mercator(node["lon"], node["lat"])
-        for node_id, node in payload["nodes"].items()
-    }
+    nodes = mercator_lookup_from_graph_document(payload)
 
     contigs = []
     for contig in payload["contigs"]:
-        segments = []
-        for first_id, second_id in contig["segment_pairs"]:
-            if first_id not in nodes or second_id not in nodes:
-                continue
-            segments.append((nodes[first_id], nodes[second_id]))
+        segments = segments_from_node_pairs(contig["segment_pairs"], node_lookup=nodes)
         if segments:
             contigs.append((int(contig["id"]), segments, contig))
 
@@ -101,15 +93,11 @@ def parse_patches(path):
         if patch.get("op") != "add_way":
             continue
         node_lookup = {
-            int(node["id"]): mercator(float(node["lon"]), float(node["lat"]))
+            int(node["id"]): (mercator(float(node["lon"]), float(node["lat"])))
             for node in patch.get("nodes", [])
         }
-        segments = []
         node_ids = [int(node_id) for node_id in patch.get("node_ids", [])]
-        for first_id, second_id in zip(node_ids, node_ids[1:]):
-            if first_id not in node_lookup or second_id not in node_lookup:
-                continue
-            segments.append((node_lookup[first_id], node_lookup[second_id]))
+        segments = segments_from_node_pairs(zip(node_ids, node_ids[1:]), node_lookup=node_lookup)
         if segments:
             patch_items.append((str(patch["id"]), segments, patch))
     return patch_items
