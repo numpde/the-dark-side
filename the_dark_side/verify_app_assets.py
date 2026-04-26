@@ -6,21 +6,9 @@ from __future__ import annotations
 
 import argparse
 import json
-from pathlib import Path
 
+from .asset_pipeline_cli import add_app_asset_args
 from .build_config import load_catalog_build_config
-from .karura_common import (
-    APP_MANIFEST_JSON,
-    CATALOG_BUILD_JSON,
-    CONTIGS_JSON,
-    ELEVATION_JSON,
-    JUNCTION_BINDINGS_JSON,
-    JUNCTIONS_JSON,
-    MAP_JSON,
-    MAP_PATCHES_JSON,
-    PATCHED_MAP_JSON,
-    WEB_GENERATED_DIR,
-)
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_editor_assets import verify_editor_assets
@@ -29,28 +17,7 @@ from .web_assets import load_elevation_asset, network_geojson
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--map-json", type=Path, default=MAP_JSON)
-    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
-    parser.add_argument("--patched-map-json", type=Path, default=PATCHED_MAP_JSON)
-    parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
-    parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
-    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
-    parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
-    parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument("--output-network", type=Path, default=WEB_GENERATED_DIR / "karura-network.geojson")
-    parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
-    parser.add_argument("--output-editor-manifest", type=Path, default=WEB_GENERATED_DIR / "editor-manifest.json")
-    parser.add_argument("--output-app-manifest", type=Path, default=APP_MANIFEST_JSON)
-    parser.add_argument(
-        "--fill-segment-gaps",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-    )
-    parser.add_argument(
-        "--respect-inner-rings",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-    )
+    add_app_asset_args(parser)
     return parser.parse_args()
 
 

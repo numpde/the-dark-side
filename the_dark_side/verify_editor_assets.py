@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
+from .asset_pipeline_cli import add_editor_asset_args
 from .apply_karura_patches import apply_patchset, load_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
@@ -35,25 +36,8 @@ from .web_assets import build_editor_graph_payload_from_map
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--map-json", type=Path, default=MAP_JSON)
-    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
-    parser.add_argument("--patched-map-json", type=Path, default=PATCHED_MAP_JSON)
-    parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
-    parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
-    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
-    parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
-    parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
+    add_editor_asset_args(parser, include_output_editor_manifest=True)
     parser.add_argument("--output-frontend-manifest", type=Path, default=FRONTEND_MANIFEST_JSON)
-    parser.add_argument(
-        "--fill-segment-gaps",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-    )
-    parser.add_argument(
-        "--respect-inner-rings",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-    )
     return parser.parse_args(argv)
 
 

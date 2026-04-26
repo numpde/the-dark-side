@@ -7,9 +7,9 @@ from __future__ import annotations
 import argparse
 import json
 from datetime import datetime, timezone
-from pathlib import Path
 
 from .apply_karura_patches import apply_patchset, load_patchset
+from .asset_pipeline_cli import add_editor_asset_args
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map, write_json
 from .junction_bindings import build_junction_bindings, load_junction_catalog
@@ -19,12 +19,6 @@ from .karura_common import (
     EDITOR_MODULE_PATHS,
     EDITOR_MANIFEST_JSON,
     FRONTEND_MANIFEST_JSON,
-    JUNCTION_BINDINGS_JSON,
-    JUNCTIONS_JSON,
-    MAP_JSON,
-    MAP_PATCHES_JSON,
-    PATCHED_MAP_JSON,
-    WEB_GENERATED_DIR,
     repo_rel,
     sync_web_source_assets,
     digest_paths,
@@ -35,26 +29,7 @@ from .web_assets import build_editor_graph_payload, write_json as write_export_j
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--map-json", type=Path, default=MAP_JSON)
-    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
-    parser.add_argument("--patched-map-json", type=Path, default=PATCHED_MAP_JSON)
-    parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
-    parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
-    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
-    parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
-    parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
-    parser.add_argument(
-        "--fill-segment-gaps",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Fill clipped gaps between kept segments on the same way",
-    )
-    parser.add_argument(
-        "--respect-inner-rings",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-        help="Respect inner rings as holes instead of using only the outer shell",
-    )
+    add_editor_asset_args(parser, include_output_editor_manifest=True)
     return parser.parse_args(argv)
 
 

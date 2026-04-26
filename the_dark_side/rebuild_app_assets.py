@@ -7,27 +7,18 @@ from __future__ import annotations
 import argparse
 import json
 from datetime import datetime, timezone
-from pathlib import Path
 
+from .asset_pipeline_cli import add_app_asset_args, editor_rebuild_argv_from_namespace
+from .build_config import catalog_build_config_digest, load_catalog_build_config
 from .karura_common import (
     APP_MANIFEST_JSON,
-    CATALOG_BUILD_JSON,
-    CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
-    ELEVATION_JSON,
-    JUNCTION_BINDINGS_JSON,
-    JUNCTIONS_JSON,
-    MAP_JSON,
-    MAP_PATCHES_JSON,
-    PATCHED_MAP_JSON,
-    WEB_GENERATED_DIR,
     repo_rel,
 )
 from .rebuild_editor_assets import (
     parse_args as parse_editor_args,
     rebuild_editor_assets as rebuild_editor_bundle,
 )
-from .build_config import catalog_build_config_digest, load_catalog_build_config
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .web_assets import (
     load_elevation_asset,
@@ -38,28 +29,7 @@ from .web_assets import (
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--map-json", type=Path, default=MAP_JSON)
-    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
-    parser.add_argument("--patched-map-json", type=Path, default=PATCHED_MAP_JSON)
-    parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
-    parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
-    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
-    parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
-    parser.add_argument("--elevation-json", type=Path, default=ELEVATION_JSON)
-    parser.add_argument("--output-network", type=Path, default=WEB_GENERATED_DIR / "karura-network.geojson")
-    parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
-    parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
-    parser.add_argument("--output-app-manifest", type=Path, default=APP_MANIFEST_JSON)
-    parser.add_argument(
-        "--fill-segment-gaps",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-    )
-    parser.add_argument(
-        "--respect-inner-rings",
-        action=argparse.BooleanOptionalAction,
-        default=False,
-    )
+    add_app_asset_args(parser)
     return parser.parse_args(argv)
 
 
@@ -170,18 +140,7 @@ def build_app_manifest(
 
 def editor_args_from_app_args(args: argparse.Namespace) -> argparse.Namespace:
     return parse_editor_args(
-        [
-            "--map-json", str(args.map_json),
-            "--patches-json", str(args.patches_json),
-            "--patched-map-json", str(args.patched_map_json),
-            "--contigs-json", str(args.contigs_json),
-            "--junctions-json", str(args.junctions_json),
-            "--junction-bindings-json", str(args.junction_bindings_json),
-            "--output-editor-network", str(args.output_editor_network),
-            "--output-editor-manifest", str(args.output_editor_manifest),
-            "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",
-            "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
-        ]
+        editor_rebuild_argv_from_namespace(args, include_output_editor_manifest=True)
     )
 
 
