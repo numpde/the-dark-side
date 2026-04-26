@@ -10,9 +10,9 @@ const MODULE_VERSION = requireModuleVersion();
 const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
 const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
-const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
+const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`);
 const {
   setControlsDisabled,
   updateRouteSurfaceState,
@@ -57,11 +57,15 @@ let appState = {
   routeMapView: null,
   gpxUrl: null,
   loopArrowPhase: 0,
-  plannerClient: null,
-  plannerReady: false,
+  routeRuntime: createRouteRuntime({
+    moduleVersion: MODULE_VERSION,
+    parsePlannerWorkerResponse,
+    onUnhandledError: (error) => {
+      showError(errorCard, error.message || String(error));
+    },
+  }),
   routeStatus: "booting",
   activeRouteRequestId: 0,
-  routeSeedCounter: Math.floor(Math.random() * 1_000_000),
   routeHistoryByScenario: new Map(),
 };
 
@@ -71,12 +75,6 @@ function networkUrlForArea() {
   const url = new URL(relativePath, appManifestUrl);
   url.searchParams.set("v", appState.manifest.planner.network_version);
   return url;
-}
-
-
-function nextRouteSeed() {
-  appState.routeSeedCounter += 1;
-  return appState.routeSeedCounter;
 }
 
 function routeSurfaceIsInvalidated() {
@@ -167,7 +165,7 @@ function updateSummary() {
   updateRouteStats();
   updateDownloadLink();
   setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
-    disabled: !appState.plannerReady,
+    disabled: !appState.routeRuntime.plannerReady,
     isLoading: appState.routeStatus === "loading",
     hasRoute: Boolean(appState.route),
   });
@@ -184,33 +182,8 @@ async function loadAreaNetwork() {
 }
 
 
-function ensurePlannerClient() {
-  if (appState.plannerClient) {
-    return appState.plannerClient;
-  }
-  appState.plannerClient = createPlannerClient({
-    moduleVersion: MODULE_VERSION,
-    parsePlannerWorkerResponse,
-    onUnhandledError: (error) => {
-      showError(errorCard, error.message || String(error));
-    },
-  });
-  return appState.plannerClient;
-}
-
-
-function sendWorkerMessage(type, payload, { onProgress = null } = {}) {
-  return ensurePlannerClient().request(type, payload, { onProgress });
-}
-
-
 async function initializePlanner(networkPayload) {
-  appState.plannerReady = false;
-  await sendWorkerMessage("init", {
-    network: networkPayload,
-    config: appState.manifest.planner.config,
-  });
-  appState.plannerReady = true;
+  await appState.routeRuntime.initializePlanner(networkPayload, appState.manifest.planner.config);
   clearError(errorCard);
 }
 
@@ -218,7 +191,7 @@ async function initializePlanner(networkPayload) {
 async function chooseRoute() {
   const scenario = currentScenario();
   syncUrlFromSelectors(areaSelect, startSelect, endSelect);
-  if (!scenario || !appState.plannerReady || !appState.area) {
+  if (!scenario || !appState.routeRuntime.plannerReady || !appState.area) {
     appState.route = null;
     updateSummary();
     renderRoute();
@@ -227,7 +200,7 @@ async function chooseRoute() {
 
   const { startJunction, endJunction } = currentJunctions();
   const requestId = ++appState.activeRouteRequestId;
-  const seed = nextRouteSeed();
+  const seed = appState.routeRuntime.nextRouteSeed();
   const hadRoute = Boolean(appState.route);
   appState.routeStatus = "loading";
   if (!hadRoute) {
@@ -239,7 +212,7 @@ async function chooseRoute() {
   }
 
   try {
-    const route = await sendWorkerMessage("plan", {
+    const route = await appState.routeRuntime.requestRoute({
       routeId: `browser-${scenario.id}-seed${seed}`,
       seed,
       startNodeId: startJunction.graph_node_id,
@@ -273,7 +246,6 @@ async function chooseRoute() {
 
 
 async function loadArea(area) {
-  appState.plannerReady = false;
   appState.routeStatus = "loading";
   appState.route = null;
   appState.network = null;
