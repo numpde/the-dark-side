@@ -271,6 +271,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function normalizeRouteHistory\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function buildDiverseCandidatePool\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function pickHistoryAwarePrimaryCandidate\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function findArticulationPoints\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_time_budget_ms:\s*requireFiniteNumber\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")

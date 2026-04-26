@@ -19,54 +19,6 @@ function makeRng(seed) {
   };
 }
 
-function findArticulationPoints(adjacency) {
-  const graph = new Map();
-  for (const [nodeId, edges] of adjacency.entries()) {
-    graph.set(nodeId, new Set(edges.map(([, neighbor]) => neighbor).filter((neighbor) => neighbor !== nodeId)));
-  }
-
-  const discovery = new Map();
-  const low = new Map();
-  const parent = new Map();
-  const articulation = new Set();
-  let time = 0;
-
-  function visit(nodeId) {
-    time += 1;
-    discovery.set(nodeId, time);
-    low.set(nodeId, time);
-    let childCount = 0;
-
-    const neighbors = [...(graph.get(nodeId) || [])].sort((a, b) => a - b);
-    for (const neighbor of neighbors) {
-      if (!discovery.has(neighbor)) {
-        parent.set(neighbor, nodeId);
-        childCount += 1;
-        visit(neighbor);
-        low.set(nodeId, Math.min(low.get(nodeId), low.get(neighbor)));
-        if (!parent.has(nodeId) && childCount > 1) {
-          articulation.add(nodeId);
-        }
-        if (parent.has(nodeId) && low.get(neighbor) >= discovery.get(nodeId)) {
-          articulation.add(nodeId);
-        }
-      } else if (neighbor !== parent.get(nodeId)) {
-        low.set(nodeId, Math.min(low.get(nodeId), discovery.get(neighbor)));
-      }
-    }
-  }
-
-  for (const nodeId of [...graph.keys()].sort((a, b) => a - b)) {
-    if (discovery.has(nodeId)) {
-      continue;
-    }
-    parent.delete(nodeId);
-    visit(nodeId);
-  }
-
-  return articulation;
-}
-
 function isShortConnector(contig, config) {
   return contig.lengthM <= config.short_connector_max_length_m;
 }
