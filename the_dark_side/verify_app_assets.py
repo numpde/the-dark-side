@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 
 from .asset_contracts import load_required_elevation_asset
 from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
@@ -18,6 +17,7 @@ from .karura_routing import load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_helpers import assert_equal, load_json, normalized
 from .verify_editor_assets import verify_editor_assets
+from .karura_common import print_json_document
 from .web_assets import load_elevation_asset, network_geojson
 
 
@@ -150,7 +150,7 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
 
 def main() -> None:
     args = parse_args()
-    print(json.dumps(verify_app_assets(args), indent=2))
+    print_json_document(verify_app_assets(args))
 
 
 if __name__ == "__main__":

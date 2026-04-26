@@ -132,6 +132,10 @@ def write_json_document(path: Path, payload: object, *, sort_keys: bool = False)
     path.write_text(json.dumps(payload, indent=2, sort_keys=sort_keys) + "\n")
 
 
+def print_json_document(payload: object, *, sort_keys: bool = False) -> None:
+    print(json.dumps(payload, indent=2, sort_keys=sort_keys))
+
+
 def sync_web_source_assets() -> list[Path]:
     WEB_SOURCE_DIR.mkdir(parents=True, exist_ok=True)
     synced: list[Path] = []

@@ -17,6 +17,7 @@ from typing import Any
 from .karura_common import (
     MAP_JSON as DEFAULT_MAP_JSON,
     RAW_JSON as DEFAULT_RAW_JSON,
+    print_json_document,
     utc_now_z,
     write_json_document,
 )
@@ -515,7 +516,7 @@ def main() -> None:
         "fill_segment_gaps": args.fill_segment_gaps,
         "respect_inner_rings": args.respect_inner_rings,
     }
-    print(json.dumps(summary, indent=2))
+    print_json_document(summary)
 
 
 if __name__ == "__main__":

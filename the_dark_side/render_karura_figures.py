@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 import argparse
-import json
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -19,10 +18,10 @@ from .karura_common import (
     CONTIGS_JSON,
     CURATED_DIR,
     DEBUG_DIR,
-    FIGURES_DIR,
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     VIEWPORT,
+    print_json_document,
 )
 from .render_support import load_viewport, project_lon_lat
 
@@ -163,7 +162,7 @@ def main() -> None:
     output = args.output or (args.figures_json.parent / figure["output_path"])
     output.parent.mkdir(parents=True, exist_ok=True)
     overlay.save(output)
-    print(json.dumps({"figure_id": figure["id"], "output": str(output)}, indent=2))
+    print_json_document({"figure_id": figure["id"], "output": str(output)})
 
 
 if __name__ == "__main__":

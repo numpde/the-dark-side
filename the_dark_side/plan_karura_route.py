@@ -5,14 +5,13 @@
 from __future__ import annotations
 
 import argparse
-import json
 import os
 from pathlib import Path
 import random
 
 from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
-from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR, write_json_document
+from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR, print_json_document, write_json_document
 from .karura_routing import (
     PlannerConfig,
     load_route_graph,
@@ -105,7 +104,7 @@ def main() -> None:
         if top
         else None,
     }
-    print(json.dumps(summary, indent=2))
+    print_json_document(summary)
 
 
 if __name__ == "__main__":

@@ -4,14 +4,13 @@
 
 from __future__ import annotations
 
-import json
-
+from .karura_common import print_json_document
 from .verify_app_assets import parse_args, verify_app_assets
 
 
 def main() -> None:
     args = parse_args()
-    print(json.dumps(verify_app_assets(args), indent=2))
+    print_json_document(verify_app_assets(args))
 
 
 if __name__ == "__main__":

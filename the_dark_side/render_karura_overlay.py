@@ -3,7 +3,6 @@
 """Render Karura overlay images from the normalized map JSON."""
 
 import argparse
-import json
 import random
 from pathlib import Path
 
@@ -20,6 +19,7 @@ from .karura_common import (
     include_editor_way,
     include_ride_way,
     mercator,
+    print_json_document,
     resolve_map_json,
 )
 from .render_support import load_viewport, prepare_base_image, project_mercator_point
@@ -162,12 +162,7 @@ def main():
     out = args.output or OUT_BY_MODE[args.mode]
     out.parent.mkdir(parents=True, exist_ok=True)
     img.save(out)
-    print(
-        json.dumps(
-            {"mode": args.mode, "ways": len(ways), "segments": segment_count, "output": str(out)},
-            indent=2,
-        )
-    )
+    print_json_document({"mode": args.mode, "ways": len(ways), "segments": segment_count, "output": str(out)})
 
 
 if __name__ == "__main__":

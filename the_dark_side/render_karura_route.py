@@ -5,14 +5,13 @@
 from __future__ import annotations
 
 import argparse
-import json
 import math
 from pathlib import Path
 
 from PIL import ImageDraw
 
 from .asset_contracts import load_route_asset_document
-from .karura_common import SCREENSHOT, VIEWPORT
+from .karura_common import SCREENSHOT, VIEWPORT, print_json_document
 from .karura_routing import load_route_graph
 from .render_support import load_viewport, prepare_base_image, project_lon_lat
 
@@ -126,7 +125,7 @@ def main() -> None:
     output = args.output or default_output(args.route_json, route_payload, args.route_index)
     output.parent.mkdir(parents=True, exist_ok=True)
     image.save(output)
-    print(json.dumps({"route_index": args.route_index, "output": str(output)}, indent=2))
+    print_json_document({"route_index": args.route_index, "output": str(output)})
 
 
 if __name__ == "__main__":

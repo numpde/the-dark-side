@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from .asset_contracts import load_required_patchset
+from .download_karura_map import load_map
 from .karura_common import (
     CONTIGS_JSON as DEFAULT_OUT_JSON,
     LOCAL_BICYCLE_DIRECTION_TAG,
@@ -22,6 +23,7 @@ from .karura_common import (
     MAP_PATCHES_JSON,
     include_ride_way,
     parse_iso_date,
+    print_json_document,
     repo_rel,
     resolve_map_json,
     write_json_document,
@@ -388,7 +390,7 @@ def build_contigs(
 def main() -> None:
     args = parse_args()
     map_json = args.map_json or resolve_map_json()
-    payload = json.loads(map_json.read_text())
+    payload = load_map(map_json).to_dict()
     patchset = load_required_patchset(args.patches_json, label="patchset file")
     contig_graph = build_contigs(
         payload,
@@ -398,17 +400,14 @@ def main() -> None:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     write_json_document(args.output, contig_graph, sort_keys=True)
-    print(
-        json.dumps(
-            {
-                "output": str(args.output),
-                "contig_count": contig_graph["meta"]["contig_count"],
-                "crossing_count": contig_graph["meta"]["crossing_count"],
-                "edge_count": contig_graph["meta"]["edge_count"],
-                "applied_contig_patch_count": len(contig_graph["meta"].get("applied_contig_patch_ids", [])),
-            },
-            indent=2,
-        )
+    print_json_document(
+        {
+            "output": str(args.output),
+            "contig_count": contig_graph["meta"]["contig_count"],
+            "crossing_count": contig_graph["meta"]["crossing_count"],
+            "edge_count": contig_graph["meta"]["edge_count"],
+            "applied_contig_patch_count": len(contig_graph["meta"].get("applied_contig_patch_ids", [])),
+        }
     )
 
 

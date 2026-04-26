@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import re
 from pathlib import Path
 from types import SimpleNamespace
@@ -28,6 +27,7 @@ from .karura_common import (
     SOURCE_ASSET_PATHS,
     WEB_GENERATED_DIR,
     WEB_SOURCE_DIR,
+    print_json_document,
     repo_rel,
 )
 from .karura_common import include_ride_way
@@ -530,7 +530,7 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
 
 def main() -> None:
     args = parse_args()
-    print(json.dumps(verify_editor_assets(args), indent=2))
+    print_json_document(verify_editor_assets(args))
 
 
 if __name__ == "__main__":
