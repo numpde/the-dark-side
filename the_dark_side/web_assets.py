@@ -9,9 +9,9 @@ from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .karura_common import (
     include_editor_way,
+    load_required_elevation_asset,
     load_required_patchset,
     repo_rel,
-    require_json_object,
 )
 
 
@@ -144,16 +144,15 @@ def build_editor_graph_payload(*, editor_map_json: Path, editor_patches_json: Pa
 def load_elevation_asset(path: Path | None, *, expected_graph_asset_id: str | None = None) -> tuple[dict[int, float], bool]:
     if path is None or not path.exists():
         return {}, False
-    payload = require_json_object(json.loads(path.read_text()), label="elevation asset")
-    meta = require_json_object(payload.get("meta"), label="elevation asset.meta")
+    payload = load_required_elevation_asset(path, label="elevation asset")
+    meta = payload["meta"]
     payload_graph_asset_id = meta.get("graph_asset_id")
     if expected_graph_asset_id is not None and payload_graph_asset_id != expected_graph_asset_id:
         return {}, False
-    nodes = require_json_object(payload.get("nodes"), label="elevation asset.nodes")
+    nodes = payload["nodes"]
     node_elevations: dict[int, float] = {}
     for node_id, node_payload in nodes.items():
-        item = require_json_object(node_payload, label=f"elevation asset.nodes[{node_id}]")
-        elevation = item.get("elevation_m")
+        elevation = node_payload.get("elevation_m")
         if elevation is None:
             continue
         node_elevations[int(node_id)] = float(elevation)

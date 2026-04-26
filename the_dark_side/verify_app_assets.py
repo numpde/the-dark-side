@@ -12,6 +12,7 @@ from .build_config import (
     BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS,
     load_catalog_build_config,
 )
+from .karura_common import load_required_elevation_asset
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_helpers import assert_equal, load_json, normalized
@@ -84,12 +85,12 @@ def validate_manifest_schema(manifest: dict) -> None:
 def verify_app_assets(args: argparse.Namespace) -> dict:
     editor_args = editor_args_from_app_args(args)
     editor_verification = verify_editor_assets(editor_args)
+    graph = load_route_graph(args.contigs_json)
 
     if args.elevation_json.exists():
-        elevation_payload = load_json(args.elevation_json)
-        actual_contigs = load_json(args.contigs_json)
-        actual_graph_asset_id = elevation_payload.get("meta", {}).get("graph_asset_id")
-        expected_graph_asset_id = actual_contigs.get("meta", {}).get("asset_id")
+        elevation_payload = load_required_elevation_asset(args.elevation_json, label="elevation cache")
+        actual_graph_asset_id = elevation_payload["meta"]["graph_asset_id"]
+        expected_graph_asset_id = graph.asset_id
         if actual_graph_asset_id != expected_graph_asset_id:
             raise SystemExit(
                 f"{args.elevation_json} does not match current contig graph; rebuild elevation and commit the updated cache"
@@ -99,7 +100,6 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
             f"missing elevation cache: {args.elevation_json}; rebuild elevation and commit the updated cache"
         )
 
-    graph = load_route_graph(args.contigs_json)
     build_config_payload = load_catalog_build_config(args.build_config_json)
     node_elevations, elevation_matches_graph = load_elevation_asset(
         args.elevation_json,

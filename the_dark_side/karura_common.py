@@ -242,6 +242,27 @@ def load_required_junction_bindings(path: Path, *, label: str) -> dict:
     return validate_junction_bindings_document(load_required_json(path, label=label), label=label)
 
 
+def validate_elevation_asset_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("graph_asset_id"), label=f"{label}.meta.graph_asset_id")
+    nodes = require_json_object(document.get("nodes"), label=f"{label}.nodes")
+    for node_id, node_payload in nodes.items():
+        if not isinstance(node_id, str):
+            raise ValueError(f"{label}.nodes keys must be strings")
+        item = require_json_object(node_payload, label=f"{label}.nodes[{node_id}]")
+        elevation_m = item.get("elevation_m")
+        if elevation_m is None:
+            continue
+        if not isinstance(elevation_m, (int, float)):
+            raise ValueError(f"{label}.nodes[{node_id}].elevation_m must be numeric")
+    return document
+
+
+def load_required_elevation_asset(path: Path, *, label: str) -> dict:
+    return validate_elevation_asset_document(load_required_json(path, label=label), label=label)
+
+
 def validate_figure_catalog_document(payload: object, *, label: str) -> dict:
     document = require_json_object(payload, label=label)
     meta = require_json_object(document.get("meta"), label=f"{label}.meta")
