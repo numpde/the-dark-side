@@ -180,6 +180,10 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_contains("web/route-worker.js", route_worker_js, 'searchParams.get("v") || ""')
     route_planner_js = (WEB_GENERATED_DIR.parent / "route-planner.mjs").read_text()
     assert_regex("web/route-planner.mjs", route_planner_js, r'import\s*\{\s*karuraTodayString,\s*isCurrentlyUnavailable\s*\}\s*from\s*"\./karura-policy\.mjs"')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_time_budget_ms:\s*requireFiniteNumber\(')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
+    assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")
+    assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_progress_interval_iterations == null")
 
 
 def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:

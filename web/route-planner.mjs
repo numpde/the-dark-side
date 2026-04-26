@@ -1175,6 +1175,14 @@ export function planBrowserRoute(graph, options) {
       config.mcts_loop_overlap_penalty_per_m,
       "planner config.mcts_loop_overlap_penalty_per_m",
     ),
+    mcts_time_budget_ms: requireFiniteNumber(
+      config.mcts_time_budget_ms,
+      "planner config.mcts_time_budget_ms",
+    ),
+    mcts_progress_interval_iterations: requireInteger(
+      config.mcts_progress_interval_iterations,
+      "planner config.mcts_progress_interval_iterations",
+    ),
   };
   const loopMode = startNodeId === endNodeId;
   const root = {
@@ -1188,15 +1196,8 @@ export function planBrowserRoute(graph, options) {
   };
   const candidates = [];
   const maxIterations = plannerConfig.mcts_iterations;
-  const maxPlanningMs = plannerConfig.mcts_time_budget_ms == null
-    ? Number.POSITIVE_INFINITY
-    : requireFiniteNumber(plannerConfig.mcts_time_budget_ms, "planner config.mcts_time_budget_ms");
-  const progressIntervalIterations = plannerConfig.mcts_progress_interval_iterations == null
-    ? null
-    : Math.max(1, requireInteger(
-      plannerConfig.mcts_progress_interval_iterations,
-      "planner config.mcts_progress_interval_iterations",
-    ));
+  const maxPlanningMs = plannerConfig.mcts_time_budget_ms;
+  const progressIntervalIterations = Math.max(1, plannerConfig.mcts_progress_interval_iterations);
   const deadline = monotonicNowMs() + maxPlanningMs;
   let lastProgressSignature = null;
 

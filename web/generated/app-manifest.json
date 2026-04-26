@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T16:47:59.402497Z",
+    "generated_at": "2026-04-26T18:21:58.006165Z",
     "asset_kind": "app_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "catalog_build_path": "source/catalog_build.json",
-    "catalog_build_digest": "caa3dbfc1515",
+    "catalog_build_digest": "34a917665275",
     "elevation_asset_matches_graph": true
   },
   "planner": {

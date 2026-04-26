@@ -82,6 +82,18 @@ def validate_manifest_schema(manifest: dict) -> None:
         raise SystemExit("app manifest is stale; missing planner.network_version")
     if not isinstance(config, dict):
         raise SystemExit("app manifest is stale; missing planner.config object")
+    numeric_config_fields = (
+        "selection_pool",
+        "selection_window",
+        "mcts_iterations",
+        "mcts_rollout_top_k",
+        "mcts_rollout_samples",
+        "mcts_time_budget_ms",
+        "mcts_progress_interval_iterations",
+    )
+    for field_name in numeric_config_fields:
+        if not isinstance(config.get(field_name), (int, float)):
+            raise SystemExit(f"app manifest is stale; missing numeric planner.config.{field_name}")
     areas = manifest.get("areas")
     if not isinstance(areas, list) or not areas:
         raise SystemExit("app manifest is stale; missing non-empty areas list")

@@ -52,7 +52,7 @@ Static GitHub Pages app and route-planning toolkit for long, low-overlap bike ro
 - `the_dark_side.render_karura_route`
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
-  Exports the precomputed/debug route catalog plus the generated GeoJSON assets used by the web app and contig editor into `web/generated/`, and publishes read-only copies of the canonical `source/*.json` inputs into `web/source/`.
+  Exports the precomputed/debug route catalog into `data/routes/`, and provides shared GeoJSON/export helpers used by the editor/app rebuild pipeline.
 - `the_dark_side.rebuild_editor_assets`
   Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
 - `the_dark_side.verify_editor_assets`
@@ -396,6 +396,11 @@ python3 -m the_dark_side.verify_app_assets
 `web/generated/app-manifest.json` contains the live route-app bootstrap payload:
 
 - `planner` contains the browser-side algorithm id, the ride-network asset path, and bounded planner config
+- the canonical build config is split into:
+  - `debug_catalog`
+  - `planner`
+  - `browser_runtime`
+- the browser runtime knobs come from explicit `browser_runtime.browser_*` entries in `source/catalog_build.json`, not hidden Python clamps
 - `areas` contains the currently supported areas, starting with `karura`
 - each area contains:
   - `junctions`

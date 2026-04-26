@@ -262,3 +262,27 @@ test("browser planner rejects endpoint mismatches instead of silently inferring 
     /Invalid route network: features\[0\] endpoint_node_ids must match the first and last node_ids/
   );
 });
+
+test("browser planner rejects missing runtime budget fields instead of falling back silently", () => {
+  const payload = {
+    type: "FeatureCollection",
+    features: [
+      feature(50, [1, 2], [[36.81, -1.24], [36.811, -1.241]], { length_m: 100 }),
+      feature(51, [2, 3], [[36.811, -1.241], [36.812, -1.242]], { length_m: 100 }),
+    ],
+  };
+
+  const graph = buildGraphFromGeoJson(payload);
+  const badConfig = { ...CONFIG };
+  delete badConfig.mcts_time_budget_ms;
+
+  assert.throws(
+    () => planBrowserRoute(graph, {
+      startNodeId: 1,
+      endNodeId: 3,
+      seed: 5,
+      config: badConfig,
+    }),
+    /planner config\.mcts_time_budget_ms/
+  );
+});

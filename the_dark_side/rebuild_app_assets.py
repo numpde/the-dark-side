@@ -108,13 +108,15 @@ def build_app_manifest(
             "elevation_min_step_m",
         )
     }
-    planner_config["selection_pool"] = min(int(build_config_payload["beam_selection_pool"]), 5)
-    planner_config["selection_window"] = min(int(build_config_payload["beam_selection_window"]), 12)
-    planner_config["mcts_iterations"] = min(int(planner_config["mcts_iterations"]), 320)
-    planner_config["mcts_rollout_top_k"] = min(int(planner_config["mcts_rollout_top_k"]), 3)
-    planner_config["mcts_rollout_samples"] = min(int(planner_config["mcts_rollout_samples"]), 2)
-    planner_config["mcts_time_budget_ms"] = 350.0
-    planner_config["mcts_progress_interval_iterations"] = 24
+    planner_config["selection_pool"] = int(build_config_payload["browser_selection_pool"])
+    planner_config["selection_window"] = int(build_config_payload["browser_selection_window"])
+    planner_config["mcts_iterations"] = int(build_config_payload["browser_mcts_iterations"])
+    planner_config["mcts_rollout_top_k"] = int(build_config_payload["browser_mcts_rollout_top_k"])
+    planner_config["mcts_rollout_samples"] = int(build_config_payload["browser_mcts_rollout_samples"])
+    planner_config["mcts_time_budget_ms"] = float(build_config_payload["browser_mcts_time_budget_ms"])
+    planner_config["mcts_progress_interval_iterations"] = int(
+        build_config_payload["browser_mcts_progress_interval_iterations"]
+    )
     junction_defs = junction_catalog["junctions"]
     scenarios = [
         {

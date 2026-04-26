@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Export a static Karura route catalog for the frontend app."""
+"""Export a precomputed debug route catalog and shared web graph payloads."""
 
 from __future__ import annotations
 
