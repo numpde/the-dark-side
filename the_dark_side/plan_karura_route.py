@@ -10,7 +10,8 @@ import os
 from pathlib import Path
 import random
 
-from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR
+from .build_config import add_planner_config_args, load_catalog_build_config, planner_config_kwargs_from_namespace
+from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR
 from .karura_routing import (
     PlannerConfig,
     load_junction_bindings,
@@ -25,8 +26,14 @@ from .karura_routing import (
 )
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument("--build-config-json", type=Path, default=CATALOG_BUILD_JSON)
+    pre_args, remaining = pre_parser.parse_known_args(argv)
+    planner_defaults = load_catalog_build_config(pre_args.build_config_json)
+
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--build-config-json", type=Path, default=pre_args.build_config_json)
     parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), default="naive")
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
@@ -34,57 +41,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start-junction", default="family_trail_west")
     parser.add_argument("--end-junction", default="kiambu_side_exit")
     parser.add_argument("--seed", type=int, default=7)
-    parser.add_argument("--short-connector-max-length-m", type=float, default=35.0)
-    parser.add_argument("--max-overlap-m", type=float, default=70.0)
-    parser.add_argument("--max-steps", type=int, default=256)
-    parser.add_argument("--random-top-k", type=int, default=4)
-    parser.add_argument("--end-stop-probability", type=float, default=0.7)
-    parser.add_argument("--end-stop-unused-slack-m", type=float, default=400.0)
-    parser.add_argument("--rollout-trials", type=int, default=250)
-    parser.add_argument("--beam-width", type=int, default=80)
-    parser.add_argument("--beam-branch-factor", type=int, default=5)
-    parser.add_argument("--beam-rounds", type=int, default=200)
-    parser.add_argument("--beam-selection-pool", type=int, default=5)
-    parser.add_argument("--beam-selection-window", type=int, default=12)
-    parser.add_argument("--mcts-iterations", type=int, default=640)
-    parser.add_argument("--mcts-exploration-weight", type=float, default=1.0)
-    parser.add_argument("--mcts-rollout-top-k", type=int, default=3)
-    parser.add_argument("--mcts-rollout-samples", type=int, default=3)
-    parser.add_argument("--mcts-prior-weight", type=float, default=0.5)
-    parser.add_argument("--mcts-loop-completion-bonus", type=float, default=220.0)
-    parser.add_argument("--mcts-loop-unused-penalty-per-m", type=float, default=0.045)
-    parser.add_argument("--mcts-loop-late-return-bonus", type=float, default=180.0)
-    parser.add_argument("--mcts-loop-overlap-penalty-per-m", type=float, default=4.0)
-    parser.add_argument("--keep-best", type=int, default=5)
+    add_planner_config_args(parser, planner_defaults)
     parser.add_argument("--output", type=Path)
-    return parser.parse_args()
+    return parser.parse_args(remaining)
 
 
 def build_config(args: argparse.Namespace) -> PlannerConfig:
-    return PlannerConfig(
-        short_connector_max_length_m=args.short_connector_max_length_m,
-        max_overlap_m=args.max_overlap_m,
-        max_steps=args.max_steps,
-        random_top_k=args.random_top_k,
-        end_stop_probability=args.end_stop_probability,
-        end_stop_unused_slack_m=args.end_stop_unused_slack_m,
-        rollout_trials=args.rollout_trials,
-        beam_width=args.beam_width,
-        beam_branch_factor=args.beam_branch_factor,
-        beam_rounds=args.beam_rounds,
-        beam_selection_pool=args.beam_selection_pool,
-        beam_selection_window=args.beam_selection_window,
-        mcts_iterations=args.mcts_iterations,
-        mcts_exploration_weight=args.mcts_exploration_weight,
-        mcts_rollout_top_k=args.mcts_rollout_top_k,
-        mcts_rollout_samples=args.mcts_rollout_samples,
-        mcts_prior_weight=args.mcts_prior_weight,
-        mcts_loop_completion_bonus=args.mcts_loop_completion_bonus,
-        mcts_loop_unused_penalty_per_m=args.mcts_loop_unused_penalty_per_m,
-        mcts_loop_late_return_bonus=args.mcts_loop_late_return_bonus,
-        mcts_loop_overlap_penalty_per_m=args.mcts_loop_overlap_penalty_per_m,
-        keep_best=args.keep_best,
-    )
+    return PlannerConfig(**planner_config_kwargs_from_namespace(args))
 
 
 def default_output(args: argparse.Namespace) -> Path:

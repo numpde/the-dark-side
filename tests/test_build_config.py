@@ -11,6 +11,8 @@ from the_dark_side.build_config import (
     catalog_build_config_digest,
     load_catalog_build_config,
 )
+from the_dark_side.benchmark_karura_routes import parse_args as parse_benchmark_args
+from the_dark_side.plan_karura_route import parse_args as parse_plan_args
 
 
 class BuildConfigTest(unittest.TestCase):
@@ -64,6 +66,42 @@ class BuildConfigTest(unittest.TestCase):
             path.write_text(json.dumps({"debug_catalog": {}, "seed_end": 9}))
             with self.assertRaises(ValueError):
                 load_catalog_build_config(path)
+
+    def test_plan_cli_reads_defaults_from_canonical_build_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "catalog_build.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "planner": {
+                            "beam_width": 99,
+                            "end_finish_unused_slack_m": 333.0,
+                        }
+                    }
+                )
+            )
+            args = parse_plan_args(["--build-config-json", str(path)])
+
+        self.assertEqual(args.beam_width, 99)
+        self.assertEqual(args.end_finish_unused_slack_m, 333.0)
+
+    def test_benchmark_cli_reads_defaults_from_canonical_build_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = Path(tmpdir) / "catalog_build.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "planner": {
+                            "mcts_iterations": 777,
+                            "keep_best": 9,
+                        }
+                    }
+                )
+            )
+            args = parse_benchmark_args(["--build-config-json", str(path)])
+
+        self.assertEqual(args.mcts_iterations, 777)
+        self.assertEqual(args.keep_best, 9)
 
 
 if __name__ == "__main__":

@@ -138,6 +138,8 @@ python3 -m the_dark_side.plan_karura_route --algorithm beam
 python3 -m the_dark_side.plan_karura_route --algorithm mcts
 ```
 
+These debug planners now take their defaults from `source/catalog_build.json`. To try an alternate tuning document without changing the canonical source, pass `--build-config-json /path/to/catalog_build.json`.
+
 The current MCTS defaults are tuned toward longer coverage-heavy routes:
 
 - `--mcts-iterations 640`
@@ -192,6 +194,8 @@ Run the route benchmark summary:
 ```bash
 python3 -m the_dark_side.benchmark_karura_routes --seed-start 1 --seed-end 10
 ```
+
+Like the one-off route planner, the benchmark tool also derives planner defaults from `source/catalog_build.json` unless you override `--build-config-json`.
 
 This writes:
 - `data/benchmarks/karura-route-benchmark.json`
