@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Benchmark Karura route planners across scenarios and seeds."""
+"""Debug/oracle tool: benchmark Karura route planners across scenarios and seeds."""
 
 from __future__ import annotations
 
@@ -41,7 +41,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default_path=CATALOG_BUILD_JSON,
     )
 
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        epilog="Offline/debug tool only. The published app composes routes in the browser.",
+    )
     parser.add_argument("--build-config-json", type=Path, default=build_config_json)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
