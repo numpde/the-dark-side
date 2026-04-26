@@ -93,6 +93,7 @@ def verify_frontend_bootstrap_contract() -> None:
     app_js = (WEB_GENERATED_DIR.parent / "app.js").read_text()
     editor_js = (WEB_GENERATED_DIR.parent / "editor.js").read_text()
     planner_client_js = (WEB_GENERATED_DIR.parent / "planner-client.mjs").read_text()
+    route_map_view_js = (WEB_GENERATED_DIR.parent / "route-map-view.mjs").read_text()
     route_scenarios_js = (WEB_GENERATED_DIR.parent / "route-scenarios.mjs").read_text()
 
     assert_regex(
@@ -121,10 +122,10 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'await import\(`\./runtime-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-client\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/app.js", app_js, r'await import\(`\./route-map-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'function requireModuleVersion\(\)')
     assert_regex("web/app.js", app_js, r'throw new Error\("App runtime is missing required module version"\)')
-    assert_regex("web/app.js", app_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
     assert_regex("web/app.js", app_js, r'url\.searchParams\.set\("v", appState\.manifest\.planner\.network_version\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./gpx\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'createPlannerClient\(')
@@ -152,6 +153,10 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/app.js", app_js, r'function junctionById\(')
     assert_not_regex("web/app.js", app_js, r'function scenarioLabelText\(')
     assert_not_regex("web/app.js", app_js, r'function canonicalSelectionFromQuery\(')
+    assert_not_regex("web/app.js", app_js, r'function mixColor\(')
+    assert_not_regex("web/app.js", app_js, r'function boundsToLeaflet\(')
+    assert_not_regex("web/app.js", app_js, r'function junctionLatLon\(')
+    assert_not_regex("web/app.js", app_js, r'function ensureMap\(')
 
     assert_regex("web/planner-client.mjs", planner_client_js, r'export function createPlannerClient\(')
     assert_contains("web/planner-client.mjs", planner_client_js, "parsePlannerWorkerResponse(event.data)")
@@ -165,6 +170,13 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveCanonicalSelection\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function scenarioLabelText\(')
     assert_not_regex("web/route-scenarios.mjs", route_scenarios_js, r'function setScenarioLabelParts\(')
+
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'export function createRouteMapView\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'function mixColor\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'function boundsToLeaflet\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'function junctionLatLon\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
+    assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
 
     assert_regex("web/editor.js", editor_js, r'new URL\("\./generated/editor-manifest\.json", window\.location\.href\)')
     assert_regex("web/editor.js", editor_js, r'fetchJson\(editorManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')

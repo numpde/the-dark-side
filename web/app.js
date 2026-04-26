@@ -12,6 +12,7 @@ const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuf
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
 const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
+const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
 const {
   recentRoutesForScenario,
   rememberRouteForScenario,
@@ -32,7 +33,7 @@ const newRouteButton = document.getElementById("new-route-button");
 const downloadLink = document.getElementById("download-link");
 const routeStrip = document.querySelector(".route-strip");
 const buttonRow = document.querySelector(".button-row");
-const mapView = document.getElementById("map");
+const mapElement = document.getElementById("map");
 const LOOP_ARROW_INTERVAL_MS = 1000;
 
 let appState = {
@@ -40,10 +41,7 @@ let appState = {
   area: null,
   network: null,
   route: null,
-  map: null,
-  networkLayer: null,
-  routeLayer: null,
-  markerLayer: null,
+  routeMapView: null,
   gpxUrl: null,
   loopArrowPhase: 0,
   plannerClient: null,
@@ -88,7 +86,7 @@ function updateRouteSurfaceState() {
   const invalidated = routeSurfaceIsInvalidated();
   routeStrip.classList.toggle("is-stale", invalidated);
   buttonRow.classList.toggle("is-stale", invalidated);
-  mapView.classList.toggle("is-stale", invalidated);
+  mapElement.classList.toggle("is-stale", invalidated);
 }
 
 
@@ -155,24 +153,6 @@ function animatedLoopArrow() {
   return appState.loopArrowPhase % 2 === 0 ? "↗" : "↘";
 }
 
-
-function mixColor(start, end, fraction) {
-  const clamped = Math.max(0, Math.min(1, fraction));
-  const values = start.map((value, index) =>
-    Math.round(value + (end[index] - value) * clamped)
-  );
-  return `rgb(${values[0]}, ${values[1]}, ${values[2]})`;
-}
-
-
-function boundsToLeaflet(bounds) {
-  return [
-    [bounds[1], bounds[0]],
-    [bounds[3], bounds[2]],
-  ];
-}
-
-
 function currentScenario() {
   if (!appState.area) {
     return null;
@@ -190,132 +170,27 @@ function currentJunctions() {
 }
 
 
-function junctionLatLon(junction) {
-  if (!junction) {
-    return null;
-  }
-  return [junction.location.lat, junction.location.lon];
-}
-
-
-function ensureMap() {
-  if (appState.map) {
-    return appState.map;
-  }
-  const map = L.map("map", {
-    zoomControl: false,
-    preferCanvas: true,
-  });
-  map.setView([-1.2418, 36.8315], 14);
-  map.createPane("network-pane");
-  map.getPane("network-pane").style.zIndex = "350";
-  map.createPane("route-pane");
-  map.getPane("route-pane").style.zIndex = "450";
-  map.createPane("marker-pane");
-  map.getPane("marker-pane").style.zIndex = "500";
-  L.control.zoom({ position: "bottomright" }).addTo(map);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 18,
-  }).addTo(map);
-  appState.map = map;
-  return map;
-}
-
-
 function renderNetwork() {
-  const map = ensureMap();
-  if (appState.networkLayer) {
-    appState.networkLayer.remove();
+  ensureRouteMapView().renderNetwork(appState.network);
+}
+
+
+function ensureRouteMapView() {
+  if (!appState.routeMapView) {
+    appState.routeMapView = createRouteMapView("map");
   }
-  if (!appState.network) {
-    return;
-  }
-  appState.networkLayer = L.geoJSON(appState.network, {
-    style: {
-      color: "#3d4f46",
-      weight: 2,
-      opacity: 0.33,
-    },
-    pane: "network-pane",
-  }).addTo(map);
+  return appState.routeMapView;
 }
 
 
 function renderRoute() {
-  const map = ensureMap();
-  if (appState.routeLayer) {
-    appState.routeLayer.remove();
-  }
-  if (appState.markerLayer) {
-    appState.markerLayer.remove();
-  }
-
   const route = appState.route;
   const scenario = currentScenario();
-  if (!route || !scenario) {
-    return;
-  }
-
-  const routeLayer = L.layerGroup();
-  const startColor = [36, 96, 220];
-  const endColor = [230, 40, 40];
-  const totalSegments = Math.max(1, route.coordinates.length - 1);
-
-  route.coordinates.forEach((_, index) => {
-    if (index === route.coordinates.length - 1) {
-      return;
-    }
-    const first = route.coordinates[index];
-    const second = route.coordinates[index + 1];
-    const fraction = index / totalSegments;
-    L.polyline(
-      [
-        [first[1], first[0]],
-        [second[1], second[0]],
-      ],
-      {
-        color: mixColor(startColor, endColor, fraction),
-        weight: 6,
-        opacity: 0.92,
-        lineCap: "round",
-        pane: "route-pane",
-      }
-    ).addTo(routeLayer);
-  });
-
-  const markerLayer = L.layerGroup();
   const { startJunction, endJunction } = currentJunctions();
-  const startLatLon = junctionLatLon(startJunction);
-  const endLatLon = junctionLatLon(endJunction);
-  if (startJunction && startLatLon) {
-    L.circleMarker(startLatLon, {
-      radius: 7,
-      color: "#ffffff",
-      weight: 3,
-      fillColor: "#2d8c4d",
-      fillOpacity: 1,
-      pane: "marker-pane",
-    }).bindTooltip(`Start: ${startJunction.name}`, { direction: "top" }).addTo(markerLayer);
-  }
-  if (endJunction && endLatLon) {
-    L.circleMarker(endLatLon, {
-      radius: 7,
-      color: "#ffffff",
-      weight: 3,
-      fillColor: "#245ac9",
-      fillOpacity: 1,
-      pane: "marker-pane",
-    }).bindTooltip(`End: ${endJunction.name}`, { direction: "top" }).addTo(markerLayer);
-  }
-
-  routeLayer.addTo(map);
-  markerLayer.addTo(map);
-  appState.routeLayer = routeLayer;
-  appState.markerLayer = markerLayer;
-  map.fitBounds(boundsToLeaflet(route.bounds), {
-    padding: [28, 28],
-    maxZoom: 16,
+  ensureRouteMapView().renderRoute(route, {
+    scenario,
+    startJunction,
+    endJunction,
   });
 }
 
@@ -607,7 +482,7 @@ function bindControls() {
 async function boot() {
   clearError();
   installShellPlaceholders();
-  ensureMap();
+  ensureRouteMapView().ensureMap();
   bindControls();
 
   try {
