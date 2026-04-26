@@ -177,25 +177,71 @@ test("buildPatchsetDocument preserves passthrough patches and emits canonical po
 });
 
 
-test("normalizePatchset sanitizes invalid managed policy values", () => {
-  const editorState = normalizePatchset({
-    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-    patches: [
-      {
-        id: "editor-policy-contig-77",
-        op: "update_contig_tags",
-        contig_id: 77,
-        set: {
-          [POLICY_TAGS.routingState]: "sideways",
-          [POLICY_TAGS.bikeability]: "99",
-          [POLICY_TAGS.bicycleDirection]: "uphill-only",
-          [POLICY_TAGS.unavailableUntil]: "soon",
+test("normalizePatchset rejects invalid managed policy values instead of sanitizing them", () => {
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-77",
+          op: "update_contig_tags",
+          contig_id: 77,
+          set: {
+            [POLICY_TAGS.routingState]: "sideways",
+          },
         },
-      },
-    ],
-  });
-
-  assert.deepEqual(policyForWay(editorState, 77), defaultWayPolicy());
+      ],
+    }),
+    /local:routing_state/
+  );
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-78",
+          op: "update_contig_tags",
+          contig_id: 78,
+          set: {
+            [POLICY_TAGS.bikeability]: "99",
+          },
+        },
+      ],
+    }),
+    /local:bikeability/
+  );
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-79",
+          op: "update_contig_tags",
+          contig_id: 79,
+          set: {
+            [POLICY_TAGS.bicycleDirection]: "uphill-only",
+          },
+        },
+      ],
+    }),
+    /local:bicycle_direction/
+  );
+  assert.throws(
+    () => normalizePatchset({
+      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
+      patches: [
+        {
+          id: "editor-policy-contig-80",
+          op: "update_contig_tags",
+          contig_id: 80,
+          set: {
+            [POLICY_TAGS.unavailableUntil]: "soon",
+          },
+        },
+      ],
+    }),
+    /local:unavailable_until/
+  );
 });
 
 test("normalizePatchset rejects malformed patchset documents instead of treating them as empty", () => {

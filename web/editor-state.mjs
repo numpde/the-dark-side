@@ -22,6 +22,14 @@ function normalizeRoutingState(value) {
 }
 
 
+function requireRoutingState(value, label) {
+  if (value !== "include" && value !== "exclude") {
+    throw new Error(`${label} must be "include" or "exclude"`);
+  }
+  return value;
+}
+
+
 function normalizeBikeability(value) {
   if (value == null || value === "") {
     return null;
@@ -38,8 +46,25 @@ function normalizeBikeability(value) {
 }
 
 
+function requireBikeability(value, label) {
+  const numeric = normalizeBikeability(value);
+  if (numeric == null) {
+    throw new Error(`${label} must be an integer from 1 to 5`);
+  }
+  return numeric;
+}
+
+
 function normalizeBicycleDirection(value) {
   return value === "forward" || value === "backward" ? value : "both";
+}
+
+
+function requireBicycleDirection(value, label) {
+  if (value !== "both" && value !== "forward" && value !== "backward") {
+    throw new Error(`${label} must be "both", "forward", or "backward"`);
+  }
+  return value;
 }
 
 
@@ -65,6 +90,15 @@ function normalizeUnavailableUntil(value) {
     return null;
   }
   return text;
+}
+
+
+function requireUnavailableUntil(value, label) {
+  const normalized = normalizeUnavailableUntil(value);
+  if (normalized == null) {
+    throw new Error(`${label} must be a valid YYYY-MM-DD date`);
+  }
+  return normalized;
 }
 
 
@@ -214,15 +248,25 @@ function applyManagedPatch(policy, patch) {
   }
   for (const [key, value] of Object.entries(patch.set ?? {})) {
     if (key === POLICY_TAGS.routingState) {
-      next.routingState = normalizeRoutingState(value);
+      next.routingState = requireRoutingState(value, `Patch ${patch.id || "(unnamed)"} ${POLICY_TAGS.routingState}`);
     } else if (key === POLICY_TAGS.bikeability) {
-      next.bikeability = normalizeBikeability(value);
+      next.bikeability = requireBikeability(value, `Patch ${patch.id || "(unnamed)"} ${POLICY_TAGS.bikeability}`);
     } else if (key === POLICY_TAGS.bicycleDirection) {
-      next.bicycleDirection = normalizeBicycleDirection(value);
+      next.bicycleDirection = requireBicycleDirection(
+        value,
+        `Patch ${patch.id || "(unnamed)"} ${POLICY_TAGS.bicycleDirection}`
+      );
     } else if (key === POLICY_TAGS.unavailableUntil) {
-      next.unavailableUntil = normalizeUnavailableUntil(value);
+      next.unavailableUntil = requireUnavailableUntil(
+        value,
+        `Patch ${patch.id || "(unnamed)"} ${POLICY_TAGS.unavailableUntil}`
+      );
     } else if (key === POLICY_TAGS.legacyAvailability && value === "temporarily_unavailable") {
       next.unavailableUntil = "9999-12-31";
+    } else if (key === POLICY_TAGS.legacyAvailability) {
+      throw new Error(
+        `Patch ${patch.id || "(unnamed)"} ${POLICY_TAGS.legacyAvailability} must be "temporarily_unavailable"`
+      );
     }
   }
   return next;

@@ -715,14 +715,18 @@ async function loadArea(area) {
 
 function bindControls() {
   areaSelect.addEventListener("change", async () => {
-    appState.area = appState.manifest.areas.find((item) => item.id === areaSelect.value) || appState.manifest.areas[0];
-    areaSelect.value = appState.area.id;
-    populateJunctionSelectors(
-      appState.area,
-      appState.area.scenarios[0].start_junction_id,
-      appState.area.scenarios[0].end_junction_id
-    );
     try {
+      const selectedArea = appState.manifest.areas.find((item) => item.id === areaSelect.value);
+      if (!selectedArea) {
+        throw new Error(`Unknown area id ${areaSelect.value}`);
+      }
+      appState.area = selectedArea;
+      areaSelect.value = appState.area.id;
+      populateJunctionSelectors(
+        appState.area,
+        appState.area.scenarios[0].start_junction_id,
+        appState.area.scenarios[0].end_junction_id
+      );
       await loadArea(appState.area);
     } catch (error) {
       appState.routeStatus = "error";

@@ -362,6 +362,27 @@ class MapPatchPipelineTest(unittest.TestCase):
         self.assertEqual(first["tags"]["local:unavailable_until"], "2099-12-31")
         self.assertEqual(first["tags"]["local:bicycle_direction"], "forward")
 
+    def test_build_contigs_rejects_invalid_contig_policy_values(self) -> None:
+        payload = self.build_map().to_dict()
+        with self.assertRaisesRegex(ValueError, "invalid local:routing_state"):
+            build_contigs(
+                payload,
+                source_map="data/karura_map.json",
+                patchset={
+                    "meta": {"patchset_id": "contig-tags"},
+                    "patches": [
+                        {
+                            "id": "editor-policy-contig-1",
+                            "op": "update_contig_tags",
+                            "contig_id": 1,
+                            "node_ids": [11, 12, 13],
+                            "set": {"local:routing_state": "sideways"},
+                        }
+                    ],
+                },
+                patchset_path="source/karura-map-patches.json",
+            )
+
     def test_build_contigs_rejects_stale_contig_signature(self) -> None:
         payload = self.build_map().to_dict()
         with self.assertRaises(ValueError):

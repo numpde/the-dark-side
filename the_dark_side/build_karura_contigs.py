@@ -14,9 +14,14 @@ from typing import Any
 
 from .karura_common import (
     CONTIGS_JSON as DEFAULT_OUT_JSON,
+    LOCAL_BICYCLE_DIRECTION_TAG,
+    LOCAL_BIKEABILITY_TAG,
+    LOCAL_ROUTING_STATE_TAG,
+    LOCAL_UNAVAILABLE_UNTIL_TAG,
     MAP_PATCHES_JSON,
     include_ride_way,
     load_required_json,
+    parse_iso_date,
     repo_rel,
     resolve_map_json,
 )
@@ -133,6 +138,33 @@ def load_patchset(path: Path) -> dict:
     return load_required_json(path, label="patchset file")
 
 
+def validate_contig_policy_patch(patch: dict[str, Any]) -> None:
+    patch_label = str(patch.get("id", f"contig-{patch.get('contig_id', '?')}"))
+    patch_set = patch.get("set")
+    if patch_set is not None and (not isinstance(patch_set, dict) or isinstance(patch_set, list)):
+        raise ValueError(f"patch {patch_label} has invalid set payload; expected object")
+    patch_remove = patch.get("remove")
+    if patch_remove is not None and (
+        not isinstance(patch_remove, list) or any(not isinstance(item, str) for item in patch_remove)
+    ):
+        raise ValueError(f"patch {patch_label} has invalid remove payload; expected array of strings")
+
+    for key, value in (patch_set or {}).items():
+        if key == LOCAL_ROUTING_STATE_TAG and value not in {"include", "exclude"}:
+            raise ValueError(f"patch {patch_label} has invalid {LOCAL_ROUTING_STATE_TAG} value {value!r}")
+        if key == LOCAL_BIKEABILITY_TAG:
+            try:
+                numeric = int(str(value))
+            except ValueError as error:
+                raise ValueError(f"patch {patch_label} has invalid {LOCAL_BIKEABILITY_TAG} value {value!r}") from error
+            if numeric < 1 or numeric > 5:
+                raise ValueError(f"patch {patch_label} has invalid {LOCAL_BIKEABILITY_TAG} value {value!r}")
+        if key == LOCAL_BICYCLE_DIRECTION_TAG and value not in {"both", "forward", "backward"}:
+            raise ValueError(f"patch {patch_label} has invalid {LOCAL_BICYCLE_DIRECTION_TAG} value {value!r}")
+        if key == LOCAL_UNAVAILABLE_UNTIL_TAG and parse_iso_date(str(value)) is None:
+            raise ValueError(f"patch {patch_label} has invalid {LOCAL_UNAVAILABLE_UNTIL_TAG} value {value!r}")
+
+
 def apply_contig_policy_patchset(contig_graph: dict, patchset: dict[str, Any]) -> tuple[list[str], str]:
     by_id = {int(contig["id"]): contig for contig in contig_graph["contigs"]}
     by_signature = {}
@@ -147,6 +179,7 @@ def apply_contig_policy_patchset(contig_graph: dict, patchset: dict[str, Any]) -
             continue
         if patch.get("op") != "update_contig_tags":
             continue
+        validate_contig_policy_patch(patch)
 
         contig = None
         node_ids = patch.get("node_ids")
@@ -169,7 +202,7 @@ def apply_contig_policy_patchset(contig_graph: dict, patchset: dict[str, Any]) -
         contig["tags"] = tags
         applied_patch_ids.append(str(patch["id"]))
 
-    patchset_id = str(patchset.get("meta", {}).get("patchset_id", "karura-map-patches-v1"))
+    patchset_id = str(patchset["meta"]["patchset_id"])
     return applied_patch_ids, patchset_id
 
 
