@@ -10,6 +10,7 @@ const MODULE_VERSION = requireModuleVersion();
 const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
 const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
+const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -37,12 +38,10 @@ let appState = {
   markerLayer: null,
   gpxUrl: null,
   loopArrowPhase: 0,
-  plannerWorker: null,
+  plannerClient: null,
   plannerReady: false,
   routeStatus: "booting",
-  workerRequestId: 0,
   activeRouteRequestId: 0,
-  pendingWorkerRequests: new Map(),
   routeSeedCounter: Math.floor(Math.random() * 1_000_000),
   routeHistoryByScenario: new Map(),
 };
@@ -560,59 +559,23 @@ async function loadAreaNetwork() {
 }
 
 
-function ensurePlannerWorker() {
-  if (appState.plannerWorker) {
-    return appState.plannerWorker;
+function ensurePlannerClient() {
+  if (appState.plannerClient) {
+    return appState.plannerClient;
   }
-  const workerUrl = new URL("./route-worker.js", import.meta.url);
-  workerUrl.searchParams.set("v", MODULE_VERSION);
-  const worker = new Worker(workerUrl, { type: "module" });
-  function rejectPendingWorkerRequests(error) {
-    for (const pending of appState.pendingWorkerRequests.values()) {
-      pending.reject(error);
-    }
-    appState.pendingWorkerRequests.clear();
-  }
-  worker.addEventListener("message", (event) => {
-    let message;
-    try {
-      message = parsePlannerWorkerResponse(event.data);
-    } catch (error) {
-      rejectPendingWorkerRequests(error instanceof Error ? error : new Error(String(error)));
-      showError(error instanceof Error ? error.message : String(error));
-      return;
-    }
-    const { requestId, type, payload } = message;
-    const pending = appState.pendingWorkerRequests.get(requestId);
-    if (!pending) {
-      return;
-    }
-    if (type === "progress") {
-      pending.onProgress?.(payload);
-      return;
-    }
-    appState.pendingWorkerRequests.delete(requestId);
-    if (type === "error") {
-      pending.reject(new Error(payload?.message || "Worker error"));
-      return;
-    }
-    pending.resolve(payload);
+  appState.plannerClient = createPlannerClient({
+    moduleVersion: MODULE_VERSION,
+    parsePlannerWorkerResponse,
+    onUnhandledError: (error) => {
+      showError(error.message || String(error));
+    },
   });
-  worker.addEventListener("error", (event) => {
-    rejectPendingWorkerRequests(event.error || new Error(event.message || "Worker failed"));
-  });
-  appState.plannerWorker = worker;
-  return worker;
+  return appState.plannerClient;
 }
 
 
 function sendWorkerMessage(type, payload, { onProgress = null } = {}) {
-  const worker = ensurePlannerWorker();
-  const requestId = ++appState.workerRequestId;
-  return new Promise((resolve, reject) => {
-    appState.pendingWorkerRequests.set(requestId, { resolve, reject, onProgress });
-    worker.postMessage({ type, requestId, payload });
-  });
+  return ensurePlannerClient().request(type, payload, { onProgress });
 }
 
 

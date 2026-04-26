@@ -92,6 +92,7 @@ def verify_frontend_bootstrap_contract() -> None:
     editor_bootstrap = extract_single_inline_module_script(WEB_GENERATED_DIR.parent / "editor.html")
     app_js = (WEB_GENERATED_DIR.parent / "app.js").read_text()
     editor_js = (WEB_GENERATED_DIR.parent / "editor.js").read_text()
+    planner_client_js = (WEB_GENERATED_DIR.parent / "planner-client.mjs").read_text()
 
     assert_regex(
         "web/index.html",
@@ -118,6 +119,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'validateAppManifest\(await response\.json\(\)\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./runtime-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/app.js", app_js, r'await import\(`\./planner-client\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'function requireModuleVersion\(\)')
     assert_regex("web/app.js", app_js, r'throw new Error\("App runtime is missing required module version"\)')
     assert_regex("web/app.js", app_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
@@ -125,8 +127,9 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'function junctionById\(')
     assert_regex("web/app.js", app_js, r'url\.searchParams\.set\("v", appState\.manifest\.planner\.network_version\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./gpx\.mjs\$\{moduleSuffix\}`\)')
-    assert_regex("web/app.js", app_js, r'workerUrl\.searchParams\.set\("v", MODULE_VERSION\)')
-    assert_regex("web/app.js", app_js, r'parsePlannerWorkerResponse\(event\.data\)')
+    assert_regex("web/app.js", app_js, r'createPlannerClient\(')
+    assert_not_contains("web/app.js", app_js, 'workerUrl.searchParams.set("v", MODULE_VERSION)')
+    assert_not_contains("web/app.js", app_js, "parsePlannerWorkerResponse(event.data)")
     assert_not_regex("web/app.js", app_js, r'function requireObject\(')
     assert_not_regex("web/app.js", app_js, r'function requireArray\(')
     assert_not_regex("web/app.js", app_js, r'function requireString\(')
@@ -140,6 +143,12 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_contains("web/app.js", app_js, "|| area.scenarios[0]")
     assert_not_contains("web/app.js", app_js, "return scenario.id")
     assert_not_contains("web/app.js", app_js, 'searchParams.get("v") || ""')
+    assert_not_regex("web/app.js", app_js, r'function ensurePlannerWorker\(')
+
+    assert_regex("web/planner-client.mjs", planner_client_js, r'export function createPlannerClient\(')
+    assert_contains("web/planner-client.mjs", planner_client_js, "parsePlannerWorkerResponse(event.data)")
+    assert_contains("web/planner-client.mjs", planner_client_js, 'workerUrl.searchParams.set("v", moduleVersion)')
+    assert_not_contains("web/planner-client.mjs", planner_client_js, 'new URL("./generated/app-manifest.json"')
 
     assert_regex("web/editor.js", editor_js, r'new URL\("\./generated/editor-manifest\.json", window\.location\.href\)')
     assert_regex("web/editor.js", editor_js, r'fetchJson\(editorManifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
