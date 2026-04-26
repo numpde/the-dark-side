@@ -47,6 +47,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "app.js",
     WEB_DIR / "gpx.mjs",
     WEB_DIR / "karura-policy.mjs",
+    WEB_DIR / "runtime-contracts.mjs",
     WEB_DIR / "route-worker.js",
     WEB_DIR / "route-planner.mjs",
 )
@@ -54,6 +55,7 @@ EDITOR_MODULE_PATHS = (
     WEB_DIR / "editor.js",
     WEB_DIR / "editor-state.mjs",
     WEB_DIR / "karura-policy.mjs",
+    WEB_DIR / "runtime-contracts.mjs",
 )
 
 R = 6378137.0

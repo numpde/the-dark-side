@@ -8,6 +8,12 @@ function requireModuleVersion() {
 
 const MODULE_VERSION = requireModuleVersion();
 const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
+const {
+  requireObject,
+  requireInteger,
+  requireString,
+  validateAppManifest,
+} = await import(`./runtime-contracts.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -44,116 +50,6 @@ let appState = {
   routeSeedCounter: Math.floor(Math.random() * 1_000_000),
   routeHistoryByScenario: new Map(),
 };
-
-function requireObject(value, label) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`App manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function requireArray(value, label) {
-  if (!Array.isArray(value)) {
-    throw new Error(`App manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function requireString(value, label) {
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`App manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function requireFiniteNumber(value, label) {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    throw new Error(`App manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function requireInteger(value, label) {
-  if (!Number.isInteger(value)) {
-    throw new Error(`App manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function validateJunction(junction, index) {
-  const normalized = requireObject(junction, `areas[0].junctions[${index}]`);
-  const location = requireObject(normalized.location, `areas[0].junctions[${index}].location`);
-  requireString(normalized.id, `areas[0].junctions[${index}].id`);
-  requireString(normalized.name, `areas[0].junctions[${index}].name`);
-  requireFiniteNumber(location.lat, `areas[0].junctions[${index}].location.lat`);
-  requireFiniteNumber(location.lon, `areas[0].junctions[${index}].location.lon`);
-  requireInteger(normalized.graph_node_id, `areas[0].junctions[${index}].graph_node_id`);
-  requireArray(normalized.tags ?? [], `areas[0].junctions[${index}].tags`);
-  return normalized;
-}
-
-function validateScenario(scenario, index, junctionIds) {
-  const normalized = requireObject(scenario, `areas[0].scenarios[${index}]`);
-  requireString(normalized.id, `areas[0].scenarios[${index}].id`);
-  const startJunctionId = requireString(
-    normalized.start_junction_id,
-    `areas[0].scenarios[${index}].start_junction_id`
-  );
-  const endJunctionId = requireString(
-    normalized.end_junction_id,
-    `areas[0].scenarios[${index}].end_junction_id`
-  );
-  if (!junctionIds.has(startJunctionId)) {
-    throw new Error(`App manifest scenario ${normalized.id} references unknown start junction ${startJunctionId}`);
-  }
-  if (!junctionIds.has(endJunctionId)) {
-    throw new Error(`App manifest scenario ${normalized.id} references unknown end junction ${endJunctionId}`);
-  }
-  if (typeof normalized.is_loop !== "boolean") {
-    throw new Error(`App manifest is missing valid areas[0].scenarios[${index}].is_loop`);
-  }
-  return normalized;
-}
-
-function validateArea(area, index) {
-  const normalized = requireObject(area, `areas[${index}]`);
-  requireString(normalized.id, `areas[${index}].id`);
-  requireString(normalized.name, `areas[${index}].name`);
-  requireArray(normalized.bounds, `areas[${index}].bounds`);
-  if (normalized.bounds.length !== 4) {
-    throw new Error(`App manifest is missing valid areas[${index}].bounds`);
-  }
-  normalized.bounds.forEach((value, boundsIndex) => {
-    requireFiniteNumber(value, `areas[${index}].bounds[${boundsIndex}]`);
-  });
-  const junctions = requireArray(normalized.junctions, `areas[${index}].junctions`);
-  if (junctions.length === 0) {
-    throw new Error(`App manifest must contain at least one junction in areas[${index}]`);
-  }
-  junctions.forEach(validateJunction);
-  const junctionIds = new Set(junctions.map((junction) => junction.id));
-  const scenarios = requireArray(normalized.scenarios, `areas[${index}].scenarios`);
-  if (scenarios.length === 0) {
-    throw new Error(`App manifest must contain at least one scenario in areas[${index}]`);
-  }
-  scenarios.forEach((scenario, scenarioIndex) => validateScenario(scenario, scenarioIndex, junctionIds));
-  return normalized;
-}
-
-function validateAppManifest(manifest) {
-  const normalized = requireObject(manifest, "root object");
-  requireObject(normalized.meta ?? {}, "meta");
-  const planner = requireObject(normalized.planner, "planner");
-  requireString(planner.network_path, "planner.network_path");
-  requireString(planner.network_version, "planner.network_version");
-  requireObject(planner.config, "planner.config");
-  const areas = requireArray(normalized.areas, "areas");
-  if (areas.length === 0) {
-    throw new Error("App manifest must contain at least one area");
-  }
-  areas.forEach(validateArea);
-  return normalized;
-}
 
 
 function networkUrlForArea() {

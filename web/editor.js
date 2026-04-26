@@ -20,6 +20,7 @@ const {
   karuraTodayString,
   isCurrentlyUnavailable: isPolicyCurrentlyUnavailable,
 } = await import(`./karura-policy.mjs${moduleSuffix}`);
+const { validateEditorManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
 
 function findErrorBox() {
   return document.getElementById("error-box");
@@ -114,33 +115,6 @@ const appState = {
   loadedPatchLabel: "–",
   editorManifest: null,
 };
-
-function requireObject(value, label) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`Editor manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function requireString(value, label) {
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`Editor manifest is missing valid ${label}`);
-  }
-  return value;
-}
-
-function validateEditorManifest(manifest) {
-  const normalized = requireObject(manifest, "root object");
-  const meta = requireObject(normalized.meta, "meta");
-  const editor = requireObject(normalized.editor, "editor");
-  requireString(meta.editor_graph_asset_id, "meta.editor_graph_asset_id");
-  requireString(meta.patchset_path, "meta.patchset_path");
-  requireString(meta.patchset_digest, "meta.patchset_digest");
-  requireString(meta.generated_at, "meta.generated_at");
-  requireString(editor.network_path, "editor.network_path");
-  requireString(editor.network_version, "editor.network_version");
-  return normalized;
-}
 
 
 function showError(message) {
