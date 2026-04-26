@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import ImageDraw
 
-from .asset_contracts import load_required_patchset, load_route_graph_document
+from .asset_contracts import load_required_patchset
 from .download_karura_map import load_map
 from .karura_common import (
     CONTIGS_JSON,
@@ -21,10 +21,11 @@ from .karura_common import (
     print_json_document,
     resolve_map_json,
 )
+from .karura_routing import load_route_graph
 from .render_support import (
     load_viewport,
-    mercator_lookup_from_graph_document,
     mercator_lookup_from_map,
+    mercator_lookup_from_route_graph,
     prepare_base_image,
     project_mercator_point,
     segments_from_node_pairs,
@@ -72,14 +73,17 @@ def parse_map(path, mode):
 
 
 def parse_contigs(path):
-    payload = load_route_graph_document(path, label="route graph")
-    nodes = mercator_lookup_from_graph_document(payload)
+    graph = load_route_graph(path)
+    nodes = mercator_lookup_from_route_graph(graph)
 
     contigs = []
-    for contig in payload["contigs"]:
-        segments = segments_from_node_pairs(contig["segment_pairs"], node_lookup=nodes)
+    for contig in graph.contigs.values():
+        segments = segments_from_node_pairs(
+            zip(contig.node_ids, contig.node_ids[1:]),
+            node_lookup=nodes,
+        )
         if segments:
-            contigs.append((int(contig["id"]), segments, contig))
+            contigs.append((contig.id, segments, contig))
 
     return contigs
 

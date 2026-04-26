@@ -12,7 +12,6 @@ from .asset_contracts import (
     load_required_figure_catalog,
     load_required_junction_bindings,
     load_required_junction_catalog,
-    load_route_graph_document,
 )
 from .karura_common import (
     CONTIGS_JSON,
@@ -23,7 +22,7 @@ from .karura_common import (
     VIEWPORT,
     print_json_document,
 )
-from .karura_routing import resolve_junction_ref
+from .karura_routing import load_route_graph, resolve_junction_ref
 from .render_support import load_viewport, project_lon_lat
 
 
@@ -112,8 +111,7 @@ def main() -> None:
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
     viewport = load_viewport(args.viewport)
-    contigs = load_route_graph_document(args.contigs_json, label="route graph")
-    nodes = {int(node_id): node for node_id, node in contigs["nodes"].items()}
+    graph = load_route_graph(args.contigs_json)
 
     junctions_payload = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
@@ -131,11 +129,11 @@ def main() -> None:
         junction_ref = resolve_junction_ref(
             junctions_payload,
             item["junction_id"],
-            contigs["meta"]["asset_id"],
+            graph.asset_id,
             junction_bindings,
         )
-        node = nodes[junction_ref.graph_node_id]
-        point = project_lon_lat(node["lon"], node["lat"], viewport, overlay.size)
+        node = graph.nodes[junction_ref.graph_node_id]
+        point = project_lon_lat(node.lon, node.lat, viewport, overlay.size)
         color = tuple(item["color"])
         draw_marker(draw, point, color)
         draw_label(

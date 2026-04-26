@@ -65,6 +65,13 @@ def mercator_lookup_from_graph_document(payload: dict) -> dict[int, tuple[float,
     }
 
 
+def mercator_lookup_from_route_graph(graph) -> dict[int, tuple[float, float]]:
+    return {
+        int(node_id): mercator(node.lon, node.lat)
+        for node_id, node in graph.nodes.items()
+    }
+
+
 def segments_from_node_pairs(
     node_pairs: Iterable[tuple[int, int]],
     *,
