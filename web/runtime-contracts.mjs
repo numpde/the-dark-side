@@ -24,35 +24,37 @@ export {
   requireString,
 } from "./contract-primitives.mjs";
 
-function validateJunction(junction, index) {
+function validateJunction(junction, areaIndex, index) {
   const context = "App manifest";
-  const normalized = requireObject(junction, `areas[0].junctions[${index}]`, { context });
-  const location = requireObject(normalized.location, `areas[0].junctions[${index}].location`, {
+  const basePath = `areas[${areaIndex}].junctions[${index}]`;
+  const normalized = requireObject(junction, basePath, { context });
+  const location = requireObject(normalized.location, `${basePath}.location`, {
     context,
   });
-  requireString(normalized.id, `areas[0].junctions[${index}].id`, { context });
-  requireString(normalized.name, `areas[0].junctions[${index}].name`, { context });
-  requireFiniteNumber(location.lat, `areas[0].junctions[${index}].location.lat`, { context });
-  requireFiniteNumber(location.lon, `areas[0].junctions[${index}].location.lon`, { context });
-  requireInteger(normalized.graph_node_id, `areas[0].junctions[${index}].graph_node_id`, {
+  requireString(normalized.id, `${basePath}.id`, { context });
+  requireString(normalized.name, `${basePath}.name`, { context });
+  requireFiniteNumber(location.lat, `${basePath}.location.lat`, { context });
+  requireFiniteNumber(location.lon, `${basePath}.location.lon`, { context });
+  requireInteger(normalized.graph_node_id, `${basePath}.graph_node_id`, {
     context,
   });
-  requireArray(normalized.tags ?? [], `areas[0].junctions[${index}].tags`, { context });
+  requireArray(normalized.tags ?? [], `${basePath}.tags`, { context });
   return normalized;
 }
 
-function validateScenario(scenario, index, junctionIds) {
+function validateScenario(scenario, areaIndex, index, junctionIds) {
   const context = "App manifest";
-  const normalized = requireObject(scenario, `areas[0].scenarios[${index}]`, { context });
-  requireString(normalized.id, `areas[0].scenarios[${index}].id`, { context });
+  const basePath = `areas[${areaIndex}].scenarios[${index}]`;
+  const normalized = requireObject(scenario, basePath, { context });
+  requireString(normalized.id, `${basePath}.id`, { context });
   const startJunctionId = requireString(
     normalized.start_junction_id,
-    `areas[0].scenarios[${index}].start_junction_id`,
+    `${basePath}.start_junction_id`,
     { context }
   );
   const endJunctionId = requireString(
     normalized.end_junction_id,
-    `areas[0].scenarios[${index}].end_junction_id`,
+    `${basePath}.end_junction_id`,
     { context }
   );
   if (!junctionIds.has(startJunctionId)) {
@@ -62,7 +64,7 @@ function validateScenario(scenario, index, junctionIds) {
     throw new Error(`App manifest scenario ${normalized.id} references unknown end junction ${endJunctionId}`);
   }
   if (typeof normalized.is_loop !== "boolean") {
-    throw new Error(`App manifest is missing valid areas[0].scenarios[${index}].is_loop`);
+    throw new Error(`App manifest is missing valid ${basePath}.is_loop`);
   }
   return normalized;
 }
@@ -83,13 +85,14 @@ function validateArea(area, index) {
   if (junctions.length === 0) {
     throw new Error(`App manifest must contain at least one junction in areas[${index}]`);
   }
-  junctions.forEach(validateJunction);
+  junctions.forEach((junction, junctionIndex) => validateJunction(junction, index, junctionIndex));
   const junctionIds = new Set(junctions.map((junction) => junction.id));
   const scenarios = requireArray(normalized.scenarios, `areas[${index}].scenarios`, { context });
   if (scenarios.length === 0) {
     throw new Error(`App manifest must contain at least one scenario in areas[${index}]`);
   }
-  scenarios.forEach((scenario, scenarioIndex) => validateScenario(scenario, scenarioIndex, junctionIds));
+  scenarios.forEach((scenario, scenarioIndex) =>
+    validateScenario(scenario, index, scenarioIndex, junctionIds));
   return normalized;
 }
 

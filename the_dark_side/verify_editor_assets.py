@@ -277,6 +277,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireFiniteNumber\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireInteger\(')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'^import .* from "\./')
+    assert_not_contains("web/runtime-contracts.mjs", runtime_contracts_js, "areas[0].junctions[")
+    assert_not_contains("web/runtime-contracts.mjs", runtime_contracts_js, "areas[0].scenarios[")
 
     assert_regex(
         "web/planner-worker-contracts.mjs",
