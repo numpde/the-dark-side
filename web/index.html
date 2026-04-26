@@ -58,6 +58,26 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module" src="./app.js"></script>
+  <script type="module">
+    async function boot() {
+      const response = await fetch("./generated/frontend-manifest.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Failed to load frontend manifest: ${response.status}`);
+      }
+      const manifest = await response.json();
+      const version = manifest?.modules?.app_version;
+      const specifier = version ? `./app.js?v=${encodeURIComponent(version)}` : "./app.js";
+      await import(specifier);
+    }
+
+    boot().catch((error) => {
+      console.error("Failed to load app shell", error);
+      const errorCard = document.getElementById("error-card");
+      if (errorCard) {
+        errorCard.textContent = `Failed to load app shell: ${error.message || String(error)}`;
+        errorCard.classList.remove("hidden");
+      }
+    });
+  </script>
 </body>
 </html>

@@ -15,8 +15,11 @@ from .download_karura_map import load_map, write_json
 from .export_karura_web_catalog import build_editor_graph_payload, write_json as write_export_json
 from .junction_bindings import build_junction_bindings, load_junction_catalog
 from .karura_common import (
+    APP_MODULE_PATHS,
     CONTIGS_JSON,
+    EDITOR_MODULE_PATHS,
     EDITOR_MANIFEST_JSON,
+    FRONTEND_MANIFEST_JSON,
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     MAP_JSON,
@@ -25,6 +28,7 @@ from .karura_common import (
     WEB_GENERATED_DIR,
     repo_rel,
     sync_web_source_assets,
+    digest_paths,
 )
 from .karura_common import include_ride_way
 
@@ -120,7 +124,24 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
             "patchset_path": patched_payload["meta"]["patches_path"],
             "respect_inner_rings": patched_payload["meta"]["respect_inner_rings"],
             "fill_segment_gaps": patched_payload["meta"]["fill_segment_gaps"],
-        }
+        },
+        "editor": {
+            "network_path": args.output_editor_network.name,
+            "network_version": editor_graph_payload["meta"]["asset_id"],
+        },
+    }
+
+
+def build_frontend_manifest() -> dict:
+    return {
+        "meta": {
+            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "asset_kind": "frontend_manifest",
+        },
+        "modules": {
+            "app_version": digest_paths(APP_MODULE_PATHS),
+            "editor_version": digest_paths(EDITOR_MODULE_PATHS),
+        },
     }
 
 
@@ -133,6 +154,7 @@ def main() -> None:
     editor_graph_payload, _ = rebuild_editor_network(args)
     manifest = build_editor_manifest(args, patched_payload, contig_payload, bindings_payload, editor_graph_payload)
     write_export_json(args.output_editor_manifest, manifest)
+    write_export_json(FRONTEND_MANIFEST_JSON, build_frontend_manifest())
     print(
         json.dumps(
             {

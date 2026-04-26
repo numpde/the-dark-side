@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import hashlib
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -20,6 +21,7 @@ CONTIGS_JSON = DATA_DIR / "karura_contigs.json"
 ELEVATION_JSON = DATA_DIR / "karura_elevation.json"
 JUNCTION_BINDINGS_JSON = DATA_DIR / "karura_junction_bindings.json"
 ROUTES_DIR = DATA_DIR / "routes"
+ROUTE_CATALOG_JSON = ROUTES_DIR / "karura-route-catalog.json"
 BENCHMARKS_DIR = DATA_DIR / "benchmarks"
 ELEVATION_CACHE_DIR = DATA_DIR / "elevation_cache"
 CURATED_DIR = REPO_ROOT / "curated"
@@ -36,9 +38,22 @@ WEB_SOURCE_DIR = WEB_DIR / "source"
 WEB_GENERATED_DIR = WEB_DIR / "generated"
 EDITOR_MANIFEST_JSON = WEB_GENERATED_DIR / "editor-manifest.json"
 APP_MANIFEST_JSON = WEB_GENERATED_DIR / "app-manifest.json"
+FRONTEND_MANIFEST_JSON = WEB_GENERATED_DIR / "frontend-manifest.json"
 MAP_PATCHES_JSON = SOURCE_DIR / "karura-map-patches.json"
 CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
 SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, CATALOG_BUILD_JSON)
+APP_MODULE_PATHS = (
+    WEB_DIR / "app.js",
+    WEB_DIR / "gpx.mjs",
+    WEB_DIR / "karura-policy.mjs",
+    WEB_DIR / "route-worker.js",
+    WEB_DIR / "route-planner.mjs",
+)
+EDITOR_MODULE_PATHS = (
+    WEB_DIR / "editor.js",
+    WEB_DIR / "editor-state.mjs",
+    WEB_DIR / "karura-policy.mjs",
+)
 
 R = 6378137.0
 LOCAL_ROUTING_STATE_TAG = "local:routing_state"
@@ -99,6 +114,16 @@ def sync_web_source_assets() -> list[Path]:
         shutil.copy2(source_path, target_path)
         synced.append(target_path)
     return synced
+
+
+def digest_paths(paths: tuple[Path, ...] | list[Path]) -> str:
+    digest = hashlib.sha256()
+    for path in paths:
+        digest.update(repo_rel(path).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()[:12]
 
 
 def mercator(lon: float, lat: float) -> tuple[float, float]:

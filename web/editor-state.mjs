@@ -84,25 +84,73 @@ function managedTagNames() {
 }
 
 
-function patchTouchesOnlyManagedTags(patch) {
-  if (patch.op !== "update_contig_tags") {
-        return false;
-  }
-  const names = managedTagNames();
-  const setKeys = Object.keys(patch.set || {});
-  const removeKeys = patch.remove || [];
-  return [...setKeys, ...removeKeys].every((key) => names.has(key));
+function managedTagNamesSet() {
+  return managedTagNames();
 }
 
 
-export function isManagedPolicyPatch(patch) {
-  return Boolean(
-    patch &&
-      patch.enabled !== false &&
-      patch.op === "update_contig_tags" &&
-      Number.isInteger(Number(patch.contig_id)) &&
-      patchTouchesOnlyManagedTags(patch),
-  );
+function splitManagedPatch(patch) {
+  if (
+    !patch ||
+    patch.enabled === false ||
+    patch.op !== "update_contig_tags" ||
+    !Number.isInteger(Number(patch.contig_id))
+  ) {
+    return { managedPatch: null, residualPatch: patch ?? null };
+  }
+
+  const managedNames = managedTagNamesSet();
+  const managedSet = {};
+  const residualSet = {};
+  for (const [key, value] of Object.entries(patch.set || {})) {
+    if (managedNames.has(key)) {
+      managedSet[key] = value;
+    } else {
+      residualSet[key] = value;
+    }
+  }
+
+  const managedRemove = [];
+  const residualRemove = [];
+  for (const key of patch.remove || []) {
+    if (managedNames.has(key)) {
+      managedRemove.push(key);
+    } else {
+      residualRemove.push(key);
+    }
+  }
+
+  const managedHasContent = Object.keys(managedSet).length > 0 || managedRemove.length > 0;
+  const residualHasContent = Object.keys(residualSet).length > 0 || residualRemove.length > 0;
+
+  let residualPatch = null;
+  if (residualHasContent) {
+    residualPatch = {
+      ...patch,
+      ...(Object.keys(residualSet).length > 0 ? { set: residualSet } : { set: undefined }),
+      ...(residualRemove.length > 0 ? { remove: residualRemove } : { remove: undefined }),
+    };
+    if (residualPatch.id === `editor-policy-contig-${Number(patch.contig_id)}`) {
+      residualPatch.id = `${residualPatch.id}--passthrough`;
+    }
+    if (residualPatch.set === undefined) {
+      delete residualPatch.set;
+    }
+    if (residualPatch.remove === undefined) {
+      delete residualPatch.remove;
+    }
+  }
+
+  return {
+    managedPatch: managedHasContent
+      ? {
+          ...patch,
+          ...(Object.keys(managedSet).length > 0 ? { set: managedSet } : { set: undefined }),
+          ...(managedRemove.length > 0 ? { remove: managedRemove } : { remove: undefined }),
+        }
+      : null,
+    residualPatch,
+  };
 }
 
 
@@ -142,13 +190,16 @@ export function normalizePatchset(rawPatchset) {
   const policyByWayId = new Map();
 
   for (const patch of patchset.patches || []) {
-    if (!isManagedPolicyPatch(patch)) {
-      passthroughPatches.push(patch);
+    const { managedPatch, residualPatch } = splitManagedPatch(patch);
+    if (residualPatch) {
+      passthroughPatches.push(residualPatch);
+    }
+    if (!managedPatch) {
       continue;
     }
-    const contigId = Number(patch.contig_id);
+    const contigId = Number(managedPatch.contig_id);
     const current = policyByWayId.get(contigId) || defaultWayPolicy();
-    policyByWayId.set(contigId, applyManagedPatch(current, patch));
+    policyByWayId.set(contigId, applyManagedPatch(current, managedPatch));
   }
 
   return {

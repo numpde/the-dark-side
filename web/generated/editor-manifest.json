@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T11:08:08.304882Z",
+    "generated_at": "2026-04-26T12:51:26.946123Z",
     "asset_kind": "editor_manifest",
     "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
@@ -10,5 +10,9 @@
     "patchset_path": "source/karura-map-patches.json",
     "respect_inner_rings": false,
     "fill_segment_gaps": true
+  },
+  "editor": {
+    "network_path": "karura-editor-network.geojson",
+    "network_version": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929"
   }
 }

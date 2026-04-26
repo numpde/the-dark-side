@@ -79,11 +79,11 @@
 
     <section class="patch-info">
       <div class="patch-meta">
-        <div><span class="field-label">Loaded patch file</span> <span id="loaded-patch-path">source/karura-map-patches.json</span></div>
-        <div><span class="field-label">Export target</span> <span id="export-target-path">source/karura-map-patches.json</span></div>
+        <div><span class="field-label">Loaded patch file</span> <span id="loaded-patch-path">–</span></div>
+        <div><span class="field-label">Export target</span> <span id="export-target-path">–</span></div>
         <div><span class="field-label">Editor graph</span> <span id="editor-graph-asset">–</span></div>
         <div><span class="field-label">Editor build</span> <span id="editor-generated-at">–</span></div>
-        <div id="export-hint" class="patch-hint">Export downloads a replacement for <code>source/karura-map-patches.json</code>.</div>
+        <div id="export-hint" class="patch-hint">Export downloads a replacement for the canonical patch file.</div>
       </div>
       <div class="patch-hint">Preview below shows the current export document: the loaded file plus any edits made on this page.</div>
       <pre id="patch-preview" class="patch-preview"></pre>
@@ -95,6 +95,26 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module" src="./editor.js?v=20260426b"></script>
+  <script type="module">
+    async function boot() {
+      const response = await fetch("./generated/frontend-manifest.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Failed to load frontend manifest: ${response.status}`);
+      }
+      const manifest = await response.json();
+      const version = manifest?.modules?.editor_version;
+      const specifier = version ? `./editor.js?v=${encodeURIComponent(version)}` : "./editor.js";
+      await import(specifier);
+    }
+
+    boot().catch((error) => {
+      console.error("Failed to load editor shell", error);
+      const errorBox = document.getElementById("error-box");
+      if (errorBox) {
+        errorBox.textContent = `Failed to load editor shell: ${error.message || String(error)}`;
+        errorBox.classList.remove("hidden");
+      }
+    });
+  </script>
 </body>
 </html>

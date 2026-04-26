@@ -1,10 +1,16 @@
-import {
+const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v") || "";
+const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
+const {
   buildPatchsetDocument,
   defaultWayPolicy,
   normalizePatchset,
   policyForWay,
   setWayPolicy,
-} from "./editor-state.mjs?v=20260425d";
+} = await import(`./editor-state.mjs${moduleSuffix}`);
+const {
+  karuraTodayString,
+  isCurrentlyUnavailable: isPolicyCurrentlyUnavailable,
+} = await import(`./karura-policy.mjs${moduleSuffix}`);
 
 function findErrorBox() {
   return document.getElementById("error-box");
@@ -61,9 +67,7 @@ function requireElement(id) {
 }
 
 
-const waysUrl = new URL("./generated/karura-editor-network.geojson", window.location.href);
 const editorManifestUrl = new URL("./generated/editor-manifest.json", window.location.href);
-const patchesUrl = new URL("./source/karura-map-patches.json", window.location.href);
 
 const exportButton = requireElement("export-button");
 const importButton = requireElement("import-button");
@@ -77,6 +81,7 @@ const changeCount = requireElement("change-count");
 const clearButton = requireElement("clear-button");
 const errorBox = requireElement("error-box");
 const loadedPatchPath = requireElement("loaded-patch-path");
+const exportTargetPath = requireElement("export-target-path");
 const editorGraphAsset = requireElement("editor-graph-asset");
 const editorGeneratedAt = requireElement("editor-generated-at");
 const exportHint = requireElement("export-hint");
@@ -97,7 +102,7 @@ const appState = {
   selectedOverlay: null,
   endpointLayer: null,
   editorState: normalizePatchset(null),
-  loadedPatchLabel: "source/karura-map-patches.json",
+  loadedPatchLabel: "–",
   editorManifest: null,
 };
 
@@ -138,31 +143,17 @@ function guardAsync(fn, context) {
 }
 
 
-function karuraTodayDateString() {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Africa/Nairobi",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const parts = Object.fromEntries(
-    formatter
-      .formatToParts(new Date())
-      .filter((part) => part.type !== "literal")
-      .map((part) => [part.type, part.value]),
-  );
-  return `${parts.year}-${parts.month}-${parts.day}`;
-}
-
-
 function isCurrentlyUnavailable(policy) {
-  return policy.unavailableUntil != null && policy.unavailableUntil >= karuraTodayDateString();
+  return isPolicyCurrentlyUnavailable(
+    { "local:unavailable_until": policy.unavailableUntil ?? undefined },
+    karuraTodayString(),
+  );
 }
 
 
-async function fetchJson(url, fallback) {
+async function fetchJson(url, fallback, init) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, init);
     if (!response.ok) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
@@ -173,6 +164,46 @@ async function fetchJson(url, fallback) {
     }
     throw error;
   }
+}
+
+
+function waysUrlFromManifest() {
+  const relativePath = appState.editorManifest?.editor?.network_path;
+  if (!relativePath) {
+    throw new Error("Editor manifest is missing editor.network_path");
+  }
+  const url = new URL(relativePath, editorManifestUrl);
+  const version = appState.editorManifest?.editor?.network_version;
+  if (version) {
+    url.searchParams.set("v", version);
+  }
+  return url;
+}
+
+
+function canonicalPatchPath() {
+  const relativePath = appState.editorManifest?.meta?.patchset_path;
+  if (!relativePath) {
+    throw new Error("Editor manifest is missing meta.patchset_path");
+  }
+  return relativePath;
+}
+
+
+function patchesUrlFromManifest() {
+  const url = new URL(`./${canonicalPatchPath()}`, window.location.href);
+  const version = appState.editorManifest?.meta?.patchset_digest;
+  if (version) {
+    url.searchParams.set("v", version);
+  }
+  return url;
+}
+
+
+function canonicalPatchFilename() {
+  const path = canonicalPatchPath();
+  const parts = path.split("/");
+  return parts[parts.length - 1] || "karura-map-patches.json";
 }
 
 
@@ -360,6 +391,9 @@ function currentPatchDocument() {
 
 function updatePatchInfo() {
   loadedPatchPath.textContent = appState.loadedPatchLabel;
+  exportTargetPath.textContent = canonicalPatchPath();
+  exportHint.innerHTML =
+    `Export downloads a replacement for <code>${canonicalPatchPath()}</code>.`;
   editorGraphAsset.textContent =
     appState.editorManifest?.meta?.editor_graph_asset_id ||
     appState.editorManifest?.meta?.graph_asset_id ||
@@ -468,9 +502,7 @@ function downloadJson(payload, filename) {
 
 
 function exportPatchset() {
-  downloadJson(currentPatchDocument(), "karura_map_patches.json");
-  exportHint.innerHTML =
-    'Export downloads a replacement for <code>source/karura-map-patches.json</code>.';
+  downloadJson(currentPatchDocument(), canonicalPatchFilename());
 }
 
 
@@ -485,18 +517,18 @@ async function importPatchset(file) {
 
 
 async function boot() {
-  const [waysGeojson, patchset, editorManifest] = await Promise.all([
-    fetchJson(waysUrl),
-    fetchJson(patchesUrl, {
+  const editorManifest = await fetchJson(editorManifestUrl, null, { cache: "no-store" });
+  appState.editorManifest = editorManifest;
+  const [waysGeojson, patchset] = await Promise.all([
+    fetchJson(waysUrlFromManifest()),
+    fetchJson(patchesUrlFromManifest(), {
       meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
       patches: [],
     }),
-    fetchJson(editorManifestUrl, null),
   ]);
 
   appState.editorState = normalizePatchset(patchset);
-  appState.loadedPatchLabel = "source/karura-map-patches.json";
-  appState.editorManifest = editorManifest;
+  appState.loadedPatchLabel = canonicalPatchPath();
   renderWays(waysGeojson);
   updateControls();
 }

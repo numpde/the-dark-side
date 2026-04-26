@@ -27,11 +27,11 @@ from .karura_common import (
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
     ELEVATION_JSON,
-    MAP_JSON,
     PATCHED_MAP_JSON,
     JUNCTIONS_JSON,
     JUNCTION_BINDINGS_JSON,
     MAP_PATCHES_JSON,
+    ROUTE_CATALOG_JSON,
     repo_rel,
     WEB_SOURCE_DIR,
     WEB_GENERATED_DIR,
@@ -53,7 +53,7 @@ from .karura_routing import (
 )
 
 
-DEFAULT_CATALOG_JSON = WEB_GENERATED_DIR / "catalog.json"
+DEFAULT_CATALOG_JSON = ROUTE_CATALOG_JSON
 DEFAULT_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-network.geojson"
 DEFAULT_EDITOR_NETWORK_GEOJSON = WEB_GENERATED_DIR / "karura-editor-network.geojson"
 
@@ -759,7 +759,6 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
                 "name": "Karura Forest",
                 "bounds": area_bounds(graph),
                 "network_path": args.output_network.name,
-                "editor_network_path": args.output_editor_network.name,
                 "junctions": [
                     {
                         "id": junction["id"],

@@ -46,6 +46,65 @@ test("normalizePatchset extracts managed policy patches and preserves others", (
 });
 
 
+test("normalizePatchset splits mixed contig tag patches into managed policy and passthrough tags", () => {
+  const editorState = normalizePatchset({
+    meta: { patchset_id: "karura-map-patches-v1" },
+    patches: [
+      {
+        id: "editor-policy-contig-55",
+        op: "update_contig_tags",
+        contig_id: 55,
+        set: {
+          [POLICY_TAGS.routingState]: "exclude",
+          "surface": "gravel",
+        },
+        remove: [POLICY_TAGS.bikeability, "name"],
+      },
+    ],
+  });
+
+  assert.deepEqual(policyForWay(editorState, 55), {
+    routingState: "exclude",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+  assert.deepEqual(editorState.passthroughPatches, [
+    {
+      id: "editor-policy-contig-55--passthrough",
+      op: "update_contig_tags",
+      contig_id: 55,
+      set: {
+        surface: "gravel",
+      },
+      remove: ["name"],
+    },
+  ]);
+
+  const doc = buildPatchsetDocument(editorState);
+  assert.deepEqual(doc.patches, [
+    {
+      id: "editor-policy-contig-55--passthrough",
+      op: "update_contig_tags",
+      contig_id: 55,
+      set: {
+        surface: "gravel",
+      },
+      remove: ["name"],
+    },
+    {
+      id: "editor-policy-contig-55",
+      op: "update_contig_tags",
+      contig_id: 55,
+      node_ids: [],
+      set: {
+        [POLICY_TAGS.routingState]: "exclude",
+      },
+    },
+  ]);
+});
+
+
 test("setWayPolicy removes default policy from managed state", () => {
   const editorState = normalizePatchset({ meta: {}, patches: [] });
   setWayPolicy(editorState, 11, {

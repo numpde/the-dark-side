@@ -390,11 +390,11 @@ python3 -m the_dark_side.verify_app_assets
 - `figures` contains stable figure ids
 - figure items reference stable curated entities such as `junction_id`
 
-`web/generated/catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app.
+`data/routes/karura-route-catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app and is not part of the Pages artifact.
 
 `web/generated/app-manifest.json` contains the live route-app bootstrap payload:
 
-- `planner` contains the browser-side algorithm id, network asset paths, and bounded planner config
+- `planner` contains the browser-side algorithm id, the ride-network asset path, and bounded planner config
 - `areas` contains the currently supported areas, starting with `karura`
 - each area contains:
   - `junctions`

@@ -1,4 +1,6 @@
-import { wireGpxDownload } from "./gpx.mjs";
+const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v") || "";
+const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
+const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
 
@@ -33,7 +35,16 @@ let appState = {
 
 
 function networkUrlForArea() {
-  return new URL(`./generated/${appState.manifest.planner.network_path}`, window.location.href);
+  const relativePath = appState.manifest?.planner?.network_path;
+  if (!relativePath) {
+    throw new Error("App manifest is missing planner.network_path");
+  }
+  const url = new URL(relativePath, appManifestUrl);
+  const version = appState.manifest?.planner?.network_version;
+  if (version) {
+    url.searchParams.set("v", version);
+  }
+  return url;
 }
 
 
@@ -419,7 +430,11 @@ function ensurePlannerWorker() {
   if (appState.plannerWorker) {
     return appState.plannerWorker;
   }
-  const worker = new Worker(new URL("./route-worker.js", import.meta.url), { type: "module" });
+  const workerUrl = new URL("./route-worker.js", import.meta.url);
+  if (MODULE_VERSION) {
+    workerUrl.searchParams.set("v", MODULE_VERSION);
+  }
+  const worker = new Worker(workerUrl, { type: "module" });
   worker.addEventListener("message", (event) => {
     const { requestId, type, payload } = event.data || {};
     const pending = appState.pendingWorkerRequests.get(requestId);
@@ -567,7 +582,7 @@ async function boot() {
   bindControls();
 
   try {
-    const response = await fetch(appManifestUrl);
+    const response = await fetch(appManifestUrl, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load app manifest: ${response.status}`);
     }

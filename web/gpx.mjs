@@ -30,7 +30,7 @@ export function buildGpx(route, startJunction, endJunction) {
     })
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="karura-route-drop" xmlns="http://www.topografix.com/GPX/1/1">
+<gpx version="1.1" creator="the-dark-side" xmlns="http://www.topografix.com/GPX/1/1">
   <metadata>
     <name>${xmlEscape(route.id)}</name>
   </metadata>

@@ -25,7 +25,7 @@ const endJunction = { id: "b", name: "Kiambu-side exit junction" };
 test("buildGpx emits GPX with elevation when available", () => {
   const gpx = buildGpx(sampleRoute(), startJunction, endJunction);
   assert.match(gpx, /^<\?xml version="1.0" encoding="UTF-8"\?>/);
-  assert.match(gpx, /<gpx version="1\.1" creator="karura-route-drop"/);
+  assert.match(gpx, /<gpx version="1\.1" creator="the-dark-side"/);
   assert.match(gpx, /<name>route-123<\/name>/);
   assert.match(gpx, /<name>Family Trail west junction to Kiambu-side exit junction<\/name>/);
   assert.match(gpx, /<trkpt lat="-1\.23" lon="36\.81">/);

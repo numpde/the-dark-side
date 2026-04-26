@@ -17,6 +17,7 @@ from .junction_bindings import build_junction_bindings, load_junction_catalog
 from .karura_common import (
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
+    FRONTEND_MANIFEST_JSON,
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     MAP_JSON,
@@ -28,8 +29,7 @@ from .karura_common import (
     repo_rel,
 )
 from .karura_common import include_ride_way
-from .karura_routing import load_route_graph
-from .rebuild_editor_assets import build_editor_manifest
+from .rebuild_editor_assets import build_editor_manifest, build_frontend_manifest
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -42,6 +42,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--output-editor-network", type=Path, default=WEB_GENERATED_DIR / "karura-editor-network.geojson")
     parser.add_argument("--output-editor-manifest", type=Path, default=EDITOR_MANIFEST_JSON)
+    parser.add_argument("--output-frontend-manifest", type=Path, default=FRONTEND_MANIFEST_JSON)
     parser.add_argument(
         "--fill-segment-gaps",
         action=argparse.BooleanOptionalAction,
@@ -78,7 +79,7 @@ def verify_sources_synced() -> None:
         assert_equal(str(expected_path), expected_path.read_text(), canonical_path.read_text())
 
 
-def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict]:
+def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:
     baseline_map = load_map(args.map_json)
     patchset = load_patchset(args.patches_json)
     expected_patched_map = apply_patchset(
@@ -127,22 +128,32 @@ def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, di
         editor_patches_json=args.patches_json,
     )
     expected_manifest = build_editor_manifest(args, expected_patched_map, expected_contigs, expected_bindings, expected_editor_graph)
-    return expected_patched_map, expected_contigs, expected_bindings, expected_editor_network, expected_manifest
+    expected_frontend_manifest = build_frontend_manifest()
+    return expected_patched_map, expected_contigs, expected_bindings, expected_editor_network, expected_manifest, expected_frontend_manifest
 
 
 def verify_editor_assets(args: argparse.Namespace) -> dict:
     verify_sources_synced()
-    expected_patched_map, expected_contigs, expected_bindings, expected_editor_network, expected_manifest = build_expected(args)
+    (
+        expected_patched_map,
+        expected_contigs,
+        expected_bindings,
+        expected_editor_network,
+        expected_manifest,
+        expected_frontend_manifest,
+    ) = build_expected(args)
     actual_patched_map = load_json(args.patched_map_json)
     actual_contigs = load_json(args.contigs_json)
     actual_bindings = load_json(args.junction_bindings_json)
     actual_editor_network = load_json(args.output_editor_network)
     actual_manifest = load_json(args.output_editor_manifest)
+    actual_frontend_manifest = load_json(args.output_frontend_manifest)
     assert_equal(str(args.patched_map_json), actual_patched_map, expected_patched_map)
     assert_equal(str(args.contigs_json), actual_contigs, expected_contigs)
     assert_equal(str(args.junction_bindings_json), normalized(actual_bindings), normalized(expected_bindings))
     assert_equal(str(args.output_editor_network), actual_editor_network, expected_editor_network)
     assert_equal(str(args.output_editor_manifest), normalized(actual_manifest), normalized(expected_manifest))
+    assert_equal(str(args.output_frontend_manifest), normalized(actual_frontend_manifest), normalized(expected_frontend_manifest))
     return {
         "verified": True,
         "graph_asset_id": actual_contigs["meta"]["asset_id"],

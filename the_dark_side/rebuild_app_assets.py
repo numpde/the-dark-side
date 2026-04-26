@@ -20,6 +20,7 @@ from .karura_common import (
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
     ELEVATION_JSON,
+    FRONTEND_MANIFEST_JSON,
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     MAP_JSON,
@@ -30,6 +31,7 @@ from .karura_common import (
     sync_web_source_assets,
 )
 from .rebuild_editor_assets import (
+    build_frontend_manifest,
     build_editor_manifest,
     parse_args as parse_editor_args,
     rebuild_contigs,
@@ -137,7 +139,7 @@ def build_app_manifest(
         "planner": {
             "algorithm": "browser-beam-v1",
             "network_path": args.output_network.name,
-            "editor_network_path": args.output_editor_network.name,
+            "network_version": graph.asset_id,
             "config": planner_config,
         },
         "areas": [
@@ -187,6 +189,7 @@ def main() -> None:
     editor_graph_payload, _ = rebuild_editor_network(editor_args)
     editor_manifest = build_editor_manifest(editor_args, patched_payload, contig_payload, bindings_payload, editor_graph_payload)
     write_export_json(args.output_editor_manifest, editor_manifest)
+    write_export_json(FRONTEND_MANIFEST_JSON, build_frontend_manifest())
     graph = load_route_graph(args.contigs_json)
     build_config_payload = load_catalog_build_config(args.build_config_json)
     node_elevations, elevation_matches_graph = load_elevation_asset(
