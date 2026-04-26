@@ -53,6 +53,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "route-graph.mjs",
     WEB_DIR / "route-map-view.mjs",
     WEB_DIR / "route-network-contracts.mjs",
+    WEB_DIR / "route-selection-controls.mjs",
     WEB_DIR / "route-scenarios.mjs",
     WEB_DIR / "route-summary-view.mjs",
     WEB_DIR / "route-selection.mjs",

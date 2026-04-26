@@ -94,6 +94,7 @@ def verify_frontend_bootstrap_contract() -> None:
     editor_js = (WEB_GENERATED_DIR.parent / "editor.js").read_text()
     planner_client_js = (WEB_GENERATED_DIR.parent / "planner-client.mjs").read_text()
     route_map_view_js = (WEB_GENERATED_DIR.parent / "route-map-view.mjs").read_text()
+    route_selection_controls_js = (WEB_GENERATED_DIR.parent / "route-selection-controls.mjs").read_text()
     route_scenarios_js = (WEB_GENERATED_DIR.parent / "route-scenarios.mjs").read_text()
     route_summary_view_js = (WEB_GENERATED_DIR.parent / "route-summary-view.mjs").read_text()
 
@@ -124,6 +125,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./planner-client\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-map-view\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/app.js", app_js, r'await import\(`\./route-selection-controls\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'await import\(`\./route-summary-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/app.js", app_js, r'function requireModuleVersion\(\)')
@@ -164,6 +166,11 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/app.js", app_js, r'function setScenarioLabelText\(')
     assert_not_regex("web/app.js", app_js, r'function setScenarioLabelParts\(')
     assert_not_regex("web/app.js", app_js, r'function animatedLoopArrow\(')
+    assert_not_regex("web/app.js", app_js, r'function updateUrl\(')
+    assert_not_regex("web/app.js", app_js, r'function replaceUrlWithSelection\(')
+    assert_not_regex("web/app.js", app_js, r'function populateAreaOptions\(')
+    assert_not_regex("web/app.js", app_js, r'function populateJunctionSelectors\(')
+    assert_not_regex("web/app.js", app_js, r'function syncSelectionControlsFromQuery\(')
 
     assert_regex("web/planner-client.mjs", planner_client_js, r'export function createPlannerClient\(')
     assert_contains("web/planner-client.mjs", planner_client_js, "parsePlannerWorkerResponse(event.data)")
@@ -184,6 +191,14 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function junctionLatLon\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
     assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
+
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'import\s*\{\s*requireScenario,\s*resolveCanonicalSelection\s*\}\s*from\s*"\./route-scenarios\.mjs"')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function installSelectionPlaceholders\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateJunctionSelectors\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncSelectorsFromQuery\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function replaceUrlWithSelection\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncUrlFromSelectors\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'function renderRouteSummary\(')
 
     assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function setSummaryText\(')
     assert_regex("web/route-summary-view.mjs", route_summary_view_js, r'export function renderRouteSummary\(')

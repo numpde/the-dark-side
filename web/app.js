@@ -13,6 +13,13 @@ const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.
 const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
+const {
+  installSelectionPlaceholders,
+  populateJunctionSelectors,
+  syncSelectorsFromQuery,
+  replaceUrlWithSelection,
+  syncUrlFromSelectors,
+} = await import(`./route-selection-controls.mjs${moduleSuffix}`);
 const { setSummaryText, renderRouteSummary } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 const {
   recentRoutesForScenario,
@@ -20,7 +27,6 @@ const {
   requireScenario,
   junctionsForScenario,
   scenarioLabelText,
-  resolveCanonicalSelection,
 } = await import(`./route-scenarios.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -93,9 +99,7 @@ function updateRouteSurfaceState() {
 
 function installShellPlaceholders() {
   setSummaryText(scenarioLabel, "Loading routes…");
-  areaSelect.innerHTML = "<option>Loading…</option>";
-  startSelect.innerHTML = "<option>Loading…</option>";
-  endSelect.innerHTML = "<option>Loading…</option>";
+  installSelectionPlaceholders(areaSelect, startSelect, endSelect);
   setControlsDisabled(true);
 }
 
@@ -199,74 +203,6 @@ function updateSummary() {
 }
 
 
-function updateUrl() {
-  const query = new URLSearchParams(window.location.search);
-  query.set("area", areaSelect.value);
-  query.set("start", startSelect.value);
-  query.set("end", endSelect.value);
-  window.history.replaceState({}, "", `${window.location.pathname}?${query.toString()}`);
-}
-
-
-function replaceUrlWithSelection(selection) {
-  const query = new URLSearchParams(window.location.search);
-  query.set("area", selection.areaId);
-  query.set("start", selection.startJunctionId);
-  query.set("end", selection.endJunctionId);
-  window.history.replaceState({}, "", `${window.location.pathname}?${query.toString()}`);
-}
-
-
-function populateAreaOptions() {
-  areaSelect.innerHTML = "";
-  appState.manifest.areas.forEach((area) => {
-    const option = document.createElement("option");
-    option.value = area.id;
-    option.textContent = area.name;
-    areaSelect.append(option);
-  });
-}
-
-
-function populateJunctionSelectors(area, requestedStart, requestedEnd) {
-  startSelect.innerHTML = "";
-  endSelect.innerHTML = "";
-  area.junctions.forEach((junction) => {
-    const startOption = document.createElement("option");
-    startOption.value = junction.id;
-    startOption.textContent = junction.name;
-    startSelect.append(startOption);
-
-    const endOption = document.createElement("option");
-    endOption.value = junction.id;
-    endOption.textContent = junction.name;
-    endSelect.append(endOption);
-  });
-
-  const exactScenario = requireScenario(area, requestedStart, requestedEnd, "junction selector state");
-
-  startSelect.value = exactScenario.start_junction_id;
-  endSelect.value = exactScenario.end_junction_id;
-}
-
-
-function syncSelectorsFromQuery() {
-  const resolved = resolveCanonicalSelection(appState.manifest, window.location.search);
-  appState.area = resolved.area;
-  populateAreaOptions();
-  areaSelect.value = appState.area.id;
-  populateJunctionSelectors(
-    appState.area,
-    resolved.scenario.start_junction_id,
-    resolved.scenario.end_junction_id
-  );
-  if (resolved.canonicalized) {
-    console.warn("Canonicalized invalid route query parameters", resolved.canonical);
-    replaceUrlWithSelection(resolved.canonical);
-  }
-}
-
-
 async function loadAreaNetwork() {
   const response = await fetch(networkUrlForArea());
   if (!response.ok) {
@@ -309,7 +245,7 @@ async function initializePlanner(networkPayload) {
 
 async function chooseRoute() {
   const scenario = currentScenario();
-  updateUrl();
+  syncUrlFromSelectors(areaSelect, startSelect, endSelect);
   if (!scenario || !appState.plannerReady || !appState.area) {
     appState.route = null;
     updateSummary();
@@ -393,6 +329,8 @@ function bindControls() {
       appState.area = selectedArea;
       areaSelect.value = appState.area.id;
       populateJunctionSelectors(
+        startSelect,
+        endSelect,
         appState.area,
         appState.area.scenarios[0].start_junction_id,
         appState.area.scenarios[0].end_junction_id
@@ -435,7 +373,18 @@ async function boot() {
     return;
   }
 
-  syncSelectorsFromQuery();
+  const resolved = syncSelectorsFromQuery(
+    appState.manifest,
+    window.location.search,
+    areaSelect,
+    startSelect,
+    endSelect
+  );
+  appState.area = resolved.area;
+  if (resolved.canonicalized) {
+    console.warn("Canonicalized invalid route query parameters", resolved.canonical);
+    replaceUrlWithSelection(resolved.canonical);
+  }
 
   try {
     await loadArea(appState.area);
