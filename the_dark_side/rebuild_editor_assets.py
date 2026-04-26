@@ -110,7 +110,6 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
 def build_frontend_manifest() -> dict:
     return {
         "meta": {
-            "generated_at": utc_now_z(),
             "asset_kind": "frontend_manifest",
         },
         "modules": {

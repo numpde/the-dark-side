@@ -1,5 +1,5 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Route runtime module");
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route runtime module");
 const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
 
 export function createRouteRuntime({

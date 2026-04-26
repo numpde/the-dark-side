@@ -1,5 +1,5 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
 const {
   buildPatchsetDocument,
   emptyPatchset,

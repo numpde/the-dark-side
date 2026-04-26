@@ -8,14 +8,6 @@ const {
   requireString,
 } = await import(`./contract-primitives.mjs${moduleSuffix}`);
 
-export {
-  requireArray,
-  requireFiniteNumber,
-  requireInteger,
-  requireObject,
-  requireString,
-} from "./contract-primitives.mjs";
-
 function validateJunction(junction, areaIndex, index) {
   const context = "App manifest";
   const basePath = `areas[${areaIndex}].junctions[${index}]`;
