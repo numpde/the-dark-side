@@ -4,14 +4,13 @@ import random
 import unittest
 from pathlib import Path
 
+from the_dark_side.asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from the_dark_side.karura_common import CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
 from the_dark_side.karura_routing import (
     ContigRecord,
     NodeRecord,
     PlannerConfig,
     RouteGraph,
-    load_junction_bindings,
-    load_junction_catalog,
     load_route_graph,
     plan_route_beam,
     plan_route_mcts,
@@ -28,8 +27,8 @@ class RouteDiversityAuditTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.graph = load_route_graph(CONTIGS_JSON)
-        cls.junction_catalog = load_junction_catalog(JUNCTIONS_JSON)
-        cls.junction_bindings = load_junction_bindings(JUNCTION_BINDINGS_JSON)
+        cls.junction_catalog = load_required_junction_catalog(JUNCTIONS_JSON, label="junction catalog")
+        cls.junction_bindings = load_required_junction_bindings(JUNCTION_BINDINGS_JSON, label="junction bindings")
         cls.start = resolve_junction_ref(cls.junction_catalog, "family_trail_west", cls.graph.asset_id, cls.junction_bindings)
         cls.end = resolve_junction_ref(cls.junction_catalog, "kiambu_side_exit", cls.graph.asset_id, cls.junction_bindings)
         cls.config = PlannerConfig(

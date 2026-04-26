@@ -7,11 +7,12 @@ from __future__ import annotations
 import argparse
 import json
 
+from .asset_contracts import load_required_junction_catalog
 from .apply_karura_patches import apply_patchset, load_patchset
 from .asset_pipeline_cli import add_editor_asset_args
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map, write_json
-from .junction_bindings import build_junction_bindings, load_junction_catalog
+from .junction_bindings import build_junction_bindings
 from .karura_common import (
     APP_MODULE_PATHS,
     CONTIGS_JSON,
@@ -66,7 +67,7 @@ def rebuild_junction_bindings(args: argparse.Namespace, contig_payload: dict) ->
     from .karura_routing import load_route_graph
 
     graph = load_route_graph(args.contigs_json)
-    junction_catalog = load_junction_catalog(args.junctions_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     payload = build_junction_bindings(
         junction_catalog,
         graph,

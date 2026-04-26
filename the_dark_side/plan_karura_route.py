@@ -10,12 +10,11 @@ import os
 from pathlib import Path
 import random
 
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
 from .karura_common import CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR
 from .karura_routing import (
     PlannerConfig,
-    load_junction_bindings,
-    load_junction_catalog,
     load_route_graph,
     planner_for,
     PLANNER_NAMES,
@@ -64,8 +63,8 @@ def main() -> None:
     args = parse_args()
     config = build_config(args)
     graph = load_route_graph(args.contigs_json)
-    junction_catalog = load_junction_catalog(args.junctions_json)
-    junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     start_ref = resolve_junction_ref(junction_catalog, args.start_junction, graph.asset_id, junction_bindings)
     end_ref = resolve_junction_ref(junction_catalog, args.end_junction, graph.asset_id, junction_bindings)
     rng = random.Random(args.seed)

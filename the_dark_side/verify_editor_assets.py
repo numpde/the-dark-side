@@ -10,11 +10,12 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
+from .asset_contracts import load_required_junction_catalog
 from .asset_pipeline_cli import add_editor_asset_args
 from .apply_karura_patches import apply_patchset, load_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
-from .junction_bindings import build_junction_bindings, load_junction_catalog
+from .junction_bindings import build_junction_bindings
 from .karura_common import (
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
@@ -461,7 +462,7 @@ def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, di
         graph.adjacency.setdefault(first, []).append((int(contig["id"]), second))
         if first != second:
             graph.adjacency.setdefault(second, []).append((int(contig["id"]), first))
-    junction_catalog = load_junction_catalog(args.junctions_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     expected_bindings = build_junction_bindings(
         junction_catalog,
         graph,

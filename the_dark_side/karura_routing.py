@@ -11,11 +11,9 @@ from pathlib import Path
 from typing import Iterable
 
 from .asset_contracts import (
-    load_required_junction_catalog,
     load_route_asset_document,
     load_route_graph_document,
 )
-from .junction_bindings import load_junction_bindings as load_junction_bindings_payload
 from .karura_common import (
     is_currently_unavailable,
     utc_now_z,
@@ -227,15 +225,6 @@ def load_route_graph(path: Path) -> RouteGraph:
         adjacency=dict(adjacency),
         articulation_points=articulation_points,
     )
-
-
-def load_junction_catalog(path: Path) -> dict:
-    return load_required_junction_catalog(path, label="junction catalog")
-
-
-def load_junction_bindings(path: Path) -> dict:
-    return load_junction_bindings_payload(path)
-
 
 def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict) -> JunctionRef:
     junction = next((entry for entry in payload["junctions"] if entry["id"] == junction_id), None)

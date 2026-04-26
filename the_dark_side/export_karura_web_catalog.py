@@ -12,6 +12,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import (
     DEBUG_CATALOG_KEYS,
     PLANNER_KEYS,
@@ -40,8 +41,6 @@ from .karura_routing import (
     RouteCandidate,
     build_route_node_ids,
     contig_jaccard_similarity,
-    load_junction_bindings,
-    load_junction_catalog,
     load_route_graph,
     planner_for,
     resolve_junction_ref,
@@ -320,8 +319,8 @@ def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
         args.elevation_json,
         expected_graph_asset_id=graph.asset_id,
     )
-    junction_catalog = load_junction_catalog(args.junctions_json)
-    junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     junction_defs = junction_catalog["junctions"]
     junction_ids = [junction["id"] for junction in junction_defs]
     junction_refs = {

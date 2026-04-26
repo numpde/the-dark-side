@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import json
 
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .asset_pipeline_cli import add_app_asset_args, editor_rebuild_argv_from_namespace
 from .build_config import (
     browser_planner_config_from_build_config,
@@ -25,7 +26,7 @@ from .rebuild_editor_assets import (
     parse_args as parse_editor_args,
     rebuild_editor_assets as rebuild_editor_bundle,
 )
-from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
+from .karura_routing import load_route_graph
 from .web_assets import (
     load_elevation_asset,
     network_geojson,
@@ -144,8 +145,8 @@ def rebuild_app_assets(
         node_elevations=node_elevations if elevation_matches_graph else None,
     )
     write_export_json(args.output_network, route_network)
-    junction_catalog = load_junction_catalog(args.junctions_json)
-    junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     frontend_manifest = build_frontend_manifest()
     app_manifest = build_app_manifest(
         args,

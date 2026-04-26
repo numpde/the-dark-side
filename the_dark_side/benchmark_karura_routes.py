@@ -12,14 +12,13 @@ from dataclasses import asdict
 from pathlib import Path
 import random
 
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .build_config import add_planner_config_args, planner_config_kwargs_from_namespace, resolve_build_config_defaults
 from .karura_common import BENCHMARKS_DIR, CATALOG_BUILD_JSON, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
 from .karura_routing import (
     PlannerConfig,
     PLANNER_NAMES,
     RouteCandidate,
-    load_junction_bindings,
-    load_junction_catalog,
     load_route_graph,
     planner_for,
     resolve_junction_ref,
@@ -201,8 +200,8 @@ def main() -> None:
     algorithms = args.algorithm or list(ALGORITHMS)
     seeds = list(range(args.seed_start, args.seed_end + 1))
     graph = load_route_graph(args.contigs_json)
-    junction_catalog = load_junction_catalog(args.junctions_json)
-    junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
 
     results: dict[str, dict] = {}
     for scenario_name in scenarios:
