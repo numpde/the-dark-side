@@ -49,6 +49,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "gpx.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "planner-worker-contracts.mjs",
+    WEB_DIR / "route-network-contracts.mjs",
     WEB_DIR / "runtime-contracts.mjs",
     WEB_DIR / "route-worker.js",
     WEB_DIR / "route-planner.mjs",

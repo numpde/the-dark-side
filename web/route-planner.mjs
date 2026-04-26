@@ -1,4 +1,6 @@
+import { requireFiniteNumber, requireInteger } from "./contract-primitives.mjs";
 import { karuraTodayString, isCurrentlyUnavailable } from "./karura-policy.mjs";
+import { normalizeRouteNetworkFeatureCollection } from "./route-network-contracts.mjs";
 
 function makeRng(seed) {
   let state = (seed >>> 0) || 1;
@@ -105,134 +107,8 @@ function nodeCoordinate(coordinate) {
   return [roundCoordinate(coordinate[0]), roundCoordinate(coordinate[1])];
 }
 
-function failNetwork(message) {
-  throw new Error(`Invalid route network: ${message}`);
-}
-
-function requireArray(value, label) {
-  if (!Array.isArray(value)) {
-    failNetwork(`${label} must be an array`);
-  }
-  return value;
-}
-
-function requireObject(value, label) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    failNetwork(`${label} must be an object`);
-  }
-  return value;
-}
-
-function requireFiniteNumber(value, label) {
-  const numeric = Number(value);
-  if (!Number.isFinite(numeric)) {
-    failNetwork(`${label} must be a finite number`);
-  }
-  return numeric;
-}
-
-function requireInteger(value, label) {
-  const numeric = Number(value);
-  if (!Number.isInteger(numeric)) {
-    failNetwork(`${label} must be an integer`);
-  }
-  return numeric;
-}
-
-function requireCoordinatePair(value, label) {
-  const pair = requireArray(value, label);
-  if (pair.length !== 2) {
-    failNetwork(`${label} must contain exactly two numbers`);
-  }
-  return [
-    roundCoordinate(requireFiniteNumber(pair[0], `${label}[0]`)),
-    roundCoordinate(requireFiniteNumber(pair[1], `${label}[1]`)),
-  ];
-}
-
-function normalizeFeature(feature, index) {
-  requireObject(feature, `features[${index}]`);
-  if (feature.type !== "Feature") {
-    failNetwork(`features[${index}].type must be "Feature"`);
-  }
-
-  const properties = requireObject(feature.properties, `features[${index}].properties`);
-  const geometry = requireObject(feature.geometry, `features[${index}].geometry`);
-  if (geometry.type !== "LineString") {
-    failNetwork(`features[${index}].geometry.type must be "LineString"`);
-  }
-
-  const coordinates = requireArray(geometry.coordinates, `features[${index}].geometry.coordinates`)
-    .map((coordinate, coordinateIndex) =>
-      requireCoordinatePair(coordinate, `features[${index}].geometry.coordinates[${coordinateIndex}]`)
-    );
-  if (coordinates.length < 2) {
-    failNetwork(`features[${index}].geometry.coordinates must contain at least two points`);
-  }
-
-  const nodeIds = requireArray(properties.node_ids, `features[${index}].properties.node_ids`)
-    .map((value, nodeIndex) => requireInteger(value, `features[${index}].properties.node_ids[${nodeIndex}]`));
-  if (nodeIds.length < 2) {
-    failNetwork(`features[${index}].properties.node_ids must contain at least two ids`);
-  }
-  if (nodeIds.length !== coordinates.length) {
-    failNetwork(`features[${index}] node_ids and coordinates must have the same length`);
-  }
-
-  const endpointNodeIds = requireArray(
-    properties.endpoint_node_ids,
-    `features[${index}].properties.endpoint_node_ids`
-  ).map((value, endpointIndex) =>
-    requireInteger(value, `features[${index}].properties.endpoint_node_ids[${endpointIndex}]`)
-  );
-  if (endpointNodeIds.length !== 2) {
-    failNetwork(`features[${index}].properties.endpoint_node_ids must contain exactly two ids`);
-  }
-  if (endpointNodeIds[0] !== nodeIds[0] || endpointNodeIds[1] !== nodeIds[nodeIds.length - 1]) {
-    failNetwork(`features[${index}] endpoint_node_ids must match the first and last node_ids`);
-  }
-
-  let elevations = null;
-  if (properties.elevations_m !== undefined) {
-    elevations = requireArray(properties.elevations_m, `features[${index}].properties.elevations_m`)
-      .map((value, elevationIndex) =>
-        requireFiniteNumber(value, `features[${index}].properties.elevations_m[${elevationIndex}]`)
-      );
-    if (elevations.length !== nodeIds.length) {
-      failNetwork(`features[${index}] elevations_m must have the same length as node_ids`);
-    }
-  }
-
-  const tags = requireObject(properties.tags ?? {}, `features[${index}].properties.tags`);
-  return {
-    properties: {
-      contig_id: requireInteger(properties.contig_id, `features[${index}].properties.contig_id`),
-      endpoint_node_ids: endpointNodeIds,
-      node_ids: nodeIds,
-      length_m: requireFiniteNumber(properties.length_m, `features[${index}].properties.length_m`),
-      segment_count: requireInteger(properties.segment_count, `features[${index}].properties.segment_count`),
-      way_ids: requireArray(properties.way_ids ?? [], `features[${index}].properties.way_ids`)
-        .map((value, wayIndex) =>
-          requireInteger(value, `features[${index}].properties.way_ids[${wayIndex}]`)
-        ),
-      way_names: requireArray(properties.way_names ?? [], `features[${index}].properties.way_names`)
-        .map((value, wayNameIndex) => String(value ?? failNetwork(`features[${index}].properties.way_names[${wayNameIndex}] must be present`))),
-      tags,
-      ...(elevations ? { elevations_m: elevations } : {}),
-    },
-    geometry: {
-      type: "LineString",
-      coordinates,
-    },
-  };
-}
-
 export function buildGraphFromGeoJson(payload) {
-  requireObject(payload, "payload");
-  if (payload.type !== "FeatureCollection") {
-    failNetwork('payload.type must be "FeatureCollection"');
-  }
-  const features = requireArray(payload.features, "payload.features").map(normalizeFeature);
+  const features = normalizeRouteNetworkFeatureCollection(payload);
   const nodes = new Map();
   const contigs = new Map();
   const adjacency = new Map();
@@ -260,7 +136,7 @@ export function buildGraphFromGeoJson(payload) {
       isCycle: endpointNodeIds[0] === endpointNodeIds[1],
     };
     if (contigs.has(contig.id)) {
-      failNetwork(`duplicate contig_id ${contig.id}`);
+      throw new Error(`Invalid route network: duplicate contig_id ${contig.id}`);
     }
     contigs.set(contig.id, contig);
 

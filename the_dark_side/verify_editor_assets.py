@@ -163,6 +163,7 @@ def verify_frontend_bootstrap_contract() -> None:
     runtime_contracts_js = (WEB_GENERATED_DIR.parent / "runtime-contracts.mjs").read_text()
     worker_contracts_js = (WEB_GENERATED_DIR.parent / "planner-worker-contracts.mjs").read_text()
     contract_primitives_js = (WEB_GENERATED_DIR.parent / "contract-primitives.mjs").read_text()
+    route_network_contracts_js = (WEB_GENERATED_DIR.parent / "route-network-contracts.mjs").read_text()
 
     assert_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'from "\./contract-primitives\.mjs"')
     assert_not_regex("web/runtime-contracts.mjs", runtime_contracts_js, r'function requireContract\(')
@@ -192,6 +193,18 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireCoordinatePair\(')
     assert_regex("web/contract-primitives.mjs", contract_primitives_js, r'export function requireIntegerArray\(')
 
+    assert_regex(
+        "web/route-network-contracts.mjs",
+        route_network_contracts_js,
+        r'from "\./contract-primitives\.mjs"',
+    )
+    assert_regex(
+        "web/route-network-contracts.mjs",
+        route_network_contracts_js,
+        r'export function normalizeRouteNetworkFeatureCollection\(',
+    )
+    assert_not_regex("web/route-network-contracts.mjs", route_network_contracts_js, r'function roundMeters\(')
+
     assert_regex("web/route-worker.js", route_worker_js, r'new Error\("Route worker is missing required module version"\)')
     assert_regex("web/route-worker.js", route_worker_js, r'import\(`\./planner-worker-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-worker.js", route_worker_js, r'workerContracts\.parsePlannerWorkerRequest\(event\.data\)')
@@ -206,6 +219,18 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_contains("web/route-worker.js", route_worker_js, 'searchParams.get("v") || ""')
     route_planner_js = (WEB_GENERATED_DIR.parent / "route-planner.mjs").read_text()
     assert_regex("web/route-planner.mjs", route_planner_js, r'import\s*\{\s*karuraTodayString,\s*isCurrentlyUnavailable\s*\}\s*from\s*"\./karura-policy\.mjs"')
+    assert_regex(
+        "web/route-planner.mjs",
+        route_planner_js,
+        r'import\s*\{\s*normalizeRouteNetworkFeatureCollection\s*\}\s*from\s*"\./route-network-contracts\.mjs"',
+    )
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function failNetwork\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireArray\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireObject\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireFiniteNumber\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireInteger\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireCoordinatePair\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function normalizeFeature\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_time_budget_ms:\s*requireFiniteNumber\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")
