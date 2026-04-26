@@ -8,6 +8,11 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
+from .asset_contracts import (
+    load_required_figure_catalog,
+    load_required_junction_bindings,
+    load_required_junction_catalog,
+)
 from .karura_common import (
     CONTIGS_JSON,
     CURATED_DIR,
@@ -16,9 +21,6 @@ from .karura_common import (
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     VIEWPORT,
-    load_required_figure_catalog,
-    load_required_junction_bindings,
-    load_required_junction_catalog,
 )
 from .render_support import load_viewport, project_lon_lat
 

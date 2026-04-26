@@ -9,6 +9,7 @@ from pathlib import Path
 
 from PIL import ImageDraw
 
+from .asset_contracts import load_required_patchset
 from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
@@ -17,7 +18,6 @@ from .karura_common import (
     VIEWPORT,
     include_editor_way,
     include_ride_way,
-    load_required_patchset,
     mercator,
     resolve_map_json,
 )

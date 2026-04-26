@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from the_dark_side.karura_common import load_required_figure_catalog
+from the_dark_side.asset_contracts import load_required_figure_catalog
 
 
 class RenderFiguresTest(unittest.TestCase):

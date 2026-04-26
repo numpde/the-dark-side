@@ -6,14 +6,13 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from the_dark_side.asset_contracts import load_required_json, load_required_patchset
 from the_dark_side.apply_karura_patches import apply_patchset, build_inside_karura, compute_way_record
 from the_dark_side.build_karura_contigs import build_contigs
 from the_dark_side.karura_common import (
     include_editor_way,
     include_ride_way,
     is_currently_unavailable,
-    load_required_json,
-    load_required_patchset,
 )
 from the_dark_side.download_karura_map import BoundaryComponent, BoundaryRecord, KaruraMap, NodeRecord
 

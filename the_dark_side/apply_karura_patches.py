@@ -22,7 +22,8 @@ from .download_karura_map import (
     point_in_ring,
     write_json,
 )
-from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, load_required_patchset, repo_rel
+from .asset_contracts import load_required_patchset
+from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel
 
 
 def parse_args() -> argparse.Namespace:

@@ -5,12 +5,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from .asset_contracts import load_required_elevation_asset, load_required_patchset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .karura_common import (
     include_editor_way,
-    load_required_elevation_asset,
-    load_required_patchset,
     repo_rel,
 )
 

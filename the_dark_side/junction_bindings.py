@@ -6,11 +6,10 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
+from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog
 from .karura_common import (
     JUNCTIONS_JSON,
     JUNCTION_BINDINGS_JSON,
-    load_required_junction_bindings,
-    load_required_junction_catalog,
     repo_rel,
     utc_now_z,
 )

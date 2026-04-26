@@ -7,12 +7,12 @@ from __future__ import annotations
 import argparse
 import json
 
+from .asset_contracts import load_required_elevation_asset
 from .asset_pipeline_cli import add_app_asset_args
 from .build_config import (
     BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS,
     load_catalog_build_config,
 )
-from .karura_common import load_required_elevation_asset
 from .karura_routing import load_junction_bindings, load_junction_catalog, load_route_graph
 from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
 from .verify_helpers import assert_equal, load_json, normalized

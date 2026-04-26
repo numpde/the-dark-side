@@ -5,6 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from the_dark_side.asset_contracts import validate_route_asset_document
 from the_dark_side.karura_routing import (
     ContigRecord,
     JunctionRef,
@@ -15,7 +16,6 @@ from the_dark_side.karura_routing import (
     RouteStep,
     load_route_asset,
     route_asset_payload,
-    validate_route_asset_document,
 )
 
 

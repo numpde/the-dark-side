@@ -5,7 +5,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from the_dark_side.karura_routing import load_route_graph, validate_route_graph_document
+from the_dark_side.asset_contracts import validate_route_graph_document
+from the_dark_side.karura_routing import load_route_graph
 
 
 class RouteGraphTest(unittest.TestCase):

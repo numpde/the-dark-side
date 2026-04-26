@@ -12,6 +12,7 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
+from .asset_contracts import load_required_patchset
 from .karura_common import (
     CONTIGS_JSON as DEFAULT_OUT_JSON,
     LOCAL_BICYCLE_DIRECTION_TAG,
@@ -20,7 +21,6 @@ from .karura_common import (
     LOCAL_UNAVAILABLE_UNTIL_TAG,
     MAP_PATCHES_JSON,
     include_ride_way,
-    load_required_patchset,
     parse_iso_date,
     repo_rel,
     resolve_map_json,
