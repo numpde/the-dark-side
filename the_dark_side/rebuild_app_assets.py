@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
 
 from .asset_pipeline_cli import add_app_asset_args, editor_rebuild_argv_from_namespace
 from .build_config import (
@@ -18,6 +17,7 @@ from .karura_common import (
     APP_MANIFEST_JSON,
     EDITOR_MANIFEST_JSON,
     repo_rel,
+    utc_now_z,
 )
 from .rebuild_editor_assets import (
     parse_args as parse_editor_args,
@@ -66,7 +66,7 @@ def build_app_manifest(
     ]
     return {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "asset_kind": "app_manifest",
             "ride_graph_asset_id": graph.asset_id,
             "editor_graph_asset_id": editor_manifest["meta"]["editor_graph_asset_id"],

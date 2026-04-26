@@ -10,7 +10,6 @@ import json
 import random
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 from .build_config import (
@@ -35,6 +34,7 @@ from .karura_common import (
     MAP_PATCHES_JSON,
     ROUTE_CATALOG_JSON,
     repo_rel,
+    utc_now_z,
     WEB_SOURCE_DIR,
     WEB_GENERATED_DIR,
     sync_web_source_assets,
@@ -468,7 +468,7 @@ def build_export_payloads(args: argparse.Namespace) -> dict[str, dict]:
 
     catalog_payload = {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "graph_asset_id": graph.asset_id,
             "junction_catalog_asset_id": junction_catalog["meta"]["asset_id"],
             "junction_bindings_asset_id": junction_bindings["meta"]["asset_id"],

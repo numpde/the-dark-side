@@ -73,6 +73,10 @@ def karura_today() -> date:
     return datetime.now(KARURA_TIMEZONE).date()
 
 
+def utc_now_z() -> str:
+    return datetime.now(ZoneInfo("UTC")).isoformat().replace("+00:00", "Z")
+
+
 def parse_iso_date(value: str | None) -> date | None:
     if value is None:
         return None

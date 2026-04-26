@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
 
 from .apply_karura_patches import apply_patchset, load_patchset
 from .asset_pipeline_cli import add_editor_asset_args
@@ -22,6 +21,7 @@ from .karura_common import (
     repo_rel,
     sync_web_source_assets,
     digest_paths,
+    utc_now_z,
 )
 from .karura_common import include_ride_way
 from .web_assets import build_editor_graph_payload, write_json as write_export_json
@@ -89,7 +89,7 @@ def rebuild_editor_network(args: argparse.Namespace) -> tuple[dict, dict]:
 def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, contig_payload: dict, bindings_payload: dict, editor_graph_payload: dict) -> dict:
     return {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "asset_kind": "editor_manifest",
             "ride_graph_asset_id": contig_payload["meta"]["asset_id"],
             "editor_graph_asset_id": editor_graph_payload["meta"]["asset_id"],
@@ -110,7 +110,7 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
 def build_frontend_manifest() -> dict:
     return {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "asset_kind": "frontend_manifest",
         },
         "modules": {

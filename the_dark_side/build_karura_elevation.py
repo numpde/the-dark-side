@@ -6,11 +6,10 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 
 from .elevation import OpenMeteoElevationClient, OpenTopoDataElevationClient
-from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON
+from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON, utc_now_z
 from .karura_routing import load_route_graph
 
 
@@ -51,7 +50,7 @@ def main(argv: list[str] | None = None) -> None:
 
     payload = {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "asset_id": f"karura-elevation-{args.provider}-{graph.asset_id}",
             "asset_kind": "graph_elevation",
             "provider": args.provider,

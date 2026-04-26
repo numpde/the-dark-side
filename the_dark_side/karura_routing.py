@@ -6,7 +6,6 @@ import math
 import random
 from collections import defaultdict, deque
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
 from heapq import heappop, heappush
 from pathlib import Path
 from typing import Iterable
@@ -19,6 +18,7 @@ from .karura_common import (
     require_json_array,
     require_json_object,
     require_nonempty_string,
+    utc_now_z,
 )
 
 
@@ -1350,7 +1350,7 @@ def route_asset_payload(
     seed: int,
     candidates: list[RouteCandidate],
 ) -> dict:
-    generated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    generated_at = utc_now_z()
     junction_catalog_meta = junction_catalog["meta"]
     asset_id = (
         f"karura-route-{algorithm}-from-{graph.asset_id}-"

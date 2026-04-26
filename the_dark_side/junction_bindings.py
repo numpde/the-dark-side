@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
@@ -13,6 +12,7 @@ from .karura_common import (
     load_required_junction_bindings,
     load_required_junction_catalog,
     repo_rel,
+    utc_now_z,
 )
 
 
@@ -26,6 +26,8 @@ def haversine_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
     lat2_r = radians(lat2)
     value = sin(dlat / 2) ** 2 + cos(lat1_r) * cos(lat2_r) * sin(dlon / 2) ** 2
     return 2 * R * asin(sqrt(value))
+
+
 def load_junction_catalog(path: Path = JUNCTIONS_JSON) -> dict[str, Any]:
     return load_required_junction_catalog(path, label="junction catalog")
 
@@ -74,7 +76,7 @@ def build_junction_bindings(
 
     return {
         "meta": {
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "generated_at": utc_now_z(),
             "asset_id": f"karura-junction-bindings-for-{graph.asset_id}",
             "asset_kind": "junction_bindings",
             "graph_asset_id": graph.asset_id,

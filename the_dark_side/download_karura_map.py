@@ -11,11 +11,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON
+from .karura_common import MAP_JSON as DEFAULT_MAP_JSON, RAW_JSON as DEFAULT_RAW_JSON, utc_now_z
 
 DEFAULT_RELATION_IDS = [13626194, 15417497]
 DEFAULT_OVERPASS_URL = "https://overpass-api.de/api/interpreter"
@@ -411,7 +410,7 @@ def build_map(
         components=boundary_components,
     )
 
-    downloaded_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    downloaded_at = utc_now_z()
     meta = {
         "name": " + ".join(relation_names),
         "asset_id": f"karura-map-r{'-r'.join(str(relation_id) for relation_id in relation_ids)}-{timestamp_asset_suffix(downloaded_at)}",
