@@ -270,6 +270,60 @@ test("browser planner rejects endpoint mismatches instead of silently inferring 
   );
 });
 
+test("browser planner rejects missing contig tags instead of defaulting them to an empty object", () => {
+  assert.throws(
+    () => buildGraphFromGeoJson({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            contig_id: 3,
+            endpoint_node_ids: [1, 2],
+            node_ids: [1, 2],
+            length_m: 100,
+            segment_count: 1,
+            way_ids: [3],
+            way_names: [],
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [[36.81, -1.24], [36.811, -1.241]],
+          },
+        },
+      ],
+    }),
+    /Invalid route network: features\[0\]\.properties\.tags/
+  );
+});
+
+test("browser planner rejects missing way id arrays instead of defaulting them to empty arrays", () => {
+  assert.throws(
+    () => buildGraphFromGeoJson({
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            contig_id: 4,
+            endpoint_node_ids: [1, 2],
+            node_ids: [1, 2],
+            length_m: 100,
+            segment_count: 1,
+            way_names: [],
+            tags: {},
+          },
+          geometry: {
+            type: "LineString",
+            coordinates: [[36.81, -1.24], [36.811, -1.241]],
+          },
+        },
+      ],
+    }),
+    /Invalid route network: features\[0\]\.properties\.way_ids/
+  );
+});
+
 test("browser planner rejects missing runtime budget fields instead of falling back silently", () => {
   const payload = {
     type: "FeatureCollection",

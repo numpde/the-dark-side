@@ -120,7 +120,7 @@ function normalizeFeature(feature, index) {
     }
   }
 
-  const tags = requireNetworkObject(properties.tags ?? {}, `features[${index}].properties.tags`);
+  const tags = requireNetworkObject(properties.tags, `features[${index}].properties.tags`);
   return {
     properties: {
       contig_id: requireNetworkInteger(properties.contig_id, `features[${index}].properties.contig_id`),
@@ -132,13 +132,13 @@ function normalizeFeature(feature, index) {
         `features[${index}].properties.segment_count`,
       ),
       way_ids: requireNetworkArray(
-        properties.way_ids ?? [],
+        properties.way_ids,
         `features[${index}].properties.way_ids`,
       ).map((value, wayIndex) =>
         requireNetworkInteger(value, `features[${index}].properties.way_ids[${wayIndex}]`)
       ),
       way_names: requireNetworkArray(
-        properties.way_names ?? [],
+        properties.way_names,
         `features[${index}].properties.way_names`,
       ).map((value, wayNameIndex) => String(
         value ?? failNetwork(`features[${index}].properties.way_names[${wayNameIndex}] must be present`)

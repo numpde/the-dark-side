@@ -48,7 +48,7 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
                         "way_ids": list(contig["way_ids"]),
                         "endpoint_node_ids": list(contig["endpoint_node_ids"]),
                         "node_ids": list(contig["node_ids"]),
-                        "tags": dict(contig.get("tags", {})),
+                        "tags": dict(contig["tags"]),
                         **({"elevations_m": elevations} if elevations is not None else {}),
                     },
                     "geometry": {
