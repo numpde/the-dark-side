@@ -17,10 +17,24 @@ test("route app shell loads and route controls become usable", async ({ page }) 
   await expect(page.locator("#map")).toBeVisible();
 
   const newRouteButton = page.locator("#new-route-button");
+  const routeStrip = page.locator(".route-strip");
+  const mapView = page.locator("#map");
   releaseNetwork();
 
   await expect(newRouteButton).toBeEnabled();
   await expect(page.locator("#scenario-label")).toContainText("km");
+  await expect(page.locator("#download-link")).toHaveAttribute("href", /blob:/);
+
+  await newRouteButton.click();
+  await expect(routeStrip).toHaveClass(/is-stale/);
+  await expect(mapView).toHaveClass(/is-stale/);
+  await expect(page.locator("#scenario-label")).toContainText("km");
+  await expect(page.locator("#download-link")).toHaveClass(/disabled/);
+  await expect(newRouteButton).toBeDisabled();
+
+  await expect(newRouteButton).toBeEnabled();
+  await expect(routeStrip).not.toHaveClass(/is-stale/);
+  await expect(mapView).not.toHaveClass(/is-stale/);
   await expect(page.locator("#download-link")).toHaveAttribute("href", /blob:/);
 });
 

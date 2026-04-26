@@ -241,7 +241,7 @@ Verify the published app assets:
 python3 -m the_dark_side.verify_app_assets
 ```
 
-The browser-planner build parameters live in `source/catalog_build.json`. The published app uses a bounded seeded beam planner in a Web Worker; `rebuild_app_assets` exports the graph and the planner config needed by that worker.
+The browser-planner build parameters live in `source/catalog_build.json`. The published app uses a bounded seeded MCTS planner in a Web Worker; `rebuild_app_assets` exports the graph and the planner config needed by that worker.
 
 The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
 The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present on the generated route graph.

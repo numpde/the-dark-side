@@ -1,5 +1,13 @@
-const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v") || "";
-const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("App runtime is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
@@ -11,6 +19,9 @@ const scenarioLabel = document.getElementById("scenario-label");
 const errorCard = document.getElementById("error-card");
 const newRouteButton = document.getElementById("new-route-button");
 const downloadLink = document.getElementById("download-link");
+const routeStrip = document.querySelector(".route-strip");
+const buttonRow = document.querySelector(".button-row");
+const mapView = document.getElementById("map");
 const LOOP_ARROW_INTERVAL_MS = 1000;
 
 let appState = {
@@ -31,6 +42,7 @@ let appState = {
   activeRouteRequestId: 0,
   pendingWorkerRequests: new Map(),
   routeSeedCounter: Math.floor(Math.random() * 1_000_000),
+  routeHistoryByScenario: new Map(),
 };
 
 function requireObject(value, label) {
@@ -133,6 +145,7 @@ function validateAppManifest(manifest) {
   requireObject(normalized.meta ?? {}, "meta");
   const planner = requireObject(normalized.planner, "planner");
   requireString(planner.network_path, "planner.network_path");
+  requireString(planner.network_version, "planner.network_version");
   requireObject(planner.config, "planner.config");
   const areas = requireArray(normalized.areas, "areas");
   if (areas.length === 0) {
@@ -144,15 +157,9 @@ function validateAppManifest(manifest) {
 
 
 function networkUrlForArea() {
-  const relativePath = appState.manifest?.planner?.network_path;
-  if (!relativePath) {
-    throw new Error("App manifest is missing planner.network_path");
-  }
+  const relativePath = appState.manifest.planner.network_path;
   const url = new URL(relativePath, appManifestUrl);
-  const version = appState.manifest?.planner?.network_version;
-  if (version) {
-    url.searchParams.set("v", version);
-  }
+  url.searchParams.set("v", appState.manifest.planner.network_version);
   return url;
 }
 
@@ -172,6 +179,17 @@ function setControlsDisabled(disabled) {
   if (disabled || !appState.route) {
     downloadLink.removeAttribute("href");
   }
+}
+
+function routeSurfaceIsInvalidated() {
+  return appState.routeStatus === "loading" && Boolean(appState.route);
+}
+
+function updateRouteSurfaceState() {
+  const invalidated = routeSurfaceIsInvalidated();
+  routeStrip.classList.toggle("is-stale", invalidated);
+  buttonRow.classList.toggle("is-stale", invalidated);
+  mapView.classList.toggle("is-stale", invalidated);
 }
 
 
@@ -230,6 +248,33 @@ function boundsToLeaflet(bounds) {
 
 function scenarioId(startJunctionId, endJunctionId) {
   return `${startJunctionId}__to__${endJunctionId}`;
+}
+
+function scenarioHistoryKey(area, scenario) {
+  return `${area.id}:${scenario.id}`;
+}
+
+function routeSequenceSignature(sequence) {
+  return sequence.join(",");
+}
+
+function recentRoutesForScenario(area, scenario) {
+  return appState.routeHistoryByScenario.get(scenarioHistoryKey(area, scenario)) || [];
+}
+
+function rememberRouteForScenario(area, scenario, route) {
+  const sequence = Array.isArray(route?.contig_id_sequence)
+    ? route.contig_id_sequence.map((value) => Number(value))
+    : [];
+  if (!sequence.length) {
+    return;
+  }
+  const key = scenarioHistoryKey(area, scenario);
+  const existing = recentRoutesForScenario(area, scenario);
+  const signature = routeSequenceSignature(sequence);
+  const updated = existing.filter((item) => routeSequenceSignature(item) !== signature);
+  updated.unshift(sequence);
+  appState.routeHistoryByScenario.set(key, updated.slice(0, 12));
 }
 
 function findScenario(area, startJunctionId, endJunctionId) {
@@ -425,7 +470,7 @@ function updateRouteStats() {
     return;
   }
 
-  if (appState.routeStatus === "loading") {
+  if (appState.routeStatus === "loading" && !appState.route) {
     scenarioLabel.textContent = `${scenarioLabelText(scenario, appState.area)}…`;
     return;
   }
@@ -454,7 +499,7 @@ function updateRouteStats() {
 function updateDownloadLink() {
   const route = appState.route;
   const scenario = currentScenario();
-  if (!route || !scenario) {
+  if (!route || !scenario || appState.routeStatus === "loading") {
     if (appState.gpxUrl) {
       URL.revokeObjectURL(appState.gpxUrl);
       appState.gpxUrl = null;
@@ -480,6 +525,7 @@ function updateSummary() {
   updateRouteStats();
   updateDownloadLink();
   newRouteButton.disabled = !appState.plannerReady || appState.routeStatus === "loading";
+  updateRouteSurfaceState();
 }
 
 
@@ -599,14 +645,57 @@ function ensurePlannerWorker() {
     return appState.plannerWorker;
   }
   const workerUrl = new URL("./route-worker.js", import.meta.url);
-  if (MODULE_VERSION) {
-    workerUrl.searchParams.set("v", MODULE_VERSION);
-  }
+  workerUrl.searchParams.set("v", MODULE_VERSION);
   const worker = new Worker(workerUrl, { type: "module" });
+  function rejectPendingWorkerRequests(error) {
+    for (const pending of appState.pendingWorkerRequests.values()) {
+      pending.reject(error);
+    }
+    appState.pendingWorkerRequests.clear();
+  }
+  function parseWorkerMessage(event) {
+    const data = requireObject(event.data, "worker message");
+    const type = requireString(data.type, "worker message type");
+    const requestId = requireInteger(data.requestId, "worker requestId");
+    if (type === "error") {
+      const payload = requireObject(data.payload, "worker error payload");
+      return {
+        requestId,
+        type,
+        payload: {
+          message: requireString(payload.message, "worker error payload.message"),
+        },
+      };
+    }
+    if (type === "progress") {
+      return {
+        requestId,
+        type,
+        payload: requireObject(data.payload, "worker progress payload"),
+      };
+    }
+    return {
+      requestId,
+      type,
+      payload: requireObject(data.payload, "worker payload"),
+    };
+  }
   worker.addEventListener("message", (event) => {
-    const { requestId, type, payload } = event.data || {};
+    let message;
+    try {
+      message = parseWorkerMessage(event);
+    } catch (error) {
+      rejectPendingWorkerRequests(error instanceof Error ? error : new Error(String(error)));
+      showError(error instanceof Error ? error.message : String(error));
+      return;
+    }
+    const { requestId, type, payload } = message;
     const pending = appState.pendingWorkerRequests.get(requestId);
     if (!pending) {
+      return;
+    }
+    if (type === "progress") {
+      pending.onProgress?.(payload);
       return;
     }
     appState.pendingWorkerRequests.delete(requestId);
@@ -617,21 +706,18 @@ function ensurePlannerWorker() {
     pending.resolve(payload);
   });
   worker.addEventListener("error", (event) => {
-    for (const pending of appState.pendingWorkerRequests.values()) {
-      pending.reject(event.error || new Error(event.message || "Worker failed"));
-    }
-    appState.pendingWorkerRequests.clear();
+    rejectPendingWorkerRequests(event.error || new Error(event.message || "Worker failed"));
   });
   appState.plannerWorker = worker;
   return worker;
 }
 
 
-function sendWorkerMessage(type, payload) {
+function sendWorkerMessage(type, payload, { onProgress = null } = {}) {
   const worker = ensurePlannerWorker();
   const requestId = ++appState.workerRequestId;
   return new Promise((resolve, reject) => {
-    appState.pendingWorkerRequests.set(requestId, { resolve, reject });
+    appState.pendingWorkerRequests.set(requestId, { resolve, reject, onProgress });
     worker.postMessage({ type, requestId, payload });
   });
 }
@@ -661,10 +747,15 @@ async function chooseRoute() {
   const { startJunction, endJunction } = currentJunctions();
   const requestId = ++appState.activeRouteRequestId;
   const seed = nextRouteSeed();
+  const hadRoute = Boolean(appState.route);
   appState.routeStatus = "loading";
-  appState.route = null;
+  if (!hadRoute) {
+    appState.route = null;
+  }
   updateSummary();
-  renderRoute();
+  if (!hadRoute) {
+    renderRoute();
+  }
 
   try {
     const route = await sendWorkerMessage("plan", {
@@ -672,12 +763,14 @@ async function chooseRoute() {
       seed,
       startNodeId: startJunction.graph_node_id,
       endNodeId: endJunction.graph_node_id,
+      recentRouteContigSequences: recentRoutesForScenario(appState.area, scenario),
     });
     if (requestId !== appState.activeRouteRequestId) {
       return;
     }
     appState.route = route;
     appState.routeStatus = "ready";
+    rememberRouteForScenario(appState.area, scenario, route);
     updateSummary();
     renderRoute();
     clearError();
@@ -685,10 +778,14 @@ async function chooseRoute() {
     if (requestId !== appState.activeRouteRequestId) {
       return;
     }
-    appState.route = null;
+    if (!hadRoute) {
+      appState.route = null;
+    }
     appState.routeStatus = "error";
     updateSummary();
-    renderRoute();
+    if (!hadRoute) {
+      renderRoute();
+    }
     showError(error.message || String(error));
   }
 }

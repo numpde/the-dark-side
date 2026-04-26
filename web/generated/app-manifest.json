@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-04-26T15:02:32.753569Z",
+    "generated_at": "2026-04-26T16:47:59.402497Z",
     "asset_kind": "app_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
@@ -10,7 +10,7 @@
     "elevation_asset_matches_graph": true
   },
   "planner": {
-    "algorithm": "browser-beam-v1",
+    "algorithm": "browser-mcts-v1",
     "network_path": "karura-network.geojson",
     "network_version": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
     "config": {
@@ -18,6 +18,7 @@
       "max_overlap_m": 70.0,
       "max_steps": 256,
       "random_top_k": 4,
+      "end_stop_probability": 0.7,
       "end_stop_unused_slack_m": 400.0,
       "end_finish_unused_slack_m": 250.0,
       "future_length_weight": 0.08,
@@ -27,13 +28,21 @@
       "articulation_future_threshold_m": 400.0,
       "dead_end_penalty": 180.0,
       "early_finish_penalty": 320.0,
-      "beam_width": 32,
-      "beam_branch_factor": 3,
-      "beam_rounds": 96,
-      "beam_selection_pool": 5,
-      "beam_selection_window": 12,
+      "mcts_iterations": 320,
+      "mcts_exploration_weight": 1.0,
+      "mcts_rollout_top_k": 3,
+      "mcts_rollout_samples": 2,
+      "mcts_prior_weight": 0.5,
+      "mcts_loop_completion_bonus": 220.0,
+      "mcts_loop_unused_penalty_per_m": 0.045,
+      "mcts_loop_late_return_bonus": 180.0,
+      "mcts_loop_overlap_penalty_per_m": 4.0,
       "elevation_smoothing_window": 3,
-      "elevation_min_step_m": 0.5
+      "elevation_min_step_m": 0.5,
+      "selection_pool": 5,
+      "selection_window": 12,
+      "mcts_time_budget_ms": 350.0,
+      "mcts_progress_interval_iterations": 24
     }
   },
   "areas": [

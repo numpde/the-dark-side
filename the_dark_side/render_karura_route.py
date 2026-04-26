@@ -12,7 +12,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageOps
 
 from .karura_common import SCREENSHOT, VIEWPORT, mercator
-from .karura_routing import asset_index, load_payload, load_route_graph
+from .karura_routing import asset_index, load_route_asset, load_route_graph
 
 
 BASE_IMAGE_ALPHA = 0.7
@@ -94,7 +94,7 @@ def segment_length(a: tuple[float, float], b: tuple[float, float]) -> float:
 
 def main() -> None:
     args = parse_args()
-    route_payload = load_payload(args.route_json)
+    route_payload = load_route_asset(args.route_json)
     graph = resolve_graph_from_route(route_payload, args.route_json)
     viewport = json.loads(args.viewport.read_text())["viewport"]
     image = prepare_base_image(args.screenshot)

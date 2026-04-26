@@ -8,6 +8,7 @@ const CONFIG = {
   max_overlap_m: 70,
   max_steps: 64,
   random_top_k: 3,
+  end_stop_probability: 0.7,
   end_stop_unused_slack_m: 400,
   end_finish_unused_slack_m: 250,
   future_length_weight: 0.08,
@@ -17,11 +18,19 @@ const CONFIG = {
   articulation_future_threshold_m: 400,
   dead_end_penalty: 180,
   early_finish_penalty: 320,
-  beam_width: 12,
-  beam_branch_factor: 2,
-  beam_rounds: 24,
-  beam_selection_pool: 3,
-  beam_selection_window: 6,
+  selection_pool: 3,
+  selection_window: 6,
+  mcts_iterations: 80,
+  mcts_exploration_weight: 1.0,
+  mcts_rollout_top_k: 3,
+  mcts_rollout_samples: 2,
+  mcts_prior_weight: 0.5,
+  mcts_loop_completion_bonus: 220,
+  mcts_loop_unused_penalty_per_m: 0.045,
+  mcts_loop_late_return_bonus: 180,
+  mcts_loop_overlap_penalty_per_m: 4,
+  mcts_progress_interval_iterations: 8,
+  mcts_time_budget_ms: 1000,
   elevation_smoothing_window: 3,
   elevation_min_step_m: 0.5,
 };
@@ -74,6 +83,7 @@ test("browser planner avoids excluded contigs and returns a complete route", () 
   assert.deepEqual(route.contig_id_sequence, [1, 3, 4]);
   assert.ok(!route.contig_id_sequence.includes(2));
   assert.equal(route.id, "test-route");
+  assert.equal(route.algorithm, "browser-mcts");
   assert.equal(route.coordinates.length, 4);
   assert.equal(typeof route.elevation_gain_m, "number");
   assert.equal(typeof route.elevation_loss_m, "number");
@@ -129,6 +139,72 @@ test("browser planner returns a non-empty loop for start=end scenarios", () => {
   assert.ok(route.unique_length_m > 0);
   assert.equal(route.route_node_ids[0], 20);
   assert.equal(route.route_node_ids.at(-1), 20);
+});
+
+test("browser planner uses recent route history to avoid repeating the same route", () => {
+  const payload = {
+    type: "FeatureCollection",
+    features: [
+      feature(30, [1, 2], [[36.84, -1.24], [36.841, -1.241]], { length_m: 100 }),
+      feature(31, [2, 4], [[36.841, -1.241], [36.842, -1.242]], { length_m: 100 }),
+      feature(32, [1, 3], [[36.84, -1.24], [36.8408, -1.2394]], { length_m: 100 }),
+      feature(33, [3, 4], [[36.8408, -1.2394], [36.842, -1.242]], { length_m: 100 }),
+      feature(34, [2, 5], [[36.841, -1.241], [36.8416, -1.2404]], { length_m: 40 }),
+      feature(35, [5, 4], [[36.8416, -1.2404], [36.842, -1.242]], { length_m: 40 }),
+    ],
+  };
+
+  const graph = buildGraphFromGeoJson(payload);
+  const baseline = planBrowserRoute(graph, {
+    startNodeId: 1,
+    endNodeId: 4,
+    seed: 7,
+    config: CONFIG,
+  });
+  const withHistory = planBrowserRoute(graph, {
+    startNodeId: 1,
+    endNodeId: 4,
+    seed: 7,
+    config: CONFIG,
+    recentRouteContigSequences: [baseline.contig_id_sequence],
+  });
+
+  assert.equal(baseline.complete, true);
+  assert.equal(withHistory.complete, true);
+  assert.notDeepEqual(
+    withHistory.contig_id_sequence,
+    baseline.contig_id_sequence,
+    "expected route history to steer selection away from the already shown route"
+  );
+});
+
+test("browser planner can emit best-so-far progress updates for future live preview", () => {
+  const payload = {
+    type: "FeatureCollection",
+    features: [
+      feature(40, [1, 2], [[36.84, -1.24], [36.841, -1.241]], { length_m: 100 }),
+      feature(41, [2, 4], [[36.841, -1.241], [36.842, -1.242]], { length_m: 100 }),
+      feature(42, [1, 3], [[36.84, -1.24], [36.8408, -1.2394]], { length_m: 100 }),
+      feature(43, [3, 4], [[36.8408, -1.2394], [36.842, -1.242]], { length_m: 100 }),
+    ],
+  };
+
+  const graph = buildGraphFromGeoJson(payload);
+  const progress = [];
+  const route = planBrowserRoute(graph, {
+    startNodeId: 1,
+    endNodeId: 4,
+    seed: 17,
+    config: CONFIG,
+    onProgress: (partialRoute) => {
+      progress.push(partialRoute);
+    },
+  });
+
+  assert.equal(route.complete, true);
+  assert.ok(progress.length >= 1, "expected at least one progress route");
+  assert.ok(progress.every((item) => item.algorithm === "browser-mcts-progress"));
+  assert.ok(progress.every((item) => Array.isArray(item.contig_id_sequence) && item.contig_id_sequence.length > 0));
 });
 
 test("browser planner rejects malformed network payloads instead of falling back to an empty graph", () => {

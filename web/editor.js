@@ -1,5 +1,13 @@
-const MODULE_VERSION = new URL(import.meta.url).searchParams.get("v") || "";
-const moduleSuffix = MODULE_VERSION ? `?v=${encodeURIComponent(MODULE_VERSION)}` : "";
+function requireModuleVersion() {
+  const version = new URL(import.meta.url).searchParams.get("v");
+  if (!version) {
+    throw new Error("Editor runtime is missing required module version");
+  }
+  return version;
+}
+
+const MODULE_VERSION = requireModuleVersion();
+const moduleSuffix = `?v=${encodeURIComponent(MODULE_VERSION)}`;
 const {
   buildPatchsetDocument,
   emptyPatchset,
@@ -189,34 +197,21 @@ async function fetchJson(url, init) {
 
 
 function waysUrlFromManifest() {
-  const relativePath = appState.editorManifest?.editor?.network_path;
-  if (!relativePath) {
-    throw new Error("Editor manifest is missing editor.network_path");
-  }
+  const relativePath = appState.editorManifest.editor.network_path;
   const url = new URL(relativePath, editorManifestUrl);
-  const version = appState.editorManifest?.editor?.network_version;
-  if (version) {
-    url.searchParams.set("v", version);
-  }
+  url.searchParams.set("v", appState.editorManifest.editor.network_version);
   return url;
 }
 
 
 function canonicalPatchPath() {
-  const relativePath = appState.editorManifest?.meta?.patchset_path;
-  if (!relativePath) {
-    throw new Error("Editor manifest is missing meta.patchset_path");
-  }
-  return relativePath;
+  return appState.editorManifest.meta.patchset_path;
 }
 
 
 function patchesUrlFromManifest() {
   const url = new URL(`./${canonicalPatchPath()}`, window.location.href);
-  const version = appState.editorManifest?.meta?.patchset_digest;
-  if (version) {
-    url.searchParams.set("v", version);
-  }
+  url.searchParams.set("v", appState.editorManifest.meta.patchset_digest);
   return url;
 }
 

@@ -85,6 +85,7 @@ def build_app_manifest(
             "max_overlap_m",
             "max_steps",
             "random_top_k",
+            "end_stop_probability",
             "end_stop_unused_slack_m",
             "end_finish_unused_slack_m",
             "future_length_weight",
@@ -94,18 +95,26 @@ def build_app_manifest(
             "articulation_future_threshold_m",
             "dead_end_penalty",
             "early_finish_penalty",
-            "beam_width",
-            "beam_branch_factor",
-            "beam_rounds",
-            "beam_selection_pool",
-            "beam_selection_window",
+            "mcts_iterations",
+            "mcts_exploration_weight",
+            "mcts_rollout_top_k",
+            "mcts_rollout_samples",
+            "mcts_prior_weight",
+            "mcts_loop_completion_bonus",
+            "mcts_loop_unused_penalty_per_m",
+            "mcts_loop_late_return_bonus",
+            "mcts_loop_overlap_penalty_per_m",
             "elevation_smoothing_window",
             "elevation_min_step_m",
         )
     }
-    planner_config["beam_width"] = min(int(planner_config["beam_width"]), 32)
-    planner_config["beam_branch_factor"] = min(int(planner_config["beam_branch_factor"]), 3)
-    planner_config["beam_rounds"] = min(int(planner_config["beam_rounds"]), 96)
+    planner_config["selection_pool"] = min(int(build_config_payload["beam_selection_pool"]), 5)
+    planner_config["selection_window"] = min(int(build_config_payload["beam_selection_window"]), 12)
+    planner_config["mcts_iterations"] = min(int(planner_config["mcts_iterations"]), 320)
+    planner_config["mcts_rollout_top_k"] = min(int(planner_config["mcts_rollout_top_k"]), 3)
+    planner_config["mcts_rollout_samples"] = min(int(planner_config["mcts_rollout_samples"]), 2)
+    planner_config["mcts_time_budget_ms"] = 350.0
+    planner_config["mcts_progress_interval_iterations"] = 24
     junction_defs = junction_catalog["junctions"]
     scenarios = [
         {
@@ -129,7 +138,7 @@ def build_app_manifest(
             "elevation_asset_matches_graph": elevation_matches_graph,
         },
         "planner": {
-            "algorithm": "browser-beam-v1",
+            "algorithm": "browser-mcts-v1",
             "network_path": args.output_network.name,
             "network_version": graph.asset_id,
             "config": planner_config,

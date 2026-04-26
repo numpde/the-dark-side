@@ -70,6 +70,18 @@ def assert_equal(label: str, actual, expected) -> None:
 
 
 def validate_manifest_schema(manifest: dict) -> None:
+    planner = manifest.get("planner")
+    if not isinstance(planner, dict):
+        raise SystemExit("app manifest is stale; missing planner object")
+    network_path = planner.get("network_path")
+    network_version = planner.get("network_version")
+    config = planner.get("config")
+    if not isinstance(network_path, str) or not network_path:
+        raise SystemExit("app manifest is stale; missing planner.network_path")
+    if not isinstance(network_version, str) or not network_version:
+        raise SystemExit("app manifest is stale; missing planner.network_version")
+    if not isinstance(config, dict):
+        raise SystemExit("app manifest is stale; missing planner.config object")
     areas = manifest.get("areas")
     if not isinstance(areas, list) or not areas:
         raise SystemExit("app manifest is stale; missing non-empty areas list")
