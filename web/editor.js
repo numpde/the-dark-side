@@ -62,6 +62,7 @@ function requireElement(id) {
 
 
 const waysUrl = new URL("./generated/karura-editor-network.geojson", window.location.href);
+const editorManifestUrl = new URL("./generated/editor-manifest.json", window.location.href);
 const patchesUrl = new URL("./source/karura-map-patches.json", window.location.href);
 
 const exportButton = requireElement("export-button");
@@ -76,6 +77,8 @@ const changeCount = requireElement("change-count");
 const clearButton = requireElement("clear-button");
 const errorBox = requireElement("error-box");
 const loadedPatchPath = requireElement("loaded-patch-path");
+const editorGraphAsset = requireElement("editor-graph-asset");
+const editorGeneratedAt = requireElement("editor-generated-at");
 const exportHint = requireElement("export-hint");
 const patchPreview = requireElement("patch-preview");
 const stateButtons = [...document.querySelectorAll(".state-button")];
@@ -95,6 +98,7 @@ const appState = {
   endpointLayer: null,
   editorState: normalizePatchset(null),
   loadedPatchLabel: "source/karura-map-patches.json",
+  editorManifest: null,
 };
 
 
@@ -356,6 +360,11 @@ function currentPatchDocument() {
 
 function updatePatchInfo() {
   loadedPatchPath.textContent = appState.loadedPatchLabel;
+  editorGraphAsset.textContent =
+    appState.editorManifest?.meta?.editor_graph_asset_id ||
+    appState.editorManifest?.meta?.graph_asset_id ||
+    "–";
+  editorGeneratedAt.textContent = appState.editorManifest?.meta?.generated_at || "–";
   patchPreview.textContent = `${JSON.stringify(currentPatchDocument(), null, 2)}\n`;
 }
 
@@ -476,16 +485,18 @@ async function importPatchset(file) {
 
 
 async function boot() {
-  const [waysGeojson, patchset] = await Promise.all([
+  const [waysGeojson, patchset, editorManifest] = await Promise.all([
     fetchJson(waysUrl),
     fetchJson(patchesUrl, {
       meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
       patches: [],
     }),
+    fetchJson(editorManifestUrl, null),
   ]);
 
   appState.editorState = normalizePatchset(patchset);
   appState.loadedPatchLabel = "source/karura-map-patches.json";
+  appState.editorManifest = editorManifest;
   renderWays(waysGeojson);
   updateControls();
 }

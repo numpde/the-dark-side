@@ -9,7 +9,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from .karura_common import CURATED_DIR, DEBUG_DIR, FIGURES_DIR, VIEWPORT, mercator
+from .karura_common import CONTIGS_JSON, CURATED_DIR, DEBUG_DIR, FIGURES_DIR, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON, VIEWPORT, mercator
 
 
 FIGURES_JSON = CURATED_DIR / "karura_figures.json"
@@ -21,7 +21,9 @@ OVERLAY_BY_ASSET_KIND = {
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--figures-json", type=Path, default=FIGURES_JSON)
-    parser.add_argument("--junctions-json", type=Path)
+    parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
+    parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
+    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--viewport", type=Path, default=VIEWPORT)
     parser.add_argument("--figure-id", default="junctions_primary")
     parser.add_argument("--output", type=Path)
@@ -91,10 +93,6 @@ def draw_label(
     )
 
 
-def asset_index(payload: dict) -> dict[str, dict]:
-    return {asset["id"]: asset for asset in payload.get("assets", [])}
-
-
 def resolve_figure(payload: dict, figure_id: str) -> dict:
     for figure in payload.get("figures", []):
         if figure["id"] == figure_id:
@@ -102,18 +100,11 @@ def resolve_figure(payload: dict, figure_id: str) -> dict:
     raise KeyError(f"Figure '{figure_id}' not found")
 
 
-def pick_asset_ref(figure: dict, kind: str) -> dict:
-    for ref in figure.get("asset_refs", []):
-        if ref.get("kind") == kind:
-            return ref
-    raise KeyError(f"Figure '{figure['id']}' is missing asset ref kind '{kind}'")
-
-
-def resolve_junction_asset_ref(junction: dict, asset_id: str) -> dict:
-    for ref in junction.get("asset_refs", []):
-        if ref.get("asset_id") == asset_id:
-            return ref
-    raise KeyError(f"Junction '{junction['id']}' has no ref for asset '{asset_id}'")
+def resolve_junction_binding(bindings: dict, junction_id: str) -> dict:
+    for binding in bindings.get("bindings", []):
+        if binding.get("junction_id") == junction_id:
+            return binding
+    raise KeyError(f"Junction '{junction_id}' has no derived binding")
 
 
 def load_payload(path: Path) -> dict:
@@ -123,30 +114,19 @@ def load_payload(path: Path) -> dict:
 def main() -> None:
     args = parse_args()
     figures_payload = load_payload(args.figures_json)
-    figure_assets = asset_index(figures_payload)
     figure = resolve_figure(figures_payload, args.figure_id)
-    graph_asset_ref = pick_asset_ref(figure, "base_graph")
-    graph_asset = figure_assets[graph_asset_ref["asset_id"]]
-
-    overlay_path = OVERLAY_BY_ASSET_KIND[graph_asset["kind"]]
+    overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
     overlay = Image.open(overlay_path).convert("RGBA")
     viewport = json.loads(args.viewport.read_text())["viewport"]
-    contigs = load_payload(args.figures_json.parent / graph_asset["path"])
-    if contigs["meta"]["asset_id"] != graph_asset["id"]:
-        raise RuntimeError(
-            f"Figure '{figure['id']}' expects graph asset '{graph_asset['id']}' "
-            f"but loaded '{contigs['meta']['asset_id']}'"
-        )
+    contigs = load_payload(args.contigs_json)
     nodes = {int(node_id): node for node_id, node in contigs["nodes"].items()}
 
-    junction_catalog_ref = pick_asset_ref(figure, "junction_catalog")
-    junction_catalog_asset = figure_assets[junction_catalog_ref["asset_id"]]
-    junctions_path = args.junctions_json or (args.figures_json.parent / junction_catalog_asset["path"])
-    junctions_payload = load_payload(junctions_path)
-    if junctions_payload["meta"]["asset_id"] != junction_catalog_ref["asset_id"]:
+    junctions_payload = load_payload(args.junctions_json)
+    junction_bindings = load_payload(args.junction_bindings_json)
+    if junction_bindings["meta"]["graph_asset_id"] != contigs["meta"]["asset_id"]:
         raise RuntimeError(
-            f"Figure '{figure['id']}' expects junction catalog '{junction_catalog_ref['asset_id']}' "
-            f"but loaded '{junctions_payload['meta']['asset_id']}'"
+            f"Junction bindings are for graph '{junction_bindings['meta']['graph_asset_id']}' "
+            f"but loaded contigs '{contigs['meta']['asset_id']}'"
         )
     junctions = {junction["id"]: junction for junction in junctions_payload["junctions"]}
 
@@ -161,7 +141,7 @@ def main() -> None:
 
     for item in figure.get("items", []):
         junction = junctions[item["junction_id"]]
-        junction_ref = resolve_junction_asset_ref(junction, graph_asset["id"])
+        junction_ref = resolve_junction_binding(junction_bindings, junction["id"])
         node = nodes[junction_ref["graph_node_id"]]
         point = project_point(node["lon"], node["lat"], viewport, overlay.size)
         color = tuple(item["color"])

@@ -36,6 +36,12 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Fill clipped gaps between kept segments on the same way",
     )
+    parser.add_argument(
+        "--respect-inner-rings",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Respect inner rings as holes instead of using only the outer shell",
+    )
     return parser.parse_args()
 
 
@@ -57,18 +63,25 @@ def patchset_digest(
     patchset_id: str,
     applied_patches: list[dict[str, Any]],
     fill_segment_gaps: bool,
+    respect_inner_rings: bool,
 ) -> str:
     payload = {
         "source_asset_id": source_asset_id,
         "patchset_id": patchset_id,
         "patches": applied_patches,
         "fill_segment_gaps": fill_segment_gaps,
+        "respect_inner_rings": respect_inner_rings,
     }
     normalized = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha1(normalized).hexdigest()[:12]
 
 
-def build_inside_karura(boundary: BoundaryRecord, nodes: dict[int, NodeRecord]):
+def build_inside_karura(
+    boundary: BoundaryRecord,
+    nodes: dict[int, NodeRecord],
+    *,
+    respect_inner_rings: bool = False,
+):
     component_coords = [
         (
             [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
@@ -81,7 +94,7 @@ def build_inside_karura(boundary: BoundaryRecord, nodes: dict[int, NodeRecord]):
         for outer_ring_coords, inner_ring_coords in component_coords:
             if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
                 continue
-            if any(point_in_ring(point, ring) for ring in inner_ring_coords):
+            if respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords):
                 continue
             return True
         return False
@@ -254,6 +267,7 @@ def apply_patchset(
     patchset_path: str,
     *,
     fill_segment_gaps: bool = True,
+    respect_inner_rings: bool = False,
 ) -> KaruraMap:
     patch_ids: set[str] = set()
     nodes = {
@@ -272,7 +286,11 @@ def apply_patchset(
         )
         for way_id, way in karura_map.ways.items()
     }
-    inside_karura = build_inside_karura(karura_map.boundary, nodes)
+    inside_karura = build_inside_karura(
+        karura_map.boundary,
+        nodes,
+        respect_inner_rings=respect_inner_rings,
+    )
     applied_patch_ids: list[str] = []
     applied_patches: list[dict[str, Any]] = []
 
@@ -319,6 +337,7 @@ def apply_patchset(
         patchset_id=patchset_id,
         applied_patches=applied_patches,
         fill_segment_gaps=fill_segment_gaps,
+        respect_inner_rings=respect_inner_rings,
     )
     meta = {
         "asset_id": f"karura-map-patched-from-{karura_map.meta.get('asset_id', 'unknown')}-{patchset_id}-{patch_digest}",
@@ -331,6 +350,7 @@ def apply_patchset(
         "patchset_asset_kind": patchset_meta.get("asset_kind", "map_patchset"),
         "applied_patch_ids": applied_patch_ids,
         "fill_segment_gaps": fill_segment_gaps,
+        "respect_inner_rings": respect_inner_rings,
         "node_count": len(nodes),
         "way_count": len(ways),
     }
@@ -353,6 +373,7 @@ def main() -> None:
         source_map=repo_rel(args.map_json),
         patchset_path=repo_rel(args.patches_json),
         fill_segment_gaps=args.fill_segment_gaps,
+        respect_inner_rings=args.respect_inner_rings,
     )
     write_json(args.output, patched.to_dict())
     print(
@@ -364,6 +385,7 @@ def main() -> None:
                 "patchset_digest": patched.meta["patchset_digest"],
                 "applied_patch_count": len(patched.meta["applied_patch_ids"]),
                 "fill_segment_gaps": patched.meta["fill_segment_gaps"],
+                "respect_inner_rings": patched.meta["respect_inner_rings"],
                 "node_count": patched.meta["node_count"],
                 "way_count": patched.meta["way_count"],
             },

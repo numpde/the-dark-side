@@ -149,6 +149,12 @@ def parse_args() -> argparse.Namespace:
         default=True,
         help="Fill clipped gaps between kept segments on the same way",
     )
+    parser.add_argument(
+        "--respect-inner-rings",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Respect inner rings as holes instead of using only the outer shell",
+    )
     args = parser.parse_args()
     if not args.relation_ids:
         args.relation_ids = list(DEFAULT_RELATION_IDS)
@@ -285,6 +291,7 @@ def build_map(
     query: str,
     *,
     fill_segment_gaps: bool = True,
+    respect_inner_rings: bool = False,
 ) -> KaruraMap:
     nodes: dict[int, NodeRecord] = {}
     way_rows: dict[int, dict[str, Any]] = {}
@@ -345,7 +352,7 @@ def build_map(
         for outer_ring_coords, inner_ring_coords in component_coords:
             if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
                 continue
-            if any(point_in_ring(point, ring) for ring in inner_ring_coords):
+            if respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords):
                 continue
             return True
         return False
@@ -421,6 +428,7 @@ def build_map(
             for relation_id in relation_ids
         ],
         "fill_segment_gaps": fill_segment_gaps,
+        "respect_inner_rings": respect_inner_rings,
         "node_count": len(nodes),
         "way_count": len(ways),
         "raw_element_count": len(payload.get("elements", [])),
@@ -493,6 +501,7 @@ def main() -> None:
         overpass_url=args.overpass_url,
         query=query,
         fill_segment_gaps=args.fill_segment_gaps,
+        respect_inner_rings=args.respect_inner_rings,
     )
     write_json(args.map_json, karura_map.to_dict())
 
@@ -505,6 +514,7 @@ def main() -> None:
         "outer_ring_count": len(karura_map.boundary.outer_rings),
         "inner_ring_count": len(karura_map.boundary.inner_rings),
         "fill_segment_gaps": args.fill_segment_gaps,
+        "respect_inner_rings": args.respect_inner_rings,
     }
     print(json.dumps(summary, indent=2))
 

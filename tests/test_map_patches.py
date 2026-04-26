@@ -375,6 +375,26 @@ class MapPatchPipelineTest(unittest.TestCase):
                 patchset_path="source/karura-map-patches.json",
             )
 
+    def test_build_contigs_asset_id_includes_graph_mode(self) -> None:
+        payload = self.build_map().to_dict()
+        ride_graph = build_contigs(
+            payload,
+            source_map="data/karura_map.json",
+            patchset={"meta": {"patchset_id": "contig-tags"}, "patches": []},
+            patchset_path="source/karura-map-patches.json",
+            graph_mode="ride",
+        )
+        editor_graph = build_contigs(
+            payload,
+            source_map="data/karura_map.json",
+            patchset={"meta": {"patchset_id": "contig-tags"}, "patches": []},
+            patchset_path="source/karura-map-patches.json",
+            graph_mode="editor",
+        )
+        self.assertNotEqual(ride_graph["meta"]["asset_id"], editor_graph["meta"]["asset_id"])
+        self.assertIn("karura-contigs-ride-from-", ride_graph["meta"]["asset_id"])
+        self.assertIn("karura-contigs-editor-from-", editor_graph["meta"]["asset_id"])
+
     def test_compute_way_record_keeps_segment_if_either_endpoint_is_inside(self) -> None:
         nodes = {
             1: NodeRecord(id=1, lat=0.0, lon=0.0),
@@ -492,9 +512,30 @@ class MapPatchPipelineTest(unittest.TestCase):
             ],
         )
         inside_karura = build_inside_karura(boundary, nodes)
-        self.assertFalse(inside_karura((0.3, 0.3)))
+        self.assertTrue(inside_karura((0.3, 0.3)))
         self.assertTrue(inside_karura((0.8, 0.8)))
         self.assertTrue(inside_karura((2.4, 2.4)))
+
+    def test_boundary_can_respect_inner_rings_when_requested(self) -> None:
+        nodes = {
+            1: NodeRecord(id=1, lat=0.0, lon=0.0),
+            2: NodeRecord(id=2, lat=0.0, lon=1.0),
+            3: NodeRecord(id=3, lat=1.0, lon=1.0),
+            4: NodeRecord(id=4, lat=1.0, lon=0.0),
+            9: NodeRecord(id=9, lat=0.2, lon=0.2),
+            10: NodeRecord(id=10, lat=0.2, lon=0.4),
+            11: NodeRecord(id=11, lat=0.4, lon=0.4),
+            12: NodeRecord(id=12, lat=0.4, lon=0.2),
+        }
+        boundary = BoundaryRecord(
+            relation_id=13626194,
+            relation_tags={"name": "Union"},
+            outer_rings=[[1, 2, 3, 4, 1]],
+            inner_rings=[[9, 10, 11, 12, 9]],
+        )
+        inside_karura = build_inside_karura(boundary, nodes, respect_inner_rings=True)
+        self.assertFalse(inside_karura((0.3, 0.3)))
+        self.assertTrue(inside_karura((0.8, 0.8)))
 
 
 if __name__ == "__main__":

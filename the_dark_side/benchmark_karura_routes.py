@@ -12,10 +12,11 @@ from dataclasses import asdict
 from pathlib import Path
 import random
 
-from .karura_common import BENCHMARKS_DIR, CONTIGS_JSON, JUNCTIONS_JSON
+from .karura_common import BENCHMARKS_DIR, CONTIGS_JSON, JUNCTION_BINDINGS_JSON, JUNCTIONS_JSON
 from .karura_routing import (
     PlannerConfig,
     RouteCandidate,
+    load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
     plan_route_beam,
@@ -38,6 +39,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
+    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--scenario", choices=tuple(SCENARIOS), action="append")
     parser.add_argument("--algorithm", choices=ALGORITHMS, action="append")
     parser.add_argument("--seed-start", type=int, default=1)
@@ -245,12 +247,13 @@ def main() -> None:
     seeds = list(range(args.seed_start, args.seed_end + 1))
     graph = load_route_graph(args.contigs_json)
     junction_catalog = load_junction_catalog(args.junctions_json)
+    junction_bindings = load_junction_bindings(args.junction_bindings_json)
 
     results: dict[str, dict] = {}
     for scenario_name in scenarios:
         start_junction, end_junction = SCENARIOS[scenario_name]
-        start_ref = resolve_junction_ref(junction_catalog, start_junction, graph.asset_id)
-        end_ref = resolve_junction_ref(junction_catalog, end_junction, graph.asset_id)
+        start_ref = resolve_junction_ref(junction_catalog, start_junction, graph.asset_id, junction_bindings)
+        end_ref = resolve_junction_ref(junction_catalog, end_junction, graph.asset_id, junction_bindings)
         scenario_result = {
             "start_junction_id": start_junction,
             "end_junction_id": end_junction,

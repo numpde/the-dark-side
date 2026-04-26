@@ -34,6 +34,9 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
 - `the_dark_side.build_karura_elevation`
   Annotates the contig graph nodes with elevation values and writes:
   - `data/karura_elevation.json`
+- `the_dark_side.junction_bindings`
+  Resolves curated junction locations onto the current contig graph and writes:
+  - `data/karura_junction_bindings.json`
 - `the_dark_side.karura_routing`
   Shared graph/junction loaders plus route planners.
 - `the_dark_side.elevation`
@@ -50,10 +53,18 @@ Static route generator and GitHub Pages app for long, low-overlap bike routes th
   Debug tool: renders one-off planned route candidates on the aligned screenshot.
 - `the_dark_side.export_karura_web_catalog`
   Exports the static frontend catalog plus the generated GeoJSON assets used by the web app and contig editor into `web/generated/`, and publishes the canonical `source/*.json` inputs into `web/source/`.
+- `the_dark_side.rebuild_editor_assets`
+  Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
+- `the_dark_side.verify_editor_assets`
+  Verifies that the editor-facing derived assets match the current canonical inputs.
+- `the_dark_side.rebuild_app_assets`
+  Rebuilds the editor assets, then exports the published route catalog and app-facing network assets.
+- `the_dark_side.verify_app_assets`
+  Verifies the editor assets, elevation cache binding, and published app assets.
 - `the_dark_side.rebuild_all`
-  Rebuilds the deterministic derived assets from the canonical inputs.
+  Convenience wrapper that rebuilds the full editor + app stack; use `--with-elevation` to refresh the external cache first.
 - `the_dark_side.verify_assets`
-  Verifies that the committed derived assets still match the current canonical inputs.
+  Convenience wrapper around app verification.
 
 ## Setup
 
@@ -71,7 +82,7 @@ Download and normalize the map:
 python3 -m the_dark_side.download_karura_map
 ```
 
-Add `--no-fill-segment-gaps` to disable continuity repair along clipped ways for debugging.
+By default the baseline inclusion region uses the topological outer shell of the Karura relations and ignores inner rings. Add `--respect-inner-rings` to treat relation holes as exclusions again, or `--no-fill-segment-gaps` to disable continuity repair along clipped ways for debugging.
 
 Build contigs from the ride graph:
 
@@ -85,7 +96,7 @@ Apply local structural map patches:
 python3 -m the_dark_side.apply_karura_patches
 ```
 
-This step also supports `--no-fill-segment-gaps` if you want patched way geometry to preserve raw endpoint-only clipping.
+This step also supports `--respect-inner-rings` and `--no-fill-segment-gaps` if you want patched way geometry to preserve stricter relation clipping behavior.
 
 `build_karura_contigs` will prefer `data/karura_map_patched.json` when it exists, and fall back to `data/karura_map.json` otherwise.
 
@@ -168,20 +179,31 @@ This writes:
 - `data/benchmarks/karura-route-benchmark.json`
 - `data/benchmarks/karura-route-benchmark.md`
 
-Rebuild the deterministic derived assets from canonical inputs:
+Rebuild the editor-facing derived assets from canonical inputs:
 
 ```bash
-python3 -m the_dark_side.rebuild_all
+python3 -m the_dark_side.rebuild_editor_assets
 ```
 
 This writes:
 - `data/karura_map_patched.json`
 - `data/karura_contigs.json`
-- `web/generated/catalog.json`
-- `web/generated/karura-network.geojson`
+- `data/karura_junction_bindings.json`
 - `web/generated/karura-editor-network.geojson`
+- `web/generated/editor-manifest.json`
 - `web/source/karura-map-patches.json`
 - `web/source/catalog_build.json`
+
+Rebuild the published route app assets:
+
+```bash
+python3 -m the_dark_side.rebuild_app_assets
+```
+
+This writes:
+- `web/generated/catalog.json`
+- `web/generated/karura-network.geojson`
+- `web/generated/app-manifest.json`
 
 Rebuild including a refreshed elevation cache:
 
@@ -189,10 +211,16 @@ Rebuild including a refreshed elevation cache:
 python3 -m the_dark_side.rebuild_all --with-elevation
 ```
 
-Verify that the committed derived assets still match the canonical inputs:
+Verify editor-facing derived assets:
 
 ```bash
-python3 -m the_dark_side.verify_assets
+python3 -m the_dark_side.verify_editor_assets
+```
+
+Verify the published app assets:
+
+```bash
+python3 -m the_dark_side.verify_app_assets
 ```
 
 The route-catalog build parameters live in `source/catalog_build.json`. By default the exporter samples `mcts`, `beam`, and `naive` planners, then keeps a diverse subset per scenario according to that file.
@@ -226,7 +254,7 @@ The page will:
 
 The editor will:
 - load the current patch file automatically
-- let you mark baseline OSM-highway contigs as `default`, `include`, or `exclude`
+- let you mark baseline transport contigs (all kept `highway=*` plus `amenity=parking`) as `default`, `include`, or `exclude`
 - annotate `bikeability` and allowed bike direction
 - annotate contigs as unavailable until a specific date
 - export a replacement for `source/karura-map-patches.json`
@@ -262,10 +290,9 @@ Use `curated/karura_routing_overrides.json` for time-varying routing knowledge t
 The intended build order is:
 
 1. `download_karura_map`
-2. `apply_karura_patches`
-3. `build_karura_contigs`
-4. `build_karura_elevation` when you intentionally refresh the external cache
-5. `export_karura_web_catalog`
+2. `rebuild_editor_assets`
+3. `build_karura_elevation` when you intentionally refresh the external cache
+4. `rebuild_app_assets`
 
 Canonical inputs:
 
@@ -282,8 +309,10 @@ Pinned external cache:
 Everything else in `data/` and `web/generated/` is derived. After changing a canonical input, regenerate and verify before pushing:
 
 ```bash
-python3 -m the_dark_side.rebuild_all
-python3 -m the_dark_side.verify_assets
+python3 -m the_dark_side.rebuild_editor_assets
+python3 -m the_dark_side.verify_editor_assets
+python3 -m the_dark_side.rebuild_app_assets
+python3 -m the_dark_side.verify_app_assets
 ```
 
 ## Data shape
@@ -291,7 +320,7 @@ python3 -m the_dark_side.verify_assets
 `data/karura_map.json` contains:
 
 - `meta`: download metadata and query info
-- `boundary`: outer and inner rings for the Karura relation
+- `boundary`: outer and inner rings for the Karura relation union
 - `nodes`: node id to `{lat, lon}`
 - `ways`: way id to:
   - `tags`
@@ -301,12 +330,12 @@ python3 -m the_dark_side.verify_assets
   - `inside_length_m`
   - `bounds`
 
-`segment_pairs` are the kept segments after boundary clipping. A segment is kept if either endpoint is inside the current baseline boundary union, and short internal gaps between kept runs on the same way are filled by default to preserve topology near the boundary.
+`segment_pairs` are the kept segments after boundary clipping. By default the baseline uses the union of the relations' outer shells, ignoring inner rings so relation holes do not punch topological breaks into the route graph. A segment is kept if either endpoint is inside that baseline region, and short internal gaps between kept runs on the same way are filled by default to preserve topology near the boundary.
 
-`data/karura_contigs.json` contains the collapsed baseline highway graph used for routing:
+`data/karura_contigs.json` contains the collapsed baseline transport graph used for routing:
 
 - `crossings`: graph nodes with degree other than `2`
-- `contigs`: maximal chains of kept `highway=*` segments between crossings or dead ends
+- `contigs`: maximal chains of kept baseline transport segments between crossings or dead ends
 
 `source/karura-map-patches.json` contains local structural edits and contig policy layered on top of the downloaded map asset:
 
@@ -332,13 +361,16 @@ python3 -m the_dark_side.verify_assets
 `curated/karura_junctions.json` is the manual layer for named junctions:
 
 - `location` is the stable geographic point
-- `asset_refs` contains graph-specific references (`graph_node_id`, `incident_contig_ids`) scoped to a particular generated asset
-- `assets` records which generated graph file those references target
+
+`data/karura_junction_bindings.json` contains the derived graph binding for those stable junctions:
+
+- `meta.graph_asset_id` identifies the contig graph it was built against
+- `bindings[*].graph_node_id` is the resolved graph node
+- `bindings[*].incident_contig_ids` are the contigs touching that node
 
 `curated/karura_figures.json` is the manual layer for presentation figures:
 
 - `figures` contains stable figure ids
-- each figure has `asset_refs` pointing at the generated assets it depends on
 - figure items reference stable curated entities such as `junction_id`
 
 `web/generated/catalog.json` contains the static frontend bundle:
@@ -358,3 +390,5 @@ python3 -m the_dark_side.verify_assets
   - `elevation_max_m`
   - `elevations_m` aligned with `coordinates`
   - `elevation_profile` as `[distance_m, elevation_m]` pairs for charting
+
+`web/generated/editor-manifest.json` and `web/generated/app-manifest.json` expose the active graph asset ids, patch digest, build config digest, and generated timestamps so stale assets are visible in the UI and CI.

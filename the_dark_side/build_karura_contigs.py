@@ -331,7 +331,7 @@ def build_contigs(
 
     contig_graph = {
         "meta": {
-            "asset_id": f"karura-contigs-ride-from-{source_asset_id}",
+            "asset_id": f"karura-contigs-{graph_mode}-from-{source_asset_id}",
             "asset_kind": "contig_graph",
             "source_map": source_map,
             "source_asset_id": source_asset_id,

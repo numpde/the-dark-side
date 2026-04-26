@@ -56,16 +56,17 @@ jobs:
           python3 -m unittest -v \
             tests.test_build_config \
             tests.test_export_catalog \
+            tests.test_junction_bindings \
             tests.test_map_patches \
             tests.test_route_diversity
 
-      - name: Rebuild deterministic assets
+      - name: Rebuild app assets
         run: |
-          python3 -m the_dark_side.rebuild_all
+          python3 -m the_dark_side.rebuild_app_assets
 
-      - name: Verify asset provenance
+      - name: Verify app asset provenance
         run: |
-          python3 -m the_dark_side.verify_assets
+          python3 -m the_dark_side.verify_app_assets
 
       - uses: actions/upload-pages-artifact@v5
         with:

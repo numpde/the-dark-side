@@ -1,29 +1,6 @@
 {
-  "assets": [
-    {
-      "id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
-      "kind": "contig_graph",
-      "path": "../data/karura_contigs.json",
-      "source_asset_id": null
-    },
-    {
-      "id": "karura-junctions-curated-v1",
-      "kind": "junction_catalog",
-      "path": "karura_junctions.json"
-    }
-  ],
   "figures": [
     {
-      "asset_refs": [
-        {
-          "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260424T183329146066Z-karura-map-patches-v1-048790ac263f",
-          "kind": "base_graph"
-        },
-        {
-          "asset_id": "karura-junctions-curated-v1",
-          "kind": "junction_catalog"
-        }
-      ],
       "header": {
         "subtitle": "Selected junction nodes on the contig graph",
         "title": "Karura Junction Figure"
@@ -64,6 +41,6 @@
     "asset_kind": "figure_catalog",
     "area": "Karura",
     "description": "Curated figure definitions for Karura map assets.",
-    "schema_version": 1
+    "schema_version": 2
   }
 }

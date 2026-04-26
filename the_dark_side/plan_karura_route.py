@@ -10,9 +10,10 @@ import os
 from pathlib import Path
 import random
 
-from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, ROUTES_DIR
+from .karura_common import CONTIGS_JSON, JUNCTIONS_JSON, JUNCTION_BINDINGS_JSON, ROUTES_DIR
 from .karura_routing import (
     PlannerConfig,
+    load_junction_bindings,
     load_junction_catalog,
     load_route_graph,
     plan_route_beam,
@@ -29,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--algorithm", choices=("naive", "beam", "mcts"), default="naive")
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
+    parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--start-junction", default="family_trail_west")
     parser.add_argument("--end-junction", default="kiambu_side_exit")
     parser.add_argument("--seed", type=int, default=7)
@@ -98,8 +100,9 @@ def main() -> None:
     config = build_config(args)
     graph = load_route_graph(args.contigs_json)
     junction_catalog = load_junction_catalog(args.junctions_json)
-    start_ref = resolve_junction_ref(junction_catalog, args.start_junction, graph.asset_id)
-    end_ref = resolve_junction_ref(junction_catalog, args.end_junction, graph.asset_id)
+    junction_bindings = load_junction_bindings(args.junction_bindings_json)
+    start_ref = resolve_junction_ref(junction_catalog, args.start_junction, graph.asset_id, junction_bindings)
+    end_ref = resolve_junction_ref(junction_catalog, args.end_junction, graph.asset_id, junction_bindings)
     rng = random.Random(args.seed)
 
     if args.algorithm == "naive":
@@ -130,9 +133,11 @@ def main() -> None:
     output = args.output or default_output(args)
     graph_ref_path = Path(os.path.relpath(args.contigs_json.resolve(), output.parent.resolve()))
     junctions_ref_path = Path(os.path.relpath(args.junctions_json.resolve(), output.parent.resolve()))
+    junction_bindings_ref_path = Path(os.path.relpath(args.junction_bindings_json.resolve(), output.parent.resolve()))
     payload = route_asset_payload(
         graph_path=graph_ref_path,
         junctions_path=junctions_ref_path,
+        junction_bindings_path=junction_bindings_ref_path,
         graph=graph,
         junction_catalog=junction_catalog,
         start_ref=start_ref,
