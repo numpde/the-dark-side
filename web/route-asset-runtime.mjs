@@ -1,0 +1,25 @@
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route asset runtime module");
+const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+
+async function fetchJson(url, { cache = "no-store" } = {}) {
+  const response = await fetch(url, { cache });
+  if (!response.ok) {
+    throw new Error(`Failed to load ${url.pathname.split("/").pop()}: ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function loadAppManifest(appManifestUrl) {
+  return validateAppManifest(await fetchJson(appManifestUrl));
+}
+
+export function buildAreaNetworkUrl(appManifestUrl, appManifest) {
+  const url = new URL(appManifest.planner.network_path, appManifestUrl);
+  url.searchParams.set("v", appManifest.planner.network_version);
+  return url;
+}
+
+export async function loadAreaNetwork(appManifestUrl, appManifest) {
+  return fetchJson(buildAreaNetworkUrl(appManifestUrl, appManifest), { cache: "default" });
+}

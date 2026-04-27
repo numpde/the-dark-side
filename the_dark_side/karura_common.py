@@ -58,6 +58,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "module-context.mjs",
     WEB_DIR / "planner-client.mjs",
     WEB_DIR / "planner-worker-contracts.mjs",
+    WEB_DIR / "route-asset-runtime.mjs",
     WEB_DIR / "route-controller.mjs",
     WEB_DIR / "route-graph.mjs",
     WEB_DIR / "route-map-view.mjs",

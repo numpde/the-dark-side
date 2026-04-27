@@ -1,8 +1,8 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Route controller module");
-const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
 const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
+const { loadAppManifest, loadAreaNetwork } = await import(`./route-asset-runtime.mjs${moduleSuffix}`);
 const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
 const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`);
 const {
@@ -72,13 +72,6 @@ export function createRouteController({
     activeAreaLoadId: 0,
     routeHistoryByScenario: new Map(),
   };
-
-  function networkUrlForArea() {
-    const relativePath = appState.manifest.planner.network_path;
-    const url = new URL(relativePath, appManifestUrl);
-    url.searchParams.set("v", appState.manifest.planner.network_version);
-    return url;
-  }
 
   function routeSurfaceIsInvalidated() {
     return appState.routeStatus === "loading" && Boolean(appState.route);
@@ -190,14 +183,6 @@ export function createRouteController({
     showError(errorCard, error.message || String(error));
   }
 
-  async function loadAreaNetwork() {
-    const response = await fetch(networkUrlForArea());
-    if (!response.ok) {
-      throw new Error(`Failed to load network overlay: ${response.status}`);
-    }
-    return response.json();
-  }
-
   async function initializePlanner(networkPayload) {
     await appState.routeRuntime.initializePlanner(networkPayload, appState.manifest.planner.config);
     clearError(errorCard);
@@ -261,7 +246,7 @@ export function createRouteController({
       isLoading: true,
     });
 
-    const networkPayload = await loadAreaNetwork();
+    const networkPayload = await loadAreaNetwork(appManifestUrl, appState.manifest);
     if (loadId !== appState.activeAreaLoadId) {
       return;
     }
@@ -325,11 +310,7 @@ export function createRouteController({
     bindControls();
 
     try {
-      const response = await fetch(appManifestUrl, { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`Failed to load app manifest: ${response.status}`);
-      }
-      appState.manifest = validateAppManifest(await response.json());
+      appState.manifest = await loadAppManifest(appManifestUrl);
     } catch (error) {
       showError(errorCard, error.message || String(error));
       setSummaryText(scenarioLabel, "Failed to load routes");
