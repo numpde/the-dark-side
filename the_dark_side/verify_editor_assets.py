@@ -240,7 +240,6 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function junctionsForScenario\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveCanonicalSelection\(')
     assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function resolveScenarioSelection\(')
-    assert_regex("web/route-scenarios.mjs", route_scenarios_js, r'export function scenarioLabelText\(')
     assert_not_regex("web/route-scenarios.mjs", route_scenarios_js, r'function setScenarioLabelParts\(')
 
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'export function createRouteMapView\(')

@@ -63,6 +63,7 @@ export function createRouteController({
     }),
     routeStatus: "booting",
     activeRouteRequestId: 0,
+    activeAreaLoadId: 0,
     routeHistoryByScenario: new Map(),
   };
 
@@ -159,6 +160,32 @@ export function createRouteController({
     updateRouteSurfaceState(routeStrip, buttonRow, mapElement, routeSurfaceIsInvalidated());
   }
 
+  function beginRouteRefresh({ preserveRoute }) {
+    appState.routeStatus = "loading";
+    if (!preserveRoute) {
+      appState.route = null;
+    }
+    updateSummary();
+    if (!preserveRoute) {
+      renderRoute();
+    }
+  }
+
+  function failRouteRefresh(error, { preserveRoute, requestId = null }) {
+    if (requestId != null && requestId !== appState.activeRouteRequestId) {
+      return;
+    }
+    if (!preserveRoute) {
+      appState.route = null;
+    }
+    appState.routeStatus = "error";
+    updateSummary();
+    if (!preserveRoute) {
+      renderRoute();
+    }
+    showError(errorCard, error.message || String(error));
+  }
+
   async function loadAreaNetwork() {
     const response = await fetch(networkUrlForArea());
     if (!response.ok) {
@@ -173,29 +200,21 @@ export function createRouteController({
   }
 
   async function chooseRoute() {
-    const scenario = currentScenario();
-    syncUrlFromSelectors(areaSelect, startSelect, endSelect);
-    if (!scenario || !appState.routeRuntime.plannerReady || !appState.area) {
-      appState.route = null;
-      updateSummary();
-      renderRoute();
-      return;
-    }
-
-    const { startJunction, endJunction } = currentJunctions();
     const requestId = ++appState.activeRouteRequestId;
-    const seed = appState.routeRuntime.nextRouteSeed();
     const hadRoute = Boolean(appState.route);
-    appState.routeStatus = "loading";
-    if (!hadRoute) {
-      appState.route = null;
-    }
-    updateSummary();
-    if (!hadRoute) {
-      renderRoute();
-    }
-
     try {
+      const scenario = currentScenario();
+      syncUrlFromSelectors(areaSelect, startSelect, endSelect);
+      if (!scenario || !appState.routeRuntime.plannerReady || !appState.area) {
+        appState.route = null;
+        updateSummary();
+        renderRoute();
+        return;
+      }
+
+      const { startJunction, endJunction } = currentJunctions();
+      const seed = appState.routeRuntime.nextRouteSeed();
+      beginRouteRefresh({ preserveRoute: hadRoute });
       const route = await appState.routeRuntime.requestRoute({
         routeId: `browser-${scenario.id}-seed${seed}`,
         seed,
@@ -217,22 +236,16 @@ export function createRouteController({
       renderRoute();
       clearError(errorCard);
     } catch (error) {
-      if (requestId !== appState.activeRouteRequestId) {
-        return;
-      }
-      if (!hadRoute) {
-        appState.route = null;
-      }
-      appState.routeStatus = "error";
-      updateSummary();
-      if (!hadRoute) {
-        renderRoute();
-      }
-      showError(errorCard, error.message || String(error));
+      failRouteRefresh(error, {
+        preserveRoute: hadRoute,
+        requestId,
+      });
     }
   }
 
   async function loadArea(area) {
+    const loadId = ++appState.activeAreaLoadId;
+    appState.activeRouteRequestId += 1;
     appState.routeStatus = "loading";
     appState.route = null;
     appState.network = null;
@@ -246,7 +259,13 @@ export function createRouteController({
     });
 
     const networkPayload = await loadAreaNetwork();
+    if (loadId !== appState.activeAreaLoadId) {
+      return;
+    }
     await initializePlanner(networkPayload);
+    if (loadId !== appState.activeAreaLoadId) {
+      return;
+    }
     appState.network = networkPayload;
     renderNetwork();
     setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
@@ -283,14 +302,14 @@ export function createRouteController({
 
     startSelect.addEventListener("change", () => {
       canonicalizeSelectorScenario(startSelect, endSelect, appState.area, "start");
-      chooseRoute();
+      void chooseRoute();
     });
     endSelect.addEventListener("change", () => {
       canonicalizeSelectorScenario(startSelect, endSelect, appState.area, "end");
-      chooseRoute();
+      void chooseRoute();
     });
     newRouteButton.addEventListener("click", () => {
-      chooseRoute();
+      void chooseRoute();
     });
   }
 
