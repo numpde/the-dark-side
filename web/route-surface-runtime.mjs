@@ -92,7 +92,7 @@ export function createRouteSurfaceRuntime({
         routeStatus,
         scenario,
         loopArrowPhase,
-        loadingLabel,
+        loadingLabel: route ? null : loadingLabel,
       });
       syncShellState({
         routeStatus,

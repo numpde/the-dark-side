@@ -28,7 +28,7 @@ test("route app shell loads and route controls become usable", async ({ page }) 
   await newRouteButton.click();
   await expect(routeStrip).toHaveClass(/is-stale/);
   await expect(mapView).toHaveClass(/is-stale/);
-  await expect(page.locator("#scenario-label")).toContainText("Searching route");
+  await expect(page.locator("#scenario-label")).toContainText("km");
   await expect(mapView).toHaveAttribute("data-loading-label", /Searching route/);
   await expect(page.locator("#download-link")).toHaveClass(/disabled/);
   await expect(newRouteButton).toBeDisabled();
