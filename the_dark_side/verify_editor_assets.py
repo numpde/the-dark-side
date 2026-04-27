@@ -322,6 +322,7 @@ def verify_frontend_bootstrap_contract() -> None:
     contract_primitives_js = (WEB_GENERATED_DIR.parent / "contract-primitives.mjs").read_text()
     route_graph_js = (WEB_GENERATED_DIR.parent / "route-graph.mjs").read_text()
     route_network_contracts_js = (WEB_GENERATED_DIR.parent / "route-network-contracts.mjs").read_text()
+    route_search_js = (WEB_GENERATED_DIR.parent / "route-search.mjs").read_text()
     route_selection_js = (WEB_GENERATED_DIR.parent / "route-selection.mjs").read_text()
 
     assert_uses_module_context("web/runtime-contracts.mjs", runtime_contracts_js, "Runtime contracts module")
@@ -383,6 +384,17 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-selection.mjs", route_selection_js, r'function rolloutRoute\(')
     assert_not_regex("web/route-selection.mjs", route_selection_js, r'^import .* from "\./')
 
+    assert_uses_module_context("web/route-search.mjs", route_search_js, "Route search module")
+    assert_regex("web/route-search.mjs", route_search_js, r'await import\(`\./karura-policy\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-search.mjs", route_search_js, r'await import\(`\./route-selection\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-search.mjs", route_search_js, r'export function createInitialState\(')
+    assert_regex("web/route-search.mjs", route_search_js, r'export function rolloutRoute\(')
+    assert_regex("web/route-search.mjs", route_search_js, r'export function routeReward\(')
+    assert_regex("web/route-search.mjs", route_search_js, r'export function expandMctsNode\(')
+    assert_not_regex("web/route-search.mjs", route_search_js, r'function requireFiniteNumber\(')
+    assert_not_regex("web/route-search.mjs", route_search_js, r'function requireInteger\(')
+    assert_not_regex("web/route-search.mjs", route_search_js, r'^import .* from "\./')
+
     assert_uses_module_context(
         "web/route-network-contracts.mjs",
         route_network_contracts_js,
@@ -413,12 +425,11 @@ def verify_frontend_bootstrap_contract() -> None:
     route_planner_js = (WEB_GENERATED_DIR.parent / "route-planner.mjs").read_text()
     assert_uses_module_context("web/route-planner.mjs", route_planner_js, "Route planner module")
     assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./contract-primitives\.mjs\$\{moduleSuffix\}`\)')
-    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./karura-policy\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./route-graph\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./route-selection\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-planner.mjs", route_planner_js, r'await import\(`\./route-search\.mjs\$\{moduleSuffix\}`\)')
     assert_contains("web/route-planner.mjs", route_planner_js, "normalizeRouteHistory,")
     assert_contains("web/route-planner.mjs", route_planner_js, "pickHistoryAwarePrimaryCandidate,")
-    assert_contains("web/route-planner.mjs", route_planner_js, "sampleWeighted,")
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'export function buildGraphFromGeoJson\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function failNetwork\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function requireArray\(')
@@ -433,6 +444,10 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function buildDiverseCandidatePool\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function pickHistoryAwarePrimaryCandidate\(')
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'function findArticulationPoints\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function moveCandidates\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function rolloutRoute\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function routeReward\(')
+    assert_not_regex("web/route-planner.mjs", route_planner_js, r'function createInitialState\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_time_budget_ms:\s*requireFiniteNumber\(')
     assert_regex("web/route-planner.mjs", route_planner_js, r'mcts_progress_interval_iterations:\s*requireInteger\(')
     assert_not_contains("web/route-planner.mjs", route_planner_js, "plannerConfig.mcts_time_budget_ms == null")
