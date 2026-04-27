@@ -118,6 +118,7 @@ def verify_frontend_bootstrap_contract() -> None:
     route_summary_view_js = (WEB_GENERATED_DIR.parent / "route-summary-view.mjs").read_text()
     module_context_js = (WEB_GENERATED_DIR.parent / "module-context.mjs").read_text()
     entry_bootstrap_js = (WEB_GENERATED_DIR.parent / "entry-bootstrap.mjs").read_text()
+    editor_policy_contracts_js = (WEB_GENERATED_DIR.parent / "editor-policy-contracts.mjs").read_text()
     editor_shell_view_js = (WEB_GENERATED_DIR.parent / "editor-shell-view.mjs").read_text()
 
     assert_regex(
@@ -339,6 +340,33 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/editor-map-view.mjs", editor_map_view_js, r'function geometryEndpoints\(')
     assert_regex("web/editor-map-view.mjs", editor_map_view_js, r'function endpointMarker\(')
     assert_not_regex("web/editor-map-view.mjs", editor_map_view_js, r'^import .* from "\./')
+    editor_state_js = (WEB_GENERATED_DIR.parent / "editor-state.mjs").read_text()
+    assert_uses_module_context("web/editor-state.mjs", editor_state_js, "Editor state module")
+    assert_regex("web/editor-state.mjs", editor_state_js, r'await import\(`\./editor-policy-contracts\.mjs\$\{moduleSuffix\}`\)')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeRoutingState\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireRoutingState\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeBikeability\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireBikeability\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeBicycleDirection\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireBicycleDirection\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeUnavailableUntil\(')
+    assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireUnavailableUntil\(')
+    assert_uses_module_context(
+        "web/editor-policy-contracts.mjs",
+        editor_policy_contracts_js,
+        "Editor policy contracts module",
+    )
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export const POLICY_TAGS = \{')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function defaultWayPolicy\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function normalizeRoutingState\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function requireRoutingState\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function normalizeBikeability\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function requireBikeability\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function normalizeBicycleDirection\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function requireBicycleDirection\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function normalizeUnavailableUntil\(')
+    assert_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'export function requireUnavailableUntil\(')
+    assert_not_regex("web/editor-policy-contracts.mjs", editor_policy_contracts_js, r'^import .* from "\./')
     assert_uses_module_context("web/editor-shell-view.mjs", editor_shell_view_js, "Editor shell view module")
     assert_regex("web/editor-shell-view.mjs", editor_shell_view_js, r'export function createEditorShellView\(')
     assert_regex("web/editor-shell-view.mjs", editor_shell_view_js, r'function requireElement\(')
