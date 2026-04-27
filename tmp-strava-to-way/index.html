@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strava to Way Fit Editor</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="./styles.css?v=20260427s" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>Strava to Way Fit Editor</h1>
+        <p class="subtitle">Left: screenshot pixels. Right: OSM way geometry. Place the same numbered point on both sides, then infer extent.</p>
+      </div>
+      <div class="topbar-meta">
+        <span id="figure-meta">Loading dataset…</span>
+      </div>
+    </header>
+
+    <section class="controls">
+      <label class="field">
+        <span>Figure</span>
+        <select id="figure-select" aria-label="Figure"></select>
+      </label>
+      <label class="field">
+        <span>Fit mode</span>
+        <select id="fit-mode" aria-label="Fit mode">
+          <option value="axis-aligned">Axis-aligned mercator</option>
+          <option value="similarity">Similarity</option>
+          <option value="affine">Affine</option>
+        </select>
+      </label>
+      <label class="toggle">
+        <input id="toggle-region" type="checkbox" checked />
+        <span>Show downloaded ways</span>
+      </label>
+      <label class="toggle">
+        <input id="toggle-bounds" type="checkbox" checked />
+        <span>Show approx bounds</span>
+      </label>
+      <div class="button-row">
+        <button type="button" id="undo-button" class="secondary">Undo</button>
+        <button type="button" id="add-point-button">Add point</button>
+        <button type="button" id="delete-point-button" class="secondary">Delete point</button>
+        <button type="button" id="clear-points-button" class="secondary">Reset points</button>
+        <button type="button" id="fit-button">Fit / infer extent</button>
+      </div>
+    </section>
+
+    <section class="selection-strip" id="selection-strip">No active point. Add one or click directly in the screenshot or map to start.</section>
+
+    <section class="workspace">
+      <section class="pane">
+        <div class="pane-header">
+          <div class="pane-title">Screenshot</div>
+          <div class="pane-caption">Wheel to zoom, drag to pan, click without dragging to set the selected point.</div>
+        </div>
+        <div class="image-viewport" id="image-viewport">
+          <div class="image-canvas" id="image-canvas">
+            <img id="screenshot-image" alt="Selected Strava screenshot" draggable="false" />
+          </div>
+          <div class="image-markers" id="image-markers" aria-hidden="true"></div>
+          <div class="placement-ghost hidden" id="image-placement-ghost" aria-hidden="true">
+            <div class="placement-ghost-marker image-placement-ghost-marker">
+              <span class="placement-ghost-index" id="image-placement-ghost-index">1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pane">
+        <div class="pane-header">
+          <div class="pane-title">OSM Map</div>
+          <div class="pane-caption">Click to set the same point in map space. Markers are draggable.</div>
+        </div>
+        <div class="map-shell">
+          <div class="map-view" id="map"></div>
+          <div class="placement-ghost hidden" id="map-placement-ghost" aria-hidden="true">
+            <div class="placement-ghost-marker map-placement-ghost-marker">
+              <span class="placement-ghost-index" id="map-placement-ghost-index">1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="inspector">
+      <div class="point-panel">
+        <div class="section-heading">Control points</div>
+        <div class="point-list" id="point-list"></div>
+      </div>
+
+      <div class="result-panel">
+        <div class="result-heading-row">
+          <div class="section-heading">Fit result</div>
+          <button type="button" id="copy-fit-button" class="secondary" disabled>Copy JSON</button>
+        </div>
+        <div class="status" id="status-box">Pick a figure, add points, then run fit.</div>
+        <pre id="result-box" class="result-box"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script type="module" src="./app.js?v=20260427ac"></script>
+</body>
+</html>

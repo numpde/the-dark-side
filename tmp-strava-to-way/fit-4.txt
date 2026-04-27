@@ -1,0 +1,64 @@
+{
+  "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123525",
+  "figureLabel": "Figure 4",
+  "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.36/-1.239862/36.842144",
+  "fitMode": "axis-aligned",
+  "controlPointCount": 4,
+  "residualSummaryMeters": {
+    "mean": 0.26,
+    "max": 0.392
+  },
+  "residuals": [
+    {
+      "pointId": 1,
+      "residualMeters": 0.065
+    },
+    {
+      "pointId": 2,
+      "residualMeters": 0.392
+    },
+    {
+      "pointId": 3,
+      "residualMeters": 0.223
+    },
+    {
+      "pointId": 4,
+      "residualMeters": 0.36
+    }
+  ],
+  "corners": [
+    {
+      "name": "topLeft",
+      "lat": -1.23722035,
+      "lon": 36.83706631
+    },
+    {
+      "name": "topRight",
+      "lat": -1.23722035,
+      "lon": 36.847731225
+    },
+    {
+      "name": "bottomRight",
+      "lat": -1.243055402,
+      "lon": 36.847731225
+    },
+    {
+      "name": "bottomLeft",
+      "lat": -1.243055402,
+      "lon": 36.83706631
+    }
+  ],
+  "inferredBounds": {
+    "north": -1.23722035,
+    "south": -1.243055402,
+    "west": 36.83706631,
+    "east": 36.847731225
+  },
+  "transform": {
+    "type": "axis-aligned",
+    "xMetersPerPixel": 0.467039,
+    "yMetersPerPixel": -0.467415,
+    "xOffsetMeters": 4100683.464,
+    "yOffsetMeters": -137737.444
+  }
+}
