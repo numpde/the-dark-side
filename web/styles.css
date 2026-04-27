@@ -4,6 +4,10 @@
   --sand: #d8c7a5;
   --fern: #325847;
   --fern-deep: #223a31;
+  --route-start: #2460dc;
+  --route-end: #e62828;
+  --route-button-start: #5e7ec2;
+  --route-button-end: #bf6767;
   --line: rgba(22, 33, 30, 0.12);
   --font-sans: "Space Grotesk", "Avenir Next", sans-serif;
 }
@@ -104,13 +108,6 @@ select {
   display: inline;
 }
 
-.note {
-  margin: -6px 0 -2px;
-  font-size: 0.78rem;
-  line-height: 1.3;
-  color: rgba(22, 33, 30, 0.58);
-}
-
 .button-row {
   display: flex;
   flex-wrap: wrap;
@@ -165,9 +162,26 @@ select:disabled {
 
 button {
   border: none;
-  background: linear-gradient(135deg, var(--fern), var(--fern-deep));
+  background: linear-gradient(135deg, var(--route-button-start), var(--route-button-end));
   color: white;
   font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+}
+
+#new-route-button {
+  border: 1px solid rgba(22, 33, 30, 0.14);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--route-start);
+  text-shadow: none;
+}
+
+#new-route-button .button-gradient-text {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--route-start), var(--route-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .download-link {
@@ -242,20 +256,18 @@ button:hover,
     display: block;
   }
 
-  .note {
-    margin: -4px 0 -2px;
-    font-size: 0.74rem;
-  }
-
   .button-row {
     width: 100%;
     gap: 8px;
+    flex-wrap: nowrap;
   }
 
   button,
   .download-link {
-    flex: 1 1 100%;
+    flex: 1 1 0;
+    min-width: 0;
     min-height: 44px;
+    white-space: nowrap;
   }
 
   .map-view {

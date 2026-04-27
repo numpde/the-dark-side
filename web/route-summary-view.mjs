@@ -63,5 +63,6 @@ export function renderRouteSummary(labelElement, { title, route, routeStatus, is
     const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
     metaText += ` (↗ ${upText}, ↘ ${downText})`;
   }
+  metaText += " Stats are approximate.";
   setScenarioLabelParts(labelElement, title, metaText);
 }
