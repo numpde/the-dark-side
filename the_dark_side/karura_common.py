@@ -72,7 +72,9 @@ APP_MODULE_PATHS = (
 )
 EDITOR_MODULE_PATHS = (
     WEB_DIR / "contract-primitives.mjs",
+    WEB_DIR / "editor-map-view.mjs",
     WEB_DIR / "editor.js",
+    WEB_DIR / "editor-shell-view.mjs",
     WEB_DIR / "editor-state.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",
