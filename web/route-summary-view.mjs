@@ -10,12 +10,19 @@ function animatedLoopArrow(loopArrowPhase) {
   return loopArrowPhase % 2 === 0 ? "↗" : "↘";
 }
 
-function setScenarioLabelMeta(labelElement, metaText) {
+function setScenarioLabelMeta(labelElement, metaText, noteText = null) {
   labelElement.replaceChildren();
   const metaSpan = document.createElement("span");
   metaSpan.className = "scenario-title-meta";
   metaSpan.textContent = metaText;
   labelElement.append(metaSpan);
+  if (!noteText) {
+    return;
+  }
+  const noteSpan = document.createElement("span");
+  noteSpan.className = "scenario-title-note";
+  noteSpan.textContent = noteText;
+  labelElement.append(noteSpan);
 }
 
 export function setSummaryText(labelElement, text) {
@@ -44,6 +51,5 @@ export function renderRouteSummary(labelElement, { route, routeStatus, isLoop, l
     const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
     metaText += ` (↗ ${upText}, ↘ ${downText})`;
   }
-  metaText += " Stats are approximate.";
-  setScenarioLabelMeta(labelElement, metaText);
+  setScenarioLabelMeta(labelElement, metaText, "Stats are approximate.");
 }

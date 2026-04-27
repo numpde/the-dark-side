@@ -244,10 +244,13 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-scenarios.mjs", route_scenarios_js, r'function setScenarioLabelParts\(')
 
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'export function createRouteMapView\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'await import\(`\./karura-policy\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function mixColor\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function boundsToLeaflet\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function junctionLatLon\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'function networkFeatureStyle\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'isCurrentlyUnavailable\(tags\)')
     assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
 
     assert_uses_module_context(

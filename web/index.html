@@ -20,33 +20,34 @@
     <h1>Random bike routes</h1>
 
     <div class="controls-grid">
-      <label id="area-field">
-        <span>Area</span>
-        <select id="area-select"></select>
-      </label>
+      <div id="area-field" class="control-field">
+        <select id="area-select" aria-label="Area"></select>
+      </div>
 
-      <label>
-        <span>Start</span>
-        <select id="start-select"></select>
-      </label>
-
-      <label>
-        <span>End</span>
-        <select id="end-select"></select>
-      </label>
+      <div class="route-pair-row" aria-label="From and to route selectors">
+        <div class="control-field">
+          <select id="start-select" aria-label="From"></select>
+        </div>
+        <span class="route-direction-arrow" aria-hidden="true">→</span>
+        <div class="control-field">
+          <select id="end-select" aria-label="To"></select>
+        </div>
+      </div>
     </div>
 
     <div class="route-strip">
       <p class="scenario-title" id="scenario-label">Loading…</p>
     </div>
 
+    <div class="map-view" id="map"></div>
     <div class="button-row">
       <button type="button" id="new-route-button"><span class="button-gradient-text">New route</span></button>
       <a class="download-link" id="download-link" href="#" aria-label="Download GPX" title="Download GPX">↓ GPX</a>
     </div>
-
-    <div class="map-view" id="map"></div>
     <div class="error-card hidden" id="error-card"></div>
+    <p class="note">
+      Thanks to <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> and <a href="https://www.opentopodata.org/datasets/mapzen/">Open Topo Data / Mapzen</a>.
+    </p>
   </main>
 
   <script

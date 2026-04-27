@@ -1,3 +1,7 @@
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route map view module");
+const { isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
+
 function mixColor(start, end, fraction) {
   const clamped = Math.max(0, Math.min(1, fraction));
   const values = start.map((value, index) =>
@@ -18,6 +22,39 @@ function junctionLatLon(junction) {
     return null;
   }
   return [junction.location.lat, junction.location.lon];
+}
+
+function networkFeatureStyle(feature) {
+  const tags = feature?.properties?.tags || {};
+  if (isCurrentlyUnavailable(tags)) {
+    return {
+      color: "#d0741f",
+      weight: 3,
+      opacity: 0.72,
+      dashArray: "10 6",
+      lineCap: "round",
+    };
+  }
+  return {
+    color: "#3d4f46",
+    weight: 2,
+    opacity: 0.33,
+  };
+}
+
+function bindNetworkFeature(layer, feature) {
+  const tags = feature?.properties?.tags || {};
+  if (!isCurrentlyUnavailable(tags)) {
+    return;
+  }
+  const until = tags["local:unavailable_until"];
+  const message = typeof until === "string"
+    ? `Temporarily unavailable until ${until}`
+    : "Temporarily unavailable";
+  layer.bindTooltip(message, {
+    direction: "top",
+    sticky: true,
+  });
 }
 
 export function createRouteMapView(elementId) {
@@ -59,11 +96,8 @@ export function createRouteMapView(elementId) {
       return;
     }
     networkLayer = L.geoJSON(network, {
-      style: {
-        color: "#3d4f46",
-        weight: 2,
-        opacity: 0.33,
-      },
+      style: networkFeatureStyle,
+      onEachFeature: bindNetworkFeature,
       pane: "network-pane",
     }).addTo(activeMap);
   }
