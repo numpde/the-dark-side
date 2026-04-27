@@ -1,25 +1,11 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor shell view module");
 const { clearErrorText, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
-
-function findErrorBox() {
-  return document.getElementById("error-box");
-}
-
-function requireElement(id) {
-  const element = document.getElementById(id);
-  if (!element) {
-    const message = `Missing required page element: #${id}`;
-    const fallbackErrorBox = findErrorBox();
-    if (fallbackErrorBox) {
-      fallbackErrorBox.textContent = message;
-      fallbackErrorBox.classList.remove("hidden");
-    }
-    console.error(message);
-    throw new Error(message);
-  }
-  return element;
-}
+const {
+  requireElement,
+  guard,
+  guardAsync,
+} = await import(`./view-runtime.mjs${moduleSuffix}`);
 
 export function createEditorShellView({
   reportError,
@@ -31,23 +17,24 @@ export function createEditorShellView({
   onExport,
   onImportFile,
 }) {
-  const exportButton = requireElement("export-button");
-  const importButton = requireElement("import-button");
-  const importInput = requireElement("import-input");
-  const wayHeading = requireElement("way-heading");
-  const wayMeta = requireElement("way-meta");
-  const bikeabilitySelect = requireElement("bikeability-select");
-  const directionSelect = requireElement("direction-select");
-  const unavailableUntilInput = requireElement("unavailable-until-input");
-  const changeCount = requireElement("change-count");
-  const clearButton = requireElement("clear-button");
-  const errorBox = requireElement("error-box");
-  const loadedPatchPath = requireElement("loaded-patch-path");
-  const exportTargetPath = requireElement("export-target-path");
-  const editorGraphAsset = requireElement("editor-graph-asset");
-  const editorGeneratedAt = requireElement("editor-generated-at");
-  const exportHint = requireElement("export-hint");
-  const patchPreview = requireElement("patch-preview");
+  const requireShellElement = (id) => requireElement(id, { errorElementId: "error-box" });
+  const exportButton = requireShellElement("export-button");
+  const importButton = requireShellElement("import-button");
+  const importInput = requireShellElement("import-input");
+  const wayHeading = requireShellElement("way-heading");
+  const wayMeta = requireShellElement("way-meta");
+  const bikeabilitySelect = requireShellElement("bikeability-select");
+  const directionSelect = requireShellElement("direction-select");
+  const unavailableUntilInput = requireShellElement("unavailable-until-input");
+  const changeCount = requireShellElement("change-count");
+  const clearButton = requireShellElement("clear-button");
+  const errorBox = requireShellElement("error-box");
+  const loadedPatchPath = requireShellElement("loaded-patch-path");
+  const exportTargetPath = requireShellElement("export-target-path");
+  const editorGraphAsset = requireShellElement("editor-graph-asset");
+  const editorGeneratedAt = requireShellElement("editor-generated-at");
+  const exportHint = requireShellElement("export-hint");
+  const patchPreview = requireShellElement("patch-preview");
   const stateButtons = [...document.querySelectorAll(".state-button")];
 
   if (stateButtons.length === 0) {
@@ -62,51 +49,29 @@ export function createEditorShellView({
     clearErrorText(errorBox);
   }
 
-  function guard(fn, context) {
-    return (...args) => {
-      try {
-        return fn(...args);
-      } catch (error) {
-        reportError(error, context);
-        return undefined;
-      }
-    };
-  }
-
-  function guardAsync(fn, context) {
-    return async (...args) => {
-      try {
-        return await fn(...args);
-      } catch (error) {
-        reportError(error, context);
-        return undefined;
-      }
-    };
-  }
-
   stateButtons.forEach((button) => {
-    button.addEventListener("click", guard(() => {
+    button.addEventListener("click", guard(reportError, "Failed to update routing state", () => {
       onRoutingStateChange(button.dataset.routingState);
-    }, "Failed to update routing state"));
+    }));
   });
 
-  bikeabilitySelect.addEventListener("change", guard(() => {
+  bikeabilitySelect.addEventListener("change", guard(reportError, "Failed to update bikeability", () => {
     onBikeabilityChange(bikeabilitySelect.value === "" ? null : Number(bikeabilitySelect.value));
-  }, "Failed to update bikeability"));
+  }));
 
-  directionSelect.addEventListener("change", guard(() => {
+  directionSelect.addEventListener("change", guard(reportError, "Failed to update direction", () => {
     onDirectionChange(directionSelect.value);
-  }, "Failed to update direction"));
+  }));
 
-  unavailableUntilInput.addEventListener("change", guard(() => {
+  unavailableUntilInput.addEventListener("change", guard(reportError, "Failed to update availability", () => {
     onUnavailableUntilChange(unavailableUntilInput.value || null);
-  }, "Failed to update availability"));
+  }));
 
-  clearButton.addEventListener("click", guard(onClear, "Failed to reset contig policy"));
-  exportButton.addEventListener("click", guard(onExport, "Failed to export patch file"));
-  importButton.addEventListener("click", guard(() => importInput.click(), "Failed to open import dialog"));
+  clearButton.addEventListener("click", guard(reportError, "Failed to reset contig policy", onClear));
+  exportButton.addEventListener("click", guard(reportError, "Failed to export patch file", onExport));
+  importButton.addEventListener("click", guard(reportError, "Failed to open import dialog", () => importInput.click()));
 
-  importInput.addEventListener("change", guardAsync(async () => {
+  importInput.addEventListener("change", guardAsync(reportError, "Failed to import patch file", async () => {
     const [file] = importInput.files || [];
     if (!file) {
       return;
@@ -117,7 +82,7 @@ export function createEditorShellView({
     } finally {
       importInput.value = "";
     }
-  }, "Failed to import patch file"));
+  }));
 
   function update({
     feature,

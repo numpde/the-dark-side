@@ -86,6 +86,7 @@ EDITOR_MODULE_PATHS = (
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",
     WEB_DIR / "runtime-contracts.mjs",
+    WEB_DIR / "view-runtime.mjs",
 )
 
 R = 6378137.0
