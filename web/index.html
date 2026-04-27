@@ -78,7 +78,7 @@
       const { bootVersionedEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
       try {
         await bootVersionedEntry({
-          manifestUrl: "./generated/frontend-manifest.json",
+          manifest,
           bootstrapVersionKey: "bootstrap_version",
           entryVersionKey: "app_version",
           entryPath: "./app.js",

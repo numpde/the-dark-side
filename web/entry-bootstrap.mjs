@@ -1,22 +1,19 @@
+function requireManifestModuleVersion(manifest, key) {
+  const value = manifest?.modules?.[key];
+  if (!value) {
+    throw new Error(`Frontend manifest is missing modules.${key}`);
+  }
+  return value;
+}
+
 export async function bootVersionedEntry({
-  manifestUrl,
+  manifest,
   bootstrapVersionKey,
   entryVersionKey,
   entryPath,
 }) {
-  const response = await fetch(manifestUrl, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Failed to load frontend manifest: ${response.status}`);
-  }
-  const manifest = await response.json();
-  const bootstrapVersion = manifest?.modules?.[bootstrapVersionKey];
-  if (!bootstrapVersion) {
-    throw new Error(`Frontend manifest is missing modules.${bootstrapVersionKey}`);
-  }
-  const entryVersion = manifest?.modules?.[entryVersionKey];
-  if (!entryVersion) {
-    throw new Error(`Frontend manifest is missing modules.${entryVersionKey}`);
-  }
+  requireManifestModuleVersion(manifest, bootstrapVersionKey);
+  const entryVersion = requireManifestModuleVersion(manifest, entryVersionKey);
   const specifier = `${entryPath}?v=${encodeURIComponent(entryVersion)}`;
   await import(specifier);
 }
