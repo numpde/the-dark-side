@@ -14,6 +14,7 @@ export function createPlannerClient({
   let nextRequestId = 0;
   const pendingRequests = new Map();
   let workerBooted = false;
+  let workerFailedError = null;
   let resolveWorkerBooted;
   let rejectWorkerBooted;
   const workerBootedPromise = new Promise((resolve, reject) => {
@@ -22,11 +23,16 @@ export function createPlannerClient({
   });
 
   function failWorker(error) {
+    if (workerFailedError) {
+      return;
+    }
+    workerFailedError = error;
     rejectWorkerBooted?.(error);
     for (const pending of pendingRequests.values()) {
       pending.reject(error);
     }
     pendingRequests.clear();
+    worker.terminate();
     onUnhandledError?.(error);
   }
 
@@ -68,8 +74,14 @@ export function createPlannerClient({
 
   return {
     async request(type, payload, { onProgress = null } = {}) {
+      if (workerFailedError) {
+        throw workerFailedError;
+      }
       if (!workerBooted) {
         await workerBootedPromise;
+      }
+      if (workerFailedError) {
+        throw workerFailedError;
       }
       const requestId = ++nextRequestId;
       return new Promise((resolve, reject) => {

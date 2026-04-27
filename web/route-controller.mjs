@@ -59,6 +59,7 @@ export function createRouteController({
       parsePlannerWorkerResponse,
       onUnhandledError: (error) => {
         showError(errorCard, error.message || String(error));
+        updateSummary();
       },
     }),
     routeStatus: "booting",

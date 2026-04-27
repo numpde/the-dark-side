@@ -19,7 +19,10 @@ export function createRouteRuntime({
     plannerClient = createPlannerClient({
       moduleVersion,
       parsePlannerWorkerResponse,
-      onUnhandledError,
+      onUnhandledError: (error) => {
+        plannerReady = false;
+        onUnhandledError?.(error);
+      },
     });
     return plannerClient;
   }
