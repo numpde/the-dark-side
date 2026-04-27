@@ -15,11 +15,15 @@ const {
 } = await import(`./route-shell-view.mjs${moduleSuffix}`);
 const {
   canonicalizeSelectorScenario,
-  populateJunctionSelectors,
   syncSelectorsFromQuery,
+} = await import(`./route-selection-controls.mjs${moduleSuffix}`);
+const {
+  populateJunctionSelectors,
+} = await import(`./route-selection-view.mjs${moduleSuffix}`);
+const {
   replaceUrlWithSelection,
   syncUrlFromSelectors,
-} = await import(`./route-selection-controls.mjs${moduleSuffix}`);
+} = await import(`./route-url-state.mjs${moduleSuffix}`);
 const { setSummaryText, renderRouteSummary } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 const {
   recentRoutesForScenario,
@@ -287,8 +291,7 @@ export function createRouteController({
           startSelect,
           endSelect,
           appState.area,
-          appState.area.scenarios[0].start_junction_id,
-          appState.area.scenarios[0].end_junction_id,
+          appState.area.scenarios[0],
         );
         await loadArea(appState.area);
       } catch (error) {

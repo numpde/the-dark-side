@@ -113,9 +113,11 @@ def verify_frontend_bootstrap_contract() -> None:
     route_map_view_js = (WEB_GENERATED_DIR.parent / "route-map-view.mjs").read_text()
     route_runtime_js = (WEB_GENERATED_DIR.parent / "route-runtime.mjs").read_text()
     route_selection_controls_js = (WEB_GENERATED_DIR.parent / "route-selection-controls.mjs").read_text()
+    route_selection_view_js = (WEB_GENERATED_DIR.parent / "route-selection-view.mjs").read_text()
     route_shell_view_js = (WEB_GENERATED_DIR.parent / "route-shell-view.mjs").read_text()
     route_scenarios_js = (WEB_GENERATED_DIR.parent / "route-scenarios.mjs").read_text()
     route_summary_view_js = (WEB_GENERATED_DIR.parent / "route-summary-view.mjs").read_text()
+    route_url_state_js = (WEB_GENERATED_DIR.parent / "route-url-state.mjs").read_text()
     module_context_js = (WEB_GENERATED_DIR.parent / "module-context.mjs").read_text()
     error_presentation_js = (WEB_GENERATED_DIR.parent / "error-presentation.mjs").read_text()
     fatal_error_runtime_js = (WEB_GENERATED_DIR.parent / "fatal-error-runtime.mjs").read_text()
@@ -235,6 +237,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-runtime\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-shell-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-selection-controls\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-selection-view\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-url-state\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-summary-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-controller.mjs", route_controller_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-controller.mjs", route_controller_js, r'export function createRouteController\(')
@@ -296,18 +300,44 @@ def verify_frontend_bootstrap_contract() -> None:
         "Route selection controls module",
     )
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'await import\(`\./route-scenarios\.mjs\$\{moduleSuffix\}`\)')
-    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function installSelectionPlaceholders\(')
-    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateJunctionSelectors\(')
+    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'await import\(`\./route-selection-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncSelectorsFromQuery\(')
     assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function canonicalizeSelectorScenario\(')
-    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function replaceUrlWithSelection\(')
-    assert_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncUrlFromSelectors\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function replaceUrlWithSelection\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function syncUrlFromSelectors\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function installSelectionPlaceholders\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateAreaOptions\(')
+    assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'export function populateJunctionSelectors\(')
     assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'function renderRouteSummary\(')
     assert_not_regex("web/route-selection-controls.mjs", route_selection_controls_js, r'^import .* from "\./')
+    assert_not_contains("web/route-selection-controls.mjs", route_selection_controls_js, 'document.createElement("option")')
+    assert_not_contains("web/route-selection-controls.mjs", route_selection_controls_js, "window.history.replaceState")
+
+    assert_uses_module_context(
+        "web/route-selection-view.mjs",
+        route_selection_view_js,
+        "Route selection view module",
+    )
+    assert_regex("web/route-selection-view.mjs", route_selection_view_js, r'export function installSelectionPlaceholders\(')
+    assert_regex("web/route-selection-view.mjs", route_selection_view_js, r'export function populateAreaOptions\(')
+    assert_regex("web/route-selection-view.mjs", route_selection_view_js, r'export function populateJunctionSelectors\(')
+    assert_contains("web/route-selection-view.mjs", route_selection_view_js, 'document.createElement("option")')
+    assert_not_contains("web/route-selection-view.mjs", route_selection_view_js, "window.history.replaceState")
+    assert_not_regex("web/route-selection-view.mjs", route_selection_view_js, r'^import .* from "\./')
+
+    assert_uses_module_context(
+        "web/route-url-state.mjs",
+        route_url_state_js,
+        "Route URL state module",
+    )
+    assert_regex("web/route-url-state.mjs", route_url_state_js, r'export function replaceUrlWithSelection\(')
+    assert_regex("web/route-url-state.mjs", route_url_state_js, r'export function syncUrlFromSelectors\(')
+    assert_contains("web/route-url-state.mjs", route_url_state_js, "window.history.replaceState")
+    assert_not_regex("web/route-url-state.mjs", route_url_state_js, r'^import .* from "\./')
 
     assert_uses_module_context("web/route-shell-view.mjs", route_shell_view_js, "Route shell view module")
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./error-presentation\.mjs\$\{moduleSuffix\}`\)')
-    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./route-selection-controls\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./route-selection-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'await import\(`\./route-summary-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function setControlsDisabled\(')
     assert_regex("web/route-shell-view.mjs", route_shell_view_js, r'export function updateRouteSurfaceState\(')
