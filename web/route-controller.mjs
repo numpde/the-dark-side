@@ -1,14 +1,10 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Route controller module");
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
-const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
 const { loadAppManifest, loadAreaNetwork } = await import(`./route-asset-runtime.mjs${moduleSuffix}`);
-const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
 const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`);
+const { createRouteSurfaceRuntime } = await import(`./route-surface-runtime.mjs${moduleSuffix}`);
 const {
-  setControlsDisabled,
-  updateRouteSurfaceState,
-  updateDownloadLinkState,
   installShellPlaceholders,
   showError,
   clearError,
@@ -17,14 +13,12 @@ const {
   canonicalizeSelectorScenario,
   syncSelectorsFromQuery,
 } = await import(`./route-selection-controls.mjs${moduleSuffix}`);
-const {
-  populateJunctionSelectors,
-} = await import(`./route-selection-view.mjs${moduleSuffix}`);
+const { populateJunctionSelectors } = await import(`./route-selection-view.mjs${moduleSuffix}`);
 const {
   replaceUrlWithSelection,
   syncUrlFromSelectors,
 } = await import(`./route-url-state.mjs${moduleSuffix}`);
-const { setSummaryText, renderRouteSummary } = await import(`./route-summary-view.mjs${moduleSuffix}`);
+const { setSummaryText } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 const {
   recentRoutesForScenario,
   rememberRouteForScenario,
@@ -51,26 +45,36 @@ export function createRouteController({
   } = elements;
 
   let loopArrowTimer = null;
+  const routeSurfaceRuntime = createRouteSurfaceRuntime({
+    areaSelect,
+    startSelect,
+    endSelect,
+    scenarioLabel,
+    newRouteButton,
+    downloadLink,
+    routeStrip,
+    buttonRow,
+    mapElement,
+  });
   const appState = {
     manifest: null,
     area: null,
     network: null,
     route: null,
-    routeMapView: null,
-    gpxUrl: null,
     loopArrowPhase: 0,
     routeRuntime: createRouteRuntime({
       moduleVersion: MODULE_VERSION,
       parsePlannerWorkerResponse,
       onUnhandledError: (error) => {
         showError(errorCard, error.message || String(error));
-        updateSummary();
+        syncSurface();
       },
     }),
     routeStatus: "booting",
     activeRouteRequestId: 0,
     activeAreaLoadId: 0,
     routeHistoryByScenario: new Map(),
+    controlsDisabledOverride: true,
   };
 
   function routeSurfaceIsInvalidated() {
@@ -92,69 +96,30 @@ export function createRouteController({
     return junctionsForScenario(appState.area, scenario);
   }
 
-  function ensureRouteMapView() {
-    if (!appState.routeMapView) {
-      appState.routeMapView = createRouteMapView(mapElement.id);
-    }
-    return appState.routeMapView;
-  }
-
-  function renderNetwork() {
-    ensureRouteMapView().renderNetwork(appState.network);
-  }
-
-  function renderRoute() {
-    const route = appState.route;
+  function syncSurface() {
     const scenario = currentScenario();
     const { startJunction, endJunction } = currentJunctions();
-    ensureRouteMapView().renderRoute(route, {
+    routeSurfaceRuntime.sync({
+      route: appState.route,
+      routeStatus: appState.routeStatus,
+      plannerReady: appState.routeRuntime.plannerReady,
       scenario,
       startJunction,
       endJunction,
+      loopArrowPhase: appState.loopArrowPhase,
+      invalidated: routeSurfaceIsInvalidated(),
+      controlsDisabledOverride: appState.controlsDisabledOverride,
     });
   }
 
-  function updateRouteStats() {
+  function updateRouteSummary() {
     const scenario = currentScenario();
-    renderRouteSummary(scenarioLabel, {
+    routeSurfaceRuntime.syncSummary({
       route: appState.route,
       routeStatus: appState.routeStatus,
-      isLoop: Boolean(scenario?.is_loop),
       loopArrowPhase: appState.loopArrowPhase,
+      scenario,
     });
-  }
-
-  function updateDownloadLink() {
-    const route = appState.route;
-    const scenario = currentScenario();
-    if (!route || !scenario || appState.routeStatus === "loading") {
-      if (appState.gpxUrl) {
-        URL.revokeObjectURL(appState.gpxUrl);
-        appState.gpxUrl = null;
-      }
-      updateDownloadLinkState(downloadLink, { enabled: false, href: null });
-      return;
-    }
-
-    const { startJunction, endJunction } = currentJunctions();
-    const download = wireGpxDownload(downloadLink, {
-      route,
-      startJunction,
-      endJunction,
-      previousUrl: appState.gpxUrl,
-    });
-    appState.gpxUrl = download.url;
-    updateDownloadLinkState(downloadLink, { enabled: true, href: download.url });
-  }
-
-  function updateSummary() {
-    updateRouteStats();
-    updateDownloadLink();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
-      disabled: !appState.routeRuntime.plannerReady,
-      isLoading: appState.routeStatus === "loading",
-    });
-    updateRouteSurfaceState(routeStrip, buttonRow, mapElement, routeSurfaceIsInvalidated());
   }
 
   function beginRouteRefresh({ preserveRoute }) {
@@ -162,10 +127,7 @@ export function createRouteController({
     if (!preserveRoute) {
       appState.route = null;
     }
-    updateSummary();
-    if (!preserveRoute) {
-      renderRoute();
-    }
+    syncSurface();
   }
 
   function failRouteRefresh(error, { preserveRoute, requestId = null }) {
@@ -176,10 +138,7 @@ export function createRouteController({
       appState.route = null;
     }
     appState.routeStatus = "error";
-    updateSummary();
-    if (!preserveRoute) {
-      renderRoute();
-    }
+    syncSurface();
     showError(errorCard, error.message || String(error));
   }
 
@@ -196,8 +155,7 @@ export function createRouteController({
       syncUrlFromSelectors(areaSelect, startSelect, endSelect);
       if (!scenario || !appState.routeRuntime.plannerReady || !appState.area) {
         appState.route = null;
-        updateSummary();
-        renderRoute();
+        syncSurface();
         return;
       }
 
@@ -221,8 +179,7 @@ export function createRouteController({
       appState.route = route;
       appState.routeStatus = "ready";
       rememberRouteForScenario(appState.routeHistoryByScenario, appState.area, scenario, route);
-      updateSummary();
-      renderRoute();
+      syncSurface();
       clearError(errorCard);
     } catch (error) {
       failRouteRefresh(error, {
@@ -238,13 +195,9 @@ export function createRouteController({
     appState.routeStatus = "loading";
     appState.route = null;
     appState.network = null;
-    updateSummary();
-    renderRoute();
-    renderNetwork();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
-      disabled: true,
-      isLoading: true,
-    });
+    appState.controlsDisabledOverride = true;
+    syncSurface();
+    routeSurfaceRuntime.renderNetwork(null);
 
     const networkPayload = await loadAreaNetwork(appManifestUrl, appState.manifest);
     if (loadId !== appState.activeAreaLoadId) {
@@ -255,11 +208,9 @@ export function createRouteController({
       return;
     }
     appState.network = networkPayload;
-    renderNetwork();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
-      disabled: false,
-      isLoading: false,
-    });
+    routeSurfaceRuntime.renderNetwork(networkPayload);
+    appState.controlsDisabledOverride = false;
+    syncSurface();
     await chooseRoute();
   }
 
@@ -281,7 +232,7 @@ export function createRouteController({
         await loadArea(appState.area);
       } catch (error) {
         appState.routeStatus = "error";
-        updateSummary();
+        syncSurface();
         showError(errorCard, error.message || String(error));
       }
     });
@@ -302,11 +253,8 @@ export function createRouteController({
   async function boot() {
     clearError(errorCard);
     installShellPlaceholders(scenarioLabel, areaSelect, startSelect, endSelect);
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
-      disabled: true,
-      isLoading: false,
-    });
-    ensureRouteMapView().ensureMap();
+    syncSurface();
+    routeSurfaceRuntime.ensureMap();
     bindControls();
 
     try {
@@ -335,7 +283,7 @@ export function createRouteController({
         appState.loopArrowPhase = (appState.loopArrowPhase + 1) % 2;
         const scenario = currentScenario();
         if (appState.route && scenario?.is_loop) {
-          updateRouteStats();
+          updateRouteSummary();
         }
       }, loopArrowIntervalMs);
     }
@@ -344,7 +292,7 @@ export function createRouteController({
       await loadArea(appState.area);
     } catch (error) {
       appState.routeStatus = "error";
-      updateSummary();
+      syncSurface();
       showError(errorCard, error.message || String(error));
     }
   }
