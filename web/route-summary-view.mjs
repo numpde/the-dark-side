@@ -29,9 +29,15 @@ export function setSummaryText(labelElement, text) {
   labelElement.textContent = text;
 }
 
-export function renderRouteSummary(labelElement, { route, routeStatus, isLoop, loopArrowPhase }) {
-  if (routeStatus === "loading" && !route) {
-    setSummaryText(labelElement, "Computing route…");
+export function renderRouteSummary(labelElement, {
+  route,
+  routeStatus,
+  isLoop,
+  loopArrowPhase,
+  loadingLabel = null,
+}) {
+  if ((routeStatus === "loading" || routeStatus === "booting") && !route) {
+    setSummaryText(labelElement, loadingLabel || "Loading routes…");
     return;
   }
 
@@ -51,5 +57,9 @@ export function renderRouteSummary(labelElement, { route, routeStatus, isLoop, l
     const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
     metaText += ` (↗ ${upText}, ↘ ${downText})`;
   }
-  setScenarioLabelMeta(labelElement, metaText);
+  setScenarioLabelMeta(
+    labelElement,
+    metaText,
+    routeStatus === "loading" ? loadingLabel : null,
+  );
 }

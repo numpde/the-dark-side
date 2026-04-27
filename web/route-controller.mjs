@@ -61,6 +61,7 @@ export function createRouteController({
     area: null,
     network: null,
     route: null,
+    loadingLabel: "Loading route options…",
     loopArrowPhase: 0,
     routeRuntime: createRouteRuntime({
       moduleVersion: MODULE_VERSION,
@@ -79,6 +80,10 @@ export function createRouteController({
 
   function routeSurfaceIsInvalidated() {
     return appState.routeStatus === "loading" && Boolean(appState.route);
+  }
+
+  function setLoadingLabel(message) {
+    appState.loadingLabel = message;
   }
 
   function currentScenario() {
@@ -109,6 +114,7 @@ export function createRouteController({
       loopArrowPhase: appState.loopArrowPhase,
       invalidated: routeSurfaceIsInvalidated(),
       controlsDisabledOverride: appState.controlsDisabledOverride,
+      loadingLabel: appState.loadingLabel,
     });
   }
 
@@ -119,11 +125,27 @@ export function createRouteController({
       routeStatus: appState.routeStatus,
       loopArrowPhase: appState.loopArrowPhase,
       scenario,
+      loadingLabel: appState.loadingLabel,
     });
   }
 
-  function beginRouteRefresh({ preserveRoute }) {
+  function syncLoadingProgress() {
+    const scenario = currentScenario();
+    routeSurfaceRuntime.syncLoadingProgress({
+      route: appState.route,
+      routeStatus: appState.routeStatus,
+      plannerReady: appState.routeRuntime.plannerReady,
+      scenario,
+      loopArrowPhase: appState.loopArrowPhase,
+      invalidated: routeSurfaceIsInvalidated(),
+      controlsDisabledOverride: appState.controlsDisabledOverride,
+      loadingLabel: appState.loadingLabel,
+    });
+  }
+
+  function beginRouteRefresh({ preserveRoute, loadingLabel }) {
     appState.routeStatus = "loading";
+    setLoadingLabel(loadingLabel);
     if (!preserveRoute) {
       appState.route = null;
     }
@@ -138,11 +160,14 @@ export function createRouteController({
       appState.route = null;
     }
     appState.routeStatus = "error";
+    setLoadingLabel(null);
     syncSurface();
     showError(errorCard, error.message || String(error));
   }
 
   async function initializePlanner(networkPayload) {
+    setLoadingLabel("Preparing route planner…");
+    syncLoadingProgress();
     await appState.routeRuntime.initializePlanner(networkPayload, appState.manifest.planner.config);
     clearError(errorCard);
   }
@@ -161,7 +186,10 @@ export function createRouteController({
 
       const { startJunction, endJunction } = currentJunctions();
       const seed = appState.routeRuntime.nextRouteSeed();
-      beginRouteRefresh({ preserveRoute: hadRoute });
+      beginRouteRefresh({
+        preserveRoute: hadRoute,
+        loadingLabel: hadRoute ? "Searching route…" : "Computing first route…",
+      });
       const route = await appState.routeRuntime.requestRoute({
         routeId: `browser-${scenario.id}-seed${seed}`,
         seed,
@@ -172,12 +200,22 @@ export function createRouteController({
           appState.area,
           scenario,
         ),
+      }, {
+        onProgress: (partialRoute) => {
+          if (requestId !== appState.activeRouteRequestId) {
+            return;
+          }
+          const bestDistanceKm = (partialRoute.unique_length_m / 1000).toFixed(2);
+          setLoadingLabel(`Searching route… ${bestDistanceKm} km best so far`);
+          syncLoadingProgress();
+        },
       });
       if (requestId !== appState.activeRouteRequestId) {
         return;
       }
       appState.route = route;
       appState.routeStatus = "ready";
+      setLoadingLabel(null);
       rememberRouteForScenario(appState.routeHistoryByScenario, appState.area, scenario, route);
       syncSurface();
       clearError(errorCard);
@@ -196,6 +234,7 @@ export function createRouteController({
     appState.route = null;
     appState.network = null;
     appState.controlsDisabledOverride = true;
+    setLoadingLabel("Loading route network…");
     syncSurface();
     routeSurfaceRuntime.renderNetwork(null);
 

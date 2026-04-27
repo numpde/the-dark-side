@@ -30,13 +30,12 @@ export function createRouteSurfaceRuntime({
     return routeMapView;
   }
 
-  function syncSummary({ route, routeStatus, scenario, loopArrowPhase }) {
-    renderRouteSummary(scenarioLabel, {
-      route,
-      routeStatus,
-      isLoop: Boolean(scenario?.is_loop),
-      loopArrowPhase,
+  function syncShellState({ routeStatus, plannerReady, invalidated, controlsDisabledOverride, loadingLabel }) {
+    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
+      disabled: controlsDisabledOverride ?? !plannerReady,
+      isLoading: routeStatus === "loading",
     });
+    updateRouteSurfaceState(routeStrip, buttonRow, mapElement, invalidated, loadingLabel);
   }
 
   function syncDownloadLink({ route, routeStatus, scenario, startJunction, endJunction }) {
@@ -68,7 +67,41 @@ export function createRouteSurfaceRuntime({
       ensureRouteMapView().renderNetwork(network);
     },
 
-    syncSummary,
+    syncSummary({ route, routeStatus, scenario, loopArrowPhase, loadingLabel = null }) {
+      renderRouteSummary(scenarioLabel, {
+        route,
+        routeStatus,
+        isLoop: Boolean(scenario?.is_loop),
+        loopArrowPhase,
+        loadingLabel,
+      });
+    },
+
+    syncLoadingProgress({
+      route,
+      routeStatus,
+      plannerReady,
+      scenario,
+      loopArrowPhase,
+      invalidated,
+      controlsDisabledOverride = null,
+      loadingLabel = null,
+    }) {
+      this.syncSummary({
+        route,
+        routeStatus,
+        scenario,
+        loopArrowPhase,
+        loadingLabel,
+      });
+      syncShellState({
+        routeStatus,
+        plannerReady,
+        invalidated,
+        controlsDisabledOverride,
+        loadingLabel,
+      });
+    },
 
     sync({
       route,
@@ -80,12 +113,14 @@ export function createRouteSurfaceRuntime({
       loopArrowPhase,
       invalidated,
       controlsDisabledOverride = null,
+      loadingLabel = null,
     }) {
-      syncSummary({
+      this.syncSummary({
         route,
         routeStatus,
         scenario,
         loopArrowPhase,
+        loadingLabel,
       });
       syncDownloadLink({
         route,
@@ -94,11 +129,13 @@ export function createRouteSurfaceRuntime({
         startJunction,
         endJunction,
       });
-      setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
-        disabled: controlsDisabledOverride ?? !plannerReady,
-        isLoading: routeStatus === "loading",
+      syncShellState({
+        routeStatus,
+        plannerReady,
+        invalidated,
+        controlsDisabledOverride,
+        loadingLabel,
       });
-      updateRouteSurfaceState(routeStrip, buttonRow, mapElement, invalidated);
       ensureRouteMapView().renderRoute(route, {
         scenario,
         startJunction,

@@ -26,10 +26,15 @@ export function updateDownloadLinkState(downloadLink, { enabled, href }) {
   downloadLink.href = href;
 }
 
-export function updateRouteSurfaceState(routeStrip, buttonRow, mapElement, invalidated) {
+export function updateRouteSurfaceState(routeStrip, buttonRow, mapElement, invalidated, loadingLabel = null) {
   routeStrip.classList.toggle("is-stale", invalidated);
   buttonRow.classList.toggle("is-stale", invalidated);
   mapElement.classList.toggle("is-stale", invalidated);
+  if (invalidated && loadingLabel) {
+    mapElement.dataset.loadingLabel = loadingLabel;
+    return;
+  }
+  delete mapElement.dataset.loadingLabel;
 }
 
 export function installShellPlaceholders(
