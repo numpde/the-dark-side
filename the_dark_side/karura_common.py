@@ -52,6 +52,7 @@ APP_MODULE_PATHS = (
     WEB_DIR / "app.js",
     WEB_DIR / "contract-primitives.mjs",
     WEB_DIR / "error-presentation.mjs",
+    WEB_DIR / "fatal-error-runtime.mjs",
     WEB_DIR / "gpx.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",

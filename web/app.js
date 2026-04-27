@@ -1,10 +1,17 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "App runtime");
 const { createRouteController } = await import(`./route-controller.mjs${moduleSuffix}`);
+const { createFatalErrorReporter, installWindowErrorHandlers } = await import(`./fatal-error-runtime.mjs${moduleSuffix}`);
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
 
-createRouteController({
+const reportFatalError = createFatalErrorReporter({
+  errorElementId: "error-card",
+  defaultContext: "App error",
+});
+installWindowErrorHandlers(reportFatalError);
+
+const controller = createRouteController({
   appManifestUrl,
   loopArrowIntervalMs: 1000,
   elements: {
@@ -19,4 +26,8 @@ createRouteController({
     buttonRow: document.querySelector(".button-row"),
     mapElement: document.getElementById("map"),
   },
-}).boot();
+});
+
+controller.boot().catch((error) => {
+  reportFatalError(error, "Failed to load routes");
+});
