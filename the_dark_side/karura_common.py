@@ -43,6 +43,10 @@ FRONTEND_MANIFEST_JSON = WEB_GENERATED_DIR / "frontend-manifest.json"
 MAP_PATCHES_JSON = SOURCE_DIR / "karura-map-patches.json"
 CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
 SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, CATALOG_BUILD_JSON)
+BOOTSTRAP_MODULE_PATHS = (
+    WEB_DIR / "entry-bootstrap.mjs",
+    WEB_DIR / "module-context.mjs",
+)
 APP_MODULE_PATHS = (
     WEB_DIR / "app.js",
     WEB_DIR / "contract-primitives.mjs",

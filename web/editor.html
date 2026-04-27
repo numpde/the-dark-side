@@ -102,12 +102,25 @@
         throw new Error(`Failed to load frontend manifest: ${response.status}`);
       }
       const manifest = await response.json();
-      const version = manifest?.modules?.editor_version;
+      const version = manifest?.modules?.bootstrap_version;
       if (!version) {
-        throw new Error("Frontend manifest is missing modules.editor_version");
+        throw new Error("Frontend manifest is missing modules.bootstrap_version");
       }
-      const specifier = `./editor.js?v=${encodeURIComponent(version)}`;
-      await import(specifier);
+      const { bootVersionedEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
+      try {
+        await bootVersionedEntry({
+          manifestUrl: "./generated/frontend-manifest.json",
+          bootstrapVersionKey: "bootstrap_version",
+          entryVersionKey: "editor_version",
+          entryPath: "./editor.js",
+        });
+      } catch (error) {
+        renderBootstrapFailure({
+          errorElementId: "error-box",
+          failureLabel: "editor shell",
+          error,
+        });
+      }
     }
 
     boot().catch((error) => {

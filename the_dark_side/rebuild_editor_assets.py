@@ -15,6 +15,7 @@ from .download_karura_map import load_map
 from .junction_bindings import build_junction_bindings
 from .karura_common import (
     APP_MODULE_PATHS,
+    BOOTSTRAP_MODULE_PATHS,
     CONTIGS_JSON,
     EDITOR_MODULE_PATHS,
     EDITOR_MANIFEST_JSON,
@@ -115,6 +116,7 @@ def build_frontend_manifest() -> dict:
             "asset_kind": "frontend_manifest",
         },
         "modules": {
+            "bootstrap_version": digest_paths(BOOTSTRAP_MODULE_PATHS),
             "app_version": digest_paths(APP_MODULE_PATHS),
             "editor_version": digest_paths(EDITOR_MODULE_PATHS),
         },

@@ -71,12 +71,25 @@
         throw new Error(`Failed to load frontend manifest: ${response.status}`);
       }
       const manifest = await response.json();
-      const version = manifest?.modules?.app_version;
+      const version = manifest?.modules?.bootstrap_version;
       if (!version) {
-        throw new Error("Frontend manifest is missing modules.app_version");
+        throw new Error("Frontend manifest is missing modules.bootstrap_version");
       }
-      const specifier = `./app.js?v=${encodeURIComponent(version)}`;
-      await import(specifier);
+      const { bootVersionedEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
+      try {
+        await bootVersionedEntry({
+          manifestUrl: "./generated/frontend-manifest.json",
+          bootstrapVersionKey: "bootstrap_version",
+          entryVersionKey: "app_version",
+          entryPath: "./app.js",
+        });
+      } catch (error) {
+        renderBootstrapFailure({
+          errorElementId: "error-card",
+          failureLabel: "app shell",
+          error,
+        });
+      }
     }
 
     boot().catch((error) => {

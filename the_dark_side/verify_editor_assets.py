@@ -117,26 +117,38 @@ def verify_frontend_bootstrap_contract() -> None:
     route_scenarios_js = (WEB_GENERATED_DIR.parent / "route-scenarios.mjs").read_text()
     route_summary_view_js = (WEB_GENERATED_DIR.parent / "route-summary-view.mjs").read_text()
     module_context_js = (WEB_GENERATED_DIR.parent / "module-context.mjs").read_text()
+    entry_bootstrap_js = (WEB_GENERATED_DIR.parent / "entry-bootstrap.mjs").read_text()
 
     assert_regex(
         "web/index.html",
         index_bootstrap,
         r'fetch\(\s*"\./generated/frontend-manifest\.json"\s*,\s*\{\s*cache:\s*"no-store"\s*\}\s*\)',
     )
-    assert_regex("web/index.html", index_bootstrap, r'manifest\?\.\s*modules\?\.\s*app_version')
-    assert_regex("web/index.html", index_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.app_version"\)')
-    assert_regex("web/index.html", index_bootstrap, r'const specifier = `\./app\.js\?v=\$\{encodeURIComponent\(version\)\}`')
-    assert_not_regex("web/index.html", index_bootstrap, r'"\./app\.js"')
+    assert_regex("web/index.html", index_bootstrap, r'manifest\?\.\s*modules\?\.\s*bootstrap_version')
+    assert_regex("web/index.html", index_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.bootstrap_version"\)')
+    assert_regex("web/index.html", index_bootstrap, r'await import\(`\./entry-bootstrap\.mjs\?v=\$\{encodeURIComponent\(version\)\}`\)')
+    assert_regex("web/index.html", index_bootstrap, r'entryVersionKey:\s*"app_version"')
+    assert_regex("web/index.html", index_bootstrap, r'entryPath:\s*"\./app\.js"')
+    assert_not_regex("web/index.html", index_bootstrap, r'await import\(`\./app\.js')
 
     assert_regex(
         "web/editor.html",
         editor_bootstrap,
         r'fetch\(\s*"\./generated/frontend-manifest\.json"\s*,\s*\{\s*cache:\s*"no-store"\s*\}\s*\)',
     )
-    assert_regex("web/editor.html", editor_bootstrap, r'manifest\?\.\s*modules\?\.\s*editor_version')
-    assert_regex("web/editor.html", editor_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.editor_version"\)')
-    assert_regex("web/editor.html", editor_bootstrap, r'const specifier = `\./editor\.js\?v=\$\{encodeURIComponent\(version\)\}`')
-    assert_not_regex("web/editor.html", editor_bootstrap, r'"\./editor\.js"')
+    assert_regex("web/editor.html", editor_bootstrap, r'manifest\?\.\s*modules\?\.\s*bootstrap_version')
+    assert_regex("web/editor.html", editor_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.bootstrap_version"\)')
+    assert_regex("web/editor.html", editor_bootstrap, r'await import\(`\./entry-bootstrap\.mjs\?v=\$\{encodeURIComponent\(version\)\}`\)')
+    assert_regex("web/editor.html", editor_bootstrap, r'entryVersionKey:\s*"editor_version"')
+    assert_regex("web/editor.html", editor_bootstrap, r'entryPath:\s*"\./editor\.js"')
+    assert_not_regex("web/editor.html", editor_bootstrap, r'await import\(`\./editor\.js')
+
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"export async function bootVersionedEntry\(")
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'fetch\(manifestUrl,\s*\{\s*cache:\s*"no-store"\s*\}\)')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'manifest\?\.\s*modules\?\.\[bootstrapVersionKey\]')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'manifest\?\.\s*modules\?\.\[entryVersionKey\]')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'const specifier = `\$\{entryPath\}\?v=\$\{encodeURIComponent\(entryVersion\)\}`')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"export function renderBootstrapFailure\(")
 
     assert_regex("web/app.js", app_js, r'new URL\("\./generated/app-manifest\.json", window\.location\.href\)')
     assert_uses_module_context("web/app.js", app_js, "App runtime")
