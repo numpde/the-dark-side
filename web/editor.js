@@ -12,6 +12,11 @@ const {
   karuraTodayString,
   isCurrentlyUnavailable: isPolicyCurrentlyUnavailable,
 } = await import(`./karura-policy.mjs${moduleSuffix}`);
+const {
+  downloadJsonDocument,
+  loadEditorBundle,
+  readJsonFile,
+} = await import(`./editor-asset-runtime.mjs${moduleSuffix}`);
 const { createEditorMapView, styleForPolicy } = await import(`./editor-map-view.mjs${moduleSuffix}`);
 const { createEditorShellView } = await import(`./editor-shell-view.mjs${moduleSuffix}`);
 const { validateEditorManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
@@ -59,6 +64,7 @@ const appState = {
   editorState: normalizePatchset(emptyPatchset()),
   loadedPatchLabel: "–",
   editorManifest: null,
+  assetUrls: null,
 };
 
 function isCurrentlyUnavailable(policy) {
@@ -68,39 +74,8 @@ function isCurrentlyUnavailable(policy) {
   );
 }
 
-async function fetchJson(url, init) {
-  const response = await fetch(url, init);
-  if (!response.ok) {
-    throw new Error(`${response.status} ${response.statusText}`);
-  }
-  return await response.json();
-}
-
-function waysUrlFromManifest() {
-  const relativePath = appState.editorManifest.editor.network_path;
-  const url = new URL(relativePath, editorManifestUrl);
-  url.searchParams.set("v", appState.editorManifest.editor.network_version);
-  return url;
-}
-
 function canonicalPatchPath() {
-  return appState.editorManifest.meta.patchset_path;
-}
-
-function patchesUrlFromManifest() {
-  const url = new URL(`./${canonicalPatchPath()}`, window.location.href);
-  url.searchParams.set("v", appState.editorManifest.meta.patchset_digest);
-  return url;
-}
-
-function canonicalPatchFilename() {
-  const path = canonicalPatchPath();
-  const parts = path.split("/");
-  const filename = parts[parts.length - 1];
-  if (!filename) {
-    throw new Error(`Editor manifest has invalid meta.patchset_path: ${path}`);
-  }
-  return filename;
+  return appState.assetUrls.patchsetPath;
 }
 
 const mapView = createEditorMapView({
@@ -184,36 +159,28 @@ function updateSelectedPolicy(partial) {
 }
 
 function downloadJson(payload, filename) {
-  const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
+  downloadJsonDocument(payload, filename);
 }
 
 function exportPatchset() {
-  downloadJson(currentPatchDocument(), canonicalPatchFilename());
+  downloadJson(currentPatchDocument(), appState.assetUrls.patchsetFilename);
 }
 
 async function importPatchset(file) {
-  const text = await file.text();
-  const parsed = JSON.parse(text);
-  appState.editorState = normalizePatchset(parsed);
+  appState.editorState = normalizePatchset(await readJsonFile(file));
   appState.loadedPatchLabel = `imported/${file.name}`;
   mapView.updateAllWayStyles();
   renderShell();
 }
 
 async function boot() {
-  appState.editorManifest = validateEditorManifest(
-    await fetchJson(editorManifestUrl, { cache: "no-store" }),
-  );
-  const [waysGeojson, patchset] = await Promise.all([
-    fetchJson(waysUrlFromManifest()),
-    fetchJson(patchesUrlFromManifest()),
-  ]);
+  const { editorManifest, assetUrls, waysGeojson, patchset } = await loadEditorBundle({
+    editorManifestUrl,
+    validateEditorManifest,
+    pageUrl: window.location.href,
+  });
+  appState.editorManifest = editorManifest;
+  appState.assetUrls = assetUrls;
   appState.editorState = normalizePatchset(patchset);
   appState.loadedPatchLabel = canonicalPatchPath();
   mapView.renderWays(waysGeojson);

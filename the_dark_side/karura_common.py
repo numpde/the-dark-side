@@ -72,6 +72,7 @@ APP_MODULE_PATHS = (
 )
 EDITOR_MODULE_PATHS = (
     WEB_DIR / "contract-primitives.mjs",
+    WEB_DIR / "editor-asset-runtime.mjs",
     WEB_DIR / "editor-map-view.mjs",
     WEB_DIR / "editor-policy-contracts.mjs",
     WEB_DIR / "editor.js",
