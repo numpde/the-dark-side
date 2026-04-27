@@ -45,11 +45,13 @@ CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
 SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, CATALOG_BUILD_JSON)
 BOOTSTRAP_MODULE_PATHS = (
     WEB_DIR / "entry-bootstrap.mjs",
+    WEB_DIR / "error-presentation.mjs",
     WEB_DIR / "module-context.mjs",
 )
 APP_MODULE_PATHS = (
     WEB_DIR / "app.js",
     WEB_DIR / "contract-primitives.mjs",
+    WEB_DIR / "error-presentation.mjs",
     WEB_DIR / "gpx.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",
@@ -78,6 +80,7 @@ EDITOR_MODULE_PATHS = (
     WEB_DIR / "editor-policy-contracts.mjs",
     WEB_DIR / "editor.js",
     WEB_DIR / "editor-shell-view.mjs",
+    WEB_DIR / "error-presentation.mjs",
     WEB_DIR / "editor-state.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",

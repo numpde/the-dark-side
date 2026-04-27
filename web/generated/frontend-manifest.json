@@ -3,8 +3,8 @@
     "asset_kind": "frontend_manifest"
   },
   "modules": {
-    "bootstrap_version": "2e4e42c40aca",
-    "app_version": "017de5a0a95d",
-    "editor_version": "b03b5e1f887f"
+    "bootstrap_version": "97bb506c4802",
+    "app_version": "fb5032cf2afb",
+    "editor_version": "cac096f32cbd"
   }
 }

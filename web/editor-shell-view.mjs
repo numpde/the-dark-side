@@ -1,5 +1,6 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Editor shell view module");
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor shell view module");
+const { clearErrorText, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
 
 function findErrorBox() {
   return document.getElementById("error-box");
@@ -54,13 +55,11 @@ export function createEditorShellView({
   }
 
   function showError(message) {
-    errorBox.textContent = message;
-    errorBox.classList.remove("hidden");
+    showErrorText(errorBox, message);
   }
 
   function clearError() {
-    errorBox.textContent = "";
-    errorBox.classList.add("hidden");
+    clearErrorText(errorBox);
   }
 
   function guard(fn, context) {

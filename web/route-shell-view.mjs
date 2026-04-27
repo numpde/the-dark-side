@@ -1,5 +1,6 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route shell view module");
+const { clearErrorText, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
 const { installSelectionPlaceholders } = await import(`./route-selection-controls.mjs${moduleSuffix}`);
 const { setSummaryText } = await import(`./route-summary-view.mjs${moduleSuffix}`);
 
@@ -38,11 +39,9 @@ export function installShellPlaceholders(
 }
 
 export function showError(errorCard, message) {
-  errorCard.textContent = message;
-  errorCard.classList.remove("hidden");
+  showErrorText(errorCard, message);
 }
 
 export function clearError(errorCard) {
-  errorCard.textContent = "";
-  errorCard.classList.add("hidden");
+  clearErrorText(errorCard);
 }

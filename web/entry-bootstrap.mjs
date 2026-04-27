@@ -1,3 +1,7 @@
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Entry bootstrap module");
+const { renderFailure } = await import(`./error-presentation.mjs${moduleSuffix}`);
+
 function requireManifestModuleVersion(manifest, key) {
   const value = manifest?.modules?.[key];
   if (!value) {
@@ -18,12 +22,4 @@ export async function bootVersionedEntry({
   await import(specifier);
 }
 
-export function renderBootstrapFailure({ errorElementId, failureLabel, error }) {
-  console.error(`Failed to load ${failureLabel}`, error);
-  const errorElement = document.getElementById(errorElementId);
-  if (!errorElement) {
-    return;
-  }
-  errorElement.textContent = `Failed to load ${failureLabel}: ${error.message || String(error)}`;
-  errorElement.classList.remove("hidden");
-}
+export { renderFailure as renderBootstrapFailure };

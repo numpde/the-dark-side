@@ -1,23 +1,10 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
 const { createEditorController } = await import(`./editor-controller.mjs${moduleSuffix}`);
+const { formatError, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
 
 function findErrorBox() {
   return document.getElementById("error-box");
-}
-
-function formatError(error) {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  if (typeof error === "string") {
-    return error;
-  }
-  try {
-    return JSON.stringify(error);
-  } catch {
-    return String(error);
-  }
 }
 
 function reportFatalError(error, context = "Editor error") {
@@ -25,8 +12,7 @@ function reportFatalError(error, context = "Editor error") {
   console.error(message, error);
   const box = findErrorBox();
   if (box) {
-    box.textContent = message;
-    box.classList.remove("hidden");
+    showErrorText(box, message);
   }
 }
 
