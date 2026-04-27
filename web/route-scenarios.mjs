@@ -57,15 +57,6 @@ export function junctionsForScenario(area, scenario) {
   };
 }
 
-export function scenarioLabelText(scenario, area) {
-  const start = junctionById(area, scenario.start_junction_id);
-  const end = junctionById(area, scenario.end_junction_id);
-  if (scenario.is_loop) {
-    return `${start.name} loop`;
-  }
-  return `${start.name} to ${end.name}`;
-}
-
 export function resolveCanonicalSelection(manifest, search) {
   const query = new URLSearchParams(search);
   const areas = manifest.areas;

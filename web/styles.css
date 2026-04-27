@@ -102,8 +102,6 @@ select {
   font-weight: 700;
 }
 
-.scenario-title-main,
-.scenario-title-separator,
 .scenario-title-meta {
   display: inline;
 }
@@ -246,10 +244,6 @@ button:hover,
 
   .scenario-title {
     font-size: 1rem;
-  }
-
-  .scenario-title-separator {
-    display: none;
   }
 
   .scenario-title-meta {

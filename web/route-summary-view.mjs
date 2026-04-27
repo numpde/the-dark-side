@@ -10,45 +10,26 @@ function animatedLoopArrow(loopArrowPhase) {
   return loopArrowPhase % 2 === 0 ? "↗" : "↘";
 }
 
-function setScenarioLabelParts(labelElement, title, metaText) {
+function setScenarioLabelMeta(labelElement, metaText) {
   labelElement.replaceChildren();
-  const titleSpan = document.createElement("span");
-  titleSpan.className = "scenario-title-main";
-  titleSpan.textContent = title;
-
-  if (!metaText) {
-    labelElement.append(titleSpan);
-    return;
-  }
-
-  const separatorSpan = document.createElement("span");
-  separatorSpan.className = "scenario-title-separator";
-  separatorSpan.textContent = ", ";
-
   const metaSpan = document.createElement("span");
   metaSpan.className = "scenario-title-meta";
   metaSpan.textContent = metaText;
-
-  labelElement.append(titleSpan, separatorSpan, metaSpan);
+  labelElement.append(metaSpan);
 }
 
 export function setSummaryText(labelElement, text) {
   labelElement.textContent = text;
 }
 
-export function renderRouteSummary(labelElement, { title, route, routeStatus, isLoop, loopArrowPhase }) {
-  if (!title) {
-    setSummaryText(labelElement, "Loading routes…");
-    return;
-  }
-
+export function renderRouteSummary(labelElement, { route, routeStatus, isLoop, loopArrowPhase }) {
   if (routeStatus === "loading" && !route) {
-    setSummaryText(labelElement, `${title}…`);
+    setSummaryText(labelElement, "Computing route…");
     return;
   }
 
   if (!route) {
-    setSummaryText(labelElement, title);
+    setSummaryText(labelElement, "Loading routes…");
     return;
   }
 
@@ -64,5 +45,5 @@ export function renderRouteSummary(labelElement, { title, route, routeStatus, is
     metaText += ` (↗ ${upText}, ↘ ${downText})`;
   }
   metaText += " Stats are approximate.";
-  setScenarioLabelParts(labelElement, title, metaText);
+  setScenarioLabelMeta(labelElement, metaText);
 }

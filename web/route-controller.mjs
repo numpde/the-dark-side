@@ -25,7 +25,6 @@ const {
   rememberRouteForScenario,
   requireScenario,
   junctionsForScenario,
-  scenarioLabelText,
 } = await import(`./route-scenarios.mjs${moduleSuffix}`);
 
 export function createRouteController({
@@ -118,7 +117,6 @@ export function createRouteController({
   function updateRouteStats() {
     const scenario = currentScenario();
     renderRouteSummary(scenarioLabel, {
-      title: scenario && appState.area ? scenarioLabelText(scenario, appState.area) : null,
       route: appState.route,
       routeStatus: appState.routeStatus,
       isLoop: Boolean(scenario?.is_loop),
