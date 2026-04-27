@@ -8,12 +8,15 @@ import argparse
 import math
 from pathlib import Path
 
-from PIL import ImageDraw
-
 from .asset_contracts import load_route_asset_document
-from .karura_common import SCREENSHOT, VIEWPORT, print_json_document
+from .karura_common import SCREENSHOT, VIEWPORT
 from .karura_routing import load_route_asset_graph, orient_contig_node_ids
-from .render_support import load_viewport, prepare_base_image, project_graph_node_ids, project_lon_lat
+from .render_support import (
+    load_screenshot_canvas,
+    project_graph_node_ids,
+    project_lon_lat,
+    save_render_output,
+)
 
 
 ROUTE_START_COLOR = (36, 96, 220, 235)
@@ -66,9 +69,10 @@ def main() -> None:
     args = parse_args()
     route_payload = load_route_asset_document(args.route_json, label="route asset")
     graph = load_route_asset_graph(route_payload, args.route_json)
-    viewport = load_viewport(args.viewport)
-    image = prepare_base_image(args.screenshot)
-    draw = ImageDraw.Draw(image, "RGBA")
+    viewport, image, draw = load_screenshot_canvas(
+        screenshot_path=args.screenshot,
+        viewport_path=args.viewport,
+    )
 
     if args.route_index >= len(route_payload["routes"]):
         raise IndexError(
@@ -106,9 +110,7 @@ def main() -> None:
     draw_marker(draw, project_lon_lat(end_node.lon, end_node.lat, viewport, image.size), END_COLOR)
 
     output = args.output or default_output(args.route_json, route_payload, args.route_index)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    image.save(output)
-    print_json_document({"route_index": args.route_index, "output": str(output)})
+    save_render_output(image, output=output, payload={"route_index": args.route_index, "output": str(output)})
 
 
 if __name__ == "__main__":

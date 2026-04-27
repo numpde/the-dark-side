@@ -6,8 +6,6 @@ import argparse
 import random
 from pathlib import Path
 
-from PIL import ImageDraw
-
 from .karura_common import (
     CONTIGS_JSON,
     DEBUG_DIR,
@@ -16,16 +14,15 @@ from .karura_common import (
     VIEWPORT,
     include_editor_way,
     include_ride_way,
-    print_json_document,
     resolve_map_json,
 )
 from .render_support import (
-    load_viewport,
     load_overlay_items_from_map,
     load_overlay_items_from_patchset,
     load_overlay_items_from_route_graph,
-    prepare_base_image,
+    load_screenshot_canvas,
     project_mercator_point,
+    save_render_output,
 )
 
 
@@ -55,9 +52,10 @@ def include_way(way_id, tags, mode):
 
 def main():
     args = parse_args()
-    viewport = load_viewport(args.viewport)
-    img = prepare_base_image(args.screenshot)
-    draw = ImageDraw.Draw(img, "RGBA")
+    viewport, img, draw = load_screenshot_canvas(
+        screenshot_path=args.screenshot,
+        viewport_path=args.viewport,
+    )
 
     map_json = args.map_json or resolve_map_json()
     if args.mode == "contigs":
@@ -101,9 +99,11 @@ def main():
             segment_count += 1
 
     out = args.output or OUT_BY_MODE[args.mode]
-    out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out)
-    print_json_document({"mode": args.mode, "ways": len(ways), "segments": segment_count, "output": str(out)})
+    save_render_output(
+        img,
+        output=out,
+        payload={"mode": args.mode, "ways": len(ways), "segments": segment_count, "output": str(out)},
+    )
 
 
 if __name__ == "__main__":

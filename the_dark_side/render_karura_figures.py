@@ -16,10 +16,9 @@ from .karura_common import (
     JUNCTION_BINDINGS_JSON,
     JUNCTIONS_JSON,
     VIEWPORT,
-    print_json_document,
 )
 from .karura_routing import load_graph_junction_context, resolve_context_junction_ref
-from .render_support import load_viewport, project_lon_lat
+from .render_support import load_viewport, project_lon_lat, save_render_output
 
 
 FIGURES_JSON = CURATED_DIR / "karura_figures.json"
@@ -148,9 +147,7 @@ def main() -> None:
         )
 
     output = args.output or (args.figures_json.parent / figure["output_path"])
-    output.parent.mkdir(parents=True, exist_ok=True)
-    overlay.save(output)
-    print_json_document({"figure_id": figure["id"], "output": str(output)})
+    save_render_output(overlay, output=output, payload={"figure_id": figure["id"], "output": str(output)})
 
 
 if __name__ == "__main__":

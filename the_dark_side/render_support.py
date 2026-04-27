@@ -7,11 +7,11 @@ import math
 from collections.abc import Iterable
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageDraw, ImageOps
 
 from .asset_contracts import load_required_json, load_required_patchset
 from .download_karura_map import load_map
-from .karura_common import mercator
+from .karura_common import mercator, print_json_document
 from .karura_routing import load_route_graph
 
 
@@ -39,6 +39,17 @@ def prepare_base_image(path: Path, *, alpha: float = BASE_IMAGE_ALPHA) -> Image.
     canvas = Image.new("RGBA", source.size, (255, 255, 255, 255))
     canvas.alpha_composite(grayscale)
     return canvas
+
+
+def load_screenshot_canvas(
+    *,
+    screenshot_path: Path,
+    viewport_path: Path,
+) -> tuple[dict, Image.Image, ImageDraw.ImageDraw]:
+    viewport = load_viewport(viewport_path)
+    image = prepare_base_image(screenshot_path)
+    draw = ImageDraw.Draw(image, "RGBA")
+    return viewport, image, draw
 
 
 def project_mercator_point(xy: tuple[float, float], viewport: dict, size: tuple[int, int]) -> tuple[float, float]:
@@ -145,3 +156,9 @@ def project_graph_node_ids(
         project_lon_lat(graph.nodes[node_id].lon, graph.nodes[node_id].lat, viewport, size)
         for node_id in node_ids
     ]
+
+
+def save_render_output(image: Image.Image, *, output: Path, payload: dict) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output)
+    print_json_document(payload)
