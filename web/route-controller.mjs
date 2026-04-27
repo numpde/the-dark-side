@@ -8,6 +8,7 @@ const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`
 const {
   setControlsDisabled,
   updateRouteSurfaceState,
+  updateDownloadLinkState,
   installShellPlaceholders,
   showError,
   clearError,
@@ -134,8 +135,7 @@ export function createRouteController({
         URL.revokeObjectURL(appState.gpxUrl);
         appState.gpxUrl = null;
       }
-      downloadLink.removeAttribute("href");
-      downloadLink.classList.add("disabled");
+      updateDownloadLinkState(downloadLink, { enabled: false, href: null });
       return;
     }
 
@@ -147,16 +147,15 @@ export function createRouteController({
       previousUrl: appState.gpxUrl,
     });
     appState.gpxUrl = download.url;
-    downloadLink.classList.remove("disabled");
+    updateDownloadLinkState(downloadLink, { enabled: true, href: download.url });
   }
 
   function updateSummary() {
     updateRouteStats();
     updateDownloadLink();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
       disabled: !appState.routeRuntime.plannerReady,
       isLoading: appState.routeStatus === "loading",
-      hasRoute: Boolean(appState.route),
     });
     updateRouteSurfaceState(routeStrip, buttonRow, mapElement, routeSurfaceIsInvalidated());
   }
@@ -253,10 +252,9 @@ export function createRouteController({
     updateSummary();
     renderRoute();
     renderNetwork();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
       disabled: true,
       isLoading: true,
-      hasRoute: false,
     });
 
     const networkPayload = await loadAreaNetwork();
@@ -269,10 +267,9 @@ export function createRouteController({
     }
     appState.network = networkPayload;
     renderNetwork();
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
       disabled: false,
       isLoading: false,
-      hasRoute: Boolean(appState.route),
     });
     await chooseRoute();
   }
@@ -317,10 +314,9 @@ export function createRouteController({
   async function boot() {
     clearError(errorCard);
     installShellPlaceholders(scenarioLabel, areaSelect, startSelect, endSelect);
-    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, downloadLink, {
+    setControlsDisabled(areaSelect, startSelect, endSelect, newRouteButton, {
       disabled: true,
       isLoading: false,
-      hasRoute: false,
     });
     ensureRouteMapView().ensureMap();
     bindControls();

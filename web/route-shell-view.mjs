@@ -9,17 +9,21 @@ export function setControlsDisabled(
   startSelect,
   endSelect,
   newRouteButton,
-  downloadLink,
-  { disabled, isLoading, hasRoute }
+  { disabled, isLoading }
 ) {
   areaSelect.disabled = disabled;
   startSelect.disabled = disabled;
   endSelect.disabled = disabled;
   newRouteButton.disabled = disabled || isLoading;
-  downloadLink.classList.toggle("disabled", disabled || isLoading || !hasRoute);
-  if (disabled || isLoading || !hasRoute) {
+}
+
+export function updateDownloadLinkState(downloadLink, { enabled, href }) {
+  downloadLink.classList.toggle("disabled", !enabled);
+  if (!enabled || !href) {
     downloadLink.removeAttribute("href");
+    return;
   }
+  downloadLink.href = href;
 }
 
 export function updateRouteSurfaceState(routeStrip, buttonRow, mapElement, invalidated) {
