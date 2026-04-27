@@ -82,6 +82,41 @@ test("route app canonicalizes invalid selector pairs to a valid scenario", async
   await expect(page.locator("#new-route-button")).toBeEnabled();
 });
 
+test("route app keeps mobile buttons separate from footer and footer near the viewport bottom", async ({ page }) => {
+  await page.setViewportSize({ width: 430, height: 932 });
+  await page.goto("/");
+
+  await expect(page.locator("#new-route-button")).toBeEnabled();
+
+  const layout = await page.evaluate(() => {
+    const rect = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) {
+        throw new Error(`Missing element for selector: ${selector}`);
+      }
+      const box = element.getBoundingClientRect();
+      return {
+        top: box.top,
+        bottom: box.bottom,
+      };
+    };
+    return {
+      viewportHeight: window.innerHeight,
+      heading: rect("h1"),
+      controls: rect(".controls-grid"),
+      routePanel: rect(".route-panel"),
+      buttons: rect(".button-row"),
+      footer: rect(".app-footer"),
+    };
+  });
+
+  expect(layout.controls.top - layout.heading.bottom).toBeGreaterThan(10);
+  expect(layout.routePanel.top - layout.controls.bottom).toBeGreaterThan(10);
+  expect(layout.buttons.top - layout.routePanel.bottom).toBeGreaterThan(10);
+  expect(layout.footer.top - layout.buttons.bottom).toBeGreaterThan(24);
+  expect(layout.viewportHeight - layout.footer.bottom).toBeLessThanOrEqual(32);
+});
+
 test("editor shell loads and resolves editor provenance", async ({ page }) => {
   await page.goto("/editor.html");
 

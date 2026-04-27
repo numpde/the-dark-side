@@ -18,6 +18,7 @@
 <body>
   <main class="app-shell">
     <h1>Random bike routes</h1>
+    <div class="app-shell-spacer" aria-hidden="true"></div>
 
     <div class="controls-grid">
       <div id="area-field" class="control-field">
@@ -34,20 +35,28 @@
         </div>
       </div>
     </div>
+    <div class="app-shell-spacer" aria-hidden="true"></div>
 
-    <div class="route-strip">
-      <p class="scenario-title" id="scenario-label">Loading…</p>
+    <div class="route-panel">
+      <div class="route-strip">
+        <p class="scenario-title" id="scenario-label">Loading…</p>
+      </div>
+
+      <div class="map-view" id="map"></div>
+      <div class="error-card hidden" id="error-card"></div>
     </div>
-
-    <div class="map-view" id="map"></div>
+    <div class="app-shell-spacer" aria-hidden="true"></div>
     <div class="button-row">
       <button type="button" id="new-route-button"><span class="button-gradient-text">New route</span></button>
       <a class="download-link" id="download-link" href="#" aria-label="Download GPX" title="Download GPX">↓ GPX</a>
     </div>
-    <div class="error-card hidden" id="error-card"></div>
-    <p class="note">
-      Thanks to <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> and <a href="https://www.opentopodata.org/datasets/mapzen/">Open Topo Data / Mapzen</a>.
-    </p>
+    <div class="app-shell-spacer" aria-hidden="true"></div>
+    <footer class="app-footer">
+      <p class="note">
+        <span class="note-line">Stats are approximate.</span>
+        <span class="note-line">Thanks to <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> and <a href="https://www.opentopodata.org/datasets/mapzen/">Open Topo Data / Mapzen</a>.</span>
+      </p>
+    </footer>
   </main>
 
   <script
