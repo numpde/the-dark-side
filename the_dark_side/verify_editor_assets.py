@@ -132,10 +132,13 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/index.html", index_bootstrap, r'manifest\?\.\s*modules\?\.\s*bootstrap_version')
     assert_regex("web/index.html", index_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.bootstrap_version"\)')
     assert_regex("web/index.html", index_bootstrap, r'await import\(`\./entry-bootstrap\.mjs\?v=\$\{encodeURIComponent\(version\)\}`\)')
-    assert_regex("web/index.html", index_bootstrap, r'await bootVersionedEntry\(\{\s*manifest,')
+    assert_regex("web/index.html", index_bootstrap, r'await bootPageEntry\(\{\s*manifest,')
+    assert_regex("web/index.html", index_bootstrap, r'errorElementId:\s*"error-card"')
+    assert_regex("web/index.html", index_bootstrap, r'failureLabel:\s*"app shell"')
     assert_regex("web/index.html", index_bootstrap, r'entryVersionKey:\s*"app_version"')
     assert_regex("web/index.html", index_bootstrap, r'entryPath:\s*"\./app\.js"')
     assert_not_regex("web/index.html", index_bootstrap, r'await import\(`\./app\.js')
+    assert_not_regex("web/index.html", index_bootstrap, r'try\s*\{')
 
     assert_regex(
         "web/editor.html",
@@ -145,12 +148,16 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/editor.html", editor_bootstrap, r'manifest\?\.\s*modules\?\.\s*bootstrap_version')
     assert_regex("web/editor.html", editor_bootstrap, r'if\s*\(\s*!version\s*\)\s*\{\s*throw new Error\("Frontend manifest is missing modules\.bootstrap_version"\)')
     assert_regex("web/editor.html", editor_bootstrap, r'await import\(`\./entry-bootstrap\.mjs\?v=\$\{encodeURIComponent\(version\)\}`\)')
-    assert_regex("web/editor.html", editor_bootstrap, r'await bootVersionedEntry\(\{\s*manifest,')
+    assert_regex("web/editor.html", editor_bootstrap, r'await bootPageEntry\(\{\s*manifest,')
+    assert_regex("web/editor.html", editor_bootstrap, r'errorElementId:\s*"error-box"')
+    assert_regex("web/editor.html", editor_bootstrap, r'failureLabel:\s*"editor shell"')
     assert_regex("web/editor.html", editor_bootstrap, r'entryVersionKey:\s*"editor_version"')
     assert_regex("web/editor.html", editor_bootstrap, r'entryPath:\s*"\./editor\.js"')
     assert_not_regex("web/editor.html", editor_bootstrap, r'await import\(`\./editor\.js')
+    assert_not_regex("web/editor.html", editor_bootstrap, r'try\s*\{')
 
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"export async function bootVersionedEntry\(")
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"export async function bootPageEntry\(")
     assert_uses_module_context("web/entry-bootstrap.mjs", entry_bootstrap_js, "Entry bootstrap module")
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'await import\(`\./error-presentation\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"function requireManifestModuleVersion\(")
@@ -158,6 +165,8 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'requireManifestModuleVersion\(manifest,\s*bootstrapVersionKey\)')
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'requireManifestModuleVersion\(manifest,\s*entryVersionKey\)')
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'const specifier = `\$\{entryPath\}\?v=\$\{encodeURIComponent\(entryVersion\)\}`')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'await bootVersionedEntry\(\{\s*manifest,')
+    assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'renderFailure\(\{\s*errorElementId,\s*failureLabel,\s*error,')
     assert_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r"export \{ renderFailure as renderBootstrapFailure \};")
     assert_not_regex("web/entry-bootstrap.mjs", entry_bootstrap_js, r'fetch\(')
 

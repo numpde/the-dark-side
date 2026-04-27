@@ -22,4 +22,28 @@ export async function bootVersionedEntry({
   await import(specifier);
 }
 
+export async function bootPageEntry({
+  manifest,
+  errorElementId,
+  failureLabel,
+  bootstrapVersionKey,
+  entryVersionKey,
+  entryPath,
+}) {
+  try {
+    await bootVersionedEntry({
+      manifest,
+      bootstrapVersionKey,
+      entryVersionKey,
+      entryPath,
+    });
+  } catch (error) {
+    renderFailure({
+      errorElementId,
+      failureLabel,
+      error,
+    });
+  }
+}
+
 export { renderFailure as renderBootstrapFailure };

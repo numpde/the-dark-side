@@ -106,21 +106,15 @@
       if (!version) {
         throw new Error("Frontend manifest is missing modules.bootstrap_version");
       }
-      const { bootVersionedEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
-      try {
-        await bootVersionedEntry({
-          manifest,
-          bootstrapVersionKey: "bootstrap_version",
-          entryVersionKey: "editor_version",
-          entryPath: "./editor.js",
-        });
-      } catch (error) {
-        renderBootstrapFailure({
-          errorElementId: "error-box",
-          failureLabel: "editor shell",
-          error,
-        });
-      }
+      const { bootPageEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
+      await bootPageEntry({
+        manifest,
+        errorElementId: "error-box",
+        failureLabel: "editor shell",
+        bootstrapVersionKey: "bootstrap_version",
+        entryVersionKey: "editor_version",
+        entryPath: "./editor.js",
+      });
     }
 
     boot().catch((error) => {

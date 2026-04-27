@@ -75,21 +75,15 @@
       if (!version) {
         throw new Error("Frontend manifest is missing modules.bootstrap_version");
       }
-      const { bootVersionedEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
-      try {
-        await bootVersionedEntry({
-          manifest,
-          bootstrapVersionKey: "bootstrap_version",
-          entryVersionKey: "app_version",
-          entryPath: "./app.js",
-        });
-      } catch (error) {
-        renderBootstrapFailure({
-          errorElementId: "error-card",
-          failureLabel: "app shell",
-          error,
-        });
-      }
+      const { bootPageEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
+      await bootPageEntry({
+        manifest,
+        errorElementId: "error-card",
+        failureLabel: "app shell",
+        bootstrapVersionKey: "bootstrap_version",
+        entryVersionKey: "app_version",
+        entryPath: "./app.js",
+      });
     }
 
     boot().catch((error) => {
