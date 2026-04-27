@@ -81,6 +81,7 @@ EDITOR_MODULE_PATHS = (
     WEB_DIR / "editor.js",
     WEB_DIR / "editor-shell-view.mjs",
     WEB_DIR / "error-presentation.mjs",
+    WEB_DIR / "fatal-error-runtime.mjs",
     WEB_DIR / "editor-state.mjs",
     WEB_DIR / "karura-policy.mjs",
     WEB_DIR / "module-context.mjs",

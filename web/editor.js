@@ -1,28 +1,13 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
 const { createEditorController } = await import(`./editor-controller.mjs${moduleSuffix}`);
-const { formatError, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
+const { createFatalErrorReporter, installWindowErrorHandlers } = await import(`./fatal-error-runtime.mjs${moduleSuffix}`);
 
-function findErrorBox() {
-  return document.getElementById("error-box");
-}
-
-function reportFatalError(error, context = "Editor error") {
-  const message = `${context}: ${formatError(error)}`;
-  console.error(message, error);
-  const box = findErrorBox();
-  if (box) {
-    showErrorText(box, message);
-  }
-}
-
-window.addEventListener("error", (event) => {
-  reportFatalError(event.error ?? event.message, "Page error");
+const reportFatalError = createFatalErrorReporter({
+  errorElementId: "error-box",
+  defaultContext: "Editor error",
 });
-
-window.addEventListener("unhandledrejection", (event) => {
-  reportFatalError(event.reason, "Unhandled promise rejection");
-});
+installWindowErrorHandlers(reportFatalError);
 
 const controller = createEditorController({
   editorManifestUrl: new URL("./generated/editor-manifest.json", window.location.href),
