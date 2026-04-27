@@ -1,0 +1,152 @@
+const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
+const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor controller module");
+const {
+  buildPatchsetDocument,
+  defaultWayPolicy,
+  emptyPatchset,
+  normalizePatchset,
+  policyForWay,
+  setWayPolicy,
+} = await import(`./editor-state.mjs${moduleSuffix}`);
+const {
+  karuraTodayString,
+  isCurrentlyUnavailable: isPolicyCurrentlyUnavailable,
+} = await import(`./karura-policy.mjs${moduleSuffix}`);
+const {
+  downloadJsonDocument,
+  loadEditorBundle,
+  readJsonFile,
+} = await import(`./editor-asset-runtime.mjs${moduleSuffix}`);
+const { createEditorMapView, styleForPolicy } = await import(`./editor-map-view.mjs${moduleSuffix}`);
+const { createEditorShellView } = await import(`./editor-shell-view.mjs${moduleSuffix}`);
+const { validateEditorManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+
+function isCurrentlyUnavailable(policy) {
+  return isPolicyCurrentlyUnavailable(
+    { "local:unavailable_until": policy.unavailableUntil ?? undefined },
+    karuraTodayString(),
+  );
+}
+
+function isDefaultPolicy(policy) {
+  return (
+    policy.routingState === "default" &&
+    policy.bikeability == null &&
+    policy.bicycleDirection === "both" &&
+    policy.unavailableUntil == null
+  );
+}
+
+export function createEditorController({ editorManifestUrl, reportError }) {
+  const appState = {
+    selectedWayId: null,
+    editorState: normalizePatchset(emptyPatchset()),
+    loadedPatchLabel: "–",
+    editorManifest: null,
+    assetUrls: null,
+  };
+
+  function canonicalPatchPath() {
+    return appState.assetUrls.patchsetPath;
+  }
+
+  const mapView = createEditorMapView({
+    mapElementId: "map",
+    onSelectWay: (wayId) => selectWay(wayId),
+    resolveFeatureStyle: (feature) => styleForPolicy(
+      policyForWay(appState.editorState, feature.properties.contig_id),
+      isCurrentlyUnavailable,
+    ),
+  });
+
+  const shellView = createEditorShellView({
+    reportError,
+    onRoutingStateChange: (routingState) => updateSelectedPolicy({ routingState }),
+    onBikeabilityChange: (bikeability) => updateSelectedPolicy({ bikeability }),
+    onDirectionChange: (bicycleDirection) => updateSelectedPolicy({ bicycleDirection }),
+    onUnavailableUntilChange: (unavailableUntil) => updateSelectedPolicy({ unavailableUntil }),
+    onClear: () => {
+      if (appState.selectedWayId == null) {
+        return;
+      }
+      setWayPolicy(appState.editorState, appState.selectedWayId, defaultWayPolicy());
+      mapView.updateWayStyle(appState.selectedWayId);
+      shellView.clearError();
+      renderShell();
+    },
+    onExport: () => exportPatchset(),
+    onImportFile: async (file) => {
+      await importPatchset(file);
+      shellView.clearError();
+    },
+  });
+
+  function currentPatchDocument() {
+    return buildPatchsetDocument(appState.editorState, mapView.getWayFeatures());
+  }
+
+  function renderShell() {
+    const feature = mapView.featureForWay(appState.selectedWayId);
+    const policy = feature
+      ? policyForWay(appState.editorState, appState.selectedWayId)
+      : defaultWayPolicy();
+
+    shellView.update({
+      feature,
+      policy,
+      loadedPatchLabel: appState.loadedPatchLabel,
+      canonicalPatchPath: canonicalPatchPath(),
+      editorGraphAssetId: appState.editorManifest.meta.editor_graph_asset_id,
+      editorGeneratedAtText: appState.editorManifest.meta.generated_at,
+      changedCount: appState.editorState.policyByWayId.size,
+      patchDocument: currentPatchDocument(),
+      clearDisabled: !feature || isDefaultPolicy(policy),
+    });
+    mapView.renderSelectedWay(appState.selectedWayId);
+  }
+
+  function selectWay(wayId) {
+    appState.selectedWayId = Number(wayId);
+    shellView.clearError();
+    renderShell();
+  }
+
+  function updateSelectedPolicy(partial) {
+    if (appState.selectedWayId == null) {
+      return;
+    }
+    const current = policyForWay(appState.editorState, appState.selectedWayId);
+    setWayPolicy(appState.editorState, appState.selectedWayId, { ...current, ...partial });
+    mapView.updateWayStyle(appState.selectedWayId);
+    renderShell();
+  }
+
+  function exportPatchset() {
+    downloadJsonDocument(currentPatchDocument(), appState.assetUrls.patchsetFilename);
+  }
+
+  async function importPatchset(file) {
+    appState.editorState = normalizePatchset(await readJsonFile(file));
+    appState.loadedPatchLabel = `imported/${file.name}`;
+    mapView.updateAllWayStyles();
+    renderShell();
+  }
+
+  async function boot() {
+    const { editorManifest, assetUrls, waysGeojson, patchset } = await loadEditorBundle({
+      editorManifestUrl,
+      validateEditorManifest,
+      pageUrl: window.location.href,
+    });
+    appState.editorManifest = editorManifest;
+    appState.assetUrls = assetUrls;
+    appState.editorState = normalizePatchset(patchset);
+    appState.loadedPatchLabel = canonicalPatchPath();
+    mapView.renderWays(waysGeojson);
+    renderShell();
+  }
+
+  return {
+    boot,
+  };
+}
