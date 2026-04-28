@@ -183,13 +183,15 @@ Then use:
 
 ```bash
 npm run serve:web
+npm run preview:web
 npm run test:web
 npm run check:web
 npm run test:e2e
 npm run test:frontend
 ```
 
-This does not change deployment; GitHub Pages still serves plain static files from `web/`.
+`npm run serve:web` rebuilds the Python-derived assets and the bundled browser runtime, then serves the built `dist/` artifact.
+`npm run preview:web` serves the existing `dist/` artifact without rebuilding it.
 
 Run the route benchmark summary:
 
@@ -285,7 +287,7 @@ The editor will:
 - annotate contigs as unavailable until a specific date
 - export a replacement for `source/karura-route-policy.json`
 
-GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow rebuilds the editor/app assets, verifies provenance, and publishes `web/`.
+GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow rebuilds the editor/app assets, bundles the frontend into `dist/`, verifies both provenance and the built artifact, and publishes `dist/`.
 It also runs on a daily schedule so `unavailable until` dates can expire out of the published browser-planner graph without a manual push.
 
 ## Local patch strategy
@@ -342,13 +344,13 @@ Pinned external cache:
 
 - `data/karura_elevation.json`
 
-Everything else in `data/` and `web/generated/` is derived. After changing a canonical input, regenerate and verify before pushing:
+Everything else in `data/`, `web/generated/`, and `dist/` is derived. After changing a canonical input, regenerate and verify before pushing:
 
 ```bash
-python3 -m the_dark_side.rebuild_editor_assets
+npm run build:web
 python3 -m the_dark_side.verify_editor_assets
-python3 -m the_dark_side.rebuild_app_assets
 python3 -m the_dark_side.verify_app_assets
+python3 -m the_dark_side.verify_web_dist
 ```
 
 ## Data shape

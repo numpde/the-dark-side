@@ -8,7 +8,12 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/deploy-pages.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "playwright.config.mjs"
+      - "scripts/**"
       - "source/**"
+      - "tests/**"
       - "web/**"
       - "curated/karura_junctions.json"
       - "data/karura_map.json"
@@ -43,37 +48,43 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Run frontend JS checks
         run: |
-          node --test tests/test_gpx.mjs
-          node --test tests/test_editor_state.mjs
-          node --test tests/test_route_planner.mjs
-          node --check web/app.js
-          node --check web/editor.js
-          node --check web/editor-state.mjs
-          node --check web/route-planner.mjs
-          node --check web/route-worker.js
+          npm run check:web
+          npm run test:web
 
       - name: Run Python asset tests
         run: |
           python3 -m unittest -v \
+            tests.test_cli_entrypoints \
             tests.test_build_config \
             tests.test_export_catalog \
             tests.test_junction_bindings \
             tests.test_map_patches \
-            tests.test_route_diversity
+            tests.test_route_diversity \
+            tests.test_web_assets
 
-      - name: Rebuild app assets
-        run: |
-          python3 -m the_dark_side.rebuild_app_assets
+      - name: Build deploy artifact
+        run: npm run build:web
 
-      - name: Verify app asset provenance
+      - name: Verify asset provenance
         run: |
+          python3 -m the_dark_side.verify_editor_assets
           python3 -m the_dark_side.verify_app_assets
+          python3 -m the_dark_side.verify_web_dist
+
+      - name: Run Playwright smoke tests against dist
+        run: npx playwright test
 
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: web
+          path: dist
 
   deploy:
     environment:
