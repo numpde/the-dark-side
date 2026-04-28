@@ -28,6 +28,8 @@ def parse_entry_script(html_path: Path, expected_prefix: str) -> str:
     html = html_path.read_text()
     if "frontend-manifest" in html:
         raise SystemExit(f"{html_path} is stale; built HTML must not reference frontend-manifest.json")
+    if f'./{expected_prefix}.js' in html:
+        raise SystemExit(f"{html_path} is stale; built HTML must reference a hashed {expected_prefix} asset, not source {expected_prefix}.js")
     match = re.search(
         rf'<script\s+type="module"\s+src="((?:\./)?assets/{re.escape(expected_prefix)}-[A-Za-z0-9]+\.js)"\s*></script>',
         html,
@@ -55,10 +57,31 @@ def verify_web_dist(args: argparse.Namespace) -> dict:
     worker_assets = sorted(assets_dir.glob("route-worker-*.js"))
     if len(worker_assets) != 1:
         raise SystemExit(f"{assets_dir} is stale; expected exactly one hashed route-worker bundle")
+    if sorted(assets_dir.glob("*.js")) != sorted(
+        [dist_dir / index_script.removeprefix("./"), dist_dir / editor_script.removeprefix("./"), worker_assets[0]]
+    ):
+        raise SystemExit(f"{assets_dir} is stale; expected exactly one hashed app bundle, editor bundle, and worker bundle")
 
     frontend_manifest = generated_dir / "frontend-manifest.json"
     if frontend_manifest.exists():
         raise SystemExit(f"{frontend_manifest} should not exist in the built dist artifact")
+
+    app_bundle_text = (dist_dir / index_script.removeprefix("./")).read_text()
+    editor_bundle_text = (dist_dir / editor_script.removeprefix("./")).read_text()
+    worker_bundle_text = worker_assets[0].read_text()
+    for label, bundle_text in (
+        ("built app bundle", app_bundle_text),
+        ("built editor bundle", editor_bundle_text),
+        ("built worker bundle", worker_bundle_text),
+    ):
+        if "frontend-manifest" in bundle_text:
+            raise SystemExit(f"{label} is stale; built runtime must not reference frontend-manifest.json")
+        if "module-context" in bundle_text or "entry-bootstrap" in bundle_text:
+            raise SystemExit(f"{label} is stale; built runtime must not reference legacy bootstrap modules")
+    if worker_assets[0].name not in app_bundle_text:
+        raise SystemExit("built app bundle is stale; expected the hashed route-worker filename to be embedded")
+    if "route-worker.js" in app_bundle_text:
+        raise SystemExit("built app bundle is stale; expected hashed worker asset, not source route-worker.js")
 
     app_manifest = load_required_json(generated_dir / "app-manifest.json", label="built app manifest")
     editor_manifest = load_required_json(generated_dir / "editor-manifest.json", label="built editor manifest")
