@@ -102,6 +102,14 @@ def verify_sources_synced() -> None:
         expected_path = WEB_SOURCE_DIR / canonical_path.name
         if not expected_path.exists():
             raise SystemExit(f"missing published source asset: {expected_path}; run rebuild_editor_assets and commit")
+        if canonical_path.name == "karura-route-policy.json":
+            canonical_text = canonical_path.read_text()
+            assert_not_contains(str(canonical_path), canonical_text, "editor-policy-contig-")
+            assert_not_contains(
+                str(canonical_path),
+                canonical_text,
+                "Local route policy resolved onto the current graph during rebuild.",
+            )
         assert_equal(
             str(expected_path),
             expected_path.read_text(),

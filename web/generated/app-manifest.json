@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T08:45:19.534565Z",
+    "generated_at": "2026-04-28T08:51:07.546213Z",
     "asset_kind": "app_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-4bf90dcd7bef",
+    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-13fbb6b0eb61",
     "catalog_build_path": "source/catalog_build.json",
     "catalog_build_digest": "1feff1d312fb",
     "elevation_asset_matches_graph": true

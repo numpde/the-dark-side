@@ -1,15 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T08:45:19.508189Z",
+    "generated_at": "2026-04-28T08:51:07.520349Z",
     "asset_kind": "editor_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "patched_map_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_digest": "4bf90dcd7bef",
+    "route_policy_digest": "13fbb6b0eb61",
     "route_policy_path": "source/karura-route-policy.json",
-    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-4bf90dcd7bef",
+    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-13fbb6b0eb61",
     "respect_inner_rings": false,
     "fill_segment_gaps": true
   },

@@ -132,7 +132,7 @@ test("normalizeRoutePolicyDocument migrates legacy contig tag patchsets by node 
 
   assert.equal(editorState.meta.asset_kind, "route_policy");
   assert.equal(editorState.meta.asset_id, "legacy-policy");
-  assert.equal(editorState.ruleIdByContigId.get(55), "editor-policy-contig-55");
+  assert.match(editorState.ruleIdByContigId.get(55), /^route-policy-path-[0-9a-f]{8}$/);
   assert.deepEqual(policyForContig(editorState, 55), {
     routingState: "exclude",
     bikeability: 2,

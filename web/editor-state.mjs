@@ -311,9 +311,10 @@ function routePolicyRuleFromLegacyPatch(patch, featureById) {
     featureById,
     `Patch ${patch.id || "(unnamed)"}`
   );
+  const selector = featureSelector(tempFeature);
   return {
-    id: String(managedPatch.id),
-    selector: featureSelector(tempFeature),
+    id: generatedRuleIdForSelector(selector),
+    selector,
     policy: compactPolicy(applyLegacyManagedPatch(defaultWayPolicy(), managedPatch)),
   };
 }

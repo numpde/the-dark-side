@@ -99,6 +99,22 @@ def _normalize_way_ids(way_ids: list[int] | tuple[int, ...]) -> tuple[int, ...]:
     return tuple(sorted(int(way_id) for way_id in way_ids))
 
 
+def route_rule_id_for_selector(selector: dict[str, Any]) -> str:
+    text = json.dumps(
+        {
+            "way_ids": list(_normalize_way_ids(selector["way_ids"])),
+            "node_ids": [int(node_id) for node_id in selector["node_ids"]],
+        },
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    hash_value = 2166136261
+    for byte in text.encode("utf-8"):
+        hash_value ^= byte
+        hash_value = (hash_value * 16777619) & 0xFFFFFFFF
+    return f"route-policy-path-{hash_value:08x}"
+
+
 def route_policy_digest(route_policy: dict[str, Any]) -> str:
     route_policy = validate_route_policy_document(route_policy, label="route policy")
     canonical = json.dumps(route_policy, sort_keys=True, separators=(",", ":"))
@@ -222,9 +238,10 @@ def route_policy_document_from_legacy_patchset(
             policy["unavailable_until"] = str(patch_set[LOCAL_UNAVAILABLE_UNTIL_TAG])
         if not policy:
             continue
+        rule_id = route_rule_id_for_selector(selector)
         rules.append(
             {
-                "id": str(patch["id"]),
+                "id": rule_id,
                 "selector": selector,
                 "policy": policy,
             }

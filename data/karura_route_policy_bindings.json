@@ -41,7 +41,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-1",
+      "rule_id": "route-policy-path-f2145925",
       "selector": {
         "node_ids": [
           260566258,
@@ -94,7 +94,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-2",
+      "rule_id": "route-policy-path-a8a20433",
       "selector": {
         "node_ids": [
           260566274,
@@ -131,7 +131,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-6",
+      "rule_id": "route-policy-path-2a875f65",
       "selector": {
         "node_ids": [
           271326712,
@@ -189,7 +189,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-9",
+      "rule_id": "route-policy-path-54d1cb96",
       "selector": {
         "node_ids": [
           272329805,
@@ -241,7 +241,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-11",
+      "rule_id": "route-policy-path-e1a813f9",
       "selector": {
         "node_ids": [
           281376839,
@@ -275,7 +275,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-12",
+      "rule_id": "route-policy-path-8d9e7100",
       "selector": {
         "node_ids": [
           281376839,
@@ -315,7 +315,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-13",
+      "rule_id": "route-policy-path-5cc5708a",
       "selector": {
         "node_ids": [
           281376839,
@@ -354,7 +354,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-14",
+      "rule_id": "route-policy-path-c06c39a2",
       "selector": {
         "node_ids": [
           745351446,
@@ -407,7 +407,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-15",
+      "rule_id": "route-policy-path-5f3bc887",
       "selector": {
         "node_ids": [
           745351464,
@@ -458,7 +458,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-16",
+      "rule_id": "route-policy-path-138c4666",
       "selector": {
         "node_ids": [
           745351464,
@@ -501,7 +501,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-17",
+      "rule_id": "route-policy-path-574193a1",
       "selector": {
         "node_ids": [
           745351588,
@@ -561,7 +561,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-18",
+      "rule_id": "route-policy-path-3e2fb6b3",
       "selector": {
         "node_ids": [
           745351588,
@@ -612,7 +612,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-29",
+      "rule_id": "route-policy-path-2382edc6",
       "selector": {
         "node_ids": [
           747730055,
@@ -662,7 +662,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-32",
+      "rule_id": "route-policy-path-815cdcb8",
       "selector": {
         "node_ids": [
           747730073,
@@ -718,7 +718,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-33",
+      "rule_id": "route-policy-path-51312351",
       "selector": {
         "node_ids": [
           747730073,
@@ -762,7 +762,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-36",
+      "rule_id": "route-policy-path-f9e9d997",
       "selector": {
         "node_ids": [
           747730076,
@@ -801,7 +801,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-41",
+      "rule_id": "route-policy-path-4072f335",
       "selector": {
         "node_ids": [
           747730084,
@@ -836,7 +836,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-46",
+      "rule_id": "route-policy-path-8f0a19e1",
       "selector": {
         "node_ids": [
           747730094,
@@ -869,7 +869,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-51",
+      "rule_id": "route-policy-path-f668653a",
       "selector": {
         "node_ids": [
           748782349,
@@ -908,7 +908,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-56",
+      "rule_id": "route-policy-path-e0f9f797",
       "selector": {
         "node_ids": [
           750599858,
@@ -961,7 +961,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-61",
+      "rule_id": "route-policy-path-a564a492",
       "selector": {
         "node_ids": [
           1554843709,
@@ -1016,7 +1016,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-64",
+      "rule_id": "route-policy-path-6d80c70d",
       "selector": {
         "node_ids": [
           1554843748,
@@ -1055,7 +1055,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-69",
+      "rule_id": "route-policy-path-664cc072",
       "selector": {
         "node_ids": [
           1554849718,
@@ -1087,7 +1087,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-73",
+      "rule_id": "route-policy-path-a887750a",
       "selector": {
         "node_ids": [
           1554851731,
@@ -1119,7 +1119,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-78",
+      "rule_id": "route-policy-path-74b4a4d9",
       "selector": {
         "node_ids": [
           1562475927,
@@ -1152,7 +1152,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-81",
+      "rule_id": "route-policy-path-952440e1",
       "selector": {
         "node_ids": [
           2026570585,
@@ -1206,7 +1206,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-86",
+      "rule_id": "route-policy-path-ff3d3776",
       "selector": {
         "node_ids": [
           2068386553,
@@ -1273,7 +1273,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-101",
+      "rule_id": "route-policy-path-0f9851d3",
       "selector": {
         "node_ids": [
           2068386820,
@@ -1335,7 +1335,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-102",
+      "rule_id": "route-policy-path-6a82394f",
       "selector": {
         "node_ids": [
           2068386820,
@@ -1385,7 +1385,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-103",
+      "rule_id": "route-policy-path-1bc12aeb",
       "selector": {
         "node_ids": [
           2068386820,
@@ -1421,7 +1421,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-108",
+      "rule_id": "route-policy-path-2f597776",
       "selector": {
         "node_ids": [
           2068421873,
@@ -1463,7 +1463,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-122",
+      "rule_id": "route-policy-path-0d732f72",
       "selector": {
         "node_ids": [
           2847824180,
@@ -1501,7 +1501,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-127",
+      "rule_id": "route-policy-path-373ea854",
       "selector": {
         "node_ids": [
           2847824208,
@@ -1542,7 +1542,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-128",
+      "rule_id": "route-policy-path-90266a54",
       "selector": {
         "node_ids": [
           2847824221,
@@ -1629,7 +1629,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-130",
+      "rule_id": "route-policy-path-d10f2f0e",
       "selector": {
         "node_ids": [
           2847824295,
@@ -1713,7 +1713,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-131",
+      "rule_id": "route-policy-path-6504554a",
       "selector": {
         "node_ids": [
           2847824306,
@@ -1750,7 +1750,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-132",
+      "rule_id": "route-policy-path-5d10cfaa",
       "selector": {
         "node_ids": [
           2847824306,
@@ -1788,7 +1788,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-133",
+      "rule_id": "route-policy-path-38b9b322",
       "selector": {
         "node_ids": [
           2847824359,
@@ -1828,7 +1828,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-134",
+      "rule_id": "route-policy-path-b7785255",
       "selector": {
         "node_ids": [
           2847824359,
@@ -1858,7 +1858,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-136",
+      "rule_id": "route-policy-path-9a55b6fc",
       "selector": {
         "node_ids": [
           2847824369,
@@ -1897,7 +1897,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-137",
+      "rule_id": "route-policy-path-e73dbf01",
       "selector": {
         "node_ids": [
           2847940694,
@@ -1941,7 +1941,7 @@
       "policy": {
         "unavailable_until": "2026-06-30"
       },
-      "rule_id": "editor-policy-contig-141",
+      "rule_id": "route-policy-path-4c45610b",
       "selector": {
         "node_ids": [
           2847941633,
@@ -1985,7 +1985,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-142",
+      "rule_id": "route-policy-path-34808dd6",
       "selector": {
         "node_ids": [
           2847945484,
@@ -2030,7 +2030,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-143",
+      "rule_id": "route-policy-path-fe590c98",
       "selector": {
         "node_ids": [
           2847945484,
@@ -2066,7 +2066,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-145",
+      "rule_id": "route-policy-path-838a062c",
       "selector": {
         "node_ids": [
           2847945605,
@@ -2097,7 +2097,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-149",
+      "rule_id": "route-policy-path-ab1dc0dc",
       "selector": {
         "node_ids": [
           2847945648,
@@ -2126,7 +2126,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-151",
+      "rule_id": "route-policy-path-66da1b65",
       "selector": {
         "node_ids": [
           2847945649,
@@ -2156,7 +2156,7 @@
       "policy": {
         "unavailable_until": "2026-06-01"
       },
-      "rule_id": "editor-policy-contig-156",
+      "rule_id": "route-policy-path-ac3b6eeb",
       "selector": {
         "node_ids": [
           2847949507,
@@ -2245,7 +2245,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-159",
+      "rule_id": "route-policy-path-cea8cde4",
       "selector": {
         "node_ids": [
           2847949509,
@@ -2335,7 +2335,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-160",
+      "rule_id": "route-policy-path-f98fa1cd",
       "selector": {
         "node_ids": [
           2847949514,
@@ -2414,7 +2414,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-172",
+      "rule_id": "route-policy-path-3080215c",
       "selector": {
         "node_ids": [
           2847949714,
@@ -2495,7 +2495,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-177",
+      "rule_id": "route-policy-path-9317044b",
       "selector": {
         "node_ids": [
           4803107764,
@@ -2530,7 +2530,7 @@
       "policy": {
         "routing_state": "include"
       },
-      "rule_id": "editor-policy-contig-181",
+      "rule_id": "route-policy-path-595438fe",
       "selector": {
         "node_ids": [
           5927778335,
@@ -2566,7 +2566,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-201",
+      "rule_id": "route-policy-path-f5ac3be5",
       "selector": {
         "node_ids": [
           6503768714,
@@ -2610,7 +2610,7 @@
       "policy": {
         "routing_state": "exclude"
       },
-      "rule_id": "editor-policy-contig-213",
+      "rule_id": "route-policy-path-23c711d3",
       "selector": {
         "node_ids": [
           9810327703,
@@ -2634,11 +2634,11 @@
     }
   ],
   "meta": {
-    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-4bf90dcd7bef",
+    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8-13fbb6b0eb61",
     "asset_kind": "route_policy_bindings",
     "binding_count": 55,
     "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_digest": "4bf90dcd7bef"
+    "route_policy_digest": "13fbb6b0eb61"
   }
 }
