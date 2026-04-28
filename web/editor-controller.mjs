@@ -1,12 +1,12 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor controller module");
 const {
-  buildPatchsetDocument,
+  buildRoutePolicyDocument,
   defaultWayPolicy,
-  emptyPatchset,
-  normalizePatchset,
-  policyForWay,
-  setWayPolicy,
+  emptyRoutePolicyDocument,
+  normalizeRoutePolicyDocument,
+  policyForContig,
+  setContigPolicy,
 } = await import(`./editor-state.mjs${moduleSuffix}`);
 const {
   karuraTodayString,
@@ -39,22 +39,22 @@ function isDefaultPolicy(policy) {
 
 export function createEditorController({ editorManifestUrl, reportError }) {
   const appState = {
-    selectedWayId: null,
-    editorState: normalizePatchset(emptyPatchset()),
-    loadedPatchLabel: "–",
+    selectedContigId: null,
+    editorState: normalizeRoutePolicyDocument(emptyRoutePolicyDocument()),
+    loadedRoutePolicyLabel: "–",
     editorManifest: null,
     assetUrls: null,
   };
 
-  function canonicalPatchPath() {
-    return appState.assetUrls.patchsetPath;
+  function canonicalRoutePolicyPath() {
+    return appState.assetUrls.routePolicyPath;
   }
 
   const mapView = createEditorMapView({
     mapElementId: "map",
-    onSelectWay: (wayId) => selectWay(wayId),
+    onSelectContig: (contigId) => selectContig(contigId),
     resolveFeatureStyle: (feature) => styleForPolicy(
-      policyForWay(appState.editorState, feature.properties.contig_id),
+      policyForContig(appState.editorState, feature.properties.contig_id),
       isCurrentlyUnavailable,
     ),
   });
@@ -66,83 +66,83 @@ export function createEditorController({ editorManifestUrl, reportError }) {
     onDirectionChange: (bicycleDirection) => updateSelectedPolicy({ bicycleDirection }),
     onUnavailableUntilChange: (unavailableUntil) => updateSelectedPolicy({ unavailableUntil }),
     onClear: () => {
-      if (appState.selectedWayId == null) {
+      if (appState.selectedContigId == null) {
         return;
       }
-      setWayPolicy(appState.editorState, appState.selectedWayId, defaultWayPolicy());
-      mapView.updateWayStyle(appState.selectedWayId);
+      setContigPolicy(appState.editorState, appState.selectedContigId, defaultWayPolicy());
+      mapView.updateContigStyle(appState.selectedContigId);
       shellView.clearError();
       renderShell();
     },
-    onExport: () => exportPatchset(),
+    onExport: () => exportRoutePolicy(),
     onImportFile: async (file) => {
-      await importPatchset(file);
+      await importRoutePolicy(file);
       shellView.clearError();
     },
   });
 
-  function currentPatchDocument() {
-    return buildPatchsetDocument(appState.editorState, mapView.getWayFeatures());
+  function currentRoutePolicyDocument() {
+    return buildRoutePolicyDocument(appState.editorState, mapView.getContigFeatures());
   }
 
   function renderShell() {
-    const feature = mapView.featureForWay(appState.selectedWayId);
+    const feature = mapView.featureForContig(appState.selectedContigId);
     const policy = feature
-      ? policyForWay(appState.editorState, appState.selectedWayId)
+      ? policyForContig(appState.editorState, appState.selectedContigId)
       : defaultWayPolicy();
 
     shellView.update({
       feature,
       policy,
-      loadedPatchLabel: appState.loadedPatchLabel,
-      canonicalPatchPath: canonicalPatchPath(),
+      loadedRoutePolicyLabel: appState.loadedRoutePolicyLabel,
+      canonicalRoutePolicyPath: canonicalRoutePolicyPath(),
       editorGraphAssetId: appState.editorManifest.meta.editor_graph_asset_id,
       editorGeneratedAtText: appState.editorManifest.meta.generated_at,
-      changedCount: appState.editorState.policyByWayId.size,
-      patchDocument: currentPatchDocument(),
+      changedCount: appState.editorState.policyByContigId.size,
+      routePolicyDocument: currentRoutePolicyDocument(),
       clearDisabled: !feature || isDefaultPolicy(policy),
     });
-    mapView.renderSelectedWay(appState.selectedWayId);
+    mapView.renderSelectedContig(appState.selectedContigId);
   }
 
-  function selectWay(wayId) {
-    appState.selectedWayId = Number(wayId);
+  function selectContig(contigId) {
+    appState.selectedContigId = Number(contigId);
     shellView.clearError();
     renderShell();
   }
 
   function updateSelectedPolicy(partial) {
-    if (appState.selectedWayId == null) {
+    if (appState.selectedContigId == null) {
       return;
     }
-    const current = policyForWay(appState.editorState, appState.selectedWayId);
-    setWayPolicy(appState.editorState, appState.selectedWayId, { ...current, ...partial });
-    mapView.updateWayStyle(appState.selectedWayId);
+    const current = policyForContig(appState.editorState, appState.selectedContigId);
+    setContigPolicy(appState.editorState, appState.selectedContigId, { ...current, ...partial });
+    mapView.updateContigStyle(appState.selectedContigId);
     renderShell();
   }
 
-  function exportPatchset() {
-    downloadJsonDocument(currentPatchDocument(), appState.assetUrls.patchsetFilename);
+  function exportRoutePolicy() {
+    downloadJsonDocument(currentRoutePolicyDocument(), appState.assetUrls.routePolicyFilename);
   }
 
-  async function importPatchset(file) {
-    appState.editorState = normalizePatchset(await readJsonFile(file));
-    appState.loadedPatchLabel = `imported/${file.name}`;
-    mapView.updateAllWayStyles();
+  async function importRoutePolicy(file) {
+    appState.editorState = normalizeRoutePolicyDocument(await readJsonFile(file), mapView.getContigFeatures());
+    appState.loadedRoutePolicyLabel = `imported/${file.name}`;
+    mapView.updateAllContigStyles();
     renderShell();
   }
 
   async function boot() {
-    const { editorManifest, assetUrls, waysGeojson, patchset } = await loadEditorBundle({
+    const { editorManifest, assetUrls, waysGeojson, routePolicy } = await loadEditorBundle({
       editorManifestUrl,
       validateEditorManifest,
       pageUrl: window.location.href,
     });
     appState.editorManifest = editorManifest;
     appState.assetUrls = assetUrls;
-    appState.editorState = normalizePatchset(patchset);
-    appState.loadedPatchLabel = canonicalPatchPath();
     mapView.renderWays(waysGeojson);
+    appState.editorState = normalizeRoutePolicyDocument(routePolicy, mapView.getContigFeatures());
+    appState.loadedRoutePolicyLabel = canonicalRoutePolicyPath();
     renderShell();
   }
 

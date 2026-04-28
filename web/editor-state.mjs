@@ -16,32 +16,19 @@ export const {
 } = editorPolicyContracts;
 
 
-export function emptyPatchset() {
+export function emptyRoutePolicyDocument() {
   return {
     meta: {
-      asset_kind: "map_patchset",
-      patchset_id: "karura-map-patches-v1",
+      asset_kind: "route_policy",
+      asset_id: "karura-route-policy-v1",
+      description: "Canonical route policy on patched-map paths, projected onto the current graph during rebuild.",
     },
-    patches: [],
+    rules: [],
   };
 }
 
-function requirePatchsetObject(rawPatchset) {
-  if (!rawPatchset || typeof rawPatchset !== "object" || Array.isArray(rawPatchset)) {
-    throw new Error("Patchset must be a JSON object");
-  }
-  if (!Array.isArray(rawPatchset.patches)) {
-    throw new Error("Patchset must contain a patches array");
-  }
-  const meta = requirePlainObject(rawPatchset.meta, "Patchset meta");
-  if (typeof meta.asset_kind !== "string" || meta.asset_kind.length === 0) {
-    throw new Error("Patchset meta.asset_kind must be a non-empty string");
-  }
-  if (typeof meta.patchset_id !== "string" || meta.patchset_id.length === 0) {
-    throw new Error("Patchset meta.patchset_id must be a non-empty string");
-  }
-  return rawPatchset;
-}
+
+export const emptyPatchset = emptyRoutePolicyDocument;
 
 
 function requirePlainObject(value, label) {
@@ -49,6 +36,35 @@ function requirePlainObject(value, label) {
     throw new Error(`${label} must be an object`);
   }
   return value;
+}
+
+
+function requireIntegerArray(value, label, { minLength = 0 } = {}) {
+  if (!Array.isArray(value) || value.some((item) => !Number.isInteger(Number(item)))) {
+    throw new Error(`${label} must be an array of integers`);
+  }
+  if (value.length < minLength) {
+    throw new Error(`${label} must contain at least ${minLength} items`);
+  }
+  return value.map((item) => Number(item));
+}
+
+
+function requireRoutePolicyDocument(rawDocument) {
+  if (!rawDocument || typeof rawDocument !== "object" || Array.isArray(rawDocument)) {
+    throw new Error("Route policy must be a JSON object");
+  }
+  const meta = requirePlainObject(rawDocument.meta, "Route policy meta");
+  if (typeof meta.asset_kind !== "string" || meta.asset_kind.length === 0) {
+    throw new Error("Route policy meta.asset_kind must be a non-empty string");
+  }
+  if (typeof meta.asset_id !== "string" || meta.asset_id.length === 0) {
+    throw new Error("Route policy meta.asset_id must be a non-empty string");
+  }
+  if (!Array.isArray(rawDocument.rules)) {
+    throw new Error("Route policy must contain a rules array");
+  }
+  return rawDocument;
 }
 
 
@@ -75,11 +91,6 @@ function managedTagNames() {
 }
 
 
-function managedTagNamesSet() {
-  return managedTagNames();
-}
-
-
 function splitManagedPatch(patch) {
   if (
     !patch ||
@@ -87,67 +98,26 @@ function splitManagedPatch(patch) {
     patch.op !== "update_contig_tags" ||
     !Number.isInteger(Number(patch.contig_id))
   ) {
-    return { managedPatch: null, residualPatch: patch ?? null };
+    throw new Error(`Legacy route policy import only supports enabled update_contig_tags patches; found ${patch?.op ?? "(unknown)"}`);
   }
 
   validateManagedPatchShape(patch);
 
-  const managedNames = managedTagNamesSet();
-  const managedSet = {};
-  const residualSet = {};
-  for (const [key, value] of Object.entries(patch.set ?? {})) {
-    if (managedNames.has(key)) {
-      managedSet[key] = value;
-    } else {
-      residualSet[key] = value;
-    }
+  const managedNames = managedTagNames();
+  const patchSet = patch.set ?? {};
+  const patchRemove = patch.remove ?? [];
+
+  const unsupportedSet = Object.keys(patchSet).filter((key) => !managedNames.has(key));
+  const unsupportedRemove = patchRemove.filter((key) => !managedNames.has(key));
+  if (unsupportedSet.length > 0 || unsupportedRemove.length > 0) {
+    throw new Error(`Legacy patch ${patch.id || "(unnamed)"} contains unsupported non-policy tags`);
   }
 
-  const managedRemove = [];
-  const residualRemove = [];
-  for (const key of patch.remove ?? []) {
-    if (managedNames.has(key)) {
-      managedRemove.push(key);
-    } else {
-      residualRemove.push(key);
-    }
-  }
-
-  const managedHasContent = Object.keys(managedSet).length > 0 || managedRemove.length > 0;
-  const residualHasContent = Object.keys(residualSet).length > 0 || residualRemove.length > 0;
-
-  let residualPatch = null;
-  if (residualHasContent) {
-    residualPatch = {
-      ...patch,
-      ...(Object.keys(residualSet).length > 0 ? { set: residualSet } : { set: undefined }),
-      ...(residualRemove.length > 0 ? { remove: residualRemove } : { remove: undefined }),
-    };
-    if (residualPatch.id === `editor-policy-contig-${Number(patch.contig_id)}`) {
-      residualPatch.id = `${residualPatch.id}--passthrough`;
-    }
-    if (residualPatch.set === undefined) {
-      delete residualPatch.set;
-    }
-    if (residualPatch.remove === undefined) {
-      delete residualPatch.remove;
-    }
-  }
-
-  return {
-    managedPatch: managedHasContent
-      ? {
-          ...patch,
-          ...(Object.keys(managedSet).length > 0 ? { set: managedSet } : { set: undefined }),
-          ...(managedRemove.length > 0 ? { remove: managedRemove } : { remove: undefined }),
-        }
-      : null,
-    residualPatch,
-  };
+  return patch;
 }
 
 
-function applyManagedPatch(policy, patch) {
+function applyLegacyManagedPatch(policy, patch) {
   const next = { ...policy };
   for (const key of patch.remove ?? []) {
     if (key === POLICY_TAGS.routingState) {
@@ -187,38 +157,308 @@ function applyManagedPatch(policy, patch) {
 }
 
 
-export function normalizePatchset(rawPatchset) {
-  const patchset = requirePatchsetObject(rawPatchset);
-  const passthroughPatches = [];
-  const policyByWayId = new Map();
-
-  for (const patch of patchset.patches) {
-    const { managedPatch, residualPatch } = splitManagedPatch(patch);
-    if (residualPatch) {
-      passthroughPatches.push(residualPatch);
-    }
-    if (!managedPatch) {
-      continue;
-    }
-    const contigId = Number(managedPatch.contig_id);
-    const current = policyByWayId.get(contigId) || defaultWayPolicy();
-    policyByWayId.set(contigId, applyManagedPatch(current, managedPatch));
-  }
-
+function normalizeSelector(selector, label) {
+  const normalizedSelector = requirePlainObject(selector, `${label} selector`);
   return {
-    meta: { ...patchset.meta },
-    passthroughPatches,
-    policyByWayId,
+    way_ids: requireIntegerArray(normalizedSelector.way_ids, `${label} selector.way_ids`, { minLength: 1 }),
+    node_ids: requireIntegerArray(normalizedSelector.node_ids, `${label} selector.node_ids`, { minLength: 2 }),
   };
 }
 
 
-export function policyForWay(editorState, wayId) {
-  return editorState.policyByWayId.get(Number(wayId)) || defaultWayPolicy();
+function normalizePolicyObject(policy, label) {
+  const normalizedPolicy = requirePlainObject(policy, `${label} policy`);
+  const next = defaultWayPolicy();
+  let seen = 0;
+  for (const [key, value] of Object.entries(normalizedPolicy)) {
+    if (key === "routing_state") {
+      next.routingState = requireRoutingState(value, `${label} policy.routing_state`);
+      seen += 1;
+    } else if (key === "bikeability") {
+      next.bikeability = requireBikeability(value, `${label} policy.bikeability`);
+      seen += 1;
+    } else if (key === "bicycle_direction") {
+      next.bicycleDirection = requireBicycleDirection(value, `${label} policy.bicycle_direction`);
+      seen += 1;
+    } else if (key === "unavailable_until") {
+      next.unavailableUntil = requireUnavailableUntil(value, `${label} policy.unavailable_until`);
+      seen += 1;
+    } else {
+      throw new Error(`${label} policy contains unsupported field ${key}`);
+    }
+  }
+  if (seen === 0) {
+    throw new Error(`${label} policy must contain at least one policy field`);
+  }
+  return next;
 }
 
 
-export function setWayPolicy(editorState, wayId, nextPolicy) {
+function featureSelector(feature) {
+  const wayIds = requireIntegerArray(feature?.properties?.way_ids, "Contig feature way_ids", { minLength: 1 });
+  const nodeIds = requireIntegerArray(feature?.properties?.node_ids, "Contig feature node_ids", { minLength: 2 });
+  return {
+    way_ids: wayIds,
+    node_ids: nodeIds,
+  };
+}
+
+
+function featureContigId(feature) {
+  return Number(feature?.properties?.contig_id);
+}
+
+
+function normalizeWayIds(wayIds) {
+  return [...wayIds].map((value) => Number(value)).sort((a, b) => a - b);
+}
+
+
+function selectorEdgeKeys(selector) {
+  const keys = [];
+  for (let index = 0; index < selector.node_ids.length - 1; index += 1) {
+    const firstId = Number(selector.node_ids[index]);
+    const secondId = Number(selector.node_ids[index + 1]);
+    const key = firstId < secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
+    keys.push(key);
+  }
+  return keys;
+}
+
+
+function buildFeatureLookupByEdge(featureById) {
+  const byEdge = new Map();
+  for (const feature of featureById.values()) {
+    const selector = featureSelector(feature);
+    for (const key of selectorEdgeKeys(selector)) {
+      if (!byEdge.has(key)) {
+        byEdge.set(key, []);
+      }
+      byEdge.get(key).push(feature);
+    }
+  }
+  return byEdge;
+}
+
+
+function selectorWayIdSet(selector) {
+  return new Set(normalizeWayIds(selector.way_ids));
+}
+
+
+function selectorsShareWayIds(leftSelector, rightSelector) {
+  const leftWayIds = selectorWayIdSet(leftSelector);
+  return normalizeWayIds(rightSelector.way_ids).some((wayId) => leftWayIds.has(wayId));
+}
+
+
+function resolveFeaturesForSelector(selector, featureById, label) {
+  const byEdge = buildFeatureLookupByEdge(featureById);
+  const matches = [];
+  let previousContigId = null;
+  for (const key of selectorEdgeKeys(selector)) {
+    const candidateFeatures = (byEdge.get(key) ?? [])
+      .filter((feature) => selectorsShareWayIds(selector, featureSelector(feature)));
+    if (candidateFeatures.length === 0) {
+      throw new Error(`${label} selector no longer matches the current graph`);
+    }
+    if (candidateFeatures.length > 1) {
+      throw new Error(`${label} selector matches multiple current contigs`);
+    }
+    const feature = candidateFeatures[0];
+    const contigId = featureContigId(feature);
+    if (previousContigId === contigId) {
+      continue;
+    }
+    matches.push(feature);
+    previousContigId = contigId;
+  }
+  return matches;
+}
+
+
+function resolveFeatureForSelector(selector, featureById, label) {
+  const targetForward = JSON.stringify(selector.node_ids);
+  const targetReverse = JSON.stringify([...selector.node_ids].reverse());
+  const targetWayIds = JSON.stringify(normalizeWayIds(selector.way_ids));
+  const matches = [];
+  for (const feature of featureById.values()) {
+    const featureResolvedSelector = featureSelector(feature);
+    const signature = JSON.stringify(featureResolvedSelector.node_ids);
+    if (signature !== targetForward && signature !== targetReverse) {
+      continue;
+    }
+    if (JSON.stringify(normalizeWayIds(featureResolvedSelector.way_ids)) !== targetWayIds) {
+      continue;
+    }
+    matches.push(feature);
+  }
+  if (matches.length === 0) {
+    throw new Error(`${label} selector no longer matches the current graph`);
+  }
+  if (matches.length > 1) {
+    throw new Error(`${label} selector matches multiple current contigs`);
+  }
+  return matches[0];
+}
+
+
+function routePolicyRuleFromLegacyPatch(patch, featureById) {
+  const managedPatch = splitManagedPatch(patch);
+  const nodeIds = requireIntegerArray(managedPatch.node_ids, `Patch ${patch.id || "(unnamed)"} node_ids`, { minLength: 2 });
+  const tempFeature = resolveFeatureForSelector(
+    { way_ids: featureWayIdsForNodeSignature(nodeIds, featureById), node_ids: nodeIds },
+    featureById,
+    `Patch ${patch.id || "(unnamed)"}`
+  );
+  return {
+    id: String(managedPatch.id),
+    selector: featureSelector(tempFeature),
+    policy: compactPolicy(applyLegacyManagedPatch(defaultWayPolicy(), managedPatch)),
+  };
+}
+
+
+function featureWayIdsForNodeSignature(nodeIds, featureById) {
+  const matches = [];
+  for (const feature of featureById.values()) {
+    const selector = featureSelector(feature);
+    const signature = JSON.stringify(selector.node_ids);
+    const reversed = JSON.stringify([...selector.node_ids].reverse());
+    const target = JSON.stringify(nodeIds);
+    if (signature === target || reversed === target) {
+      matches.push(selector.way_ids);
+    }
+  }
+  if (matches.length > 1) {
+    throw new Error(`Legacy patch selector matches multiple current contigs`);
+  }
+  if (matches.length === 1) {
+    return matches[0];
+  }
+  throw new Error(`Legacy patch selector no longer matches the current graph`);
+}
+
+
+function compactPolicy(policy) {
+  const compact = {};
+  if (policy.routingState !== "default") {
+    compact.routing_state = policy.routingState;
+  }
+  if (policy.bikeability != null) {
+    compact.bikeability = policy.bikeability;
+  }
+  if (policy.bicycleDirection !== "both") {
+    compact.bicycle_direction = policy.bicycleDirection;
+  }
+  if (policy.unavailableUntil != null) {
+    compact.unavailable_until = policy.unavailableUntil;
+  }
+  return compact;
+}
+
+
+function hashSelector(selector) {
+  const text = JSON.stringify({
+    way_ids: normalizeWayIds(selector.way_ids),
+    node_ids: selector.node_ids.map((value) => Number(value)),
+  });
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
+}
+
+
+function generatedRuleIdForSelector(selector) {
+  return `route-policy-path-${hashSelector(selector)}`;
+}
+
+
+function derivedRuleIdForSplitRule(ruleId, selector) {
+  return `${ruleId}--${hashSelector(selector)}`;
+}
+
+
+function ruleIdForContig(editorState, contigId, selector) {
+  return editorState.ruleIdByContigId.get(Number(contigId)) || generatedRuleIdForSelector(selector);
+}
+
+
+function buildRulesFromDocument(rawDocument, featureById) {
+  const meta = rawDocument.meta;
+  if (meta.asset_kind === "route_policy") {
+    return rawDocument.rules.map((rule, index) => ({
+      id: String(rule.id),
+      selector: normalizeSelector(rule.selector, `Rule ${rule.id || index}`),
+      policy: normalizePolicyObject(rule.policy, `Rule ${rule.id || index}`),
+    }));
+  }
+  if (meta.asset_kind === "map_patchset") {
+    if (!Array.isArray(rawDocument.patches)) {
+      throw new Error("Patchset must contain a patches array");
+    }
+    return rawDocument.patches.map((patch) => routePolicyRuleFromLegacyPatch(patch, featureById));
+  }
+  throw new Error(`Unsupported editor policy document asset kind ${meta.asset_kind}`);
+}
+
+
+export function normalizeRoutePolicyDocument(rawDocument, featureById = new Map()) {
+  const document = requireRoutePolicyDocument(
+    rawDocument?.meta?.asset_kind === "route_policy"
+      ? rawDocument
+      : rawDocument?.meta?.asset_kind === "map_patchset"
+        ? {
+            meta: {
+              asset_kind: "route_policy",
+              asset_id: rawDocument.meta.patchset_id || "migrated-route-policy",
+              description: "Migrated from legacy contig tag patchset.",
+            },
+            rules: buildRulesFromDocument(rawDocument, featureById),
+          }
+        : rawDocument
+  );
+
+  const policyByContigId = new Map();
+  const ruleIdByContigId = new Map();
+  for (const rule of buildRulesFromDocument(document, featureById)) {
+    const features = resolveFeaturesForSelector(rule.selector, featureById, `Rule ${rule.id}`);
+    const isSplitAcrossContigs = features.length > 1;
+    for (const feature of features) {
+      const contigId = featureContigId(feature);
+      if (policyByContigId.has(contigId)) {
+        throw new Error(`Multiple route policy rules resolve to contig ${contigId}`);
+      }
+      policyByContigId.set(contigId, rule.policy);
+      ruleIdByContigId.set(
+        contigId,
+        isSplitAcrossContigs
+          ? derivedRuleIdForSplitRule(rule.id, featureSelector(feature))
+          : rule.id,
+      );
+    }
+  }
+
+  return {
+    meta: { ...document.meta },
+    policyByContigId,
+    ruleIdByContigId,
+  };
+}
+
+
+export const normalizePatchset = normalizeRoutePolicyDocument;
+
+
+export function policyForContig(editorState, contigId) {
+  return editorState.policyByContigId.get(Number(contigId)) || defaultWayPolicy();
+}
+
+
+export function setContigPolicy(editorState, contigId, nextPolicy) {
   const normalized = {
     routingState: normalizeRoutingState(nextPolicy.routingState),
     bikeability: normalizeBikeability(nextPolicy.bikeability),
@@ -231,52 +471,33 @@ export function setWayPolicy(editorState, wayId, nextPolicy) {
     normalized.bicycleDirection === "both" &&
     normalized.unavailableUntil == null
   ) {
-    editorState.policyByWayId.delete(Number(wayId));
+    editorState.policyByContigId.delete(Number(contigId));
+    editorState.ruleIdByContigId.delete(Number(contigId));
     return;
   }
-  editorState.policyByWayId.set(Number(wayId), normalized);
+  editorState.policyByContigId.set(Number(contigId), normalized);
 }
 
 
-function managedPatchForWay(wayId, policy, nodeIds = []) {
-  const set = {};
-  if (policy.routingState !== "default") {
-    set[POLICY_TAGS.routingState] = policy.routingState;
-  }
-  if (policy.bikeability != null) {
-    set[POLICY_TAGS.bikeability] = String(policy.bikeability);
-  }
-  if (policy.bicycleDirection !== "both") {
-    set[POLICY_TAGS.bicycleDirection] = policy.bicycleDirection;
-  }
-  if (policy.unavailableUntil != null) {
-    set[POLICY_TAGS.unavailableUntil] = policy.unavailableUntil;
-  }
-  return {
-    id: `editor-policy-contig-${wayId}`,
-    op: "update_contig_tags",
-    contig_id: Number(wayId),
-    node_ids: [...nodeIds],
-    set,
-  };
-}
-
-
-export function buildPatchsetDocument(editorState, featureById = new Map()) {
-  const patches = [...editorState.passthroughPatches];
-  for (const [wayId, policy] of [...editorState.policyByWayId.entries()].sort((a, b) => a[0] - b[0])) {
-    const feature = featureById.get(Number(wayId));
+export function buildRoutePolicyDocument(editorState, featureById = new Map()) {
+  const rules = [];
+  for (const [contigId, policy] of [...editorState.policyByContigId.entries()].sort((a, b) => a[0] - b[0])) {
+    const feature = featureById.get(Number(contigId));
     if (!feature) {
-      throw new Error(`Current graph is missing contig ${wayId}; rebuild editor assets before exporting patches`);
+      throw new Error(`Current graph is missing contig ${contigId}; rebuild editor assets before exporting route policy`);
     }
-    const nodeIds = feature.properties?.node_ids;
-    if (!Array.isArray(nodeIds) || nodeIds.length < 2) {
-      throw new Error(`Contig ${wayId} is missing a valid node_ids signature; rebuild editor assets before exporting patches`);
-    }
-    patches.push(managedPatchForWay(wayId, policy, nodeIds));
+    const selector = featureSelector(feature);
+    rules.push({
+      id: ruleIdForContig(editorState, contigId, selector),
+      selector,
+      policy: compactPolicy(policy),
+    });
   }
   return {
     meta: { ...editorState.meta },
-    patches,
+    rules,
   };
 }
+
+
+export const buildPatchsetDocument = buildRoutePolicyDocument;

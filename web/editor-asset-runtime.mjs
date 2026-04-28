@@ -9,11 +9,11 @@ async function fetchJson(url, init) {
   return await response.json();
 }
 
-function canonicalPatchFilename(path) {
+function canonicalRoutePolicyFilename(path) {
   const parts = path.split("/");
   const filename = parts[parts.length - 1];
   if (!filename) {
-    throw new Error(`Editor manifest has invalid meta.patchset_path: ${path}`);
+    throw new Error(`Editor manifest has invalid meta.route_policy_path: ${path}`);
   }
   return filename;
 }
@@ -22,15 +22,15 @@ export function buildEditorAssetUrls(editorManifest, editorManifestUrl, pageUrl 
   const waysUrl = new URL(editorManifest.editor.network_path, editorManifestUrl);
   waysUrl.searchParams.set("v", editorManifest.editor.network_version);
 
-  const patchsetPath = editorManifest.meta.patchset_path;
-  const patchesUrl = new URL(`./${patchsetPath}`, pageUrl);
-  patchesUrl.searchParams.set("v", editorManifest.meta.patchset_digest);
+  const routePolicyPath = editorManifest.meta.route_policy_path;
+  const routePolicyUrl = new URL(`./${routePolicyPath}`, pageUrl);
+  routePolicyUrl.searchParams.set("v", editorManifest.meta.route_policy_digest);
 
   return {
-    patchsetPath,
-    patchsetFilename: canonicalPatchFilename(patchsetPath),
+    routePolicyPath,
+    routePolicyFilename: canonicalRoutePolicyFilename(routePolicyPath),
     waysUrl,
-    patchesUrl,
+    routePolicyUrl,
   };
 }
 
@@ -39,15 +39,15 @@ export async function loadEditorBundle({ editorManifestUrl, validateEditorManife
     await fetchJson(editorManifestUrl, { cache: "no-store" }),
   );
   const assetUrls = buildEditorAssetUrls(editorManifest, editorManifestUrl, pageUrl);
-  const [waysGeojson, patchset] = await Promise.all([
+  const [waysGeojson, routePolicy] = await Promise.all([
     fetchJson(assetUrls.waysUrl),
-    fetchJson(assetUrls.patchesUrl),
+    fetchJson(assetUrls.routePolicyUrl),
   ]);
   return {
     editorManifest,
     assetUrls,
     waysGeojson,
-    patchset,
+    routePolicy,
   };
 }
 

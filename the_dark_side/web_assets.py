@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .asset_contracts import load_required_elevation_asset, load_required_patchset
+from .asset_contracts import load_required_elevation_asset
 from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .karura_common import (
@@ -98,15 +98,17 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
         )
     return {"type": "FeatureCollection", "meta": meta or {}, "features": features}
 
-
-def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
-    patch_snapshot = load_required_patchset(editor_patches_json, label="patchset file")
+def build_editor_graph_payload_from_map(
+    *,
+    editor_map_payload: dict,
+    editor_map_json: Path,
+    route_policy: dict | None = None,
+) -> tuple[dict, dict]:
     editor_graph_payload = build_contigs(
         editor_map_payload,
         source_map=repo_rel(editor_map_json),
-        patchset=patch_snapshot,
-        patchset_path=repo_rel(editor_patches_json),
         include_way=include_editor_way,
+        route_policy=route_policy,
         graph_mode="editor",
     )
     editor_network = network_geojson(
@@ -115,18 +117,17 @@ def build_editor_graph_payload_from_map(*, editor_map_payload: dict, editor_map_
             "graph_asset_id": editor_graph_payload["meta"]["asset_id"],
             "graph_mode": editor_graph_payload["meta"]["graph_mode"],
             "source_map_asset_id": editor_graph_payload["meta"]["source_asset_id"],
-            "patchset_id": editor_graph_payload["meta"].get("patchset_id"),
         },
     )
     return editor_graph_payload, editor_network
 
 
-def build_editor_graph_payload(*, editor_map_json: Path, editor_patches_json: Path) -> tuple[dict, dict]:
+def build_editor_graph_payload(*, editor_map_json: Path, route_policy: dict | None = None) -> tuple[dict, dict]:
     editor_map = load_map(editor_map_json)
     return build_editor_graph_payload_from_map(
         editor_map_payload=editor_map.to_dict(),
         editor_map_json=editor_map_json,
-        editor_patches_json=editor_patches_json,
+        route_policy=route_policy,
     )
 
 

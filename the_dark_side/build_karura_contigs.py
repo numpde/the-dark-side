@@ -12,28 +12,34 @@ from math import asin, cos, radians, sin, sqrt
 from pathlib import Path
 from typing import Any
 
-from .asset_contracts import load_required_patchset
+from .asset_contracts import load_required_route_policy
 from .download_karura_map import load_map
 from .karura_common import (
     CONTIGS_JSON as DEFAULT_OUT_JSON,
-    LOCAL_BICYCLE_DIRECTION_TAG,
-    LOCAL_BIKEABILITY_TAG,
-    LOCAL_ROUTING_STATE_TAG,
-    LOCAL_UNAVAILABLE_UNTIL_TAG,
-    MAP_PATCHES_JSON,
+    ROUTE_POLICY_JSON,
+    include_baseline_way,
     include_ride_way,
-    parse_iso_date,
     print_json_document,
     repo_rel,
     resolve_map_json,
     write_json_document,
+)
+from .route_policy import (
+    apply_route_policy_to_edge_graph,
+    build_route_policy_bindings,
+    contig_tags_for_segments,
+    edge_policy_signature,
+    extract_policy_tags,
+    include_way_in_policy_candidate_graph,
+    merge_policy_tags,
+    selected_way_ids,
 )
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--map-json", type=Path)
-    parser.add_argument("--patches-json", type=Path, default=MAP_PATCHES_JSON)
+    parser.add_argument("--route-policy-json", type=Path, default=ROUTE_POLICY_JSON)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUT_JSON)
     return parser.parse_args()
 
@@ -86,6 +92,7 @@ def build_edge_graph(
                     "way_ids": set(),
                     "highway_types": Counter(),
                     "way_names": set(),
+                    "tags": {},
                 }
             edge = edges[key]
             edge["way_ids"].add(way_id)
@@ -93,6 +100,11 @@ def build_edge_graph(
                 edge["highway_types"][tags["highway"]] += 1
             if tags.get("name"):
                 edge["way_names"].add(tags["name"])
+            edge["tags"] = merge_policy_tags(
+                edge["tags"],
+                extract_policy_tags(tags),
+                label=f"source map edge {first_id}->{second_id}",
+            )
             adjacency[first_id].add(second_id)
             adjacency[second_id].add(first_id)
 
@@ -132,93 +144,9 @@ def contig_record(
         "way_ids": sorted(way_ids),
         "way_names": sorted(way_names),
         "highway_types": dict(sorted(highway_types.items())),
-        "tags": {},
+        "tags": contig_tags_for_segments(segment_pairs, edge_graph),
         "bounds": edge_bounds(nodes, path_node_ids),
     }
-
-def validate_contig_policy_patch(patch: dict[str, Any]) -> None:
-    patch_label = str(patch.get("id", f"contig-{patch.get('contig_id', '?')}"))
-    patch_set = patch.get("set")
-    if patch_set is not None and (not isinstance(patch_set, dict) or isinstance(patch_set, list)):
-        raise ValueError(f"patch {patch_label} has invalid set payload; expected object")
-    patch_remove = patch.get("remove")
-    if patch_remove is not None and (
-        not isinstance(patch_remove, list) or any(not isinstance(item, str) for item in patch_remove)
-    ):
-        raise ValueError(f"patch {patch_label} has invalid remove payload; expected array of strings")
-
-    for key, value in (patch_set or {}).items():
-        if key == LOCAL_ROUTING_STATE_TAG and value not in {"include", "exclude"}:
-            raise ValueError(f"patch {patch_label} has invalid {LOCAL_ROUTING_STATE_TAG} value {value!r}")
-        if key == LOCAL_BIKEABILITY_TAG:
-            try:
-                numeric = int(str(value))
-            except ValueError as error:
-                raise ValueError(f"patch {patch_label} has invalid {LOCAL_BIKEABILITY_TAG} value {value!r}") from error
-            if numeric < 1 or numeric > 5:
-                raise ValueError(f"patch {patch_label} has invalid {LOCAL_BIKEABILITY_TAG} value {value!r}")
-        if key == LOCAL_BICYCLE_DIRECTION_TAG and value not in {"both", "forward", "backward"}:
-            raise ValueError(f"patch {patch_label} has invalid {LOCAL_BICYCLE_DIRECTION_TAG} value {value!r}")
-        if key == LOCAL_UNAVAILABLE_UNTIL_TAG and parse_iso_date(str(value)) is None:
-            raise ValueError(f"patch {patch_label} has invalid {LOCAL_UNAVAILABLE_UNTIL_TAG} value {value!r}")
-
-
-def apply_contig_policy_patchset(contig_graph: dict, patchset: dict[str, Any]) -> tuple[list[str], str]:
-    by_id = {int(contig["id"]): contig for contig in contig_graph["contigs"]}
-    by_signature = {}
-    for contig in contig_graph["contigs"]:
-        signature = tuple(int(node_id) for node_id in contig["node_ids"])
-        by_signature[signature] = contig
-        by_signature[tuple(reversed(signature))] = contig
-    applied_patch_ids: list[str] = []
-
-    for patch in patchset.get("patches", []):
-        if not patch.get("enabled", True):
-            continue
-        if patch.get("op") != "update_contig_tags":
-            continue
-        validate_contig_policy_patch(patch)
-
-        contig = None
-        node_ids = patch.get("node_ids")
-        if node_ids:
-            contig = by_signature.get(tuple(int(node_id) for node_id in node_ids))
-            if contig is None:
-                raise ValueError(
-                    f"cannot retag contig {patch['contig_id']}; node_ids signature no longer matches current graph"
-                )
-        else:
-            contig = by_id.get(int(patch["contig_id"]))
-        if contig is None:
-            raise ValueError(f"cannot retag missing contig {patch['contig_id']}")
-
-        tags = dict(contig.get("tags", {}))
-        for key in patch.get("remove", []):
-            tags.pop(str(key), None)
-        for key, value in patch.get("set", {}).items():
-            tags[str(key)] = str(value)
-        contig["tags"] = tags
-        applied_patch_ids.append(str(patch["id"]))
-
-    patchset_id = str(patchset["meta"]["patchset_id"])
-    return applied_patch_ids, patchset_id
-
-
-def contig_patch_digest(patchset_id: str, patchset: dict[str, Any]) -> str:
-    applied = [
-        patch
-        for patch in patchset.get("patches", [])
-        if patch.get("enabled", True) and patch.get("op") == "update_contig_tags"
-    ]
-    canonical = json.dumps(
-        {
-            "patchset_id": patchset_id,
-            "patches": applied,
-        },
-        sort_keys=True,
-        separators=(",", ":"),
-    )
-    return hashlib.sha1(canonical.encode("utf-8")).hexdigest()[:12]
 
 
 def walk_contig(
@@ -291,13 +219,51 @@ def build_contigs(
     payload: dict,
     source_map: str,
     *,
-    patchset: dict[str, Any] | None = None,
-    patchset_path: str | None = None,
     include_way=include_ride_way,
+    route_policy: dict[str, Any] | None = None,
     graph_mode: str = "ride",
 ) -> dict:
-    nodes, edge_graph, adjacency = build_edge_graph(payload, include_way=include_way)
-    crossings = {node_id for node_id, neighbors in adjacency.items() if len(neighbors) != 2}
+    effective_include_way = include_way
+    applied_rule_ids: list[str] = []
+    if route_policy is not None:
+        selected = selected_way_ids(route_policy)
+
+        def base_include_for_tags(way_id: int, tags: dict[str, str]) -> bool:
+            try:
+                return bool(include_way(way_id, tags))
+            except TypeError:
+                return bool(include_way(tags))
+
+        def effective_include_way(way_id: int, tags: dict[str, str]) -> bool:
+            return include_way_in_policy_candidate_graph(
+                way_id,
+                tags,
+                selected_way_ids=selected,
+                base_include=base_include_for_tags(way_id, tags),
+            )
+
+    nodes, edge_graph, _ = build_edge_graph(payload, include_way=effective_include_way)
+    if route_policy is not None:
+        applied_rule_ids = apply_route_policy_to_edge_graph(route_policy, edge_graph)
+
+    adjacency: dict[int, set[int]] = defaultdict(set)
+    for key, edge in edge_graph.items():
+        first_id, second_id = edge["node_ids"]
+        adjacency[first_id].add(second_id)
+        adjacency[second_id].add(first_id)
+
+    crossings: set[int] = set()
+    for node_id, neighbors in adjacency.items():
+        if len(neighbors) != 2:
+            crossings.add(node_id)
+            continue
+        neighbor_list = sorted(neighbors)
+        signatures = {
+            edge_policy_signature(edge_graph[edge_key(node_id, neighbor_id)])
+            for neighbor_id in neighbor_list
+        }
+        if len(signatures) != 1:
+            crossings.add(node_id)
     visited: set[tuple[int, int]] = set()
     contigs: list[dict] = []
     contig_id = 1
@@ -370,19 +336,12 @@ def build_contigs(
             "edge_count": len(edge_graph),
             "node_count": len(nodes),
             "graph_mode": graph_mode,
+            "applied_route_policy_rule_ids": applied_rule_ids,
         },
         "nodes": {str(node_id): node for node_id, node in sorted(nodes.items())},
         "crossings": crossing_nodes,
         "contigs": contigs,
     }
-
-    if patchset is not None:
-        applied_patch_ids, patchset_id = apply_contig_policy_patchset(contig_graph, patchset)
-        contig_graph["meta"]["patchset_id"] = patchset_id
-        contig_graph["meta"]["patches_path"] = patchset_path
-        contig_graph["meta"]["applied_contig_patch_ids"] = applied_patch_ids
-        patch_digest = contig_patch_digest(patchset_id, patchset)
-        contig_graph["meta"]["contig_patchset_digest"] = patch_digest
 
     return contig_graph
 
@@ -391,12 +350,18 @@ def main() -> None:
     args = parse_args()
     map_json = args.map_json or resolve_map_json()
     payload = load_map(map_json).to_dict()
-    patchset = load_required_patchset(args.patches_json, label="patchset file")
+    route_policy = load_required_route_policy(args.route_policy_json, label="route policy file")
     contig_graph = build_contigs(
         payload,
         source_map=repo_rel(map_json),
-        patchset=patchset,
-        patchset_path=repo_rel(args.patches_json),
+        include_way=include_baseline_way,
+        route_policy=route_policy,
+    )
+    bindings = build_route_policy_bindings(route_policy, contig_graph)
+    contig_graph = apply_route_policy_bindings(
+        contig_graph,
+        bindings,
+        route_policy_path=repo_rel(args.route_policy_json),
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     write_json_document(args.output, contig_graph, sort_keys=True)
@@ -406,7 +371,7 @@ def main() -> None:
             "contig_count": contig_graph["meta"]["contig_count"],
             "crossing_count": contig_graph["meta"]["crossing_count"],
             "edge_count": contig_graph["meta"]["edge_count"],
-            "applied_contig_patch_count": len(contig_graph["meta"].get("applied_contig_patch_ids", [])),
+            "applied_route_policy_count": len(contig_graph["meta"].get("applied_route_policy_rule_ids", [])),
         }
     )
 

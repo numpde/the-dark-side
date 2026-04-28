@@ -21,7 +21,7 @@
       <h1>Contig editor</h1>
       <div class="topbar-actions">
         <button type="button" id="import-button">Import</button>
-        <button type="button" id="export-button">Export patch file</button>
+        <button type="button" id="export-button">Export route policy</button>
         <input id="import-input" type="file" accept="application/json,.json" hidden />
       </div>
     </header>
@@ -79,13 +79,13 @@
 
     <section class="patch-info">
       <div class="patch-meta">
-        <div><span class="field-label">Loaded patch file</span> <span id="loaded-patch-path">–</span></div>
+        <div><span class="field-label">Loaded route policy</span> <span id="loaded-route-policy-path">–</span></div>
         <div><span class="field-label">Export target</span> <span id="export-target-path">–</span></div>
         <div><span class="field-label">Editor graph</span> <span id="editor-graph-asset">–</span></div>
         <div><span class="field-label">Editor build</span> <span id="editor-generated-at">–</span></div>
-        <div id="export-hint" class="patch-hint">Export downloads a replacement for the canonical patch file.</div>
+        <div id="export-hint" class="patch-hint">Export downloads a replacement for the canonical route policy file.</div>
       </div>
-      <div class="patch-hint">Preview below shows the current export document: the loaded file plus any edits made on this page.</div>
+      <div class="patch-hint">Preview below shows the current export document: the loaded route policy plus any edits made on this page.</div>
       <pre id="patch-preview" class="patch-preview"></pre>
     </section>
   </main>

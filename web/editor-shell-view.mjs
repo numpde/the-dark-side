@@ -29,7 +29,7 @@ export function createEditorShellView({
   const changeCount = requireShellElement("change-count");
   const clearButton = requireShellElement("clear-button");
   const errorBox = requireShellElement("error-box");
-  const loadedPatchPath = requireShellElement("loaded-patch-path");
+  const loadedRoutePolicyPath = requireShellElement("loaded-route-policy-path");
   const exportTargetPath = requireShellElement("export-target-path");
   const editorGraphAsset = requireShellElement("editor-graph-asset");
   const editorGeneratedAt = requireShellElement("editor-generated-at");
@@ -68,10 +68,10 @@ export function createEditorShellView({
   }));
 
   clearButton.addEventListener("click", guard(reportError, "Failed to reset contig policy", onClear));
-  exportButton.addEventListener("click", guard(reportError, "Failed to export patch file", onExport));
+  exportButton.addEventListener("click", guard(reportError, "Failed to export route policy file", onExport));
   importButton.addEventListener("click", guard(reportError, "Failed to open import dialog", () => importInput.click()));
 
-  importInput.addEventListener("change", guardAsync(reportError, "Failed to import patch file", async () => {
+  importInput.addEventListener("change", guardAsync(reportError, "Failed to import route policy file", async () => {
     const [file] = importInput.files || [];
     if (!file) {
       return;
@@ -87,14 +87,14 @@ export function createEditorShellView({
   function update({
     feature,
     policy,
-    loadedPatchLabel,
-    canonicalPatchPath,
-    editorGraphAssetId,
-    editorGeneratedAtText,
-    changedCount,
-    patchDocument,
-    clearDisabled,
-  }) {
+      loadedRoutePolicyLabel,
+      canonicalRoutePolicyPath,
+      editorGraphAssetId,
+      editorGeneratedAtText,
+      changedCount,
+      routePolicyDocument,
+      clearDisabled,
+    }) {
     const disabled = !feature;
 
     wayHeading.textContent = feature
@@ -117,12 +117,12 @@ export function createEditorShellView({
     clearButton.disabled = clearDisabled;
 
     changeCount.textContent = `${changedCount} changed`;
-    loadedPatchPath.textContent = loadedPatchLabel;
-    exportTargetPath.textContent = canonicalPatchPath;
-    exportHint.innerHTML = `Export downloads a replacement for <code>${canonicalPatchPath}</code>.`;
+    loadedRoutePolicyPath.textContent = loadedRoutePolicyLabel;
+    exportTargetPath.textContent = canonicalRoutePolicyPath;
+    exportHint.innerHTML = `Export downloads a replacement for <code>${canonicalRoutePolicyPath}</code>.`;
     editorGraphAsset.textContent = editorGraphAssetId;
     editorGeneratedAt.textContent = editorGeneratedAtText;
-    patchPreview.textContent = `${JSON.stringify(patchDocument, null, 2)}\n`;
+    patchPreview.textContent = `${JSON.stringify(routePolicyDocument, null, 2)}\n`;
   }
 
   return {

@@ -75,14 +75,14 @@ function endpointMarker(lat, lon, label) {
   });
 }
 
-export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureStyle }) {
+export function createEditorMapView({ mapElementId, onSelectContig, resolveFeatureStyle }) {
   let map = null;
   let visibleLayer = null;
   let hitLayer = null;
   let selectedOverlay = null;
   let endpointLayer = null;
-  const wayLayers = new Map();
-  const wayFeatures = new Map();
+  const contigLayers = new Map();
+  const contigFeatures = new Map();
 
   function ensureMap() {
     if (map) {
@@ -101,34 +101,34 @@ export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureS
     return map;
   }
 
-  function featureForWay(wayId) {
-    return wayFeatures.get(Number(wayId));
+  function featureForContig(contigId) {
+    return contigFeatures.get(Number(contigId));
   }
 
-  function getWayFeatures() {
-    return wayFeatures;
+  function getContigFeatures() {
+    return contigFeatures;
   }
 
   function wayStyle(feature) {
     return resolveFeatureStyle(feature);
   }
 
-  function updateWayStyle(wayId) {
-    const layer = wayLayers.get(Number(wayId));
-    const feature = featureForWay(wayId);
+  function updateContigStyle(contigId) {
+    const layer = contigLayers.get(Number(contigId));
+    const feature = featureForContig(contigId);
     if (!layer || !feature) {
       return;
     }
     layer.setStyle(wayStyle(feature));
   }
 
-  function updateAllWayStyles() {
-    for (const wayId of wayLayers.keys()) {
-      updateWayStyle(wayId);
+  function updateAllContigStyles() {
+    for (const contigId of contigLayers.keys()) {
+      updateContigStyle(contigId);
     }
   }
 
-  function renderSelectedWay(wayId) {
+  function renderSelectedContig(contigId) {
     const mapInstance = ensureMap();
     if (selectedOverlay) {
       selectedOverlay.remove();
@@ -137,7 +137,7 @@ export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureS
       endpointLayer.remove();
     }
 
-    const feature = featureForWay(wayId);
+    const feature = featureForContig(contigId);
     if (!feature) {
       selectedOverlay = null;
       endpointLayer = null;
@@ -174,8 +174,8 @@ export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureS
 
   function renderWays(geojson) {
     const mapInstance = ensureMap();
-    wayLayers.clear();
-    wayFeatures.clear();
+    contigLayers.clear();
+    contigFeatures.clear();
     if (visibleLayer) {
       visibleLayer.remove();
     }
@@ -187,9 +187,9 @@ export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureS
       style: wayStyle,
       interactive: false,
       onEachFeature(feature, layer) {
-        const wayId = Number(feature.properties.contig_id);
-        wayLayers.set(wayId, layer);
-        wayFeatures.set(wayId, feature);
+        const contigId = Number(feature.properties.contig_id);
+        contigLayers.set(contigId, layer);
+        contigFeatures.set(contigId, feature);
       },
     }).addTo(mapInstance);
 
@@ -200,19 +200,19 @@ export function createEditorMapView({ mapElementId, onSelectWay, resolveFeatureS
         opacity: 0.01,
       },
       onEachFeature(feature, layer) {
-        const wayId = Number(feature.properties.contig_id);
-        layer.on("click", () => onSelectWay(wayId));
+        const contigId = Number(feature.properties.contig_id);
+        layer.on("click", () => onSelectContig(contigId));
       },
     }).addTo(mapInstance);
     mapInstance.fitBounds(hitLayer.getBounds(), { padding: [24, 24], maxZoom: 16 });
   }
 
   return {
-    featureForWay,
-    getWayFeatures,
-    renderSelectedWay,
+    featureForContig,
+    getContigFeatures,
+    renderSelectedContig,
     renderWays,
-    updateWayStyle,
-    updateAllWayStyles,
+    updateContigStyle,
+    updateAllContigStyles,
   };
 }

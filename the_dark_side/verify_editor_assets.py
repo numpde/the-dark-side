@@ -9,7 +9,13 @@ import re
 from pathlib import Path
 from types import SimpleNamespace
 
-from .asset_contracts import load_required_junction_catalog, load_required_patchset, load_required_json
+from .asset_contracts import (
+    load_required_junction_catalog,
+    load_required_json,
+    load_required_patchset,
+    load_required_route_policy,
+    load_required_route_policy_bindings,
+)
 from .asset_pipeline_cli import add_editor_asset_args
 from .apply_karura_patches import apply_patchset
 from .build_karura_contigs import build_contigs
@@ -30,8 +36,9 @@ from .karura_common import (
     print_json_document,
     repo_rel,
 )
-from .karura_common import include_ride_way
+from .karura_common import include_baseline_way
 from .rebuild_editor_assets import build_editor_manifest, build_frontend_manifest
+from .route_policy import apply_route_policy_bindings, build_route_policy_bindings
 from .verify_helpers import assert_equal, normalized
 from .web_assets import build_editor_graph_payload_from_map
 
@@ -441,12 +448,12 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'await import\(`\./editor-shell-view\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'await import\(`\./runtime-contracts\.mjs\$\{moduleSuffix\}`\)')
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'export function createEditorController\(')
-    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function currentPatchDocument\(')
+    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function currentRoutePolicyDocument\(')
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'function renderShell\(')
-    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function selectWay\(')
+    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function selectContig\(')
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'function updateSelectedPolicy\(')
-    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function exportPatchset\(')
-    assert_regex("web/editor-controller.mjs", editor_controller_js, r'async function importPatchset\(')
+    assert_regex("web/editor-controller.mjs", editor_controller_js, r'function exportRoutePolicy\(')
+    assert_regex("web/editor-controller.mjs", editor_controller_js, r'async function importRoutePolicy\(')
     assert_regex("web/editor-controller.mjs", editor_controller_js, r'async function boot\(')
     assert_not_regex("web/editor-controller.mjs", editor_controller_js, r'function requireElement\(')
     assert_not_regex("web/editor-controller.mjs", editor_controller_js, r'function guard\(')
@@ -468,11 +475,15 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'export async function readJsonFile\(')
     assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'export function downloadJsonDocument\(')
     assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'waysUrl\.searchParams\.set\("v", editorManifest\.editor\.network_version\)')
-    assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'patchesUrl\.searchParams\.set\("v", editorManifest\.meta\.patchset_digest\)')
+    assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'routePolicyUrl\.searchParams\.set\("v", editorManifest\.meta\.route_policy_digest\)')
+    assert_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'const routePolicyPath = editorManifest\.meta\.route_policy_path')
     assert_not_regex("web/editor-asset-runtime.mjs", editor_asset_runtime_js, r'^import .* from "\./')
     editor_state_js = (WEB_GENERATED_DIR.parent / "editor-state.mjs").read_text()
     assert_uses_module_context("web/editor-state.mjs", editor_state_js, "Editor state module")
     assert_regex("web/editor-state.mjs", editor_state_js, r'await import\(`\./editor-policy-contracts\.mjs\$\{moduleSuffix\}`\)')
+    assert_regex("web/editor-state.mjs", editor_state_js, r'function resolveFeaturesForSelector\(')
+    assert_regex("web/editor-state.mjs", editor_state_js, r'function generatedRuleIdForSelector\(')
+    assert_regex("web/editor-state.mjs", editor_state_js, r'function derivedRuleIdForSplitRule\(')
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeRoutingState\(')
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireRoutingState\(')
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeBikeability\(')
@@ -481,6 +492,18 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireBicycleDirection\(')
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function normalizeUnavailableUntil\(')
     assert_not_regex("web/editor-state.mjs", editor_state_js, r'function requireUnavailableUntil\(')
+    assert_not_contains(
+        "web/editor-state.mjs",
+        editor_state_js,
+        'description: "Local route policy resolved onto the current graph during rebuild."',
+    )
+    assert_not_contains(
+        "web/editor-state.mjs",
+        editor_state_js,
+        "editor-policy-contig-${Number(wayId)}",
+    )
+    assert_not_contains("web/editor-state.mjs", editor_state_js, "export const policyForWay =")
+    assert_not_contains("web/editor-state.mjs", editor_state_js, "export const setWayPolicy =")
     assert_uses_module_context(
         "web/editor-policy-contracts.mjs",
         editor_policy_contracts_js,
@@ -665,24 +688,30 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_not_regex("web/route-planner.mjs", route_planner_js, r'^import .* from "\./')
 
 
-def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict]:
+def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, dict, dict, dict]:
     baseline_map = load_map(args.map_json)
-    patchset = load_required_patchset(args.patches_json, label="patchset file")
+    patchset = load_required_patchset(args.map_patches_json, label="map patchset file")
     expected_patched_map = apply_patchset(
         baseline_map,
         patchset=patchset,
         source_map=repo_rel(args.map_json),
-        patchset_path=repo_rel(args.patches_json),
+        patchset_path=repo_rel(args.map_patches_json),
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     ).to_dict()
+    route_policy = load_required_route_policy(args.route_policy_json, label="route policy file")
     expected_contigs = build_contigs(
         expected_patched_map,
         source_map=repo_rel(args.patched_map_json),
-        patchset=patchset,
-        patchset_path=repo_rel(args.patches_json),
-        include_way=include_ride_way,
+        include_way=include_baseline_way,
+        route_policy=route_policy,
         graph_mode="ride",
+    )
+    expected_route_policy_bindings = build_route_policy_bindings(route_policy, expected_contigs)
+    expected_contigs = apply_route_policy_bindings(
+        expected_contigs,
+        expected_route_policy_bindings,
+        route_policy_path=repo_rel(args.route_policy_json),
     )
     graph = SimpleNamespace(
         asset_id=expected_contigs["meta"]["asset_id"],
@@ -711,11 +740,19 @@ def build_expected(args: argparse.Namespace) -> tuple[dict, dict, dict, dict, di
     expected_editor_graph, expected_editor_network = build_editor_graph_payload_from_map(
         editor_map_payload=expected_patched_map,
         editor_map_json=args.patched_map_json,
-        editor_patches_json=args.patches_json,
+        route_policy=route_policy,
     )
     expected_manifest = build_editor_manifest(args, expected_patched_map, expected_contigs, expected_bindings, expected_editor_graph)
     expected_frontend_manifest = build_frontend_manifest()
-    return expected_patched_map, expected_contigs, expected_bindings, expected_editor_network, expected_manifest, expected_frontend_manifest
+    return (
+        expected_patched_map,
+        expected_contigs,
+        expected_bindings,
+        expected_route_policy_bindings,
+        expected_editor_network,
+        expected_manifest,
+        expected_frontend_manifest,
+    )
 
 
 def verify_editor_assets(args: argparse.Namespace) -> dict:
@@ -726,6 +763,7 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
         expected_patched_map,
         expected_contigs,
         expected_bindings,
+        expected_route_policy_bindings,
         expected_editor_network,
         expected_manifest,
         expected_frontend_manifest,
@@ -733,6 +771,10 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
     actual_patched_map = load_required_json(args.patched_map_json, label="patched map")
     actual_contigs = load_required_json(args.contigs_json, label="contig graph")
     actual_bindings = load_required_json(args.junction_bindings_json, label="junction bindings")
+    actual_route_policy_bindings = load_required_route_policy_bindings(
+        args.route_policy_bindings_json,
+        label="route policy bindings",
+    )
     actual_editor_network = load_required_json(args.output_editor_network, label="editor network")
     actual_manifest = load_required_json(args.output_editor_manifest, label="editor manifest")
     actual_frontend_manifest = load_required_json(output_frontend_manifest, label="frontend manifest")
@@ -743,6 +785,12 @@ def verify_editor_assets(args: argparse.Namespace) -> dict:
         str(args.junction_bindings_json),
         normalized(actual_bindings),
         normalized(expected_bindings),
+        rebuild_hint=rebuild_hint,
+    )
+    assert_equal(
+        str(args.route_policy_bindings_json),
+        normalized(actual_route_policy_bindings),
+        normalized(expected_route_policy_bindings),
         rebuild_hint=rebuild_hint,
     )
     assert_equal(str(args.output_editor_network), actual_editor_network, expected_editor_network, rebuild_hint=rebuild_hint)

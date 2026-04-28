@@ -102,8 +102,8 @@ export function validateEditorManifest(manifest) {
   const meta = requireObject(normalized.meta, "meta", { context });
   const editor = requireObject(normalized.editor, "editor", { context });
   requireString(meta.editor_graph_asset_id, "meta.editor_graph_asset_id", { context });
-  requireString(meta.patchset_path, "meta.patchset_path", { context });
-  requireString(meta.patchset_digest, "meta.patchset_digest", { context });
+  requireString(meta.route_policy_path, "meta.route_policy_path", { context });
+  requireString(meta.route_policy_digest, "meta.route_policy_digest", { context });
   requireString(meta.generated_at, "meta.generated_at", { context });
   requireString(editor.network_path, "editor.network_path", { context });
   requireString(editor.network_version, "editor.network_version", { context });

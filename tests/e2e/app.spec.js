@@ -123,9 +123,9 @@ test("editor shell loads and resolves editor provenance", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: "Contig editor" })).toBeVisible();
   await expect(page.locator("#map")).toBeVisible();
-  await expect(page.locator("#loaded-patch-path")).toHaveText("source/karura-map-patches.json");
-  await expect(page.locator("#export-target-path")).toHaveText("source/karura-map-patches.json");
-  await expect(page.locator("#export-hint")).toContainText("source/karura-map-patches.json");
+  await expect(page.locator("#loaded-route-policy-path")).toHaveText("source/karura-route-policy.json");
+  await expect(page.locator("#export-target-path")).toHaveText("source/karura-route-policy.json");
+  await expect(page.locator("#export-hint")).toContainText("source/karura-route-policy.json");
   await expect(page.locator("#editor-graph-asset")).not.toHaveText("–");
-  await expect(page.locator("#patch-preview")).toContainText("\"patches\":");
+  await expect(page.locator("#patch-preview")).toContainText("\"rules\":");
 });

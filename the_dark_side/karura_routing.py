@@ -98,6 +98,7 @@ class RouteGraph:
     contigs: dict[int, ContigRecord]
     adjacency: dict[int, list[tuple[int, int]]]
     articulation_points: set[int]
+    meta: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -227,6 +228,7 @@ def load_route_graph(path: Path) -> RouteGraph:
         contigs=contigs,
         adjacency=dict(adjacency),
         articulation_points=articulation_points,
+        meta=dict(payload["meta"]),
     )
 
 def resolve_junction_ref(payload: dict, junction_id: str, graph_asset_id: str, bindings_payload: dict) -> JunctionRef:

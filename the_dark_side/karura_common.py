@@ -21,6 +21,7 @@ PATCHED_MAP_JSON = DATA_DIR / "karura_map_patched.json"
 CONTIGS_JSON = DATA_DIR / "karura_contigs.json"
 ELEVATION_JSON = DATA_DIR / "karura_elevation.json"
 JUNCTION_BINDINGS_JSON = DATA_DIR / "karura_junction_bindings.json"
+ROUTE_POLICY_BINDINGS_JSON = DATA_DIR / "karura_route_policy_bindings.json"
 ROUTES_DIR = DATA_DIR / "routes"
 ROUTE_CATALOG_JSON = ROUTES_DIR / "karura-route-catalog.json"
 BENCHMARKS_DIR = DATA_DIR / "benchmarks"
@@ -41,8 +42,9 @@ EDITOR_MANIFEST_JSON = WEB_GENERATED_DIR / "editor-manifest.json"
 APP_MANIFEST_JSON = WEB_GENERATED_DIR / "app-manifest.json"
 FRONTEND_MANIFEST_JSON = WEB_GENERATED_DIR / "frontend-manifest.json"
 MAP_PATCHES_JSON = SOURCE_DIR / "karura-map-patches.json"
+ROUTE_POLICY_JSON = SOURCE_DIR / "karura-route-policy.json"
 CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
-SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, CATALOG_BUILD_JSON)
+SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, ROUTE_POLICY_JSON, CATALOG_BUILD_JSON)
 BOOTSTRAP_MODULE_PATHS = (
     WEB_DIR / "entry-bootstrap.mjs",
     WEB_DIR / "error-presentation.mjs",

@@ -1,7 +1,7 @@
 {
   "type": "FeatureCollection",
   "meta": {
-    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260426T071501461652Z-karura-map-patches-v1-7b1075ee7929",
+    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
     "asset_kind": "contig_graph",
     "source_path": "data/karura_contigs.json"
   },
@@ -416,6 +416,254 @@
       "type": "Feature",
       "properties": {
         "contig_id": 6,
+        "length_m": 261.452,
+        "segment_count": 10,
+        "way_names": [],
+        "way_ids": [
+          196510835
+        ],
+        "endpoint_node_ids": [
+          271326712,
+          2068386670
+        ],
+        "node_ids": [
+          271326712,
+          271326711,
+          2068386629,
+          2068386635,
+          271326710,
+          2847824142,
+          271326709,
+          271326708,
+          271326707,
+          2068386667,
+          2068386670
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1695.0,
+          1692.0,
+          1692.0,
+          1691.0,
+          1689.0,
+          1688.0,
+          1689.0,
+          1686.0,
+          1687.0,
+          1688.0,
+          1688.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.819348,
+            -1.238606
+          ],
+          [
+            36.819504,
+            -1.238972
+          ],
+          [
+            36.819528,
+            -1.239093
+          ],
+          [
+            36.819534,
+            -1.239217
+          ],
+          [
+            36.819506,
+            -1.239438
+          ],
+          [
+            36.819483,
+            -1.239601
+          ],
+          [
+            36.819435,
+            -1.239955
+          ],
+          [
+            36.819348,
+            -1.240252
+          ],
+          [
+            36.819235,
+            -1.240654
+          ],
+          [
+            36.819184,
+            -1.240789
+          ],
+          [
+            36.819101,
+            -1.240823
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 7,
+        "length_m": 28.14,
+        "segment_count": 2,
+        "way_names": [],
+        "way_ids": [
+          196510835
+        ],
+        "endpoint_node_ids": [
+          271326712,
+          747730080
+        ],
+        "node_ids": [
+          271326712,
+          2068386608,
+          747730080
+        ],
+        "tags": {},
+        "elevations_m": [
+          1695.0,
+          1696.0,
+          1696.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.819348,
+            -1.238606
+          ],
+          [
+            36.819347,
+            -1.238509
+          ],
+          [
+            36.819383,
+            -1.238357
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 8,
+        "length_m": 400.024,
+        "segment_count": 13,
+        "way_names": [],
+        "way_ids": [
+          1504844701
+        ],
+        "endpoint_node_ids": [
+          271326712,
+          9923907622
+        ],
+        "node_ids": [
+          271326712,
+          13769413444,
+          13769413445,
+          13769413446,
+          13769413447,
+          13769413448,
+          13769413449,
+          13769413450,
+          13769413451,
+          13769413452,
+          13769413453,
+          13769413454,
+          13769413455,
+          9923907622
+        ],
+        "tags": {},
+        "elevations_m": [
+          1695.0,
+          1697.0,
+          1698.0,
+          1698.0,
+          1698.0,
+          1698.0,
+          1697.0,
+          1697.0,
+          1700.0,
+          1704.0,
+          1706.0,
+          1706.0,
+          1705.0,
+          1705.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.819348,
+            -1.238606
+          ],
+          [
+            36.819246,
+            -1.238453
+          ],
+          [
+            36.81922,
+            -1.23826
+          ],
+          [
+            36.819256,
+            -1.238022
+          ],
+          [
+            36.819382,
+            -1.237834
+          ],
+          [
+            36.819514,
+            -1.237551
+          ],
+          [
+            36.819647,
+            -1.237317
+          ],
+          [
+            36.819642,
+            -1.237083
+          ],
+          [
+            36.81995,
+            -1.236693
+          ],
+          [
+            36.820178,
+            -1.236111
+          ],
+          [
+            36.820395,
+            -1.235782
+          ],
+          [
+            36.820385,
+            -1.235645
+          ],
+          [
+            36.820476,
+            -1.235574
+          ],
+          [
+            36.82046,
+            -1.235408
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 9,
         "length_m": 525.756,
         "segment_count": 22,
         "way_names": [
@@ -583,7 +831,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 7,
+        "contig_id": 10,
         "length_m": 224.601,
         "segment_count": 9,
         "way_names": [],
@@ -669,7 +917,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 8,
+        "contig_id": 11,
         "length_m": 77.956,
         "segment_count": 4,
         "way_names": [],
@@ -687,7 +935,9 @@
           281376836,
           281377327
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1649.0,
           1649.0,
@@ -725,7 +975,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 9,
+        "contig_id": 12,
         "length_m": 47.093,
         "segment_count": 4,
         "way_names": [],
@@ -743,7 +993,9 @@
           281377363,
           281377362
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1649.0,
           1649.0,
@@ -781,7 +1033,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 10,
+        "contig_id": 13,
         "length_m": 136.62,
         "segment_count": 10,
         "way_names": [],
@@ -805,7 +1057,9 @@
           281377375,
           281377376
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1649.0,
           1647.0,
@@ -873,7 +1127,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 11,
+        "contig_id": 14,
         "length_m": 44.771,
         "segment_count": 3,
         "way_names": [],
@@ -925,7 +1179,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 12,
+        "contig_id": 15,
         "length_m": 426.481,
         "segment_count": 24,
         "way_names": [],
@@ -1103,7 +1357,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 13,
+        "contig_id": 16,
         "length_m": 78.356,
         "segment_count": 1,
         "way_names": [],
@@ -1143,7 +1397,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 14,
+        "contig_id": 17,
         "length_m": 479.561,
         "segment_count": 14,
         "way_names": [],
@@ -1263,7 +1517,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 15,
+        "contig_id": 18,
         "length_m": 405.161,
         "segment_count": 18,
         "way_names": [],
@@ -1405,7 +1659,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 16,
+        "contig_id": 19,
         "length_m": 337.028,
         "segment_count": 11,
         "way_names": [],
@@ -1503,7 +1757,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 17,
+        "contig_id": 20,
         "length_m": 386.862,
         "segment_count": 13,
         "way_names": [],
@@ -1613,7 +1867,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 18,
+        "contig_id": 21,
         "length_m": 77.24,
         "segment_count": 3,
         "way_names": [],
@@ -1663,7 +1917,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 19,
+        "contig_id": 22,
         "length_m": 352.768,
         "segment_count": 12,
         "way_names": [],
@@ -1767,7 +2021,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 20,
+        "contig_id": 23,
         "length_m": 341.557,
         "segment_count": 14,
         "way_names": [],
@@ -1883,7 +2137,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 21,
+        "contig_id": 24,
         "length_m": 266.908,
         "segment_count": 1,
         "way_names": [],
@@ -1921,7 +2175,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 22,
+        "contig_id": 25,
         "length_m": 660.13,
         "segment_count": 38,
         "way_names": [
@@ -2183,7 +2437,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 23,
+        "contig_id": 26,
         "length_m": 546.174,
         "segment_count": 12,
         "way_names": [],
@@ -2288,7 +2542,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 24,
+        "contig_id": 27,
         "length_m": 388.579,
         "segment_count": 7,
         "way_names": [],
@@ -2362,7 +2616,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 25,
+        "contig_id": 28,
         "length_m": 139.646,
         "segment_count": 5,
         "way_names": [],
@@ -2424,9 +2678,9 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 26,
-        "length_m": 169.889,
-        "segment_count": 9,
+        "contig_id": 29,
+        "length_m": 112.618,
+        "segment_count": 7,
         "way_names": [
           "Tara Path"
         ],
@@ -2435,7 +2689,7 @@
         ],
         "endpoint_node_ids": [
           747730055,
-          2847949514
+          13768253221
         ],
         "node_ids": [
           747730055,
@@ -2445,11 +2699,11 @@
           2847949518,
           2847949517,
           747730114,
-          2847949516,
-          2847949515,
-          2847949514
+          13768253221
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1659.0,
           1659.0,
@@ -2458,9 +2712,7 @@
           1663.0,
           1664.0,
           1665.0,
-          1673.0,
-          1676.0,
-          1679.0
+          1668.0
         ]
       },
       "geometry": {
@@ -2495,16 +2747,8 @@
             -1.229525
           ],
           [
-            36.827452,
-            -1.229649
-          ],
-          [
-            36.827353,
-            -1.229751
-          ],
-          [
-            36.8272,
-            -1.229817
+            36.827647,
+            -1.229583
           ]
         ]
       }
@@ -2512,31 +2756,29 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 27,
-        "length_m": 101.081,
-        "segment_count": 4,
+        "contig_id": 30,
+        "length_m": 81.424,
+        "segment_count": 3,
         "way_names": [],
         "way_ids": [
           692748282
         ],
         "endpoint_node_ids": [
           747730055,
-          6503768690
+          6503768691
         ],
         "node_ids": [
           747730055,
           6503768692,
           12330726052,
-          6503768691,
-          6503768690
+          6503768691
         ],
         "tags": {},
         "elevations_m": [
           1659.0,
           1659.0,
           1664.0,
-          1670.0,
-          1674.0
+          1670.0
         ]
       },
       "geometry": {
@@ -2557,10 +2799,6 @@
           [
             36.828544,
             -1.229627
-          ],
-          [
-            36.828564,
-            -1.229803
           ]
         ]
       }
@@ -2568,7 +2806,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 28,
+        "contig_id": 31,
         "length_m": 12.341,
         "segment_count": 1,
         "way_names": [
@@ -2608,7 +2846,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 29,
+        "contig_id": 32,
         "length_m": 341.078,
         "segment_count": 17,
         "way_names": [],
@@ -2744,7 +2982,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 30,
+        "contig_id": 33,
         "length_m": 208.334,
         "segment_count": 12,
         "way_names": [],
@@ -2771,7 +3009,9 @@
           2847945656,
           2847945648
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1660.0,
           1662.0,
@@ -2849,7 +3089,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 31,
+        "contig_id": 34,
         "length_m": 3.409,
         "segment_count": 3,
         "way_names": [],
@@ -2899,7 +3139,235 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 32,
+        "contig_id": 35,
+        "length_m": 245.696,
+        "segment_count": 14,
+        "way_names": [
+          "Tara Path"
+        ],
+        "way_ids": [
+          1332841838
+        ],
+        "endpoint_node_ids": [
+          747730076,
+          2847949524
+        ],
+        "node_ids": [
+          747730076,
+          2847949540,
+          2847949539,
+          2847949538,
+          2847949537,
+          2847949536,
+          2847949535,
+          2847949534,
+          747730039,
+          2847949533,
+          2847949532,
+          2847949531,
+          2847949528,
+          2847949527,
+          2847949524
+        ],
+        "tags": {},
+        "elevations_m": [
+          1690.0,
+          1690.0,
+          1686.0,
+          1684.0,
+          1683.0,
+          1682.0,
+          1679.0,
+          1677.0,
+          1675.0,
+          1669.0,
+          1667.0,
+          1666.0,
+          1663.0,
+          1661.0,
+          1660.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.828468,
+            -1.226658
+          ],
+          [
+            36.828401,
+            -1.226739
+          ],
+          [
+            36.828314,
+            -1.227011
+          ],
+          [
+            36.828225,
+            -1.227124
+          ],
+          [
+            36.828214,
+            -1.227157
+          ],
+          [
+            36.828237,
+            -1.227263
+          ],
+          [
+            36.8282,
+            -1.227401
+          ],
+          [
+            36.82819,
+            -1.227544
+          ],
+          [
+            36.828153,
+            -1.22772
+          ],
+          [
+            36.828108,
+            -1.228024
+          ],
+          [
+            36.828074,
+            -1.228245
+          ],
+          [
+            36.828043,
+            -1.228345
+          ],
+          [
+            36.828083,
+            -1.228474
+          ],
+          [
+            36.828127,
+            -1.228614
+          ],
+          [
+            36.828233,
+            -1.228718
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 36,
+        "length_m": 75.801,
+        "segment_count": 5,
+        "way_names": [
+          "Tara Path"
+        ],
+        "way_ids": [
+          1332841838
+        ],
+        "endpoint_node_ids": [
+          747730076,
+          2847949545
+        ],
+        "node_ids": [
+          747730076,
+          2847949541,
+          2847949542,
+          2847949543,
+          2847949544,
+          2847949545
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1690.0,
+          1689.0,
+          1688.0,
+          1687.0,
+          1686.0,
+          1685.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.828468,
+            -1.226658
+          ],
+          [
+            36.828607,
+            -1.226695
+          ],
+          [
+            36.828729,
+            -1.226769
+          ],
+          [
+            36.828831,
+            -1.226805
+          ],
+          [
+            36.82888,
+            -1.226857
+          ],
+          [
+            36.829076,
+            -1.226947
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 37,
+        "length_m": 90.66,
+        "segment_count": 2,
+        "way_names": [],
+        "way_ids": [
+          1504644454
+        ],
+        "endpoint_node_ids": [
+          747730076,
+          12330726051
+        ],
+        "node_ids": [
+          747730076,
+          13768240205,
+          12330726051
+        ],
+        "tags": {},
+        "elevations_m": [
+          1690.0,
+          1684.0,
+          1679.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.828468,
+            -1.226658
+          ],
+          [
+            36.828318,
+            -1.227169
+          ],
+          [
+            36.82844,
+            -1.227424
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 38,
         "length_m": 329.385,
         "segment_count": 14,
         "way_names": [
@@ -3017,111 +3485,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 33,
-        "length_m": 289.592,
-        "segment_count": 12,
-        "way_names": [],
-        "way_ids": [
-          196510835
-        ],
-        "endpoint_node_ids": [
-          747730080,
-          2068386670
-        ],
-        "node_ids": [
-          747730080,
-          2068386608,
-          271326712,
-          271326711,
-          2068386629,
-          2068386635,
-          271326710,
-          2847824142,
-          271326709,
-          271326708,
-          271326707,
-          2068386667,
-          2068386670
-        ],
-        "tags": {},
-        "elevations_m": [
-          1696.0,
-          1696.0,
-          1695.0,
-          1692.0,
-          1692.0,
-          1691.0,
-          1689.0,
-          1688.0,
-          1689.0,
-          1686.0,
-          1687.0,
-          1688.0,
-          1688.0
-        ]
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            36.819383,
-            -1.238357
-          ],
-          [
-            36.819347,
-            -1.238509
-          ],
-          [
-            36.819348,
-            -1.238606
-          ],
-          [
-            36.819504,
-            -1.238972
-          ],
-          [
-            36.819528,
-            -1.239093
-          ],
-          [
-            36.819534,
-            -1.239217
-          ],
-          [
-            36.819506,
-            -1.239438
-          ],
-          [
-            36.819483,
-            -1.239601
-          ],
-          [
-            36.819435,
-            -1.239955
-          ],
-          [
-            36.819348,
-            -1.240252
-          ],
-          [
-            36.819235,
-            -1.240654
-          ],
-          [
-            36.819184,
-            -1.240789
-          ],
-          [
-            36.819101,
-            -1.240823
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "contig_id": 34,
+        "contig_id": 39,
         "length_m": 630.467,
         "segment_count": 5,
         "way_names": [
@@ -3185,7 +3549,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 35,
+        "contig_id": 40,
         "length_m": 1491.999,
         "segment_count": 49,
         "way_names": [],
@@ -3511,7 +3875,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 36,
+        "contig_id": 41,
         "length_m": 79.216,
         "segment_count": 8,
         "way_names": [],
@@ -3593,7 +3957,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 37,
+        "contig_id": 42,
         "length_m": 187.516,
         "segment_count": 6,
         "way_names": [
@@ -3663,7 +4027,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 38,
+        "contig_id": 43,
         "length_m": 129.247,
         "segment_count": 2,
         "way_names": [],
@@ -3707,7 +4071,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 39,
+        "contig_id": 44,
         "length_m": 21.615,
         "segment_count": 1,
         "way_names": [
@@ -3747,7 +4111,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 40,
+        "contig_id": 45,
         "length_m": 297.551,
         "segment_count": 7,
         "way_names": [],
@@ -3821,7 +4185,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 41,
+        "contig_id": 46,
         "length_m": 360.566,
         "segment_count": 1,
         "way_names": [],
@@ -3836,7 +4200,9 @@
           747730094,
           6503768722
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1685.0,
           1690.0
@@ -3859,7 +4225,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 42,
+        "contig_id": 47,
         "length_m": 848.493,
         "segment_count": 11,
         "way_names": [
@@ -3959,7 +4325,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 43,
+        "contig_id": 48,
         "length_m": 188.442,
         "segment_count": 3,
         "way_names": [],
@@ -4009,7 +4375,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 44,
+        "contig_id": 49,
         "length_m": 187.483,
         "segment_count": 1,
         "way_names": [
@@ -4049,7 +4415,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 45,
+        "contig_id": 50,
         "length_m": 158.105,
         "segment_count": 2,
         "way_names": [],
@@ -4093,7 +4459,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 46,
+        "contig_id": 51,
         "length_m": 264.182,
         "segment_count": 6,
         "way_names": [],
@@ -4163,7 +4529,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 47,
+        "contig_id": 52,
         "length_m": 299.861,
         "segment_count": 8,
         "way_names": [],
@@ -4244,7 +4610,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 48,
+        "contig_id": 53,
         "length_m": 24.825,
         "segment_count": 1,
         "way_names": [],
@@ -4282,7 +4648,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 49,
+        "contig_id": 54,
         "length_m": 39.964,
         "segment_count": 1,
         "way_names": [],
@@ -4320,7 +4686,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 50,
+        "contig_id": 55,
         "length_m": 189.948,
         "segment_count": 5,
         "way_names": [],
@@ -4382,7 +4748,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 51,
+        "contig_id": 56,
         "length_m": 215.269,
         "segment_count": 7,
         "way_names": [
@@ -4405,7 +4771,9 @@
           2068437152,
           2068386722
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1692.0,
           1691.0,
@@ -4458,7 +4826,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 52,
+        "contig_id": 57,
         "length_m": 26.018,
         "segment_count": 2,
         "way_names": [],
@@ -4502,7 +4870,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 53,
+        "contig_id": 58,
         "length_m": 14.428,
         "segment_count": 1,
         "way_names": [
@@ -4542,7 +4910,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 54,
+        "contig_id": 59,
         "length_m": 50.003,
         "segment_count": 5,
         "way_names": [],
@@ -4606,7 +4974,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 55,
+        "contig_id": 60,
         "length_m": 171.501,
         "segment_count": 9,
         "way_names": [],
@@ -4692,7 +5060,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 56,
+        "contig_id": 61,
         "length_m": 460.56,
         "segment_count": 18,
         "way_names": [],
@@ -4836,7 +5204,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 57,
+        "contig_id": 62,
         "length_m": 140.763,
         "segment_count": 6,
         "way_names": [
@@ -4906,7 +5274,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 58,
+        "contig_id": 63,
         "length_m": 537.553,
         "segment_count": 14,
         "way_names": [],
@@ -5022,7 +5390,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 59,
+        "contig_id": 64,
         "length_m": 90.395,
         "segment_count": 9,
         "way_names": [],
@@ -5045,7 +5413,9 @@
           2068386431,
           2068386428
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1680.0,
           1679.0,
@@ -5108,7 +5478,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 60,
+        "contig_id": 65,
         "length_m": 183.962,
         "segment_count": 8,
         "way_names": [
@@ -5190,7 +5560,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 61,
+        "contig_id": 66,
         "length_m": 78.963,
         "segment_count": 2,
         "way_names": [],
@@ -5234,7 +5604,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 62,
+        "contig_id": 67,
         "length_m": 171.609,
         "segment_count": 4,
         "way_names": [
@@ -5292,7 +5662,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 63,
+        "contig_id": 68,
         "length_m": 299.402,
         "segment_count": 8,
         "way_names": [],
@@ -5372,7 +5742,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 64,
+        "contig_id": 69,
         "length_m": 375.397,
         "segment_count": 4,
         "way_names": [
@@ -5432,7 +5802,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 65,
+        "contig_id": 70,
         "length_m": 98.647,
         "segment_count": 2,
         "way_names": [
@@ -5478,7 +5848,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 66,
+        "contig_id": 71,
         "length_m": 515.617,
         "segment_count": 20,
         "way_names": [
@@ -5632,7 +6002,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 67,
+        "contig_id": 72,
         "length_m": 16.131,
         "segment_count": 1,
         "way_names": [
@@ -5672,7 +6042,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 68,
+        "contig_id": 73,
         "length_m": 34.415,
         "segment_count": 2,
         "way_names": [
@@ -5690,7 +6060,9 @@
           1554851730,
           7687057397
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1691.0,
           1691.0,
@@ -5718,7 +6090,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 69,
+        "contig_id": 74,
         "length_m": 83.549,
         "segment_count": 4,
         "way_names": [
@@ -5776,7 +6148,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 70,
+        "contig_id": 75,
         "length_m": 74.111,
         "segment_count": 5,
         "way_names": [
@@ -5840,7 +6212,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 71,
+        "contig_id": 76,
         "length_m": 463.183,
         "segment_count": 8,
         "way_names": [],
@@ -5920,7 +6292,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 72,
+        "contig_id": 77,
         "length_m": 169.417,
         "segment_count": 1,
         "way_names": [],
@@ -5958,7 +6330,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 73,
+        "contig_id": 78,
         "length_m": 294.65,
         "segment_count": 4,
         "way_names": [],
@@ -6016,7 +6388,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 74,
+        "contig_id": 79,
         "length_m": 525.27,
         "segment_count": 4,
         "way_names": [
@@ -6074,7 +6446,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 75,
+        "contig_id": 80,
         "length_m": 3.734,
         "segment_count": 1,
         "way_names": [
@@ -6114,7 +6486,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 76,
+        "contig_id": 81,
         "length_m": 48.037,
         "segment_count": 3,
         "way_names": [
@@ -6133,7 +6505,9 @@
           2026570604,
           2068417293
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1671.0,
           1670.0,
@@ -6166,7 +6540,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 77,
+        "contig_id": 82,
         "length_m": 4.654,
         "segment_count": 1,
         "way_names": [
@@ -6206,7 +6580,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 78,
+        "contig_id": 83,
         "length_m": 16.653,
         "segment_count": 1,
         "way_names": [],
@@ -6244,16 +6618,16 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 79,
-        "length_m": 390.313,
-        "segment_count": 20,
+        "contig_id": 84,
+        "length_m": 91.107,
+        "segment_count": 5,
         "way_names": [],
         "way_ids": [
           196510842
         ],
         "endpoint_node_ids": [
           2068386428,
-          2068386820
+          13768277794
         ],
         "node_ids": [
           2068386428,
@@ -6261,22 +6635,7 @@
           2068386419,
           2068386415,
           2068386401,
-          2068386369,
-          2068386361,
-          2068386353,
-          2068386346,
-          2068386338,
-          2068386328,
-          2068386323,
-          2068386318,
-          2068386310,
-          2068386307,
-          2068386301,
-          2068386297,
-          2068386293,
-          2068386287,
-          2068386284,
-          2068386820
+          13768277794
         ],
         "tags": {},
         "elevations_m": [
@@ -6285,22 +6644,7 @@
           1677.0,
           1677.0,
           1681.0,
-          1687.0,
-          1687.0,
-          1687.0,
-          1686.0,
-          1684.0,
-          1682.0,
-          1682.0,
-          1681.0,
-          1681.0,
-          1684.0,
-          1685.0,
-          1687.0,
-          1687.0,
-          1686.0,
-          1686.0,
-          1687.0
+          1685.0
         ]
       },
       "geometry": {
@@ -6327,68 +6671,8 @@
             -1.233257
           ],
           [
-            36.823636,
-            -1.232904
-          ],
-          [
-            36.823561,
-            -1.232785
-          ],
-          [
-            36.823464,
-            -1.232642
-          ],
-          [
-            36.823411,
-            -1.232539
-          ],
-          [
-            36.823303,
-            -1.232369
-          ],
-          [
-            36.823217,
-            -1.232268
-          ],
-          [
-            36.823091,
-            -1.232164
-          ],
-          [
-            36.822948,
-            -1.23208
-          ],
-          [
-            36.822913,
-            -1.232041
-          ],
-          [
-            36.822657,
-            -1.231889
-          ],
-          [
-            36.822582,
-            -1.231825
-          ],
-          [
-            36.822393,
-            -1.231695
-          ],
-          [
-            36.8221,
-            -1.231609
-          ],
-          [
-            36.822009,
-            -1.23156
-          ],
-          [
-            36.821923,
-            -1.231525
-          ],
-          [
-            36.821757,
-            -1.231515
+            36.823798,
+            -1.233098
           ]
         ]
       }
@@ -6396,7 +6680,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 80,
+        "contig_id": 85,
         "length_m": 301.634,
         "segment_count": 10,
         "way_names": [],
@@ -6490,7 +6774,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 81,
+        "contig_id": 86,
         "length_m": 558.657,
         "segment_count": 23,
         "way_names": [],
@@ -6664,7 +6948,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 82,
+        "contig_id": 87,
         "length_m": 67.528,
         "segment_count": 5,
         "way_names": [
@@ -6728,7 +7012,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 83,
+        "contig_id": 88,
         "length_m": 48.525,
         "segment_count": 2,
         "way_names": [],
@@ -6772,7 +7056,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 84,
+        "contig_id": 89,
         "length_m": 109.098,
         "segment_count": 5,
         "way_names": [],
@@ -6834,7 +7118,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 85,
+        "contig_id": 90,
         "length_m": 131.553,
         "segment_count": 7,
         "way_names": [],
@@ -6908,7 +7192,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 86,
+        "contig_id": 91,
         "length_m": 24.138,
         "segment_count": 2,
         "way_names": [],
@@ -6952,7 +7236,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 87,
+        "contig_id": 92,
         "length_m": 56.506,
         "segment_count": 5,
         "way_names": [],
@@ -7014,7 +7298,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 88,
+        "contig_id": 93,
         "length_m": 19.318,
         "segment_count": 2,
         "way_names": [],
@@ -7058,7 +7342,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 89,
+        "contig_id": 94,
         "length_m": 83.378,
         "segment_count": 6,
         "way_names": [],
@@ -7126,7 +7410,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 90,
+        "contig_id": 95,
         "length_m": 22.089,
         "segment_count": 1,
         "way_names": [
@@ -7166,7 +7450,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 91,
+        "contig_id": 96,
         "length_m": 63.033,
         "segment_count": 4,
         "way_names": [],
@@ -7222,7 +7506,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 92,
+        "contig_id": 97,
         "length_m": 70.493,
         "segment_count": 4,
         "way_names": [
@@ -7280,7 +7564,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 93,
+        "contig_id": 98,
         "length_m": 99.932,
         "segment_count": 6,
         "way_names": [
@@ -7350,7 +7634,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 94,
+        "contig_id": 99,
         "length_m": 79.313,
         "segment_count": 6,
         "way_names": [],
@@ -7418,7 +7702,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 95,
+        "contig_id": 100,
         "length_m": 8.796,
         "segment_count": 1,
         "way_names": [],
@@ -7456,9 +7740,139 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 96,
-        "length_m": 607.239,
-        "segment_count": 30,
+        "contig_id": 101,
+        "length_m": 299.206,
+        "segment_count": 16,
+        "way_names": [],
+        "way_ids": [
+          196510842
+        ],
+        "endpoint_node_ids": [
+          2068386820,
+          13768277794
+        ],
+        "node_ids": [
+          2068386820,
+          2068386284,
+          2068386287,
+          2068386293,
+          2068386297,
+          2068386301,
+          2068386307,
+          2068386310,
+          2068386318,
+          2068386323,
+          2068386328,
+          2068386338,
+          2068386346,
+          2068386353,
+          2068386361,
+          2068386369,
+          13768277794
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1687.0,
+          1686.0,
+          1686.0,
+          1687.0,
+          1687.0,
+          1685.0,
+          1684.0,
+          1681.0,
+          1681.0,
+          1682.0,
+          1682.0,
+          1684.0,
+          1686.0,
+          1687.0,
+          1687.0,
+          1687.0,
+          1685.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.821757,
+            -1.231515
+          ],
+          [
+            36.821923,
+            -1.231525
+          ],
+          [
+            36.822009,
+            -1.23156
+          ],
+          [
+            36.8221,
+            -1.231609
+          ],
+          [
+            36.822393,
+            -1.231695
+          ],
+          [
+            36.822582,
+            -1.231825
+          ],
+          [
+            36.822657,
+            -1.231889
+          ],
+          [
+            36.822913,
+            -1.232041
+          ],
+          [
+            36.822948,
+            -1.23208
+          ],
+          [
+            36.823091,
+            -1.232164
+          ],
+          [
+            36.823217,
+            -1.232268
+          ],
+          [
+            36.823303,
+            -1.232369
+          ],
+          [
+            36.823411,
+            -1.232539
+          ],
+          [
+            36.823464,
+            -1.232642
+          ],
+          [
+            36.823561,
+            -1.232785
+          ],
+          [
+            36.823636,
+            -1.232904
+          ],
+          [
+            36.823798,
+            -1.233098
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 102,
+        "length_m": 295.649,
+        "segment_count": 20,
         "way_names": [
           "Kima Trail"
         ],
@@ -7467,7 +7881,7 @@
         ],
         "endpoint_node_ids": [
           2068386820,
-          9923873816
+          13768277790
         ],
         "node_ids": [
           2068386820,
@@ -7490,19 +7904,11 @@
           2068386397,
           2068386409,
           2068386417,
-          2068386446,
-          2068386461,
-          9923907666,
-          2068386475,
-          2068386489,
-          2068386495,
-          2068386497,
-          2068386499,
-          2068386510,
-          2068386514,
-          9923873816
+          13768277790
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1687.0,
           1688.0,
@@ -7524,17 +7930,7 @@
           1697.0,
           1697.0,
           1696.0,
-          1699.0,
-          1700.0,
-          1700.0,
-          1700.0,
-          1701.0,
-          1702.0,
-          1703.0,
-          1704.0,
-          1704.0,
-          1703.0,
-          1702.0
+          1698.0
         ]
       },
       "geometry": {
@@ -7621,48 +8017,8 @@
             -1.233515
           ],
           [
-            36.822294,
-            -1.233783
-          ],
-          [
-            36.821906,
-            -1.234043
-          ],
-          [
-            36.821818,
-            -1.234142
-          ],
-          [
-            36.821608,
-            -1.234378
-          ],
-          [
-            36.821432,
-            -1.234605
-          ],
-          [
-            36.821357,
-            -1.234753
-          ],
-          [
-            36.821326,
-            -1.234852
-          ],
-          [
-            36.821244,
-            -1.235079
-          ],
-          [
-            36.821057,
-            -1.23555
-          ],
-          [
-            36.820956,
-            -1.235696
-          ],
-          [
-            36.820876,
-            -1.235835
+            36.822495,
+            -1.233645
           ]
         ]
       }
@@ -7670,7 +8026,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 97,
+        "contig_id": 103,
         "length_m": 108.718,
         "segment_count": 4,
         "way_names": [],
@@ -7688,7 +8044,9 @@
           9923907665,
           9189127987
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1687.0,
           1683.0,
@@ -7726,7 +8084,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 98,
+        "contig_id": 104,
         "length_m": 72.701,
         "segment_count": 6,
         "way_names": [],
@@ -7794,7 +8152,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 99,
+        "contig_id": 105,
         "length_m": 292.084,
         "segment_count": 9,
         "way_names": [],
@@ -7880,7 +8238,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 100,
+        "contig_id": 106,
         "length_m": 2.363,
         "segment_count": 1,
         "way_names": [
@@ -7920,7 +8278,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 101,
+        "contig_id": 107,
         "length_m": 1248.093,
         "segment_count": 43,
         "way_names": [
@@ -7979,9 +8337,7 @@
           6503767358,
           13075347358
         ],
-        "tags": {
-          "local:routing_state": "include"
-        },
+        "tags": {},
         "elevations_m": [
           1655.0,
           1657.0,
@@ -8214,7 +8570,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 102,
+        "contig_id": 108,
         "length_m": 298.15,
         "segment_count": 6,
         "way_names": [
@@ -8286,9 +8642,9 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 103,
-        "length_m": 580.285,
-        "segment_count": 21,
+        "contig_id": 109,
+        "length_m": 300.466,
+        "segment_count": 9,
         "way_names": [
           "Pipeline Path"
         ],
@@ -8297,7 +8653,7 @@
         ],
         "endpoint_node_ids": [
           2068421873,
-          2847824066
+          2847824077
         ],
         "node_ids": [
           2068421873,
@@ -8309,19 +8665,7 @@
           2847824080,
           2847824079,
           2847824078,
-          2847824077,
-          2847824076,
-          2847824075,
-          2847824074,
-          2847824073,
-          2847824072,
-          2847824071,
-          2847824070,
-          2847824069,
-          2847824062,
-          2847824068,
-          2847824067,
-          2847824066
+          2847824077
         ],
         "tags": {},
         "elevations_m": [
@@ -8334,19 +8678,7 @@
           1681.0,
           1682.0,
           1682.0,
-          1687.0,
-          1688.0,
-          1689.0,
-          1690.0,
-          1690.0,
-          1689.0,
-          1689.0,
-          1688.0,
-          1689.0,
-          1692.0,
-          1693.0,
-          1693.0,
-          1692.0
+          1687.0
         ]
       },
       "geometry": {
@@ -8391,54 +8723,6 @@
           [
             36.826149,
             -1.246928
-          ],
-          [
-            36.825986,
-            -1.246786
-          ],
-          [
-            36.825917,
-            -1.246703
-          ],
-          [
-            36.825596,
-            -1.246469
-          ],
-          [
-            36.825499,
-            -1.246366
-          ],
-          [
-            36.82545,
-            -1.246271
-          ],
-          [
-            36.825404,
-            -1.246215
-          ],
-          [
-            36.825282,
-            -1.246139
-          ],
-          [
-            36.825117,
-            -1.246068
-          ],
-          [
-            36.824637,
-            -1.245635
-          ],
-          [
-            36.824462,
-            -1.245507
-          ],
-          [
-            36.824304,
-            -1.245422
-          ],
-          [
-            36.824217,
-            -1.245357
           ]
         ]
       }
@@ -8446,7 +8730,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 104,
+        "contig_id": 110,
         "length_m": 147.134,
         "segment_count": 4,
         "way_names": [
@@ -8504,25 +8788,23 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 105,
-        "length_m": 338.603,
-        "segment_count": 6,
+        "contig_id": 111,
+        "length_m": 259.565,
+        "segment_count": 4,
         "way_names": [],
         "way_ids": [
           692748290
         ],
         "endpoint_node_ids": [
           2068421886,
-          5927778335
+          6503768719
         ],
         "node_ids": [
           2068421886,
           6503768716,
           6503768717,
           6503768718,
-          6503768719,
-          6503768720,
-          5927778335
+          6503768719
         ],
         "tags": {},
         "elevations_m": [
@@ -8530,9 +8812,7 @@
           1648.0,
           1647.0,
           1647.0,
-          1650.0,
-          1652.0,
-          1654.0
+          1650.0
         ]
       },
       "geometry": {
@@ -8557,14 +8837,6 @@
           [
             36.832913,
             -1.247256
-          ],
-          [
-            36.833398,
-            -1.247216
-          ],
-          [
-            36.833544,
-            -1.247045
           ]
         ]
       }
@@ -8572,7 +8844,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 106,
+        "contig_id": 112,
         "length_m": 77.885,
         "segment_count": 1,
         "way_names": [
@@ -8612,7 +8884,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 107,
+        "contig_id": 113,
         "length_m": 28.452,
         "segment_count": 2,
         "way_names": [],
@@ -8656,7 +8928,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 108,
+        "contig_id": 114,
         "length_m": 75.488,
         "segment_count": 1,
         "way_names": [],
@@ -8671,9 +8943,7 @@
           2639598617,
           8536024877
         ],
-        "tags": {
-          "local:routing_state": "exclude"
-        },
+        "tags": {},
         "elevations_m": [
           1667.0,
           1669.0
@@ -8696,7 +8966,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 109,
+        "contig_id": 115,
         "length_m": 97.648,
         "segment_count": 4,
         "way_names": [
@@ -8754,7 +9024,113 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 110,
+        "contig_id": 116,
+        "length_m": 279.82,
+        "segment_count": 12,
+        "way_names": [
+          "Pipeline Path"
+        ],
+        "way_ids": [
+          280720865
+        ],
+        "endpoint_node_ids": [
+          2847824066,
+          2847824077
+        ],
+        "node_ids": [
+          2847824066,
+          2847824067,
+          2847824068,
+          2847824062,
+          2847824069,
+          2847824070,
+          2847824071,
+          2847824072,
+          2847824073,
+          2847824074,
+          2847824075,
+          2847824076,
+          2847824077
+        ],
+        "tags": {},
+        "elevations_m": [
+          1692.0,
+          1693.0,
+          1693.0,
+          1692.0,
+          1689.0,
+          1688.0,
+          1689.0,
+          1689.0,
+          1690.0,
+          1690.0,
+          1689.0,
+          1688.0,
+          1687.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.824217,
+            -1.245357
+          ],
+          [
+            36.824304,
+            -1.245422
+          ],
+          [
+            36.824462,
+            -1.245507
+          ],
+          [
+            36.824637,
+            -1.245635
+          ],
+          [
+            36.825117,
+            -1.246068
+          ],
+          [
+            36.825282,
+            -1.246139
+          ],
+          [
+            36.825404,
+            -1.246215
+          ],
+          [
+            36.82545,
+            -1.246271
+          ],
+          [
+            36.825499,
+            -1.246366
+          ],
+          [
+            36.825596,
+            -1.246469
+          ],
+          [
+            36.825917,
+            -1.246703
+          ],
+          [
+            36.825986,
+            -1.246786
+          ],
+          [
+            36.826149,
+            -1.246928
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 117,
         "length_m": 120.544,
         "segment_count": 1,
         "way_names": [],
@@ -8792,7 +9168,45 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 111,
+        "contig_id": 118,
+        "length_m": 14.536,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672084
+        ],
+        "endpoint_node_ids": [
+          2847824077,
+          13768348481
+        ],
+        "node_ids": [
+          2847824077,
+          13768348481
+        ],
+        "tags": {},
+        "elevations_m": [
+          1687.0,
+          1687.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.826149,
+            -1.246928
+          ],
+          [
+            36.82603,
+            -1.246982
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 119,
         "length_m": 147.779,
         "segment_count": 9,
         "way_names": [
@@ -8880,7 +9294,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 112,
+        "contig_id": 120,
         "length_m": 148.835,
         "segment_count": 4,
         "way_names": [
@@ -8938,7 +9352,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 113,
+        "contig_id": 121,
         "length_m": 251.671,
         "segment_count": 6,
         "way_names": [],
@@ -9006,7 +9420,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 114,
+        "contig_id": 122,
         "length_m": 228.608,
         "segment_count": 10,
         "way_names": [],
@@ -9030,7 +9444,9 @@
           2847824222,
           2847824221
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1676.0,
           1676.0,
@@ -9098,16 +9514,16 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 115,
-        "length_m": 410.347,
-        "segment_count": 7,
+        "contig_id": 123,
+        "length_m": 383.469,
+        "segment_count": 6,
         "way_names": [],
         "way_ids": [
           280720870
         ],
         "endpoint_node_ids": [
           2847824199,
-          5927778335
+          5927778336
         ],
         "node_ids": [
           2847824199,
@@ -9116,8 +9532,7 @@
           2847824175,
           2847824186,
           2847824184,
-          5927778336,
-          5927778335
+          5927778336
         ],
         "tags": {},
         "elevations_m": [
@@ -9127,8 +9542,7 @@
           1670.0,
           1668.0,
           1662.0,
-          1657.0,
-          1654.0
+          1657.0
         ]
       },
       "geometry": {
@@ -9161,10 +9575,6 @@
           [
             36.833711,
             -1.24687
-          ],
-          [
-            36.833544,
-            -1.247045
           ]
         ]
       }
@@ -9172,7 +9582,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 116,
+        "contig_id": 124,
         "length_m": 110.785,
         "segment_count": 8,
         "way_names": [],
@@ -9252,7 +9662,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 117,
+        "contig_id": 125,
         "length_m": 86.156,
         "segment_count": 1,
         "way_names": [],
@@ -9290,7 +9700,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 118,
+        "contig_id": 126,
         "length_m": 251.089,
         "segment_count": 15,
         "way_names": [],
@@ -9412,7 +9822,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 119,
+        "contig_id": 127,
         "length_m": 27.57,
         "segment_count": 2,
         "way_names": [],
@@ -9428,7 +9838,9 @@
           2847945676,
           6503768711
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1670.0,
           1666.0,
@@ -9456,16 +9868,16 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 120,
-        "length_m": 313.425,
-        "segment_count": 20,
+        "contig_id": 128,
+        "length_m": 191.932,
+        "segment_count": 13,
         "way_names": [],
         "way_ids": [
           280734426
         ],
         "endpoint_node_ids": [
           2847824221,
-          2847945484
+          2847945496
         ],
         "node_ids": [
           2847824221,
@@ -9481,16 +9893,11 @@
           2847945493,
           2847945494,
           2847945495,
-          2847945496,
-          2847945483,
-          2847945497,
-          2847945498,
-          2847945499,
-          2847945500,
-          2847946201,
-          2847945484
+          2847945496
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1683.0,
           1685.0,
@@ -9505,14 +9912,7 @@
           1688.0,
           1688.0,
           1686.0,
-          1683.0,
-          1672.0,
-          1668.0,
-          1667.0,
-          1668.0,
-          1668.0,
-          1669.0,
-          1670.0
+          1683.0
         ]
       },
       "geometry": {
@@ -9573,34 +9973,6 @@
           [
             36.834417,
             -1.245196
-          ],
-          [
-            36.834308,
-            -1.245006
-          ],
-          [
-            36.834114,
-            -1.244912
-          ],
-          [
-            36.834017,
-            -1.244759
-          ],
-          [
-            36.833901,
-            -1.244671
-          ],
-          [
-            36.833865,
-            -1.244607
-          ],
-          [
-            36.83379,
-            -1.244526
-          ],
-          [
-            36.833716,
-            -1.244398
           ]
         ]
       }
@@ -9608,7 +9980,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 121,
+        "contig_id": 129,
         "length_m": 1071.763,
         "segment_count": 49,
         "way_names": [
@@ -9675,9 +10047,7 @@
           2847824307,
           2847824306
         ],
-        "tags": {
-          "local:routing_state": "include"
-        },
+        "tags": {},
         "elevations_m": [
           1665.0,
           1665.0,
@@ -9940,7 +10310,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 122,
+        "contig_id": 130,
         "length_m": 1163.242,
         "segment_count": 48,
         "way_names": [
@@ -10004,7 +10374,9 @@
           6503768693,
           9810327703
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1665.0,
           1665.0,
@@ -10262,9 +10634,9 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 123,
-        "length_m": 266.769,
-        "segment_count": 13,
+        "contig_id": 131,
+        "length_m": 203.079,
+        "segment_count": 10,
         "way_names": [
           "Fika Bikeshare"
         ],
@@ -10273,7 +10645,7 @@
         ],
         "endpoint_node_ids": [
           2847824306,
-          6159312406
+          13769374299
         ],
         "node_ids": [
           2847824306,
@@ -10286,12 +10658,11 @@
           2847824301,
           2847824300,
           2847824299,
-          2847824298,
-          2847824297,
-          2847824296,
-          6159312406
+          13769374299
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1662.0,
           1661.0,
@@ -10303,10 +10674,7 @@
           1672.0,
           1673.0,
           1673.0,
-          1672.0,
-          1670.0,
-          1669.0,
-          1669.0
+          1673.0
         ]
       },
       "geometry": {
@@ -10353,20 +10721,8 @@
             -1.239043
           ],
           [
-            36.843871,
-            -1.239402
-          ],
-          [
-            36.843909,
-            -1.239578
-          ],
-          [
-            36.843907,
-            -1.239722
-          ],
-          [
-            36.843909,
-            -1.239855
+            36.843863,
+            -1.239287
           ]
         ]
       }
@@ -10374,9 +10730,9 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 124,
-        "length_m": 341.199,
-        "segment_count": 12,
+        "contig_id": 132,
+        "length_m": 23.829,
+        "segment_count": 1,
         "way_names": [
           "Muhuga Trail"
         ],
@@ -10385,10 +10741,51 @@
         ],
         "endpoint_node_ids": [
           2847824306,
-          2847824369
+          2847824359
         ],
         "node_ids": [
           2847824306,
+          2847824359
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1662.0,
+          1661.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.84342,
+            -1.237624
+          ],
+          [
+            36.843207,
+            -1.237648
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 133,
+        "length_m": 317.371,
+        "segment_count": 11,
+        "way_names": [
+          "Muhuga Trail"
+        ],
+        "way_ids": [
+          280720874
+        ],
+        "endpoint_node_ids": [
+          2847824359,
+          2847824369
+        ],
+        "node_ids": [
           2847824359,
           2847824360,
           2847824361,
@@ -10402,9 +10799,10 @@
           2847824368,
           2847824369
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
-          1662.0,
           1661.0,
           1660.0,
           1658.0,
@@ -10422,10 +10820,6 @@
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [
-            36.84342,
-            -1.237624
-          ],
           [
             36.843207,
             -1.237648
@@ -10480,7 +10874,59 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 125,
+        "contig_id": 134,
+        "length_m": 78.185,
+        "segment_count": 3,
+        "way_names": [],
+        "way_ids": [
+          1504829330
+        ],
+        "endpoint_node_ids": [
+          2847824359,
+          13769344192
+        ],
+        "node_ids": [
+          2847824359,
+          13769344194,
+          13769344193,
+          13769344192
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1661.0,
+          1664.0,
+          1667.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843207,
+            -1.237648
+          ],
+          [
+            36.843273,
+            -1.237921
+          ],
+          [
+            36.843273,
+            -1.238183
+          ],
+          [
+            36.843173,
+            -1.238309
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 135,
         "length_m": 391.872,
         "segment_count": 23,
         "way_names": [
@@ -10652,8 +11098,8 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 126,
-        "length_m": 109.485,
+        "contig_id": 136,
+        "length_m": 54.267,
         "segment_count": 1,
         "way_names": [],
         "way_ids": [
@@ -10661,16 +11107,18 @@
         ],
         "endpoint_node_ids": [
           2847824369,
-          6503768697
+          13769333327
         ],
         "node_ids": [
           2847824369,
-          6503768697
+          13769333327
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1659.0,
-          1662.0
+          1664.0
         ]
       },
       "geometry": {
@@ -10681,8 +11129,8 @@
             -1.237496
           ],
           [
-            36.839724,
-            -1.238101
+            36.840115,
+            -1.237796
           ]
         ]
       }
@@ -10690,7 +11138,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 127,
+        "contig_id": 137,
         "length_m": 186.265,
         "segment_count": 12,
         "way_names": [],
@@ -10796,7 +11244,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 128,
+        "contig_id": 138,
         "length_m": 129.075,
         "segment_count": 7,
         "way_names": [],
@@ -10817,9 +11265,7 @@
           2847941622,
           8231754957
         ],
-        "tags": {
-          "local:routing_state": "exclude"
-        },
+        "tags": {},
         "elevations_m": [
           1689.0,
           1690.0,
@@ -10872,7 +11318,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 129,
+        "contig_id": 139,
         "length_m": 318.472,
         "segment_count": 17,
         "way_names": [],
@@ -10903,9 +11349,7 @@
           6503767380,
           6503767379
         ],
-        "tags": {
-          "local:routing_state": "include"
-        },
+        "tags": {},
         "elevations_m": [
           1689.0,
           1690.0,
@@ -11008,7 +11452,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 130,
+        "contig_id": 140,
         "length_m": 160.966,
         "segment_count": 6,
         "way_names": [],
@@ -11076,7 +11520,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 131,
+        "contig_id": 141,
         "length_m": 146.508,
         "segment_count": 6,
         "way_names": [
@@ -11099,7 +11543,7 @@
           6784413870
         ],
         "tags": {
-          "local:routing_state": "include"
+          "local:unavailable_until": "2026-06-30"
         },
         "elevations_m": [
           1666.0,
@@ -11148,7 +11592,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 132,
+        "contig_id": 142,
         "length_m": 194.713,
         "segment_count": 12,
         "way_names": [],
@@ -11174,7 +11618,9 @@
           11952184361,
           11952184360
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1670.0,
           1670.0,
@@ -11252,7 +11698,151 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 133,
+        "contig_id": 143,
+        "length_m": 121.493,
+        "segment_count": 7,
+        "way_names": [],
+        "way_ids": [
+          280734426
+        ],
+        "endpoint_node_ids": [
+          2847945484,
+          2847945496
+        ],
+        "node_ids": [
+          2847945484,
+          2847946201,
+          2847945500,
+          2847945499,
+          2847945498,
+          2847945497,
+          2847945483,
+          2847945496
+        ],
+        "tags": {
+          "local:routing_state": "exclude"
+        },
+        "elevations_m": [
+          1670.0,
+          1669.0,
+          1668.0,
+          1668.0,
+          1667.0,
+          1668.0,
+          1672.0,
+          1683.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.833716,
+            -1.244398
+          ],
+          [
+            36.83379,
+            -1.244526
+          ],
+          [
+            36.833865,
+            -1.244607
+          ],
+          [
+            36.833901,
+            -1.244671
+          ],
+          [
+            36.834017,
+            -1.244759
+          ],
+          [
+            36.834114,
+            -1.244912
+          ],
+          [
+            36.834308,
+            -1.245006
+          ],
+          [
+            36.834417,
+            -1.245196
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 144,
+        "length_m": 236.533,
+        "segment_count": 6,
+        "way_names": [],
+        "way_ids": [
+          1504647712
+        ],
+        "endpoint_node_ids": [
+          2847945496,
+          5927778336
+        ],
+        "node_ids": [
+          2847945496,
+          13768230799,
+          13768230798,
+          13768230797,
+          13768230796,
+          13768230795,
+          5927778336
+        ],
+        "tags": {},
+        "elevations_m": [
+          1683.0,
+          1686.0,
+          1684.0,
+          1681.0,
+          1674.0,
+          1663.0,
+          1657.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.834417,
+            -1.245196
+          ],
+          [
+            36.83414,
+            -1.245615
+          ],
+          [
+            36.833891,
+            -1.24583
+          ],
+          [
+            36.833627,
+            -1.246006
+          ],
+          [
+            36.83347,
+            -1.246314
+          ],
+          [
+            36.833514,
+            -1.246646
+          ],
+          [
+            36.833711,
+            -1.24687
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 145,
         "length_m": 37.84,
         "segment_count": 3,
         "way_names": [],
@@ -11304,7 +11894,217 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 134,
+        "contig_id": 146,
+        "length_m": 405.606,
+        "segment_count": 9,
+        "way_names": [],
+        "way_ids": [
+          60200205
+        ],
+        "endpoint_node_ids": [
+          2847945632,
+          9521536668
+        ],
+        "node_ids": [
+          2847945632,
+          747730111,
+          2847945633,
+          2847945634,
+          2847945637,
+          2847945638,
+          2847945639,
+          2847945640,
+          2847945641,
+          9521536668
+        ],
+        "tags": {},
+        "elevations_m": [
+          1654.0,
+          1653.0,
+          1651.0,
+          1649.0,
+          1648.0,
+          1647.0,
+          1651.0,
+          1651.0,
+          1650.0,
+          1646.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.839201,
+            -1.249907
+          ],
+          [
+            36.838896,
+            -1.249601
+          ],
+          [
+            36.838755,
+            -1.249488
+          ],
+          [
+            36.838667,
+            -1.249426
+          ],
+          [
+            36.838515,
+            -1.2493
+          ],
+          [
+            36.837633,
+            -1.248804
+          ],
+          [
+            36.837206,
+            -1.248606
+          ],
+          [
+            36.836937,
+            -1.248501
+          ],
+          [
+            36.836679,
+            -1.24837
+          ],
+          [
+            36.836104,
+            -1.248026
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 147,
+        "length_m": 121.453,
+        "segment_count": 2,
+        "way_names": [],
+        "way_ids": [
+          60200205
+        ],
+        "endpoint_node_ids": [
+          2847945632,
+          9810272375
+        ],
+        "node_ids": [
+          2847945632,
+          2847945631,
+          9810272375
+        ],
+        "tags": {},
+        "elevations_m": [
+          1654.0,
+          1656.0,
+          1660.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.839201,
+            -1.249907
+          ],
+          [
+            36.839471,
+            -1.25029
+          ],
+          [
+            36.839837,
+            -1.250795
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 148,
+        "length_m": 205.744,
+        "segment_count": 8,
+        "way_names": [],
+        "way_ids": [
+          1504824091
+        ],
+        "endpoint_node_ids": [
+          2847945632,
+          9810272384
+        ],
+        "node_ids": [
+          2847945632,
+          13769335634,
+          13769335635,
+          13769335636,
+          13769335637,
+          13769335638,
+          13769335639,
+          13769335640,
+          9810272384
+        ],
+        "tags": {},
+        "elevations_m": [
+          1654.0,
+          1659.0,
+          1662.0,
+          1664.0,
+          1661.0,
+          1660.0,
+          1662.0,
+          1664.0,
+          1666.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.839201,
+            -1.249907
+          ],
+          [
+            36.839437,
+            -1.24998
+          ],
+          [
+            36.839562,
+            -1.249996
+          ],
+          [
+            36.839637,
+            -1.249868
+          ],
+          [
+            36.83946,
+            -1.249648
+          ],
+          [
+            36.839365,
+            -1.249473
+          ],
+          [
+            36.839359,
+            -1.249243
+          ],
+          [
+            36.839591,
+            -1.249131
+          ],
+          [
+            36.839942,
+            -1.249209
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 149,
         "length_m": 68.571,
         "segment_count": 2,
         "way_names": [],
@@ -11350,7 +12150,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 135,
+        "contig_id": 150,
         "length_m": 5.222,
         "segment_count": 2,
         "way_names": [],
@@ -11394,7 +12194,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 136,
+        "contig_id": 151,
         "length_m": 68.635,
         "segment_count": 1,
         "way_names": [],
@@ -11434,7 +12234,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 137,
+        "contig_id": 152,
         "length_m": 323.667,
         "segment_count": 17,
         "way_names": [],
@@ -11568,47 +12368,29 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 138,
-        "length_m": 205.776,
-        "segment_count": 12,
+        "contig_id": 153,
+        "length_m": 28.007,
+        "segment_count": 3,
         "way_names": [],
         "way_ids": [
           1068716473
         ],
         "endpoint_node_ids": [
           2847945664,
-          9810272375
+          9810272384
         ],
         "node_ids": [
           2847945664,
           9810272386,
           9810272385,
-          9810272384,
-          9810272383,
-          9810272382,
-          9810272381,
-          9810272380,
-          9810272379,
-          9810272378,
-          9810272377,
-          9810272376,
-          9810272375
+          9810272384
         ],
         "tags": {},
         "elevations_m": [
           1665.0,
           1665.0,
           1666.0,
-          1666.0,
-          1668.0,
-          1669.0,
-          1669.0,
-          1668.0,
-          1667.0,
-          1666.0,
-          1664.0,
-          1663.0,
-          1660.0
+          1666.0
         ]
       },
       "geometry": {
@@ -11629,42 +12411,6 @@
           [
             36.839942,
             -1.249209
-          ],
-          [
-            36.839934,
-            -1.249489
-          ],
-          [
-            36.839923,
-            -1.249651
-          ],
-          [
-            36.839905,
-            -1.249822
-          ],
-          [
-            36.839896,
-            -1.249985
-          ],
-          [
-            36.839896,
-            -1.250149
-          ],
-          [
-            36.839891,
-            -1.250364
-          ],
-          [
-            36.839887,
-            -1.25056
-          ],
-          [
-            36.839894,
-            -1.250656
-          ],
-          [
-            36.839837,
-            -1.250795
           ]
         ]
       }
@@ -11672,7 +12418,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 139,
+        "contig_id": 154,
         "length_m": 128.705,
         "segment_count": 5,
         "way_names": [
@@ -11736,9 +12482,9 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 140,
-        "length_m": 276.927,
-        "segment_count": 8,
+        "contig_id": 155,
+        "length_m": 76.278,
+        "segment_count": 2,
         "way_names": [
           "Tara Path"
         ],
@@ -11747,30 +12493,18 @@
         ],
         "endpoint_node_ids": [
           2847949507,
-          2847949514
+          2847949509
         ],
         "node_ids": [
           2847949507,
           2847949508,
-          2847949509,
-          2847949510,
-          2847949511,
-          747730090,
-          2847949512,
-          2847949513,
-          2847949514
+          2847949509
         ],
         "tags": {},
         "elevations_m": [
           1689.0,
           1688.0,
-          1686.0,
-          1685.0,
-          1683.0,
-          1683.0,
-          1683.0,
-          1680.0,
-          1679.0
+          1686.0
         ]
       },
       "geometry": {
@@ -11787,30 +12521,6 @@
           [
             36.826806,
             -1.231572
-          ],
-          [
-            36.826865,
-            -1.231254
-          ],
-          [
-            36.826967,
-            -1.23095
-          ],
-          [
-            36.827097,
-            -1.23039
-          ],
-          [
-            36.827138,
-            -1.230178
-          ],
-          [
-            36.827176,
-            -1.229857
-          ],
-          [
-            36.8272,
-            -1.229817
           ]
         ]
       }
@@ -11818,7 +12528,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 141,
+        "contig_id": 156,
         "length_m": 559.261,
         "segment_count": 3,
         "way_names": [],
@@ -11836,7 +12546,7 @@
           2847949919
         ],
         "tags": {
-          "local:unavailable_until": "2026-06-30"
+          "local:unavailable_until": "2026-06-01"
         },
         "elevations_m": [
           1689.0,
@@ -11870,7 +12580,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 142,
+        "contig_id": 157,
         "length_m": 824.19,
         "segment_count": 10,
         "way_names": [
@@ -11964,7 +12674,471 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 143,
+        "contig_id": 158,
+        "length_m": 200.649,
+        "segment_count": 6,
+        "way_names": [
+          "Tara Path"
+        ],
+        "way_ids": [
+          1332841839
+        ],
+        "endpoint_node_ids": [
+          2847949509,
+          2847949514
+        ],
+        "node_ids": [
+          2847949509,
+          2847949510,
+          2847949511,
+          747730090,
+          2847949512,
+          2847949513,
+          2847949514
+        ],
+        "tags": {},
+        "elevations_m": [
+          1686.0,
+          1685.0,
+          1683.0,
+          1683.0,
+          1683.0,
+          1680.0,
+          1679.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.826806,
+            -1.231572
+          ],
+          [
+            36.826865,
+            -1.231254
+          ],
+          [
+            36.826967,
+            -1.23095
+          ],
+          [
+            36.827097,
+            -1.23039
+          ],
+          [
+            36.827138,
+            -1.230178
+          ],
+          [
+            36.827176,
+            -1.229857
+          ],
+          [
+            36.8272,
+            -1.229817
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 159,
+        "length_m": 1327.082,
+        "segment_count": 60,
+        "way_names": [],
+        "way_ids": [
+          1504822990
+        ],
+        "endpoint_node_ids": [
+          2847949509,
+          13769333317
+        ],
+        "node_ids": [
+          2847949509,
+          13769328758,
+          13769328759,
+          13769328760,
+          13769328761,
+          13769328762,
+          13769328763,
+          13769328764,
+          13769328765,
+          13769328766,
+          13769328767,
+          13769328768,
+          13769328769,
+          13769328770,
+          13769328771,
+          13769328772,
+          13769328773,
+          13769328774,
+          13769328775,
+          13769328776,
+          13769328777,
+          13769328778,
+          13769328779,
+          13769328780,
+          13769328781,
+          13769328782,
+          13769328783,
+          13769328784,
+          13769328785,
+          13769328786,
+          13769328787,
+          13769328788,
+          13769328789,
+          13769328790,
+          13769328791,
+          13769328792,
+          13769328793,
+          13769328794,
+          13769328795,
+          13769328796,
+          13769328797,
+          13769328798,
+          13769328799,
+          13769328800,
+          13769333301,
+          13769333302,
+          13769333303,
+          13769333304,
+          13769333305,
+          13769333306,
+          13769333307,
+          13769333308,
+          13769333309,
+          13769333310,
+          13769333311,
+          13769333312,
+          13769333313,
+          13769333314,
+          13769333315,
+          13769333316,
+          13769333317
+        ],
+        "tags": {
+          "local:routing_state": "include"
+        },
+        "elevations_m": [
+          1686.0,
+          1685.0,
+          1685.0,
+          1685.0,
+          1685.0,
+          1685.0,
+          1684.0,
+          1682.0,
+          1681.0,
+          1681.0,
+          1681.0,
+          1681.0,
+          1681.0,
+          1680.0,
+          1680.0,
+          1678.0,
+          1676.0,
+          1675.0,
+          1674.0,
+          1676.0,
+          1676.0,
+          1677.0,
+          1676.0,
+          1675.0,
+          1675.0,
+          1674.0,
+          1674.0,
+          1675.0,
+          1675.0,
+          1676.0,
+          1677.0,
+          1677.0,
+          1676.0,
+          1675.0,
+          1674.0,
+          1673.0,
+          1672.0,
+          1672.0,
+          1673.0,
+          1675.0,
+          1677.0,
+          1678.0,
+          1678.0,
+          1678.0,
+          1678.0,
+          1677.0,
+          1676.0,
+          1675.0,
+          1675.0,
+          1676.0,
+          1675.0,
+          1674.0,
+          1673.0,
+          1672.0,
+          1672.0,
+          1673.0,
+          1672.0,
+          1671.0,
+          1671.0,
+          1672.0,
+          1673.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.826806,
+            -1.231572
+          ],
+          [
+            36.82713,
+            -1.231669
+          ],
+          [
+            36.82748,
+            -1.231746
+          ],
+          [
+            36.827767,
+            -1.231935
+          ],
+          [
+            36.82797,
+            -1.232096
+          ],
+          [
+            36.828258,
+            -1.232139
+          ],
+          [
+            36.828504,
+            -1.232231
+          ],
+          [
+            36.828722,
+            -1.232379
+          ],
+          [
+            36.828929,
+            -1.232602
+          ],
+          [
+            36.829187,
+            -1.232757
+          ],
+          [
+            36.829411,
+            -1.232786
+          ],
+          [
+            36.829583,
+            -1.232886
+          ],
+          [
+            36.829799,
+            -1.233017
+          ],
+          [
+            36.829916,
+            -1.233083
+          ],
+          [
+            36.830057,
+            -1.233046
+          ],
+          [
+            36.830243,
+            -1.233108
+          ],
+          [
+            36.830404,
+            -1.233155
+          ],
+          [
+            36.830539,
+            -1.233162
+          ],
+          [
+            36.830633,
+            -1.233281
+          ],
+          [
+            36.830678,
+            -1.23346
+          ],
+          [
+            36.83083,
+            -1.233486
+          ],
+          [
+            36.830949,
+            -1.233637
+          ],
+          [
+            36.831072,
+            -1.233747
+          ],
+          [
+            36.831207,
+            -1.233791
+          ],
+          [
+            36.831314,
+            -1.233794
+          ],
+          [
+            36.831425,
+            -1.233891
+          ],
+          [
+            36.831541,
+            -1.233976
+          ],
+          [
+            36.831696,
+            -1.234042
+          ],
+          [
+            36.831854,
+            -1.234124
+          ],
+          [
+            36.83197,
+            -1.234234
+          ],
+          [
+            36.832146,
+            -1.234284
+          ],
+          [
+            36.832341,
+            -1.234315
+          ],
+          [
+            36.832549,
+            -1.2343
+          ],
+          [
+            36.832713,
+            -1.234306
+          ],
+          [
+            36.832826,
+            -1.234492
+          ],
+          [
+            36.832964,
+            -1.23458
+          ],
+          [
+            36.833162,
+            -1.234668
+          ],
+          [
+            36.833383,
+            -1.234759
+          ],
+          [
+            36.833534,
+            -1.23486
+          ],
+          [
+            36.833711,
+            -1.234965
+          ],
+          [
+            36.833909,
+            -1.235112
+          ],
+          [
+            36.834069,
+            -1.235216
+          ],
+          [
+            36.83422,
+            -1.235282
+          ],
+          [
+            36.834305,
+            -1.235442
+          ],
+          [
+            36.834428,
+            -1.235499
+          ],
+          [
+            36.834589,
+            -1.235502
+          ],
+          [
+            36.834806,
+            -1.235494
+          ],
+          [
+            36.83495,
+            -1.235525
+          ],
+          [
+            36.835161,
+            -1.235515
+          ],
+          [
+            36.835235,
+            -1.235624
+          ],
+          [
+            36.835332,
+            -1.23574
+          ],
+          [
+            36.835481,
+            -1.235784
+          ],
+          [
+            36.835635,
+            -1.235776
+          ],
+          [
+            36.835761,
+            -1.235853
+          ],
+          [
+            36.83585,
+            -1.235875
+          ],
+          [
+            36.836,
+            -1.235862
+          ],
+          [
+            36.836246,
+            -1.235928
+          ],
+          [
+            36.836512,
+            -1.236036
+          ],
+          [
+            36.836787,
+            -1.236116
+          ],
+          [
+            36.837055,
+            -1.236217
+          ],
+          [
+            36.837182,
+            -1.236255
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 160,
         "length_m": 152.294,
         "segment_count": 4,
         "way_names": [
@@ -11984,7 +13158,9 @@
           2847824426,
           6503768690
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1679.0,
           1677.0,
@@ -12022,7 +13198,59 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 144,
+        "contig_id": 161,
+        "length_m": 57.271,
+        "segment_count": 3,
+        "way_names": [
+          "Tara Path"
+        ],
+        "way_ids": [
+          1332841839
+        ],
+        "endpoint_node_ids": [
+          2847949514,
+          13768253221
+        ],
+        "node_ids": [
+          2847949514,
+          2847949515,
+          2847949516,
+          13768253221
+        ],
+        "tags": {},
+        "elevations_m": [
+          1679.0,
+          1676.0,
+          1673.0,
+          1668.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.8272,
+            -1.229817
+          ],
+          [
+            36.827353,
+            -1.229751
+          ],
+          [
+            36.827452,
+            -1.229649
+          ],
+          [
+            36.827647,
+            -1.229583
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 162,
         "length_m": 320.917,
         "segment_count": 10,
         "way_names": [],
@@ -12114,179 +13342,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 145,
-        "length_m": 361.607,
-        "segment_count": 23,
-        "way_names": [
-          "Tara Path"
-        ],
-        "way_ids": [
-          1332841838
-        ],
-        "endpoint_node_ids": [
-          2847949524,
-          9810327703
-        ],
-        "node_ids": [
-          2847949524,
-          2847949527,
-          2847949528,
-          2847949531,
-          2847949532,
-          2847949533,
-          747730039,
-          2847949534,
-          2847949535,
-          2847949536,
-          2847949537,
-          2847949538,
-          2847949539,
-          2847949540,
-          747730076,
-          2847949541,
-          2847949542,
-          2847949543,
-          2847949544,
-          2847949545,
-          2847949546,
-          2847949547,
-          2847949548,
-          9810327703
-        ],
-        "tags": {},
-        "elevations_m": [
-          1660.0,
-          1661.0,
-          1663.0,
-          1666.0,
-          1667.0,
-          1669.0,
-          1675.0,
-          1677.0,
-          1679.0,
-          1682.0,
-          1683.0,
-          1684.0,
-          1686.0,
-          1690.0,
-          1690.0,
-          1689.0,
-          1688.0,
-          1687.0,
-          1686.0,
-          1685.0,
-          1685.0,
-          1685.0,
-          1684.0,
-          1684.0
-        ]
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            36.828233,
-            -1.228718
-          ],
-          [
-            36.828127,
-            -1.228614
-          ],
-          [
-            36.828083,
-            -1.228474
-          ],
-          [
-            36.828043,
-            -1.228345
-          ],
-          [
-            36.828074,
-            -1.228245
-          ],
-          [
-            36.828108,
-            -1.228024
-          ],
-          [
-            36.828153,
-            -1.22772
-          ],
-          [
-            36.82819,
-            -1.227544
-          ],
-          [
-            36.8282,
-            -1.227401
-          ],
-          [
-            36.828237,
-            -1.227263
-          ],
-          [
-            36.828214,
-            -1.227157
-          ],
-          [
-            36.828225,
-            -1.227124
-          ],
-          [
-            36.828314,
-            -1.227011
-          ],
-          [
-            36.828401,
-            -1.226739
-          ],
-          [
-            36.828468,
-            -1.226658
-          ],
-          [
-            36.828607,
-            -1.226695
-          ],
-          [
-            36.828729,
-            -1.226769
-          ],
-          [
-            36.828831,
-            -1.226805
-          ],
-          [
-            36.82888,
-            -1.226857
-          ],
-          [
-            36.829076,
-            -1.226947
-          ],
-          [
-            36.829147,
-            -1.22695
-          ],
-          [
-            36.829215,
-            -1.226971
-          ],
-          [
-            36.829375,
-            -1.227054
-          ],
-          [
-            36.829406,
-            -1.227076
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "contig_id": 146,
+        "contig_id": 163,
         "length_m": 45.901,
         "segment_count": 3,
         "way_names": [],
@@ -12336,7 +13392,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 147,
+        "contig_id": 164,
         "length_m": 20.113,
         "segment_count": 3,
         "way_names": [
@@ -12390,8 +13446,110 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 148,
-        "length_m": 1338.885,
+        "contig_id": 165,
+        "length_m": 40.11,
+        "segment_count": 4,
+        "way_names": [
+          "Tara Path"
+        ],
+        "way_ids": [
+          1332841838
+        ],
+        "endpoint_node_ids": [
+          2847949545,
+          9810327703
+        ],
+        "node_ids": [
+          2847949545,
+          2847949546,
+          2847949547,
+          2847949548,
+          9810327703
+        ],
+        "tags": {},
+        "elevations_m": [
+          1685.0,
+          1685.0,
+          1685.0,
+          1684.0,
+          1684.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.829076,
+            -1.226947
+          ],
+          [
+            36.829147,
+            -1.22695
+          ],
+          [
+            36.829215,
+            -1.226971
+          ],
+          [
+            36.829375,
+            -1.227054
+          ],
+          [
+            36.829406,
+            -1.227076
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 166,
+        "length_m": 94.23,
+        "segment_count": 2,
+        "way_names": [],
+        "way_ids": [
+          1504644453
+        ],
+        "endpoint_node_ids": [
+          2847949545,
+          12330726051
+        ],
+        "node_ids": [
+          2847949545,
+          13768240204,
+          12330726051
+        ],
+        "tags": {},
+        "elevations_m": [
+          1685.0,
+          1681.0,
+          1679.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.829076,
+            -1.226947
+          ],
+          [
+            36.828966,
+            -1.227199
+          ],
+          [
+            36.82844,
+            -1.227424
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 167,
+        "length_m": 975.091,
         "segment_count": 8,
         "way_names": [],
         "way_ids": [
@@ -12399,7 +13557,7 @@
         ],
         "endpoint_node_ids": [
           2847949713,
-          2847949714
+          13768011707
         ],
         "node_ids": [
           2847949713,
@@ -12410,7 +13568,7 @@
           9923907711,
           2847949757,
           2847949753,
-          2847949714
+          13768011707
         ],
         "tags": {},
         "elevations_m": [
@@ -12422,7 +13580,7 @@
           1701.0,
           1702.0,
           1698.0,
-          1690.0
+          1695.0
         ]
       },
       "geometry": {
@@ -12461,8 +13619,8 @@
             -1.224925
           ],
           [
-            36.822242,
-            -1.227283
+            36.819501,
+            -1.225495
           ]
         ]
       }
@@ -12470,7 +13628,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 149,
+        "contig_id": 168,
         "length_m": 154.714,
         "segment_count": 1,
         "way_names": [],
@@ -12508,7 +13666,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 150,
+        "contig_id": 169,
         "length_m": 269.486,
         "segment_count": 20,
         "way_names": [],
@@ -12660,7 +13818,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 151,
+        "contig_id": 170,
         "length_m": 304.251,
         "segment_count": 14,
         "way_names": [],
@@ -12776,7 +13934,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 152,
+        "contig_id": 171,
         "length_m": 271.24,
         "segment_count": 1,
         "way_names": [],
@@ -12814,16 +13972,17 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 153,
-        "length_m": 259.462,
-        "segment_count": 9,
+        "contig_id": 172,
+        "length_m": 1141.503,
+        "segment_count": 48,
         "way_names": [],
         "way_ids": [
-          1213220384
+          1213220384,
+          1504644448
         ],
         "endpoint_node_ids": [
           2847949714,
-          11240465998
+          13768253221
         ],
         "node_ids": [
           2847949714,
@@ -12835,9 +13994,50 @@
           11240465995,
           11240465996,
           11240465997,
-          11240465998
+          11240465998,
+          13768222683,
+          13768222684,
+          13768222685,
+          13768222686,
+          13768222687,
+          13768222688,
+          13768222689,
+          13768222690,
+          13768222691,
+          13768222692,
+          13768222693,
+          13768222694,
+          13768222695,
+          13768222696,
+          13768222697,
+          13768222698,
+          13768222699,
+          13768222700,
+          13768253201,
+          13768253202,
+          13768253203,
+          13768253204,
+          13768253205,
+          13768253206,
+          13768253207,
+          13768253208,
+          13768253209,
+          13768253210,
+          13768253211,
+          13768253212,
+          13768253213,
+          13768253214,
+          13768253215,
+          13768253216,
+          13768253217,
+          13768253218,
+          13768253219,
+          13768253220,
+          13768253221
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1690.0,
           1685.0,
@@ -12848,7 +14048,46 @@
           1686.0,
           1688.0,
           1688.0,
-          1686.0
+          1686.0,
+          1687.0,
+          1687.0,
+          1686.0,
+          1682.0,
+          1681.0,
+          1680.0,
+          1680.0,
+          1682.0,
+          1685.0,
+          1687.0,
+          1687.0,
+          1683.0,
+          1679.0,
+          1675.0,
+          1674.0,
+          1674.0,
+          1675.0,
+          1676.0,
+          1677.0,
+          1676.0,
+          1676.0,
+          1675.0,
+          1675.0,
+          1675.0,
+          1675.0,
+          1676.0,
+          1676.0,
+          1676.0,
+          1675.0,
+          1674.0,
+          1674.0,
+          1674.0,
+          1673.0,
+          1673.0,
+          1672.0,
+          1673.0,
+          1672.0,
+          1671.0,
+          1668.0
         ]
       },
       "geometry": {
@@ -12893,6 +14132,162 @@
           [
             36.821308,
             -1.225368
+          ],
+          [
+            36.821579,
+            -1.225727
+          ],
+          [
+            36.821752,
+            -1.225925
+          ],
+          [
+            36.821996,
+            -1.226057
+          ],
+          [
+            36.822415,
+            -1.226267
+          ],
+          [
+            36.822601,
+            -1.226411
+          ],
+          [
+            36.822713,
+            -1.226527
+          ],
+          [
+            36.8228,
+            -1.226678
+          ],
+          [
+            36.82286,
+            -1.226829
+          ],
+          [
+            36.822965,
+            -1.227041
+          ],
+          [
+            36.823091,
+            -1.227228
+          ],
+          [
+            36.823198,
+            -1.227383
+          ],
+          [
+            36.823384,
+            -1.227626
+          ],
+          [
+            36.823523,
+            -1.227691
+          ],
+          [
+            36.823665,
+            -1.227759
+          ],
+          [
+            36.823724,
+            -1.227839
+          ],
+          [
+            36.823791,
+            -1.227957
+          ],
+          [
+            36.823882,
+            -1.228031
+          ],
+          [
+            36.824013,
+            -1.228074
+          ],
+          [
+            36.824179,
+            -1.228082
+          ],
+          [
+            36.824413,
+            -1.228112
+          ],
+          [
+            36.82451,
+            -1.228168
+          ],
+          [
+            36.824668,
+            -1.228287
+          ],
+          [
+            36.824829,
+            -1.228375
+          ],
+          [
+            36.82502,
+            -1.228464
+          ],
+          [
+            36.825283,
+            -1.228583
+          ],
+          [
+            36.82549,
+            -1.228693
+          ],
+          [
+            36.825658,
+            -1.228786
+          ],
+          [
+            36.825829,
+            -1.22886
+          ],
+          [
+            36.826103,
+            -1.228987
+          ],
+          [
+            36.826304,
+            -1.229054
+          ],
+          [
+            36.826517,
+            -1.229151
+          ],
+          [
+            36.826657,
+            -1.229184
+          ],
+          [
+            36.826751,
+            -1.229233
+          ],
+          [
+            36.826864,
+            -1.229319
+          ],
+          [
+            36.826984,
+            -1.229395
+          ],
+          [
+            36.827099,
+            -1.229454
+          ],
+          [
+            36.827278,
+            -1.229515
+          ],
+          [
+            36.827417,
+            -1.229553
+          ],
+          [
+            36.827647,
+            -1.229583
           ]
         ]
       }
@@ -12900,7 +14295,45 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 154,
+        "contig_id": 173,
+        "length_m": 363.794,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          280734650
+        ],
+        "endpoint_node_ids": [
+          2847949714,
+          13768011707
+        ],
+        "node_ids": [
+          2847949714,
+          13768011707
+        ],
+        "tags": {},
+        "elevations_m": [
+          1690.0,
+          1695.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.822242,
+            -1.227283
+          ],
+          [
+            36.819501,
+            -1.225495
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 174,
         "length_m": 353.197,
         "segment_count": 3,
         "way_names": [],
@@ -12950,7 +14383,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 155,
+        "contig_id": 175,
         "length_m": 215.577,
         "segment_count": 3,
         "way_names": [],
@@ -12967,9 +14400,7 @@
           13556268409,
           2847949919
         ],
-        "tags": {
-          "local:unavailable_until": "2026-06-30"
-        },
+        "tags": {},
         "elevations_m": [
           1690.0,
           1682.0,
@@ -13002,7 +14433,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 156,
+        "contig_id": 176,
         "length_m": 89.742,
         "segment_count": 6,
         "way_names": [],
@@ -13070,7 +14501,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 157,
+        "contig_id": 177,
         "length_m": 47.928,
         "segment_count": 4,
         "way_names": [],
@@ -13090,7 +14521,9 @@
           10597364813,
           10597364814
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1691.0,
           1690.0,
@@ -13128,7 +14561,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 158,
+        "contig_id": 178,
         "length_m": 60.041,
         "segment_count": 3,
         "way_names": [],
@@ -13178,7 +14611,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 159,
+        "contig_id": 179,
         "length_m": 417.234,
         "segment_count": 2,
         "way_names": [
@@ -13196,9 +14629,7 @@
           11951427050,
           6503768696
         ],
-        "tags": {
-          "local:routing_state": "include"
-        },
+        "tags": {},
         "elevations_m": [
           1674.0,
           1677.0,
@@ -13226,7 +14657,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 160,
+        "contig_id": 180,
         "length_m": 319.647,
         "segment_count": 9,
         "way_names": [
@@ -13315,7 +14746,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 161,
+        "contig_id": 181,
         "length_m": 65.798,
         "segment_count": 3,
         "way_names": [
@@ -13334,7 +14765,9 @@
           2847824166,
           13519277170
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "include"
+        },
         "elevations_m": [
           1654.0,
           1653.0,
@@ -13367,27 +14800,115 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 162,
-        "length_m": 504.471,
+        "contig_id": 182,
+        "length_m": 26.879,
         "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          280720870
+        ],
+        "endpoint_node_ids": [
+          5927778335,
+          5927778336
+        ],
+        "node_ids": [
+          5927778335,
+          5927778336
+        ],
+        "tags": {},
+        "elevations_m": [
+          1654.0,
+          1657.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.833544,
+            -1.247045
+          ],
+          [
+            36.833711,
+            -1.24687
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 183,
+        "length_m": 79.038,
+        "segment_count": 2,
+        "way_names": [],
+        "way_ids": [
+          692748290
+        ],
+        "endpoint_node_ids": [
+          5927778335,
+          6503768719
+        ],
+        "node_ids": [
+          5927778335,
+          6503768720,
+          6503768719
+        ],
+        "tags": {},
+        "elevations_m": [
+          1654.0,
+          1652.0,
+          1650.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.833544,
+            -1.247045
+          ],
+          [
+            36.833398,
+            -1.247216
+          ],
+          [
+            36.832913,
+            -1.247256
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 184,
+        "length_m": 63.69,
+        "segment_count": 4,
         "way_names": [
-          "Wangari Maathai Trail"
+          "Fika Bikeshare"
         ],
         "way_ids": [
-          692748275
+          1013539597
         ],
         "endpoint_node_ids": [
           6159312406,
-          6503768697
+          13769374299
         ],
         "node_ids": [
           6159312406,
-          6503768697
+          2847824296,
+          2847824297,
+          2847824298,
+          13769374299
         ],
         "tags": {},
         "elevations_m": [
           1669.0,
-          1662.0
+          1669.0,
+          1670.0,
+          1672.0,
+          1673.0
         ]
       },
       "geometry": {
@@ -13398,8 +14919,20 @@
             -1.239855
           ],
           [
-            36.839724,
-            -1.238101
+            36.843907,
+            -1.239722
+          ],
+          [
+            36.843909,
+            -1.239578
+          ],
+          [
+            36.843871,
+            -1.239402
+          ],
+          [
+            36.843863,
+            -1.239287
           ]
         ]
       }
@@ -13407,9 +14940,49 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 163,
-        "length_m": 314.941,
-        "segment_count": 6,
+        "contig_id": 185,
+        "length_m": 43.67,
+        "segment_count": 1,
+        "way_names": [
+          "Wangari Maathai Trail"
+        ],
+        "way_ids": [
+          692748275
+        ],
+        "endpoint_node_ids": [
+          6159312406,
+          13769344200
+        ],
+        "node_ids": [
+          6159312406,
+          13769344200
+        ],
+        "tags": {},
+        "elevations_m": [
+          1669.0,
+          1670.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843909,
+            -1.239855
+          ],
+          [
+            36.843546,
+            -1.239703
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 186,
+        "length_m": 271.601,
+        "segment_count": 5,
         "way_names": [
           "Lake Trail",
           "Pipeline Path"
@@ -13420,7 +14993,7 @@
         ],
         "endpoint_node_ids": [
           6164312038,
-          13075347395
+          6503768721
         ],
         "node_ids": [
           6164312038,
@@ -13428,8 +15001,7 @@
           10597364826,
           10597364825,
           10597364824,
-          6503768721,
-          13075347395
+          6503768721
         ],
         "tags": {},
         "elevations_m": [
@@ -13438,8 +15010,7 @@
           1692.0,
           1690.0,
           1690.0,
-          1695.0,
-          1693.0
+          1695.0
         ]
       },
       "geometry": {
@@ -13468,10 +15039,6 @@
           [
             36.821046,
             -1.244449
-          ],
-          [
-            36.820656,
-            -1.244442
           ]
         ]
       }
@@ -13479,7 +15046,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 164,
+        "contig_id": 187,
         "length_m": 58.842,
         "segment_count": 1,
         "way_names": [],
@@ -13517,7 +15084,45 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 165,
+        "contig_id": 188,
+        "length_m": 62.371,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672085
+        ],
+        "endpoint_node_ids": [
+          6164312038,
+          13768348482
+        ],
+        "node_ids": [
+          6164312038,
+          13768348482
+        ],
+        "tags": {},
+        "elevations_m": [
+          1693.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.823403,
+            -1.245038
+          ],
+          [
+            36.823284,
+            -1.245586
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 189,
         "length_m": 49.292,
         "segment_count": 4,
         "way_names": [],
@@ -13573,7 +15178,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 166,
+        "contig_id": 190,
         "length_m": 149.373,
         "segment_count": 3,
         "way_names": [
@@ -13625,7 +15230,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 167,
+        "contig_id": 191,
         "length_m": 3.886,
         "segment_count": 1,
         "way_names": [],
@@ -13663,7 +15268,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 168,
+        "contig_id": 192,
         "length_m": 12.867,
         "segment_count": 1,
         "way_names": [],
@@ -13701,7 +15306,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 169,
+        "contig_id": 193,
         "length_m": 1259.956,
         "segment_count": 41,
         "way_names": [
@@ -13981,8 +15586,102 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 170,
-        "length_m": 172.33,
+        "contig_id": 194,
+        "length_m": 19.657,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          692748282
+        ],
+        "endpoint_node_ids": [
+          6503768690,
+          6503768691
+        ],
+        "node_ids": [
+          6503768690,
+          6503768691
+        ],
+        "tags": {},
+        "elevations_m": [
+          1674.0,
+          1670.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.828564,
+            -1.229803
+          ],
+          [
+            36.828544,
+            -1.229627
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 195,
+        "length_m": 99.97,
+        "segment_count": 4,
+        "way_names": [],
+        "way_ids": [
+          1504644448
+        ],
+        "endpoint_node_ids": [
+          6503768691,
+          13768253221
+        ],
+        "node_ids": [
+          6503768691,
+          13768253224,
+          13768253223,
+          13768253222,
+          13768253221
+        ],
+        "tags": {},
+        "elevations_m": [
+          1670.0,
+          1670.0,
+          1666.0,
+          1666.0,
+          1668.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.828544,
+            -1.229627
+          ],
+          [
+            36.828331,
+            -1.229614
+          ],
+          [
+            36.828086,
+            -1.229586
+          ],
+          [
+            36.827869,
+            -1.22959
+          ],
+          [
+            36.827647,
+            -1.229583
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 196,
+        "length_m": 99.2,
         "segment_count": 1,
         "way_names": [],
         "way_ids": [
@@ -13990,16 +15689,16 @@
         ],
         "endpoint_node_ids": [
           6503768695,
-          6503768696
+          13769333317
         ],
         "node_ids": [
           6503768695,
-          6503768696
+          13769333317
         ],
         "tags": {},
         "elevations_m": [
           1659.0,
-          1672.0
+          1673.0
         ]
       },
       "geometry": {
@@ -14010,8 +15709,8 @@
             -1.235505
           ],
           [
-            36.836825,
-            -1.236807
+            36.837182,
+            -1.236255
           ]
         ]
       }
@@ -14019,7 +15718,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 171,
+        "contig_id": 197,
         "length_m": 352.95,
         "segment_count": 3,
         "way_names": [
@@ -14041,9 +15740,7 @@
           6503767357,
           6503768697
         ],
-        "tags": {
-          "local:routing_state": "include"
-        },
+        "tags": {},
         "elevations_m": [
           1672.0,
           1665.0,
@@ -14076,7 +15773,123 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 172,
+        "contig_id": 198,
+        "length_m": 73.13,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          692748283
+        ],
+        "endpoint_node_ids": [
+          6503768696,
+          13769333317
+        ],
+        "node_ids": [
+          6503768696,
+          13769333317
+        ],
+        "tags": {},
+        "elevations_m": [
+          1672.0,
+          1673.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.836825,
+            -1.236807
+          ],
+          [
+            36.837182,
+            -1.236255
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 199,
+        "length_m": 55.217,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          692748284
+        ],
+        "endpoint_node_ids": [
+          6503768697,
+          13769333327
+        ],
+        "node_ids": [
+          6503768697,
+          13769333327
+        ],
+        "tags": {},
+        "elevations_m": [
+          1662.0,
+          1664.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.839724,
+            -1.238101
+          ],
+          [
+            36.840115,
+            -1.237796
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 200,
+        "length_m": 489.392,
+        "segment_count": 1,
+        "way_names": [
+          "Wangari Maathai Trail"
+        ],
+        "way_ids": [
+          692748275
+        ],
+        "endpoint_node_ids": [
+          6503768697,
+          13769374300
+        ],
+        "node_ids": [
+          6503768697,
+          13769374300
+        ],
+        "tags": {},
+        "elevations_m": [
+          1662.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.839724,
+            -1.238101
+          ],
+          [
+            36.843784,
+            -1.239803
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 201,
         "length_m": 208.45,
         "segment_count": 7,
         "way_names": [],
@@ -14097,7 +15910,9 @@
           11952184359,
           11952184360
         ],
-        "tags": {},
+        "tags": {
+          "local:routing_state": "exclude"
+        },
         "elevations_m": [
           1667.0,
           1663.0,
@@ -14150,7 +15965,225 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 173,
+        "contig_id": 202,
+        "length_m": 384.326,
+        "segment_count": 10,
+        "way_names": [],
+        "way_ids": [
+          1504647728
+        ],
+        "endpoint_node_ids": [
+          6503768719,
+          9521536668
+        ],
+        "node_ids": [
+          6503768719,
+          13768276735,
+          13768276736,
+          13768276737,
+          13768276738,
+          13768276739,
+          13768276740,
+          13768276741,
+          13768276742,
+          13768276743,
+          9521536668
+        ],
+        "tags": {},
+        "elevations_m": [
+          1650.0,
+          1650.0,
+          1650.0,
+          1652.0,
+          1650.0,
+          1651.0,
+          1654.0,
+          1648.0,
+          1644.0,
+          1642.0,
+          1646.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.832913,
+            -1.247256
+          ],
+          [
+            36.833263,
+            -1.247397
+          ],
+          [
+            36.833603,
+            -1.247337
+          ],
+          [
+            36.834069,
+            -1.247265
+          ],
+          [
+            36.834432,
+            -1.247241
+          ],
+          [
+            36.834612,
+            -1.247325
+          ],
+          [
+            36.834958,
+            -1.247564
+          ],
+          [
+            36.835357,
+            -1.247826
+          ],
+          [
+            36.835614,
+            -1.247982
+          ],
+          [
+            36.835799,
+            -1.248047
+          ],
+          [
+            36.836104,
+            -1.248026
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 203,
+        "length_m": 10.574,
+        "segment_count": 1,
+        "way_names": [
+          "Lake Trail"
+        ],
+        "way_ids": [
+          196510851
+        ],
+        "endpoint_node_ids": [
+          6503768721,
+          13768348456
+        ],
+        "node_ids": [
+          6503768721,
+          13768348456
+        ],
+        "tags": {},
+        "elevations_m": [
+          1695.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.821046,
+            -1.244449
+          ],
+          [
+            36.820951,
+            -1.244447
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 204,
+        "length_m": 308.126,
+        "segment_count": 9,
+        "way_names": [],
+        "way_ids": [
+          1504672086
+        ],
+        "endpoint_node_ids": [
+          6503768721,
+          13768348482
+        ],
+        "node_ids": [
+          6503768721,
+          13768348484,
+          13768348485,
+          13768348486,
+          13768348487,
+          13768348488,
+          13768348489,
+          13768348490,
+          13768348491,
+          13768348482
+        ],
+        "tags": {},
+        "elevations_m": [
+          1695.0,
+          1696.0,
+          1695.0,
+          1691.0,
+          1691.0,
+          1691.0,
+          1693.0,
+          1694.0,
+          1696.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.821046,
+            -1.244449
+          ],
+          [
+            36.821082,
+            -1.244757
+          ],
+          [
+            36.821267,
+            -1.24491
+          ],
+          [
+            36.821785,
+            -1.244979
+          ],
+          [
+            36.821864,
+            -1.245077
+          ],
+          [
+            36.822261,
+            -1.245215
+          ],
+          [
+            36.822391,
+            -1.245225
+          ],
+          [
+            36.822488,
+            -1.2454
+          ],
+          [
+            36.82271,
+            -1.245414
+          ],
+          [
+            36.823284,
+            -1.245586
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 205,
         "length_m": 88.395,
         "segment_count": 1,
         "way_names": [],
@@ -14188,7 +16221,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 174,
+        "contig_id": 206,
         "length_m": 21.089,
         "segment_count": 1,
         "way_names": [],
@@ -14226,7 +16259,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 175,
+        "contig_id": 207,
         "length_m": 23.501,
         "segment_count": 2,
         "way_names": [],
@@ -14270,7 +16303,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 176,
+        "contig_id": 208,
         "length_m": 125.492,
         "segment_count": 7,
         "way_names": [],
@@ -14344,7 +16377,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 177,
+        "contig_id": 209,
         "length_m": 41.293,
         "segment_count": 1,
         "way_names": [],
@@ -14382,7 +16415,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 178,
+        "contig_id": 210,
         "length_m": 292.45,
         "segment_count": 9,
         "way_names": [],
@@ -14468,16 +16501,16 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 179,
-        "length_m": 758.529,
-        "segment_count": 62,
+        "contig_id": 211,
+        "length_m": 685.636,
+        "segment_count": 56,
         "way_names": [],
         "way_ids": [
           1082822653
         ],
         "endpoint_node_ids": [
           9189127987,
-          9923873816
+          9923907622
         ],
         "node_ids": [
           9189127987,
@@ -14536,13 +16569,7 @@
           9923907625,
           9923907624,
           9923907623,
-          9923907622,
-          9923907621,
-          9923907620,
-          9923907619,
-          9923907618,
-          9923907617,
-          9923873816
+          9923907622
         ],
         "tags": {},
         "elevations_m": [
@@ -14602,13 +16629,7 @@
           1705.0,
           1705.0,
           1705.0,
-          1705.0,
-          1705.0,
-          1705.0,
-          1705.0,
-          1705.0,
-          1703.0,
-          1702.0
+          1705.0
         ]
       },
       "geometry": {
@@ -14841,30 +16862,6 @@
           [
             36.82046,
             -1.235408
-          ],
-          [
-            36.820588,
-            -1.235492
-          ],
-          [
-            36.820667,
-            -1.235492
-          ],
-          [
-            36.820731,
-            -1.23551
-          ],
-          [
-            36.820777,
-            -1.235599
-          ],
-          [
-            36.820828,
-            -1.235752
-          ],
-          [
-            36.820876,
-            -1.235835
           ]
         ]
       }
@@ -14872,97 +16869,85 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 180,
-        "length_m": 527.059,
-        "segment_count": 11,
+        "contig_id": 212,
+        "length_m": 177.769,
+        "segment_count": 9,
         "way_names": [],
         "way_ids": [
-          60200205
+          1068716473
         ],
         "endpoint_node_ids": [
-          9521536668,
-          9810272375
+          9810272375,
+          9810272384
         ],
         "node_ids": [
-          9521536668,
-          2847945641,
-          2847945640,
-          2847945639,
-          2847945638,
-          2847945637,
-          2847945634,
-          2847945633,
-          747730111,
-          2847945632,
-          2847945631,
-          9810272375
+          9810272375,
+          9810272376,
+          9810272377,
+          9810272378,
+          9810272379,
+          9810272380,
+          9810272381,
+          9810272382,
+          9810272383,
+          9810272384
         ],
         "tags": {},
         "elevations_m": [
-          1646.0,
-          1650.0,
-          1651.0,
-          1651.0,
-          1647.0,
-          1648.0,
-          1649.0,
-          1651.0,
-          1653.0,
-          1654.0,
-          1656.0,
-          1660.0
+          1660.0,
+          1663.0,
+          1664.0,
+          1666.0,
+          1667.0,
+          1668.0,
+          1669.0,
+          1669.0,
+          1668.0,
+          1666.0
         ]
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            36.836104,
-            -1.248026
-          ],
-          [
-            36.836679,
-            -1.24837
-          ],
-          [
-            36.836937,
-            -1.248501
-          ],
-          [
-            36.837206,
-            -1.248606
-          ],
-          [
-            36.837633,
-            -1.248804
-          ],
-          [
-            36.838515,
-            -1.2493
-          ],
-          [
-            36.838667,
-            -1.249426
-          ],
-          [
-            36.838755,
-            -1.249488
-          ],
-          [
-            36.838896,
-            -1.249601
-          ],
-          [
-            36.839201,
-            -1.249907
-          ],
-          [
-            36.839471,
-            -1.25029
-          ],
-          [
             36.839837,
             -1.250795
+          ],
+          [
+            36.839894,
+            -1.250656
+          ],
+          [
+            36.839887,
+            -1.25056
+          ],
+          [
+            36.839891,
+            -1.250364
+          ],
+          [
+            36.839896,
+            -1.250149
+          ],
+          [
+            36.839896,
+            -1.249985
+          ],
+          [
+            36.839905,
+            -1.249822
+          ],
+          [
+            36.839923,
+            -1.249651
+          ],
+          [
+            36.839934,
+            -1.249489
+          ],
+          [
+            36.839942,
+            -1.249209
           ]
         ]
       }
@@ -14970,7 +16955,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 181,
+        "contig_id": 213,
         "length_m": 174.786,
         "segment_count": 11,
         "way_names": [],
@@ -14996,7 +16981,7 @@
           12330726043
         ],
         "tags": {
-          "local:routing_state": "include"
+          "local:routing_state": "exclude"
         },
         "elevations_m": [
           1684.0,
@@ -15070,7 +17055,175 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 182,
+        "contig_id": 214,
+        "length_m": 311.59,
+        "segment_count": 11,
+        "way_names": [
+          "Kima Trail"
+        ],
+        "way_ids": [
+          196510846
+        ],
+        "endpoint_node_ids": [
+          9923873816,
+          13768277790
+        ],
+        "node_ids": [
+          9923873816,
+          2068386514,
+          2068386510,
+          2068386499,
+          2068386497,
+          2068386495,
+          2068386489,
+          2068386475,
+          9923907666,
+          2068386461,
+          2068386446,
+          13768277790
+        ],
+        "tags": {},
+        "elevations_m": [
+          1702.0,
+          1703.0,
+          1704.0,
+          1704.0,
+          1703.0,
+          1702.0,
+          1701.0,
+          1700.0,
+          1700.0,
+          1700.0,
+          1699.0,
+          1698.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820876,
+            -1.235835
+          ],
+          [
+            36.820956,
+            -1.235696
+          ],
+          [
+            36.821057,
+            -1.23555
+          ],
+          [
+            36.821244,
+            -1.235079
+          ],
+          [
+            36.821326,
+            -1.234852
+          ],
+          [
+            36.821357,
+            -1.234753
+          ],
+          [
+            36.821432,
+            -1.234605
+          ],
+          [
+            36.821608,
+            -1.234378
+          ],
+          [
+            36.821818,
+            -1.234142
+          ],
+          [
+            36.821906,
+            -1.234043
+          ],
+          [
+            36.822294,
+            -1.233783
+          ],
+          [
+            36.822495,
+            -1.233645
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 215,
+        "length_m": 72.893,
+        "segment_count": 6,
+        "way_names": [],
+        "way_ids": [
+          1082822653
+        ],
+        "endpoint_node_ids": [
+          9923873816,
+          9923907622
+        ],
+        "node_ids": [
+          9923873816,
+          9923907617,
+          9923907618,
+          9923907619,
+          9923907620,
+          9923907621,
+          9923907622
+        ],
+        "tags": {},
+        "elevations_m": [
+          1702.0,
+          1703.0,
+          1705.0,
+          1705.0,
+          1705.0,
+          1705.0,
+          1705.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820876,
+            -1.235835
+          ],
+          [
+            36.820828,
+            -1.235752
+          ],
+          [
+            36.820777,
+            -1.235599
+          ],
+          [
+            36.820731,
+            -1.23551
+          ],
+          [
+            36.820667,
+            -1.235492
+          ],
+          [
+            36.820588,
+            -1.235492
+          ],
+          [
+            36.82046,
+            -1.235408
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 216,
         "length_m": 55.657,
         "segment_count": 2,
         "way_names": [],
@@ -15114,7 +17267,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 183,
+        "contig_id": 217,
         "length_m": 91.978,
         "segment_count": 1,
         "way_names": [],
@@ -15152,7 +17305,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 184,
+        "contig_id": 218,
         "length_m": 72.005,
         "segment_count": 5,
         "way_names": [],
@@ -15214,7 +17367,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 185,
+        "contig_id": 219,
         "length_m": 20.194,
         "segment_count": 2,
         "way_names": [],
@@ -15258,7 +17411,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 186,
+        "contig_id": 220,
         "length_m": 57.564,
         "segment_count": 3,
         "way_names": [],
@@ -15308,7 +17461,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 187,
+        "contig_id": 221,
         "length_m": 62.792,
         "segment_count": 3,
         "way_names": [],
@@ -15358,7 +17511,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 188,
+        "contig_id": 222,
         "length_m": 62.698,
         "segment_count": 2,
         "way_names": [],
@@ -15402,7 +17555,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 189,
+        "contig_id": 223,
         "length_m": 35.054,
         "segment_count": 1,
         "way_names": [
@@ -15442,7 +17595,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 190,
+        "contig_id": 224,
         "length_m": 72.661,
         "segment_count": 5,
         "way_names": [],
@@ -15504,7 +17657,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 191,
+        "contig_id": 225,
         "length_m": 124.158,
         "segment_count": 17,
         "way_names": [],
@@ -15638,7 +17791,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 192,
+        "contig_id": 226,
         "length_m": 254.212,
         "segment_count": 5,
         "way_names": [
@@ -15702,7 +17855,7 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 193,
+        "contig_id": 227,
         "length_m": 262.614,
         "segment_count": 19,
         "way_names": [],
@@ -15848,7 +18001,1184 @@
     {
       "type": "Feature",
       "properties": {
-        "contig_id": 194,
+        "contig_id": 228,
+        "length_m": 6.204,
+        "segment_count": 1,
+        "way_names": [
+          "Lake Trail"
+        ],
+        "way_ids": [
+          196510851
+        ],
+        "endpoint_node_ids": [
+          13075347395,
+          13768348454
+        ],
+        "node_ids": [
+          13075347395,
+          13768348454
+        ],
+        "tags": {},
+        "elevations_m": [
+          1693.0,
+          1693.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820656,
+            -1.244442
+          ],
+          [
+            36.820712,
+            -1.244443
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 229,
+        "length_m": 191.357,
+        "segment_count": 5,
+        "way_names": [],
+        "way_ids": [
+          1504625701
+        ],
+        "endpoint_node_ids": [
+          13768011702,
+          13768011707
+        ],
+        "node_ids": [
+          13768011702,
+          13768011703,
+          13768011704,
+          13768011705,
+          13768011706,
+          13768011707
+        ],
+        "tags": {},
+        "elevations_m": [
+          1686.0,
+          1690.0,
+          1690.0,
+          1692.0,
+          1693.0,
+          1695.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.821067,
+            -1.225086
+          ],
+          [
+            36.820664,
+            -1.225128
+          ],
+          [
+            36.820207,
+            -1.225075
+          ],
+          [
+            36.819842,
+            -1.225154
+          ],
+          [
+            36.819669,
+            -1.225306
+          ],
+          [
+            36.819501,
+            -1.225495
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 230,
+        "length_m": 158.073,
+        "segment_count": 4,
+        "way_names": [],
+        "way_ids": [
+          1504673113
+        ],
+        "endpoint_node_ids": [
+          13768277790,
+          13768277794
+        ],
+        "node_ids": [
+          13768277790,
+          13768277791,
+          13768277792,
+          13768277793,
+          13768277794
+        ],
+        "tags": {},
+        "elevations_m": [
+          1698.0,
+          1693.0,
+          1694.0,
+          1694.0,
+          1685.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.822495,
+            -1.233645
+          ],
+          [
+            36.822957,
+            -1.233521
+          ],
+          [
+            36.823265,
+            -1.233397
+          ],
+          [
+            36.823601,
+            -1.233224
+          ],
+          [
+            36.823798,
+            -1.233098
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 231,
+        "length_m": 27.71,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672083
+        ],
+        "endpoint_node_ids": [
+          13768348454,
+          13768348455
+        ],
+        "node_ids": [
+          13768348454,
+          13768348455
+        ],
+        "tags": {},
+        "elevations_m": [
+          1693.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820712,
+            -1.244443
+          ],
+          [
+            36.820712,
+            -1.244692
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 232,
+        "length_m": 26.562,
+        "segment_count": 1,
+        "way_names": [
+          "Lake Trail"
+        ],
+        "way_ids": [
+          196510851
+        ],
+        "endpoint_node_ids": [
+          13768348454,
+          13768348456
+        ],
+        "node_ids": [
+          13768348454,
+          13768348456
+        ],
+        "tags": {},
+        "elevations_m": [
+          1693.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820712,
+            -1.244443
+          ],
+          [
+            36.820951,
+            -1.244447
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 233,
+        "length_m": 38.031,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672083
+        ],
+        "endpoint_node_ids": [
+          13768348455,
+          13768348456
+        ],
+        "node_ids": [
+          13768348455,
+          13768348456
+        ],
+        "tags": {},
+        "elevations_m": [
+          1694.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820712,
+            -1.244692
+          ],
+          [
+            36.820951,
+            -1.244447
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 234,
+        "length_m": 373.961,
+        "segment_count": 16,
+        "way_names": [],
+        "way_ids": [
+          1504672084
+        ],
+        "endpoint_node_ids": [
+          13768348455,
+          13768348472
+        ],
+        "node_ids": [
+          13768348455,
+          13768348457,
+          13768348458,
+          13768348459,
+          13768348460,
+          13768348461,
+          13768348462,
+          13768348463,
+          13768348464,
+          13768348465,
+          13768348466,
+          13768348467,
+          13768348468,
+          13768348469,
+          13768348470,
+          13768348471,
+          13768348472
+        ],
+        "tags": {},
+        "elevations_m": [
+          1694.0,
+          1694.0,
+          1695.0,
+          1695.0,
+          1695.0,
+          1693.0,
+          1691.0,
+          1693.0,
+          1691.0,
+          1690.0,
+          1689.0,
+          1690.0,
+          1690.0,
+          1692.0,
+          1693.0,
+          1694.0,
+          1696.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.820712,
+            -1.244692
+          ],
+          [
+            36.820727,
+            -1.244942
+          ],
+          [
+            36.820796,
+            -1.245052
+          ],
+          [
+            36.820905,
+            -1.245139
+          ],
+          [
+            36.820955,
+            -1.245302
+          ],
+          [
+            36.820947,
+            -1.245472
+          ],
+          [
+            36.821015,
+            -1.245616
+          ],
+          [
+            36.821185,
+            -1.245472
+          ],
+          [
+            36.821314,
+            -1.245578
+          ],
+          [
+            36.821442,
+            -1.245591
+          ],
+          [
+            36.821606,
+            -1.24566
+          ],
+          [
+            36.821903,
+            -1.245674
+          ],
+          [
+            36.822136,
+            -1.245683
+          ],
+          [
+            36.822338,
+            -1.24571
+          ],
+          [
+            36.822567,
+            -1.24584
+          ],
+          [
+            36.822793,
+            -1.245911
+          ],
+          [
+            36.823151,
+            -1.246117
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 235,
+        "length_m": 385.709,
+        "segment_count": 9,
+        "way_names": [],
+        "way_ids": [
+          1504672084
+        ],
+        "endpoint_node_ids": [
+          13768348472,
+          13768348481
+        ],
+        "node_ids": [
+          13768348472,
+          13768348473,
+          13768348474,
+          13768348475,
+          13768348476,
+          13768348477,
+          13768348478,
+          13768348479,
+          13768348480,
+          13768348481
+        ],
+        "tags": {},
+        "elevations_m": [
+          1696.0,
+          1692.0,
+          1689.0,
+          1684.0,
+          1688.0,
+          1684.0,
+          1685.0,
+          1685.0,
+          1687.0,
+          1687.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.823151,
+            -1.246117
+          ],
+          [
+            36.823448,
+            -1.246228
+          ],
+          [
+            36.823651,
+            -1.246395
+          ],
+          [
+            36.823866,
+            -1.24682
+          ],
+          [
+            36.824238,
+            -1.246999
+          ],
+          [
+            36.82476,
+            -1.247192
+          ],
+          [
+            36.82509,
+            -1.247107
+          ],
+          [
+            36.825459,
+            -1.247268
+          ],
+          [
+            36.825814,
+            -1.247251
+          ],
+          [
+            36.82603,
+            -1.246982
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 236,
+        "length_m": 60.916,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672085
+        ],
+        "endpoint_node_ids": [
+          13768348472,
+          13768348482
+        ],
+        "node_ids": [
+          13768348472,
+          13768348482
+        ],
+        "tags": {},
+        "elevations_m": [
+          1696.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.823151,
+            -1.246117
+          ],
+          [
+            36.823284,
+            -1.245586
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 237,
+        "length_m": 62.338,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504672085
+        ],
+        "endpoint_node_ids": [
+          13768348472,
+          13768348483
+        ],
+        "node_ids": [
+          13768348472,
+          13768348483
+        ],
+        "tags": {},
+        "elevations_m": [
+          1696.0,
+          1684.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.823151,
+            -1.246117
+          ],
+          [
+            36.823028,
+            -1.246664
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 238,
+        "length_m": 361.346,
+        "segment_count": 9,
+        "way_names": [],
+        "way_ids": [
+          1504672086
+        ],
+        "endpoint_node_ids": [
+          13768348481,
+          13768348482
+        ],
+        "node_ids": [
+          13768348481,
+          13768348499,
+          13768348498,
+          13768348497,
+          13768348496,
+          13768348495,
+          13768348494,
+          13768348493,
+          13768348492,
+          13768348482
+        ],
+        "tags": {},
+        "elevations_m": [
+          1687.0,
+          1690.0,
+          1692.0,
+          1691.0,
+          1691.0,
+          1692.0,
+          1692.0,
+          1694.0,
+          1695.0,
+          1694.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.82603,
+            -1.246982
+          ],
+          [
+            36.825661,
+            -1.246942
+          ],
+          [
+            36.825308,
+            -1.246669
+          ],
+          [
+            36.824979,
+            -1.246512
+          ],
+          [
+            36.824869,
+            -1.246333
+          ],
+          [
+            36.824613,
+            -1.246139
+          ],
+          [
+            36.824207,
+            -1.246008
+          ],
+          [
+            36.823847,
+            -1.245766
+          ],
+          [
+            36.823681,
+            -1.245544
+          ],
+          [
+            36.823284,
+            -1.245586
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 239,
+        "length_m": 381.603,
+        "segment_count": 10,
+        "way_names": [],
+        "way_ids": [
+          1504822990
+        ],
+        "endpoint_node_ids": [
+          13769333317,
+          13769333327
+        ],
+        "node_ids": [
+          13769333317,
+          13769333318,
+          13769333319,
+          13769333320,
+          13769333321,
+          13769333322,
+          13769333323,
+          13769333324,
+          13769333325,
+          13769333326,
+          13769333327
+        ],
+        "tags": {},
+        "elevations_m": [
+          1673.0,
+          1672.0,
+          1667.0,
+          1664.0,
+          1663.0,
+          1665.0,
+          1663.0,
+          1661.0,
+          1664.0,
+          1666.0,
+          1664.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.837182,
+            -1.236255
+          ],
+          [
+            36.837652,
+            -1.236484
+          ],
+          [
+            36.837892,
+            -1.236534
+          ],
+          [
+            36.838179,
+            -1.236604
+          ],
+          [
+            36.838437,
+            -1.236726
+          ],
+          [
+            36.838673,
+            -1.23694
+          ],
+          [
+            36.839011,
+            -1.237071
+          ],
+          [
+            36.839302,
+            -1.237113
+          ],
+          [
+            36.83965,
+            -1.237212
+          ],
+          [
+            36.839861,
+            -1.237469
+          ],
+          [
+            36.840115,
+            -1.237796
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 240,
+        "length_m": 351.03,
+        "segment_count": 12,
+        "way_names": [],
+        "way_ids": [
+          1504829330
+        ],
+        "endpoint_node_ids": [
+          13769333327,
+          13769344192
+        ],
+        "node_ids": [
+          13769333327,
+          13769344181,
+          13769344182,
+          13769344183,
+          13769344184,
+          13769344185,
+          13769344186,
+          13769344187,
+          13769344188,
+          13769344189,
+          13769344190,
+          13769344191,
+          13769344192
+        ],
+        "tags": {},
+        "elevations_m": [
+          1664.0,
+          1662.0,
+          1661.0,
+          1659.0,
+          1658.0,
+          1658.0,
+          1659.0,
+          1661.0,
+          1664.0,
+          1665.0,
+          1666.0,
+          1667.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.840115,
+            -1.237796
+          ],
+          [
+            36.840374,
+            -1.237923
+          ],
+          [
+            36.840551,
+            -1.237894
+          ],
+          [
+            36.840849,
+            -1.237945
+          ],
+          [
+            36.841037,
+            -1.238078
+          ],
+          [
+            36.841294,
+            -1.238111
+          ],
+          [
+            36.841595,
+            -1.238113
+          ],
+          [
+            36.84183,
+            -1.238147
+          ],
+          [
+            36.842073,
+            -1.238194
+          ],
+          [
+            36.842346,
+            -1.23818
+          ],
+          [
+            36.84261,
+            -1.238206
+          ],
+          [
+            36.842853,
+            -1.238261
+          ],
+          [
+            36.843173,
+            -1.238309
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 241,
+        "length_m": 128.874,
+        "segment_count": 5,
+        "way_names": [],
+        "way_ids": [
+          1504829331
+        ],
+        "endpoint_node_ids": [
+          13769344192,
+          13769344199
+        ],
+        "node_ids": [
+          13769344192,
+          13769344195,
+          13769344196,
+          13769344197,
+          13769344198,
+          13769344199
+        ],
+        "tags": {},
+        "elevations_m": [
+          1669.0,
+          1670.0,
+          1673.0,
+          1673.0,
+          1672.0,
+          1672.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843173,
+            -1.238309
+          ],
+          [
+            36.843295,
+            -1.238487
+          ],
+          [
+            36.843347,
+            -1.238817
+          ],
+          [
+            36.843399,
+            -1.239108
+          ],
+          [
+            36.843428,
+            -1.23931
+          ],
+          [
+            36.843527,
+            -1.239356
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 242,
+        "length_m": 38.71,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504829331,
+          1504838854
+        ],
+        "endpoint_node_ids": [
+          13769344199,
+          13769344200
+        ],
+        "node_ids": [
+          13769344199,
+          13769344200
+        ],
+        "tags": {},
+        "elevations_m": [
+          1672.0,
+          1670.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843527,
+            -1.239356
+          ],
+          [
+            36.843546,
+            -1.239703
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 243,
+        "length_m": 26.715,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504838854
+        ],
+        "endpoint_node_ids": [
+          13769344199,
+          13769374297
+        ],
+        "node_ids": [
+          13769344199,
+          13769374297
+        ],
+        "tags": {},
+        "elevations_m": [
+          1672.0,
+          1672.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843527,
+            -1.239356
+          ],
+          [
+            36.843767,
+            -1.239354
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 244,
+        "length_m": 25.579,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504838854
+        ],
+        "endpoint_node_ids": [
+          13769344200,
+          13769374298
+        ],
+        "node_ids": [
+          13769344200,
+          13769374298
+        ],
+        "tags": {},
+        "elevations_m": [
+          1670.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843546,
+            -1.239703
+          ],
+          [
+            36.843776,
+            -1.239723
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 245,
+        "length_m": 28.592,
+        "segment_count": 1,
+        "way_names": [
+          "Wangari Maathai Trail"
+        ],
+        "way_ids": [
+          692748275
+        ],
+        "endpoint_node_ids": [
+          13769344200,
+          13769374300
+        ],
+        "node_ids": [
+          13769344200,
+          13769374300
+        ],
+        "tags": {},
+        "elevations_m": [
+          1670.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843546,
+            -1.239703
+          ],
+          [
+            36.843784,
+            -1.239803
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 246,
+        "length_m": 41.008,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504838855
+        ],
+        "endpoint_node_ids": [
+          13769374297,
+          13769374298
+        ],
+        "node_ids": [
+          13769374297,
+          13769374298
+        ],
+        "tags": {},
+        "elevations_m": [
+          1672.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843767,
+            -1.239354
+          ],
+          [
+            36.843776,
+            -1.239723
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 247,
+        "length_m": 12.943,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504838855
+        ],
+        "endpoint_node_ids": [
+          13769374297,
+          13769374299
+        ],
+        "node_ids": [
+          13769374297,
+          13769374299
+        ],
+        "tags": {},
+        "elevations_m": [
+          1672.0,
+          1673.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843767,
+            -1.239354
+          ],
+          [
+            36.843863,
+            -1.239287
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 248,
+        "length_m": 8.972,
+        "segment_count": 1,
+        "way_names": [],
+        "way_ids": [
+          1504838855
+        ],
+        "endpoint_node_ids": [
+          13769374298,
+          13769374300
+        ],
+        "node_ids": [
+          13769374298,
+          13769374300
+        ],
+        "tags": {},
+        "elevations_m": [
+          1669.0,
+          1669.0
+        ]
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            36.843776,
+            -1.239723
+          ],
+          [
+            36.843784,
+            -1.239803
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "contig_id": 249,
         "length_m": 344.404,
         "segment_count": 14,
         "way_names": [],

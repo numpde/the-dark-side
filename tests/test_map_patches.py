@@ -10,11 +10,13 @@ from the_dark_side.asset_contracts import load_required_json, load_required_patc
 from the_dark_side.apply_karura_patches import apply_patchset, build_inside_karura, compute_way_record
 from the_dark_side.build_karura_contigs import build_contigs
 from the_dark_side.karura_common import (
+    include_baseline_way,
     include_editor_way,
     include_ride_way,
     is_currently_unavailable,
 )
 from the_dark_side.download_karura_map import BoundaryComponent, BoundaryRecord, KaruraMap, NodeRecord
+from the_dark_side.route_policy import apply_route_policy_bindings, build_route_policy_bindings
 
 
 class MapPatchPipelineTest(unittest.TestCase):
@@ -352,22 +354,25 @@ class MapPatchPipelineTest(unittest.TestCase):
         contig_graph = build_contigs(
             payload,
             source_map="data/karura_map.json",
-            patchset={
-                "meta": {"patchset_id": "contig-tags"},
-                "patches": [
-                    {
-                        "id": "editor-policy-contig-1",
-                        "op": "update_contig_tags",
-                        "contig_id": 1,
-                        "node_ids": [11, 12, 13],
-                        "set": {
-                            "local:unavailable_until": "2099-12-31",
-                            "local:bicycle_direction": "forward",
-                        },
-                    }
-                ],
-            },
-            patchset_path="source/karura-map-patches.json",
+        )
+        route_policy = {
+            "meta": {"asset_kind": "route_policy", "asset_id": "contig-tags"},
+            "rules": [
+                {
+                    "id": "editor-policy-contig-1",
+                    "selector": {"way_ids": [10, 20], "node_ids": [11, 12, 13]},
+                    "policy": {
+                        "unavailable_until": "2099-12-31",
+                        "bicycle_direction": "forward",
+                    },
+                }
+            ],
+        }
+        bindings = build_route_policy_bindings(route_policy, contig_graph)
+        contig_graph = apply_route_policy_bindings(
+            contig_graph,
+            bindings,
+            route_policy_path="source/karura-route-policy.json",
         )
 
         first = contig_graph["contigs"][0]
@@ -377,44 +382,61 @@ class MapPatchPipelineTest(unittest.TestCase):
 
     def test_build_contigs_rejects_invalid_contig_policy_values(self) -> None:
         payload = self.build_map().to_dict()
-        with self.assertRaisesRegex(ValueError, "invalid local:routing_state"):
-            build_contigs(
-                payload,
-                source_map="data/karura_map.json",
-                patchset={
-                    "meta": {"patchset_id": "contig-tags"},
-                    "patches": [
+        contig_graph = build_contigs(payload, source_map="data/karura_map.json")
+        with self.assertRaisesRegex(ValueError, "routing_state must be include or exclude"):
+            build_route_policy_bindings(
+                {
+                    "meta": {"asset_kind": "route_policy", "asset_id": "contig-tags"},
+                    "rules": [
                         {
                             "id": "editor-policy-contig-1",
-                            "op": "update_contig_tags",
-                            "contig_id": 1,
-                            "node_ids": [11, 12, 13],
-                            "set": {"local:routing_state": "sideways"},
+                            "selector": {"way_ids": [10, 20], "node_ids": [11, 12, 13]},
+                            "policy": {"routing_state": "sideways"},
                         }
                     ],
                 },
-                patchset_path="source/karura-map-patches.json",
+                contig_graph,
             )
 
     def test_build_contigs_rejects_stale_contig_signature(self) -> None:
         payload = self.build_map().to_dict()
+        contig_graph = build_contigs(payload, source_map="data/karura_map.json")
         with self.assertRaises(ValueError):
-            build_contigs(
-                payload,
-                source_map="data/karura_map.json",
-                patchset={
-                    "meta": {"patchset_id": "contig-tags"},
-                    "patches": [
+            build_route_policy_bindings(
+                {
+                    "meta": {"asset_kind": "route_policy", "asset_id": "contig-tags"},
+                    "rules": [
                         {
                             "id": "editor-policy-contig-1",
-                            "op": "update_contig_tags",
-                            "contig_id": 1,
-                            "node_ids": [11, 12],
-                            "set": {"local:unavailable_until": "2099-12-31"},
+                            "selector": {"way_ids": [10, 20], "node_ids": [11, 12]},
+                            "policy": {"unavailable_until": "2099-12-31"},
                         }
                     ],
                 },
-                patchset_path="source/karura-map-patches.json",
+                contig_graph,
+            )
+
+    def test_build_contigs_rejects_ambiguous_route_policy_selector(self) -> None:
+        contig_graph = {
+            "meta": {"asset_id": "graph"},
+            "contigs": [
+                {"id": 1, "way_ids": [10], "node_ids": [11, 12, 13], "tags": {}},
+                {"id": 2, "way_ids": [10], "node_ids": [13, 12, 11], "tags": {}},
+            ],
+        }
+        with self.assertRaisesRegex(ValueError, "selector is ambiguous on the current graph"):
+            build_route_policy_bindings(
+                {
+                    "meta": {"asset_kind": "route_policy", "asset_id": "contig-tags"},
+                    "rules": [
+                        {
+                            "id": "editor-policy-contig-1",
+                            "selector": {"way_ids": [10], "node_ids": [11, 12, 13]},
+                            "policy": {"routing_state": "exclude"},
+                        }
+                    ],
+                },
+                contig_graph,
             )
 
     def test_build_contigs_asset_id_includes_graph_mode(self) -> None:
@@ -422,20 +444,62 @@ class MapPatchPipelineTest(unittest.TestCase):
         ride_graph = build_contigs(
             payload,
             source_map="data/karura_map.json",
-            patchset={"meta": {"patchset_id": "contig-tags"}, "patches": []},
-            patchset_path="source/karura-map-patches.json",
             graph_mode="ride",
         )
         editor_graph = build_contigs(
             payload,
             source_map="data/karura_map.json",
-            patchset={"meta": {"patchset_id": "contig-tags"}, "patches": []},
-            patchset_path="source/karura-map-patches.json",
             graph_mode="editor",
         )
         self.assertNotEqual(ride_graph["meta"]["asset_id"], editor_graph["meta"]["asset_id"])
         self.assertIn("karura-contigs-ride-from-", ride_graph["meta"]["asset_id"])
         self.assertIn("karura-contigs-editor-from-", editor_graph["meta"]["asset_id"])
+
+    def test_build_contigs_splits_at_route_policy_boundaries(self) -> None:
+        payload = self.build_map().to_dict()
+        route_policy = {
+            "meta": {"asset_kind": "route_policy", "asset_id": "policy-split"},
+            "rules": [
+                {
+                    "id": "rule-1",
+                    "selector": {"way_ids": [10], "node_ids": [11, 12]},
+                    "policy": {"routing_state": "exclude"},
+                }
+            ],
+        }
+        contig_graph = build_contigs(
+            payload,
+            source_map="data/karura_map.json",
+            include_way=include_baseline_way,
+            route_policy=route_policy,
+            graph_mode="ride",
+        )
+        self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[11, 12], [12, 13]])
+        self.assertEqual(contig_graph["contigs"][0]["tags"]["local:routing_state"], "exclude")
+        self.assertEqual(contig_graph["contigs"][1]["tags"], {})
+
+    def test_build_contigs_can_include_policy_selected_nonbaseline_way(self) -> None:
+        payload = self.build_map().to_dict()
+        payload["ways"]["20"]["tags"] = {"name": "Nonbaseline shortcut"}
+        route_policy = {
+            "meta": {"asset_kind": "route_policy", "asset_id": "policy-include"},
+            "rules": [
+                {
+                    "id": "rule-include",
+                    "selector": {"way_ids": [20], "node_ids": [12, 13]},
+                    "policy": {"routing_state": "include"},
+                }
+            ],
+        }
+        contig_graph = build_contigs(
+            payload,
+            source_map="data/karura_map.json",
+            include_way=include_baseline_way,
+            route_policy=route_policy,
+            graph_mode="ride",
+        )
+        self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[11, 12], [12, 13]])
+        self.assertEqual(contig_graph["contigs"][1]["tags"]["local:routing_state"], "include")
 
     def test_compute_way_record_keeps_segment_if_either_endpoint_is_inside(self) -> None:
         nodes = {

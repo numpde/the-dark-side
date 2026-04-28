@@ -213,10 +213,12 @@ This writes:
 - `data/karura_map_patched.json`
 - `data/karura_contigs.json`
 - `data/karura_junction_bindings.json`
+- `data/karura_route_policy_bindings.json`
 - `web/generated/karura-editor-network.geojson`
 - `web/generated/editor-manifest.json`
 - published copies in `web/source/` of:
   - `source/karura-map-patches.json`
+  - `source/karura-route-policy.json`
   - `source/catalog_build.json`
 
 Rebuild the published route app assets:
@@ -277,11 +279,11 @@ The page will:
 - generate a GPX download in the browser for the current route
 
 The editor will:
-- load the current patch file automatically
+- load the current route policy automatically
 - let you mark baseline transport contigs (all kept `highway=*` plus `amenity=parking`) as `default`, `include`, or `exclude`
 - annotate `bikeability` and allowed bike direction
 - annotate contigs as unavailable until a specific date
-- export a replacement for `source/karura-map-patches.json`
+- export a replacement for `source/karura-route-policy.json`
 
 GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow rebuilds the editor/app assets, verifies provenance, and publishes `web/`.
 It also runs on a daily schedule so `unavailable until` dates can expire out of the published browser-planner graph without a manual push.
@@ -290,7 +292,7 @@ It also runs on a daily schedule so `unavailable until` dates can expire out of 
 
 The repo treats OpenStreetMap as the upstream base layer, then applies a local override layer for product-specific corrections.
 
-Use `source/karura-map-patches.json` for structural fixes and contig policy that should affect the normalized map before graph building. The current patch language supports:
+Use `source/karura-map-patches.json` only for structural fixes that should affect the normalized map before graph building. The current patch language supports:
 
 - `add_way`
 - `remove_way`
@@ -304,7 +306,16 @@ This is the right place for:
 - access or surface tag overrides
 - removing paths that should not exist in the local product graph
 
-Use `curated/karura_routing_overrides.json` for time-varying routing knowledge that should sit on top of the contig graph rather than alter the base map. This catalog is reserved for:
+Use `source/karura-route-policy.json` for canonical route policy that should be rebound onto each refreshed contig graph. This is the right place for:
+
+- include / exclude decisions
+- bikeability ratings
+- bicycle direction constraints
+- `unavailable_until` dates
+
+`data/karura_route_policy_bindings.json` is the derived binding layer that resolves those canonical rules onto the current ride graph. Rebuilds should fail if a canonical rule no longer matches the refreshed graph.
+
+`curated/karura_routing_overrides.json` remains reserved for future time-varying or experimental routing knowledge that should sit above the canonical route-policy layer rather than alter the base map. This catalog is reserved for:
 
 - temporary closures
 - construction
@@ -322,6 +333,7 @@ Canonical inputs:
 
 - `data/karura_map.json`
 - `source/karura-map-patches.json`
+- `source/karura-route-policy.json`
 - `source/catalog_build.json`
 - `curated/karura_junctions.json`
 - `curated/karura_figures.json`
@@ -361,10 +373,16 @@ python3 -m the_dark_side.verify_app_assets
 - `crossings`: graph nodes with degree other than `2`
 - `contigs`: maximal chains of kept baseline transport segments between crossings or dead ends
 
-`source/karura-map-patches.json` contains local structural edits and contig policy layered on top of the downloaded map asset:
+`source/karura-map-patches.json` contains local structural edits layered on top of the downloaded map asset:
 
 - `meta`: patchset metadata
 - `patches`: ordered patch operations
+
+`source/karura-route-policy.json` contains the canonical route policy:
+
+- `meta`: route-policy metadata
+- `rules[*].selector`: stable `way_ids` plus `node_ids` signatures for the current path segment
+- `rules[*].policy`: include / exclude, bikeability, direction, and availability settings
 
 `source/catalog_build.json` contains the canonical browser-planner build parameters:
 
@@ -381,6 +399,14 @@ python3 -m the_dark_side.verify_app_assets
 - `meta.patchset_digest`: a content digest of the enabled applied patches
 - `meta.applied_patch_ids`: the patch operations that were enabled and applied
 - `nodes` / `ways`: the map payload after local structural edits
+
+`data/karura_route_policy_bindings.json` contains the derived ride-graph binding for the canonical route policy:
+
+- `meta.graph_asset_id` identifies the ride graph it was built against
+- `meta.route_policy_asset_id` identifies the canonical source policy
+- `bindings[*].contig_id` is the current ride-graph contig
+- `bindings[*].way_ids` / `bindings[*].node_ids` are the matched graph signature
+- `bindings[*].policy` is the applied canonical rule payload
 
 `curated/karura_junctions.json` is the manual layer for named junctions:
 

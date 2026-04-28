@@ -8,352 +8,282 @@ const frontendManifest = JSON.parse(
 const editorVersion = frontendManifest.modules.editor_version;
 const {
   POLICY_TAGS,
-  buildPatchsetDocument,
+  buildRoutePolicyDocument,
   defaultWayPolicy,
-  emptyPatchset,
-  normalizePatchset,
-  policyForWay,
-  setWayPolicy,
+  emptyRoutePolicyDocument,
+  normalizeRoutePolicyDocument,
+  policyForContig,
+  setContigPolicy,
 } = await import(`../web/editor-state.mjs?v=${encodeURIComponent(editorVersion)}`);
 
-
-test("normalizePatchset extracts managed policy patches and preserves others", () => {
-  const raw = {
-    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-    patches: [
-      {
-        id: "editor-policy-contig-10",
-        op: "update_contig_tags",
-        contig_id: 10,
-        set: {
-          [POLICY_TAGS.routingState]: "exclude",
-          [POLICY_TAGS.bikeability]: "2",
-        },
-      },
-      {
-        id: "unknown-geometry",
-        op: "replace_way_geometry",
-        way_id: 99,
-        node_ids: [1, 2],
-        nodes: [],
-      },
-    ],
+function feature(contigId, wayIds, nodeIds) {
+  return {
+    properties: {
+      contig_id: contigId,
+      way_ids: wayIds,
+      node_ids: nodeIds,
+    },
   };
+}
 
-  const editorState = normalizePatchset(raw);
-  assert.equal(editorState.passthroughPatches.length, 1);
-  assert.equal(editorState.passthroughPatches[0].id, "unknown-geometry");
-  assert.deepEqual(policyForWay(editorState, 10), {
+function featureMap(...features) {
+  return new Map(features.map((item) => [item.properties.contig_id, item]));
+}
+
+test("normalizeRoutePolicyDocument resolves rules onto the current graph", () => {
+  const features = featureMap(
+    feature(42, [1001], [420, 421, 422]),
+    feature(77, [2001, 2002], [770, 771]),
+  );
+  const editorState = normalizeRoutePolicyDocument(
+    {
+      meta: {
+        asset_kind: "route_policy",
+        asset_id: "karura-route-policy-v1",
+      },
+      rules: [
+        {
+          id: "rule-42",
+          selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+          policy: { routing_state: "exclude", bikeability: 2 },
+        },
+        {
+          id: "rule-77",
+          selector: { way_ids: [2001, 2002], node_ids: [770, 771] },
+          policy: { bicycle_direction: "backward", unavailable_until: "2026-06-30" },
+        },
+      ],
+    },
+    features,
+  );
+
+  assert.equal(editorState.meta.asset_kind, "route_policy");
+  assert.equal(editorState.ruleIdByContigId.get(42), "rule-42");
+  assert.equal(editorState.ruleIdByContigId.get(77), "rule-77");
+  assert.deepEqual(policyForContig(editorState, 42), {
     routingState: "exclude",
     bikeability: 2,
     bicycleDirection: "both",
     unavailableUntil: null,
   });
-});
-
-
-test("normalizePatchset splits mixed contig tag patches into managed policy and passthrough tags", () => {
-  const editorState = normalizePatchset({
-    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-    patches: [
-      {
-        id: "editor-policy-contig-55",
-        op: "update_contig_tags",
-        contig_id: 55,
-        set: {
-          [POLICY_TAGS.routingState]: "exclude",
-          "surface": "gravel",
-        },
-        remove: [POLICY_TAGS.bikeability, "name"],
-      },
-    ],
-  });
-
-  assert.deepEqual(policyForWay(editorState, 55), {
-    routingState: "exclude",
+  assert.deepEqual(policyForContig(editorState, 77), {
+    routingState: "default",
     bikeability: null,
-    bicycleDirection: "both",
-    unavailableUntil: null,
+    bicycleDirection: "backward",
+    unavailableUntil: "2026-06-30",
   });
-  assert.deepEqual(editorState.passthroughPatches, [
-    {
-      id: "editor-policy-contig-55--passthrough",
-      op: "update_contig_tags",
-      contig_id: 55,
-      set: {
-        surface: "gravel",
-      },
-      remove: ["name"],
-    },
-  ]);
-
-  const doc = buildPatchsetDocument(editorState, new Map([
-    [
-      55,
-      {
-        properties: {
-          node_ids: [550, 551],
-        },
-      },
-    ],
-  ]));
-  assert.deepEqual(doc.patches, [
-    {
-      id: "editor-policy-contig-55--passthrough",
-      op: "update_contig_tags",
-      contig_id: 55,
-      set: {
-        surface: "gravel",
-      },
-      remove: ["name"],
-    },
-    {
-      id: "editor-policy-contig-55",
-      op: "update_contig_tags",
-      contig_id: 55,
-      node_ids: [550, 551],
-      set: {
-        [POLICY_TAGS.routingState]: "exclude",
-      },
-    },
-  ]);
 });
 
+test("buildRoutePolicyDocument preserves selectors and emits compact policy fields", () => {
+  const features = featureMap(feature(42, [1001], [420, 421, 422]));
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument());
 
-test("setWayPolicy removes default policy from managed state", () => {
-  const editorState = normalizePatchset(emptyPatchset());
-  setWayPolicy(editorState, 11, {
-    routingState: "include",
-    bikeability: 4,
-    bicycleDirection: "forward",
-    unavailableUntil: "2026-05-10",
-  });
-  assert.notDeepEqual(policyForWay(editorState, 11), defaultWayPolicy());
-  setWayPolicy(editorState, 11, defaultWayPolicy());
-  assert.deepEqual(policyForWay(editorState, 11), defaultWayPolicy());
-});
-
-
-test("buildPatchsetDocument preserves passthrough patches and emits canonical policy patch", () => {
-  const editorState = normalizePatchset({
-    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-    patches: [
-      {
-        id: "passthrough",
-        op: "add_way",
-        way_id: -1,
-        node_ids: [1, 2],
-        nodes: [],
-        tags: { highway: "path" },
-      },
-    ],
-  });
-  setWayPolicy(editorState, 42, {
+  setContigPolicy(editorState, 42, {
     routingState: "include",
     bikeability: 5,
     bicycleDirection: "backward",
     unavailableUntil: "2026-05-10",
   });
 
-  const doc = buildPatchsetDocument(editorState, new Map([
-    [
-      42,
-      {
-        properties: {
-          node_ids: [420, 421],
-        },
+  const document = buildRoutePolicyDocument(editorState, features);
+  assert.deepEqual(document.meta, {
+    asset_kind: "route_policy",
+    asset_id: "karura-route-policy-v1",
+    description: "Canonical route policy on patched-map paths, projected onto the current graph during rebuild.",
+  });
+  assert.equal(document.rules.length, 1);
+  assert.match(document.rules[0].id, /^route-policy-path-[0-9a-f]{8}$/);
+  assert.deepEqual(document.rules[0].selector, {
+    way_ids: [1001],
+    node_ids: [420, 421, 422],
+  });
+  assert.deepEqual(document.rules[0].policy, {
+    routing_state: "include",
+    bikeability: 5,
+    bicycle_direction: "backward",
+    unavailable_until: "2026-05-10",
+  });
+});
+
+test("normalizeRoutePolicyDocument migrates legacy contig tag patchsets by node signature", () => {
+  const features = featureMap(feature(55, [5501], [550, 551]));
+  const editorState = normalizeRoutePolicyDocument(
+    {
+      meta: {
+        asset_kind: "map_patchset",
+        patchset_id: "legacy-policy",
       },
-    ],
-  ]));
-  assert.equal(doc.patches.length, 2);
-  assert.equal(doc.patches[0].id, "passthrough");
-  assert.deepEqual(doc.patches[1], {
-    id: "editor-policy-contig-42",
-    op: "update_contig_tags",
-    contig_id: 42,
-    node_ids: [420, 421],
-    set: {
-      [POLICY_TAGS.routingState]: "include",
-      [POLICY_TAGS.bikeability]: "5",
-      [POLICY_TAGS.bicycleDirection]: "backward",
-      [POLICY_TAGS.unavailableUntil]: "2026-05-10",
+      patches: [
+        {
+          id: "editor-policy-contig-55",
+          op: "update_contig_tags",
+          contig_id: 999,
+          node_ids: [550, 551],
+          set: {
+            [POLICY_TAGS.routingState]: "exclude",
+            [POLICY_TAGS.bikeability]: "2",
+            [POLICY_TAGS.unavailableUntil]: "2026-06-30",
+          },
+        },
+      ],
     },
+    features,
+  );
+
+  assert.equal(editorState.meta.asset_kind, "route_policy");
+  assert.equal(editorState.meta.asset_id, "legacy-policy");
+  assert.equal(editorState.ruleIdByContigId.get(55), "editor-policy-contig-55");
+  assert.deepEqual(policyForContig(editorState, 55), {
+    routingState: "exclude",
+    bikeability: 2,
+    bicycleDirection: "both",
+    unavailableUntil: "2026-06-30",
   });
 });
 
-
-test("normalizePatchset rejects invalid managed policy values instead of sanitizing them", () => {
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-77",
-          op: "update_contig_tags",
-          contig_id: 77,
-          set: {
-            [POLICY_TAGS.routingState]: "sideways",
-          },
-        },
-      ],
-    }),
-    /local:routing_state/
+test("normalizeRoutePolicyDocument expands split selectors across multiple current contigs", () => {
+  const features = featureMap(
+    feature(10, [1001], [420, 421]),
+    feature(11, [1001], [421, 422]),
   );
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-78",
-          op: "update_contig_tags",
-          contig_id: 78,
-          set: {
-            [POLICY_TAGS.bikeability]: "99",
-          },
-        },
-      ],
-    }),
-    /local:bikeability/
-  );
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-79",
-          op: "update_contig_tags",
-          contig_id: 79,
-          set: {
-            [POLICY_TAGS.bicycleDirection]: "uphill-only",
-          },
-        },
-      ],
-    }),
-    /local:bicycle_direction/
-  );
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-80",
-          op: "update_contig_tags",
-          contig_id: 80,
-          set: {
-            [POLICY_TAGS.unavailableUntil]: "soon",
-          },
-        },
-      ],
-    }),
-    /local:unavailable_until/
-  );
-});
-
-test("normalizePatchset rejects malformed patchset documents instead of treating them as empty", () => {
-  assert.throws(
-    () => normalizePatchset({ meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" } }),
-    /Patchset must contain a patches array/
-  );
-  assert.throws(
-    () => normalizePatchset([]),
-    /Patchset must be a JSON object/
-  );
-  assert.throws(
-    () => normalizePatchset({ meta: {}, patches: [] }),
-    /Patchset meta\.asset_kind must be a non-empty string/
-  );
-  assert.deepEqual(normalizePatchset(emptyPatchset()).passthroughPatches, []);
-});
-
-
-test("normalizePatchset rejects malformed managed contig tag patch shapes", () => {
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-12",
-          op: "update_contig_tags",
-          contig_id: 12,
-          set: ["not", "an", "object"],
-        },
-      ],
-    }),
-    /set must be an object/
-  );
-  assert.throws(
-    () => normalizePatchset({
-      meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-      patches: [
-        {
-          id: "editor-policy-contig-13",
-          op: "update_contig_tags",
-          contig_id: 13,
-          remove: "local:routing_state",
-        },
-      ],
-    }),
-    /remove must be an array of strings/
-  );
-});
-
-
-test("normalizePatchset migrates legacy temporary unavailability to far-future unavailable-until", () => {
-  const editorState = normalizePatchset({
-    meta: { asset_kind: "map_patchset", patchset_id: "karura-map-patches-v1" },
-    patches: [
-      {
-        id: "editor-policy-contig-88",
-        op: "update_contig_tags",
-        contig_id: 88,
-        set: {
-          [POLICY_TAGS.legacyAvailability]: "temporarily_unavailable",
-        },
+  const editorState = normalizeRoutePolicyDocument(
+    {
+      meta: {
+        asset_kind: "route_policy",
+        asset_id: "karura-route-policy-v1",
       },
-    ],
-  });
+      rules: [
+        {
+          id: "split-rule",
+          selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+          policy: { routing_state: "exclude" },
+        },
+      ],
+    },
+    features,
+  );
 
-  assert.deepEqual(policyForWay(editorState, 88), {
-    routingState: "default",
+  assert.deepEqual(policyForContig(editorState, 10), {
+    routingState: "exclude",
     bikeability: null,
     bicycleDirection: "both",
-    unavailableUntil: "9999-12-31",
+    unavailableUntil: null,
   });
+  assert.deepEqual(policyForContig(editorState, 11), {
+    routingState: "exclude",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+  assert.match(editorState.ruleIdByContigId.get(10), /^split-rule--[0-9a-f]{8}$/);
+  assert.match(editorState.ruleIdByContigId.get(11), /^split-rule--[0-9a-f]{8}$/);
+  assert.notEqual(editorState.ruleIdByContigId.get(10), editorState.ruleIdByContigId.get(11));
 });
 
-
-test("buildPatchsetDocument includes contig node ids when available", () => {
-  const editorState = normalizePatchset(emptyPatchset());
-  setWayPolicy(editorState, 9, { routingState: "exclude" });
-  const featureById = new Map([
-    [
-      9,
-      {
-        properties: {
-          node_ids: [100, 101, 102],
-        },
-      },
-    ],
-  ]);
-
-  const doc = buildPatchsetDocument(editorState, featureById);
-  assert.deepEqual(doc.patches[0], {
-    id: "editor-policy-contig-9",
-    op: "update_contig_tags",
-    contig_id: 9,
-    node_ids: [100, 101, 102],
-    set: {
-      [POLICY_TAGS.routingState]: "exclude",
-    },
-  });
-});
-
-test("buildPatchsetDocument rejects managed policies for contigs missing from the current graph", () => {
-  const editorState = normalizePatchset(emptyPatchset());
-  setWayPolicy(editorState, 404, { routingState: "exclude" });
-
+test("normalizeRoutePolicyDocument rejects malformed route policy documents", () => {
   assert.throws(
-    () => buildPatchsetDocument(editorState, new Map()),
-    /Current graph is missing contig 404; rebuild editor assets before exporting patches/
+    () => normalizeRoutePolicyDocument({ meta: { asset_kind: "route_policy", asset_id: "x" } }),
+    /Route policy must contain a rules array/,
+  );
+  assert.throws(
+    () =>
+      normalizeRoutePolicyDocument({
+        meta: { asset_kind: "route_policy", asset_id: "x" },
+        rules: [
+          {
+            id: "bad",
+            selector: { way_ids: [1], node_ids: [10, 11] },
+            policy: {},
+          },
+        ],
+      }),
+    /policy must contain at least one policy field/,
+  );
+  assert.throws(
+    () => normalizeRoutePolicyDocument([]),
+    /Route policy must be a JSON object/,
+  );
+});
+
+test("normalizeRoutePolicyDocument rejects legacy patches with unsupported non-policy tags", () => {
+  const features = featureMap(feature(55, [5501], [550, 551]));
+  assert.throws(
+    () =>
+      normalizeRoutePolicyDocument(
+        {
+          meta: {
+            asset_kind: "map_patchset",
+            patchset_id: "legacy-policy",
+          },
+          patches: [
+            {
+              id: "editor-policy-contig-55",
+              op: "update_contig_tags",
+              contig_id: 55,
+              node_ids: [550, 551],
+              set: {
+                [POLICY_TAGS.routingState]: "exclude",
+                surface: "gravel",
+              },
+            },
+          ],
+        },
+        features,
+      ),
+    /unsupported non-policy tags/,
+  );
+});
+
+test("setContigPolicy removes default policy from managed state", () => {
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument());
+  setContigPolicy(editorState, 11, {
+    routingState: "include",
+    bikeability: 4,
+    bicycleDirection: "forward",
+    unavailableUntil: "2026-05-10",
+  });
+  assert.notDeepEqual(policyForContig(editorState, 11), defaultWayPolicy());
+  setContigPolicy(editorState, 11, defaultWayPolicy());
+  assert.deepEqual(policyForContig(editorState, 11), defaultWayPolicy());
+});
+
+test("buildRoutePolicyDocument fails if a selected policy no longer matches the current graph", () => {
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument());
+  setContigPolicy(editorState, 42, {
+    routingState: "exclude",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+  assert.throws(
+    () => buildRoutePolicyDocument(editorState, new Map()),
+    /Current graph is missing contig 42/,
+  );
+});
+
+test("normalizeRoutePolicyDocument rejects ambiguous selectors on the current graph", () => {
+  const features = featureMap(
+    feature(10, [1001], [420, 421, 422]),
+    feature(11, [1001], [422, 421, 420]),
+  );
+  assert.throws(
+    () =>
+      normalizeRoutePolicyDocument(
+        {
+          meta: {
+            asset_kind: "route_policy",
+            asset_id: "karura-route-policy-v1",
+          },
+          rules: [
+            {
+              id: "ambiguous",
+              selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+              policy: { routing_state: "exclude" },
+            },
+          ],
+        },
+        features,
+      ),
+    /selector matches multiple current contigs/,
   );
 });

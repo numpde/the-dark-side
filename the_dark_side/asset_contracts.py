@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 
@@ -30,6 +31,17 @@ def require_nonempty_string(value: object, *, label: str) -> str:
     return value
 
 
+def require_iso_date_string(value: object, *, label: str) -> str:
+    text = require_nonempty_string(value, label=label)
+    try:
+        parsed = date.fromisoformat(text)
+    except ValueError as exc:
+        raise ValueError(f"{label} must be a valid YYYY-MM-DD date") from exc
+    if parsed.isoformat() != text:
+        raise ValueError(f"{label} must be a valid YYYY-MM-DD date")
+    return text
+
+
 def validate_patchset_document(payload: object, *, label: str) -> dict:
     document = require_json_object(payload, label=label)
     meta = require_json_object(document.get("meta"), label=f"{label}.meta")
@@ -41,6 +53,106 @@ def validate_patchset_document(payload: object, *, label: str) -> dict:
 
 def load_required_patchset(path: Path, *, label: str) -> dict:
     return validate_patchset_document(load_required_json(path, label=label), label=label)
+
+
+def require_integer_array(value: object, *, label: str, min_length: int = 0) -> list[int]:
+    items = require_json_array(value, label=label)
+    if any(not isinstance(item, int) for item in items):
+        raise ValueError(f"{label} must contain only integers")
+    if len(items) < min_length:
+        raise ValueError(f"{label} must contain at least {min_length} items")
+    return items
+
+
+def validate_route_policy_fields(policy: object, *, label: str) -> dict:
+    normalized_policy = require_json_object(policy, label=label)
+    if not normalized_policy:
+        raise ValueError(f"{label} must contain at least one policy field")
+    for key, value in normalized_policy.items():
+        if key == "routing_state":
+            if value not in {"include", "exclude"}:
+                raise ValueError(f"{label}.routing_state must be include or exclude")
+        elif key == "bikeability":
+            if not isinstance(value, int) or value < 1 or value > 5:
+                raise ValueError(f"{label}.bikeability must be an integer from 1 to 5")
+        elif key == "bicycle_direction":
+            if value not in {"forward", "backward"}:
+                raise ValueError(f"{label}.bicycle_direction must be forward or backward")
+        elif key == "unavailable_until":
+            require_iso_date_string(value, label=f"{label}.unavailable_until")
+        else:
+            raise ValueError(f"{label} contains unsupported field {key!r}")
+    return normalized_policy
+
+
+def validate_route_policy_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    rules = require_json_array(document.get("rules"), label=f"{label}.rules")
+    for index, rule in enumerate(rules):
+        item = require_json_object(rule, label=f"{label}.rules[{index}]")
+        require_nonempty_string(item.get("id"), label=f"{label}.rules[{index}].id")
+        selector = require_json_object(item.get("selector"), label=f"{label}.rules[{index}].selector")
+        require_integer_array(selector.get("way_ids"), label=f"{label}.rules[{index}].selector.way_ids", min_length=1)
+        require_integer_array(selector.get("node_ids"), label=f"{label}.rules[{index}].selector.node_ids", min_length=2)
+        validate_route_policy_fields(item.get("policy"), label=f"{label}.rules[{index}].policy")
+    return document
+
+
+def load_required_route_policy(path: Path, *, label: str) -> dict:
+    return validate_route_policy_document(load_required_json(path, label=label), label=label)
+
+
+def validate_route_policy_bindings_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    require_nonempty_string(meta.get("graph_asset_id"), label=f"{label}.meta.graph_asset_id")
+    require_nonempty_string(meta.get("route_policy_asset_id"), label=f"{label}.meta.route_policy_asset_id")
+    bindings = require_json_array(document.get("bindings"), label=f"{label}.bindings")
+    for index, binding in enumerate(bindings):
+        item = require_json_object(binding, label=f"{label}.bindings[{index}]")
+        require_nonempty_string(item.get("rule_id"), label=f"{label}.bindings[{index}].rule_id")
+        status = require_nonempty_string(item.get("status"), label=f"{label}.bindings[{index}].status")
+        if status not in {"exact", "reversed", "split_across_contigs"}:
+            raise ValueError(
+                f"{label}.bindings[{index}].status must be exact, reversed, or split_across_contigs"
+            )
+        selector = require_json_object(item.get("selector"), label=f"{label}.bindings[{index}].selector")
+        require_integer_array(selector.get("way_ids"), label=f"{label}.bindings[{index}].selector.way_ids", min_length=1)
+        require_integer_array(selector.get("node_ids"), label=f"{label}.bindings[{index}].selector.node_ids", min_length=2)
+        validate_route_policy_fields(item.get("policy"), label=f"{label}.bindings[{index}].policy")
+        matches = require_json_array(item.get("matches"), label=f"{label}.bindings[{index}].matches")
+        if len(matches) == 0:
+            raise ValueError(f"{label}.bindings[{index}].matches must contain at least one match")
+        for match_index, match in enumerate(matches):
+            match_item = require_json_object(
+                match,
+                label=f"{label}.bindings[{index}].matches[{match_index}]",
+            )
+            contig_id = match_item.get("contig_id")
+            if not isinstance(contig_id, int):
+                raise ValueError(
+                    f"{label}.bindings[{index}].matches[{match_index}].contig_id must be an integer"
+                )
+            require_integer_array(
+                match_item.get("way_ids"),
+                label=f"{label}.bindings[{index}].matches[{match_index}].way_ids",
+                min_length=1,
+            )
+            require_integer_array(
+                match_item.get("node_ids"),
+                label=f"{label}.bindings[{index}].matches[{match_index}].node_ids",
+                min_length=2,
+            )
+    return document
+
+
+def load_required_route_policy_bindings(path: Path, *, label: str) -> dict:
+    return validate_route_policy_bindings_document(load_required_json(path, label=label), label=label)
 
 
 def validate_junction_catalog_document(payload: object, *, label: str) -> dict:

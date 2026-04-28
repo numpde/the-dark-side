@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 
 from .elevation import OpenMeteoElevationClient, OpenTopoDataElevationClient
 from .karura_common import CONTIGS_JSON, ELEVATION_CACHE_DIR, ELEVATION_JSON, utc_now_z, write_json_document

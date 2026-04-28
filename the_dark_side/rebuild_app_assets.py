@@ -74,6 +74,8 @@ def build_app_manifest(
             "ride_graph_asset_id": graph.asset_id,
             "editor_graph_asset_id": editor_manifest["meta"]["editor_graph_asset_id"],
             "junction_bindings_asset_id": junction_bindings["meta"]["asset_id"],
+            "route_policy_asset_id": editor_manifest["meta"]["route_policy_asset_id"],
+            "route_policy_bindings_asset_id": graph.meta.get("route_policy_bindings_asset_id"),
             "catalog_build_path": repo_rel(args.build_config_json),
             "catalog_build_digest": build_config_digest,
             "elevation_asset_matches_graph": elevation_matches_graph,
