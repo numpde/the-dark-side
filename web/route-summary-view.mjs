@@ -57,9 +57,5 @@ export function renderRouteSummary(labelElement, {
     const downText = hasLoss ? formatElevationChange(route.elevation_loss_m) : "—";
     metaText += ` (↗ ${upText}, ↘ ${downText})`;
   }
-  setScenarioLabelMeta(
-    labelElement,
-    metaText,
-    routeStatus === "loading" ? loadingLabel : null,
-  );
+  setScenarioLabelMeta(labelElement, metaText);
 }
