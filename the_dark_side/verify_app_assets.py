@@ -33,11 +33,17 @@ def validate_manifest_schema(manifest: dict) -> None:
         raise SystemExit("app manifest is stale; missing planner object")
     network_path = planner.get("network_path")
     network_version = planner.get("network_version")
+    background_network_path = planner.get("background_network_path")
+    background_network_version = planner.get("background_network_version")
     config = planner.get("config")
     if not isinstance(network_path, str) or not network_path:
         raise SystemExit("app manifest is stale; missing planner.network_path")
     if not isinstance(network_version, str) or not network_version:
         raise SystemExit("app manifest is stale; missing planner.network_version")
+    if not isinstance(background_network_path, str) or not background_network_path:
+        raise SystemExit("app manifest is stale; missing planner.background_network_path")
+    if not isinstance(background_network_version, str) or not background_network_version:
+        raise SystemExit("app manifest is stale; missing planner.background_network_version")
     if not isinstance(config, dict):
         raise SystemExit("app manifest is stale; missing planner.config object")
     for field_name in BROWSER_PLANNER_REQUIRED_NUMERIC_FIELDS:

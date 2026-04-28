@@ -1,6 +1,10 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route map view module");
-const { isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
+const {
+  hasExplicitRoutingInclude,
+  isBoundaryDefaultExcluded,
+  isCurrentlyUnavailable,
+} = await import(`./karura-policy.mjs${moduleSuffix}`);
 
 function mixColor(start, end, fraction) {
   const clamped = Math.max(0, Math.min(1, fraction));
@@ -26,6 +30,15 @@ function junctionLatLon(junction) {
 
 function networkFeatureStyle(feature) {
   const tags = feature?.properties?.tags || {};
+  if (isBoundaryDefaultExcluded(tags) && !hasExplicitRoutingInclude(tags)) {
+    return {
+      color: "#9a8759",
+      weight: 3,
+      opacity: 0.5,
+      dashArray: "8 8",
+      lineCap: "round",
+    };
+  }
   if (isCurrentlyUnavailable(tags)) {
     return {
       color: "#d0741f",
@@ -44,17 +57,25 @@ function networkFeatureStyle(feature) {
 
 function bindNetworkFeature(layer, feature) {
   const tags = feature?.properties?.tags || {};
-  if (!isCurrentlyUnavailable(tags)) {
-    return;
+  if (isBoundaryDefaultExcluded(tags) && !hasExplicitRoutingInclude(tags)) {
+    layer.bindTooltip("Outside core boundary; excluded by default", {
+      direction: "top",
+      sticky: true,
+    });
+    if (!isCurrentlyUnavailable(tags)) {
+      return;
+    }
   }
-  const until = tags["local:unavailable_until"];
-  const message = typeof until === "string"
-    ? `Temporarily unavailable until ${until}`
-    : "Temporarily unavailable";
-  layer.bindTooltip(message, {
-    direction: "top",
-    sticky: true,
-  });
+  if (isCurrentlyUnavailable(tags)) {
+    const until = tags["local:unavailable_until"];
+    const message = typeof until === "string"
+      ? `Temporarily unavailable until ${until}`
+      : "Temporarily unavailable";
+    layer.bindTooltip(message, {
+      direction: "top",
+      sticky: true,
+    });
+  }
 }
 
 export function createRouteMapView(elementId) {
@@ -86,7 +107,7 @@ export function createRouteMapView(elementId) {
     return map;
   }
 
-  function renderNetwork(network) {
+  function renderBackgroundNetwork(network) {
     const activeMap = ensureMap();
     if (networkLayer) {
       networkLayer.remove();
@@ -177,7 +198,7 @@ export function createRouteMapView(elementId) {
 
   return {
     ensureMap,
-    renderNetwork,
+    renderBackgroundNetwork,
     renderRoute,
   };
 }

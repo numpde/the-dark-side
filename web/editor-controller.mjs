@@ -2,6 +2,7 @@ const { requireVersionedModuleContext } = await import(`./module-context.mjs${ne
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor controller module");
 const {
   buildRoutePolicyDocument,
+  explicitPolicyForContig,
   defaultWayPolicy,
   emptyRoutePolicyDocument,
   normalizeRoutePolicyDocument,
@@ -55,6 +56,7 @@ export function createEditorController({ editorManifestUrl, reportError }) {
     onSelectContig: (contigId) => selectContig(contigId),
     resolveFeatureStyle: (feature) => styleForPolicy(
       policyForContig(appState.editorState, feature.properties.contig_id),
+      feature,
       isCurrentlyUnavailable,
     ),
   });
@@ -90,6 +92,9 @@ export function createEditorController({ editorManifestUrl, reportError }) {
     const policy = feature
       ? policyForContig(appState.editorState, appState.selectedContigId)
       : defaultWayPolicy();
+    const explicitPolicy = feature
+      ? explicitPolicyForContig(appState.editorState, appState.selectedContigId)
+      : defaultWayPolicy();
 
     shellView.update({
       feature,
@@ -100,7 +105,7 @@ export function createEditorController({ editorManifestUrl, reportError }) {
       editorGeneratedAtText: appState.editorManifest.meta.generated_at,
       changedCount: appState.editorState.policyByContigId.size,
       routePolicyDocument: currentRoutePolicyDocument(),
-      clearDisabled: !feature || isDefaultPolicy(policy),
+      clearDisabled: !feature || isDefaultPolicy(explicitPolicy),
     });
     mapView.renderSelectedContig(appState.selectedContigId);
   }

@@ -63,8 +63,8 @@ export function createRouteSurfaceRuntime({
       return ensureRouteMapView().ensureMap();
     },
 
-    renderNetwork(network) {
-      ensureRouteMapView().renderNetwork(network);
+    renderBackgroundNetwork(network) {
+      ensureRouteMapView().renderBackgroundNetwork(network);
     },
 
     syncSummary({ route, routeStatus, scenario, loopArrowPhase, loadingLabel = null }) {

@@ -10,12 +10,19 @@ from the_dark_side.asset_contracts import load_required_json, load_required_patc
 from the_dark_side.apply_karura_patches import apply_patchset, build_inside_karura, compute_way_record
 from the_dark_side.build_karura_contigs import build_contigs
 from the_dark_side.karura_common import (
+    LOCAL_BOUNDARY_ZONE_TAG,
     include_baseline_way,
     include_editor_way,
     include_ride_way,
     is_currently_unavailable,
 )
-from the_dark_side.download_karura_map import BoundaryComponent, BoundaryRecord, KaruraMap, NodeRecord
+from the_dark_side.download_karura_map import (
+    BoundaryComponent,
+    BoundaryRecord,
+    KaruraMap,
+    NodeRecord,
+    build_boundary_zone_classifier,
+)
 from the_dark_side.route_policy import apply_route_policy_bindings, build_route_policy_bindings
 
 
@@ -476,7 +483,7 @@ class MapPatchPipelineTest(unittest.TestCase):
         )
         self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[11, 12], [12, 13]])
         self.assertEqual(contig_graph["contigs"][0]["tags"]["local:routing_state"], "exclude")
-        self.assertEqual(contig_graph["contigs"][1]["tags"], {})
+        self.assertEqual(contig_graph["contigs"][1]["tags"], {LOCAL_BOUNDARY_ZONE_TAG: "core"})
 
     def test_build_contigs_can_include_policy_selected_nonbaseline_way(self) -> None:
         payload = self.build_map().to_dict()
@@ -499,6 +506,41 @@ class MapPatchPipelineTest(unittest.TestCase):
             graph_mode="ride",
         )
         self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[11, 12], [12, 13]])
+        self.assertEqual(contig_graph["contigs"][1]["tags"]["local:routing_state"], "include")
+
+    def test_build_contigs_only_includes_policy_selected_way_for_overlapping_segment(self) -> None:
+        payload = self.build_map().to_dict()
+        payload["ways"]["20"]["tags"] = {"name": "Unselected overlapping segment"}
+        payload["ways"]["30"] = {
+            "id": 30,
+            "node_ids": [12, 13],
+            "tags": {"name": "Selected overlapping segment"},
+            "segment_pairs": [[12, 13]],
+            "segment_zones": ["core"],
+            "total_length_m": payload["ways"]["20"]["total_length_m"],
+            "inside_length_m": payload["ways"]["20"]["inside_length_m"],
+            "buffer_length_m": 0.0,
+            "bounds": payload["ways"]["20"]["bounds"],
+        }
+        route_policy = {
+            "meta": {"asset_kind": "route_policy", "asset_id": "policy-overlap"},
+            "rules": [
+                {
+                    "id": "rule-include-overlap",
+                    "selector": {"way_ids": [30], "node_ids": [12, 13]},
+                    "policy": {"routing_state": "include"},
+                }
+            ],
+        }
+        contig_graph = build_contigs(
+            payload,
+            source_map="data/karura_map.json",
+            include_way=include_baseline_way,
+            route_policy=route_policy,
+            graph_mode="ride",
+        )
+        self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[11, 12], [12, 13]])
+        self.assertEqual(contig_graph["contigs"][1]["way_ids"], [30])
         self.assertEqual(contig_graph["contigs"][1]["tags"]["local:routing_state"], "include")
 
     def test_compute_way_record_keeps_segment_if_either_endpoint_is_inside(self) -> None:
@@ -526,6 +568,36 @@ class MapPatchPipelineTest(unittest.TestCase):
         )
         self.assertEqual(record.segment_pairs, [[10, 11]])
         self.assertGreater(record.inside_length_m, 0.0)
+
+    def test_compute_way_record_marks_buffer_segments_and_keeps_them(self) -> None:
+        nodes = {
+            1: NodeRecord(id=1, lat=0.0, lon=0.0),
+            2: NodeRecord(id=2, lat=0.0, lon=1.0),
+            3: NodeRecord(id=3, lat=1.0, lon=1.0),
+            4: NodeRecord(id=4, lat=1.0, lon=0.0),
+            10: NodeRecord(id=10, lat=0.9, lon=1.00015),
+            11: NodeRecord(id=11, lat=0.9, lon=1.00035),
+        }
+        boundary = BoundaryRecord(
+            relation_id=13626194,
+            relation_tags={"name": "Karura"},
+            outer_rings=[[1, 2, 3, 4, 1]],
+            inner_rings=[],
+        )
+        inside_karura = build_inside_karura(boundary, nodes)
+        boundary_zone = build_boundary_zone_classifier(boundary, nodes, boundary_buffer_m=60.0)
+        record = compute_way_record(
+            way_id=80,
+            node_ids=[10, 11],
+            tags={"highway": "path"},
+            nodes=nodes,
+            inside_karura=inside_karura,
+            boundary_zone_for_point=boundary_zone,
+        )
+        self.assertEqual(record.segment_pairs, [[10, 11]])
+        self.assertEqual(record.segment_zones, ["buffer"])
+        self.assertEqual(record.inside_length_m, 0.0)
+        self.assertGreater(record.buffer_length_m, 0.0)
 
     def test_compute_way_record_fills_gap_between_kept_segments(self) -> None:
         nodes = {
@@ -642,6 +714,99 @@ class MapPatchPipelineTest(unittest.TestCase):
         inside_karura = build_inside_karura(boundary, nodes, respect_inner_rings=True)
         self.assertFalse(inside_karura((0.3, 0.3)))
         self.assertTrue(inside_karura((0.8, 0.8)))
+
+    def test_buffer_zone_is_default_excluded_from_ride_graph(self) -> None:
+        payload = {
+            "meta": {"asset_id": "buffer-map", "asset_kind": "patched_map"},
+            "boundary": {"relation_id": 1, "relation_tags": {}, "outer_rings": [], "inner_rings": []},
+            "nodes": {
+                "1": {"id": 1, "lat": 0.0, "lon": 0.0},
+                "2": {"id": 2, "lat": 0.0, "lon": 1.0},
+                "3": {"id": 3, "lat": 0.0, "lon": 2.0},
+            },
+            "ways": {
+                "10": {
+                    "id": 10,
+                    "node_ids": [1, 2],
+                    "tags": {"highway": "path"},
+                    "segment_pairs": [[1, 2]],
+                    "segment_zones": ["core"],
+                    "total_length_m": 100.0,
+                    "inside_length_m": 100.0,
+                    "buffer_length_m": 0.0,
+                    "bounds": [0.0, 0.0, 1.0, 0.0],
+                },
+                "20": {
+                    "id": 20,
+                    "node_ids": [2, 3],
+                    "tags": {"highway": "path"},
+                    "segment_pairs": [[2, 3]],
+                    "segment_zones": ["buffer"],
+                    "total_length_m": 100.0,
+                    "inside_length_m": 0.0,
+                    "buffer_length_m": 100.0,
+                    "bounds": [1.0, 0.0, 2.0, 0.0],
+                },
+            },
+        }
+        contig_graph = build_contigs(payload, source_map="data/karura_map_patched.json")
+        self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[1, 2]])
+        self.assertEqual(contig_graph["contigs"][0]["tags"][LOCAL_BOUNDARY_ZONE_TAG], "core")
+
+    def test_explicit_route_policy_include_can_reenable_buffer_segment(self) -> None:
+        payload = {
+            "meta": {"asset_id": "buffer-map", "asset_kind": "patched_map"},
+            "boundary": {"relation_id": 1, "relation_tags": {}, "outer_rings": [], "inner_rings": []},
+            "nodes": {
+                "1": {"id": 1, "lat": 0.0, "lon": 0.0},
+                "2": {"id": 2, "lat": 0.0, "lon": 1.0},
+                "3": {"id": 3, "lat": 0.0, "lon": 2.0},
+            },
+            "ways": {
+                "10": {
+                    "id": 10,
+                    "node_ids": [1, 2],
+                    "tags": {"highway": "path"},
+                    "segment_pairs": [[1, 2]],
+                    "segment_zones": ["core"],
+                    "total_length_m": 100.0,
+                    "inside_length_m": 100.0,
+                    "buffer_length_m": 0.0,
+                    "bounds": [0.0, 0.0, 1.0, 0.0],
+                },
+                "20": {
+                    "id": 20,
+                    "node_ids": [2, 3],
+                    "tags": {"highway": "path"},
+                    "segment_pairs": [[2, 3]],
+                    "segment_zones": ["buffer"],
+                    "total_length_m": 100.0,
+                    "inside_length_m": 0.0,
+                    "buffer_length_m": 100.0,
+                    "bounds": [1.0, 0.0, 2.0, 0.0],
+                },
+            },
+        }
+        route_policy = {
+            "meta": {"asset_kind": "route_policy", "asset_id": "buffer-include"},
+            "rules": [
+                {
+                    "id": "rule-buffer-include",
+                    "selector": {"way_ids": [20], "node_ids": [2, 3]},
+                    "policy": {"routing_state": "include"},
+                }
+            ],
+        }
+        contig_graph = build_contigs(
+            payload,
+            source_map="data/karura_map_patched.json",
+            include_way=include_baseline_way,
+            route_policy=route_policy,
+            graph_mode="ride",
+        )
+        self.assertEqual([contig["node_ids"] for contig in contig_graph["contigs"]], [[1, 2], [2, 3]])
+        self.assertEqual(contig_graph["contigs"][1]["tags"][LOCAL_BOUNDARY_ZONE_TAG], "buffer")
+        self.assertEqual(contig_graph["contigs"][1]["tags"]["local:routing_state"], "include")
 
 
 if __name__ == "__main__":

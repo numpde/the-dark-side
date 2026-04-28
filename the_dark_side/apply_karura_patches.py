@@ -15,11 +15,12 @@ from .download_karura_map import (
     KaruraMap,
     NodeRecord,
     WayRecord,
+    build_boundary_zone_classifier,
+    classify_segment_zone,
     fill_kept_segment_gaps,
     haversine_meters,
     keep_segment_by_endpoint,
     load_map,
-    point_in_ring,
 )
 from .asset_contracts import load_required_patchset
 from .karura_common import MAP_JSON, MAP_PATCHES_JSON, PATCHED_MAP_JSON, repo_rel, write_json_document
@@ -42,6 +43,7 @@ def parse_args() -> argparse.Namespace:
         default=False,
         help="Respect inner rings as holes instead of using only the outer shell",
     )
+    parser.add_argument("--boundary-buffer-m", type=float, default=75.0)
     return parser.parse_args()
 
 def patchset_digest(
@@ -49,6 +51,7 @@ def patchset_digest(
     source_asset_id: str | None,
     patchset_id: str,
     applied_patches: list[dict[str, Any]],
+    boundary_buffer_m: float,
     fill_segment_gaps: bool,
     respect_inner_rings: bool,
 ) -> str:
@@ -56,6 +59,7 @@ def patchset_digest(
         "source_asset_id": source_asset_id,
         "patchset_id": patchset_id,
         "patches": applied_patches,
+        "boundary_buffer_m": boundary_buffer_m,
         "fill_segment_gaps": fill_segment_gaps,
         "respect_inner_rings": respect_inner_rings,
     }
@@ -69,22 +73,15 @@ def build_inside_karura(
     *,
     respect_inner_rings: bool = False,
 ):
-    component_coords = [
-        (
-            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
-            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.inner_rings],
-        )
-        for component in boundary.iter_components()
-    ]
+    boundary_zone = build_boundary_zone_classifier(
+        boundary,
+        nodes,
+        boundary_buffer_m=0.0,
+        respect_inner_rings=respect_inner_rings,
+    )
 
     def inside_karura(point: tuple[float, float]) -> bool:
-        for outer_ring_coords, inner_ring_coords in component_coords:
-            if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
-                continue
-            if respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords):
-                continue
-            return True
-        return False
+        return boundary_zone(point) == "core"
 
     return inside_karura
 
@@ -96,6 +93,7 @@ def compute_way_record(
     tags: dict[str, str],
     nodes: dict[int, NodeRecord],
     inside_karura,
+    boundary_zone_for_point=None,
     boundary_mode: str = "inside_endpoint",
     fill_segment_gaps: bool = True,
 ) -> WayRecord:
@@ -106,8 +104,10 @@ def compute_way_record(
         raise ValueError(f"way {way_id} references missing nodes: {missing}")
 
     segment_pairs: list[list[int]] = []
+    segment_zones: list[str] = []
     total_length_m = 0.0
     inside_length_m = 0.0
+    buffer_length_m = 0.0
     lats = [nodes[node_id].lat for node_id in node_ids]
     lons = [nodes[node_id].lon for node_id in node_ids]
     bounds = [round(min(lons), 7), round(min(lats), 7), round(max(lons), 7), round(max(lats), 7)]
@@ -115,29 +115,53 @@ def compute_way_record(
     segments = list(zip(node_ids, node_ids[1:]))
     segment_lengths: list[float] = []
     keep_flags: list[bool] = []
+    raw_segment_zones: list[str] = []
     for first_id, second_id in segments:
         first = nodes[first_id]
         second = nodes[second_id]
         segment_length = haversine_meters(first, second)
         total_length_m += segment_length
+        if boundary_zone_for_point is None:
+            segment_zone = "outside"
+        else:
+            segment_zone = classify_segment_zone(first, second, boundary_zone_for_point)
+        raw_segment_zones.append(segment_zone)
         if boundary_mode == "inside_midpoint":
             midpoint = ((first.lon + second.lon) / 2, (first.lat + second.lat) / 2)
-            is_inside = inside_karura(midpoint)
+            if boundary_zone_for_point is None:
+                is_inside = inside_karura(midpoint)
+                segment_zone = "core" if is_inside else "outside"
+            else:
+                segment_zone = boundary_zone_for_point(midpoint)
+                is_inside = segment_zone != "outside"
+            raw_segment_zones[-1] = segment_zone
         elif boundary_mode == "all_segments":
             is_inside = False
         else:
-            is_inside = keep_segment_by_endpoint(first, second, inside_karura)
+            if boundary_zone_for_point is None:
+                is_inside = inside_karura((first.lon, first.lat)) or inside_karura((second.lon, second.lat))
+                if is_inside:
+                    segment_zone = "core"
+                    raw_segment_zones[-1] = segment_zone
+            else:
+                is_inside = keep_segment_by_endpoint(first, second, boundary_zone_for_point)
         keep_flags.append(is_inside or boundary_mode == "all_segments")
         segment_lengths.append(segment_length)
-        if is_inside:
+        if segment_zone == "core":
             inside_length_m += segment_length
+        elif segment_zone == "buffer":
+            buffer_length_m += segment_length
 
     if boundary_mode == "inside_endpoint" and fill_segment_gaps:
         keep_flags = fill_kept_segment_gaps(keep_flags)
 
-    for (first_id, second_id), keep in zip(segments, keep_flags):
+    for index, ((first_id, second_id), keep) in enumerate(zip(segments, keep_flags)):
         if keep:
             segment_pairs.append([first_id, second_id])
+            segment_zone = raw_segment_zones[index]
+            if segment_zone == "outside":
+                segment_zone = "buffer"
+            segment_zones.append(segment_zone)
 
     if not segment_pairs:
         raise ValueError(f"way {way_id} has no segments kept by the Karura boundary rule")
@@ -147,8 +171,10 @@ def compute_way_record(
         node_ids=node_ids,
         tags=tags,
         segment_pairs=segment_pairs,
+        segment_zones=segment_zones,
         total_length_m=total_length_m,
         inside_length_m=inside_length_m,
+        buffer_length_m=buffer_length_m,
         bounds=bounds,
     )
 
@@ -173,6 +199,7 @@ def apply_add_way(
     nodes: dict[int, NodeRecord],
     ways: dict[int, WayRecord],
     inside_karura,
+    boundary_zone_for_point,
     fill_segment_gaps: bool,
 ) -> None:
     way_id = int(patch["way_id"])
@@ -188,6 +215,7 @@ def apply_add_way(
         tags=tags,
         nodes=nodes,
         inside_karura=inside_karura,
+        boundary_zone_for_point=boundary_zone_for_point,
         boundary_mode=boundary_mode,
         fill_segment_gaps=fill_segment_gaps,
     )
@@ -215,8 +243,10 @@ def apply_update_way_tags(*, patch: dict[str, Any], ways: dict[int, WayRecord]) 
         node_ids=list(current.node_ids),
         tags=tags,
         segment_pairs=[list(pair) for pair in current.segment_pairs],
+        segment_zones=list(current.segment_zones),
         total_length_m=current.total_length_m,
         inside_length_m=current.inside_length_m,
+        buffer_length_m=current.buffer_length_m,
         bounds=list(current.bounds),
     )
 
@@ -227,6 +257,7 @@ def apply_replace_way_geometry(
     nodes: dict[int, NodeRecord],
     ways: dict[int, WayRecord],
     inside_karura,
+    boundary_zone_for_point,
     fill_segment_gaps: bool,
 ) -> None:
     way_id = int(patch["way_id"])
@@ -242,6 +273,7 @@ def apply_replace_way_geometry(
         tags=dict(current.tags),
         nodes=nodes,
         inside_karura=inside_karura,
+        boundary_zone_for_point=boundary_zone_for_point,
         boundary_mode=boundary_mode,
         fill_segment_gaps=fill_segment_gaps,
     )
@@ -253,6 +285,7 @@ def apply_patchset(
     source_map: str,
     patchset_path: str,
     *,
+    boundary_buffer_m: float = 75.0,
     fill_segment_gaps: bool = True,
     respect_inner_rings: bool = False,
 ) -> KaruraMap:
@@ -267,12 +300,20 @@ def apply_patchset(
             node_ids=list(way.node_ids),
             tags=dict(way.tags),
             segment_pairs=[list(pair) for pair in way.segment_pairs],
+            segment_zones=list(way.segment_zones),
             total_length_m=way.total_length_m,
             inside_length_m=way.inside_length_m,
+            buffer_length_m=way.buffer_length_m,
             bounds=list(way.bounds),
         )
         for way_id, way in karura_map.ways.items()
     }
+    boundary_zone_for_point = build_boundary_zone_classifier(
+        karura_map.boundary,
+        nodes,
+        boundary_buffer_m=boundary_buffer_m,
+        respect_inner_rings=respect_inner_rings,
+    )
     inside_karura = build_inside_karura(
         karura_map.boundary,
         nodes,
@@ -296,6 +337,7 @@ def apply_patchset(
                 nodes=nodes,
                 ways=ways,
                 inside_karura=inside_karura,
+                boundary_zone_for_point=boundary_zone_for_point,
                 fill_segment_gaps=fill_segment_gaps,
             )
         elif operation == "remove_way":
@@ -308,6 +350,7 @@ def apply_patchset(
                 nodes=nodes,
                 ways=ways,
                 inside_karura=inside_karura,
+                boundary_zone_for_point=boundary_zone_for_point,
                 fill_segment_gaps=fill_segment_gaps,
             )
         elif operation == "update_contig_tags":
@@ -323,6 +366,7 @@ def apply_patchset(
         source_asset_id=karura_map.meta.get("asset_id"),
         patchset_id=patchset_id,
         applied_patches=applied_patches,
+        boundary_buffer_m=boundary_buffer_m,
         fill_segment_gaps=fill_segment_gaps,
         respect_inner_rings=respect_inner_rings,
     )
@@ -338,6 +382,7 @@ def apply_patchset(
         "applied_patch_ids": applied_patch_ids,
         "fill_segment_gaps": fill_segment_gaps,
         "respect_inner_rings": respect_inner_rings,
+        "boundary_buffer_m": boundary_buffer_m,
         "node_count": len(nodes),
         "way_count": len(ways),
     }
@@ -359,6 +404,7 @@ def main() -> None:
         patchset=patchset,
         source_map=repo_rel(args.map_json),
         patchset_path=repo_rel(args.patches_json),
+        boundary_buffer_m=args.boundary_buffer_m,
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     )
@@ -373,6 +419,7 @@ def main() -> None:
                 "applied_patch_count": len(patched.meta["applied_patch_ids"]),
                 "fill_segment_gaps": patched.meta["fill_segment_gaps"],
                 "respect_inner_rings": patched.meta["respect_inner_rings"],
+                "boundary_buffer_m": patched.meta["boundary_buffer_m"],
                 "node_count": patched.meta["node_count"],
                 "way_count": patched.meta["way_count"],
             },

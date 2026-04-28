@@ -305,7 +305,9 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'async function fetchJson\(')
     assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'export async function loadAppManifest\(')
     assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'export function buildAreaNetworkUrl\(')
+    assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'export function buildAreaBackgroundNetworkUrl\(')
     assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'export async function loadAreaNetwork\(')
+    assert_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'export async function loadAreaAssets\(')
     assert_not_regex("web/route-asset-runtime.mjs", route_asset_runtime_js, r'^import .* from "\./')
 
     assert_uses_module_context("web/route-surface-runtime.mjs", route_surface_runtime_js, "Route surface runtime module")
@@ -318,7 +320,7 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'function syncDownloadLink\(')
     assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'syncLoadingProgress\(\{')
     assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'ensureMap\(\)')
-    assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'renderNetwork\(network\)')
+    assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'renderBackgroundNetwork\(network\)')
     assert_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'sync\(\{')
     assert_not_regex("web/route-surface-runtime.mjs", route_surface_runtime_js, r'^import .* from "\./')
 
@@ -337,7 +339,9 @@ def verify_frontend_bootstrap_contract() -> None:
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function junctionLatLon\(')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'return \[junction\.location\.lat, junction\.location\.lon\];')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'function networkFeatureStyle\(')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'isBoundaryDefaultExcluded\(tags\)')
     assert_regex("web/route-map-view.mjs", route_map_view_js, r'isCurrentlyUnavailable\(tags\)')
+    assert_regex("web/route-map-view.mjs", route_map_view_js, r'function renderBackgroundNetwork\(')
     assert_not_regex("web/route-map-view.mjs", route_map_view_js, r'function setScenarioLabelParts\(')
 
     assert_uses_module_context(

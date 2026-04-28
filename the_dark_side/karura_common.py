@@ -102,11 +102,23 @@ LOCAL_BIKEABILITY_TAG = "local:bikeability"
 LOCAL_BICYCLE_DIRECTION_TAG = "local:bicycle_direction"
 LOCAL_AVAILABILITY_TAG = "local:availability"
 LOCAL_UNAVAILABLE_UNTIL_TAG = "local:unavailable_until"
+LOCAL_BOUNDARY_ZONE_TAG = "local:boundary_zone"
 KARURA_TIMEZONE = ZoneInfo("Africa/Nairobi")
 
 
 def include_baseline_way(tags: dict[str, str]) -> bool:
     return "highway" in tags or tags.get("amenity") == "parking"
+
+
+def boundary_zone(tags: dict[str, str]) -> str:
+    zone = tags.get(LOCAL_BOUNDARY_ZONE_TAG)
+    if zone in {"core", "buffer"}:
+        return zone
+    return "core"
+
+
+def is_boundary_default_excluded(tags: dict[str, str]) -> bool:
+    return boundary_zone(tags) == "buffer"
 
 
 def karura_today() -> date:
@@ -201,10 +213,12 @@ def include_ride_way(way_id: int, tags: dict[str, str]) -> bool:
         return False
     if routing_state == "include":
         return True
+    if is_boundary_default_excluded(tags):
+        return False
     if tags.get("local:context_only") == "yes":
         return False
     return include_baseline_way(tags)
 
 
 def include_editor_way(_way_id: int, tags: dict[str, str]) -> bool:
-    return include_baseline_way(tags)
+    return include_baseline_way(tags) or is_boundary_default_excluded(tags)

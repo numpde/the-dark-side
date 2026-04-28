@@ -45,6 +45,7 @@ def rebuild_patched_map(args: argparse.Namespace) -> dict:
         patchset=patchset,
         source_map=repo_rel(args.map_json),
         patchset_path=repo_rel(args.map_patches_json),
+        boundary_buffer_m=args.boundary_buffer_m,
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
     )
@@ -111,6 +112,7 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
             "route_policy_bindings_asset_id": contig_payload["meta"]["route_policy_bindings_asset_id"],
             "respect_inner_rings": patched_payload["meta"]["respect_inner_rings"],
             "fill_segment_gaps": patched_payload["meta"]["fill_segment_gaps"],
+            "boundary_buffer_m": patched_payload["meta"]["boundary_buffer_m"],
         },
         "editor": {
             "network_path": args.output_editor_network.name,

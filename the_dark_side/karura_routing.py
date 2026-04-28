@@ -16,6 +16,7 @@ from .asset_contracts import (
     load_route_graph_document,
 )
 from .karura_common import (
+    is_boundary_default_excluded,
     is_currently_unavailable,
     utc_now_z,
 )
@@ -343,9 +344,12 @@ def can_traverse_contig(
     from_node_id: int,
     to_node_id: int,
 ) -> tuple[bool, bool]:
-    if contig.tags.get("local:routing_state") == "exclude":
+    routing_state = contig.tags.get("local:routing_state")
+    if routing_state == "exclude":
         return False, False
     if is_currently_unavailable(contig.tags):
+        return False, False
+    if routing_state != "include" and is_boundary_default_excluded(contig.tags):
         return False, False
     direction = contig.tags.get("local:bicycle_direction", "both")
     if not contig.is_cycle:

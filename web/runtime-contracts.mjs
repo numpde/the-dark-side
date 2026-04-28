@@ -87,6 +87,8 @@ export function validateAppManifest(manifest) {
   const planner = requireObject(normalized.planner, "planner", { context });
   requireString(planner.network_path, "planner.network_path", { context });
   requireString(planner.network_version, "planner.network_version", { context });
+  requireString(planner.background_network_path, "planner.background_network_path", { context });
+  requireString(planner.background_network_version, "planner.background_network_version", { context });
   requireObject(planner.config, "planner.config", { context });
   const areas = requireArray(normalized.areas, "areas", { context });
   if (areas.length === 0) {

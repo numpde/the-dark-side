@@ -10,6 +10,7 @@ from .asset_contracts import (
 )
 from .karura_common import (
     LOCAL_AVAILABILITY_TAG,
+    LOCAL_BOUNDARY_ZONE_TAG,
     LOCAL_BICYCLE_DIRECTION_TAG,
     LOCAL_BIKEABILITY_TAG,
     LOCAL_ROUTING_STATE_TAG,
@@ -121,11 +122,25 @@ def route_policy_digest(route_policy: dict[str, Any]) -> str:
     return hashlib.sha1(canonical.encode("utf-8")).hexdigest()[:12]
 
 
-def selected_way_ids(route_policy: dict[str, Any]) -> set[int]:
+def selected_segment_keys(route_policy: dict[str, Any]) -> set[tuple[int, int]]:
     route_policy = validate_route_policy_document(route_policy, label="route policy")
-    selected: set[int] = set()
+    selected: set[tuple[int, int]] = set()
     for rule in route_policy["rules"]:
-        selected.update(int(way_id) for way_id in rule["selector"]["way_ids"])
+        node_ids = [int(node_id) for node_id in rule["selector"]["node_ids"]]
+        for first_id, second_id in zip(node_ids, node_ids[1:]):
+            selected.add(edge_key(first_id, second_id))
+    return selected
+
+
+def selected_segment_way_ids(route_policy: dict[str, Any]) -> dict[tuple[int, int], set[int]]:
+    route_policy = validate_route_policy_document(route_policy, label="route policy")
+    selected: dict[tuple[int, int], set[int]] = {}
+    for rule in route_policy["rules"]:
+        way_ids = {int(way_id) for way_id in rule["selector"]["way_ids"]}
+        node_ids = [int(node_id) for node_id in rule["selector"]["node_ids"]]
+        for first_id, second_id in zip(node_ids, node_ids[1:]):
+            key = edge_key(first_id, second_id)
+            selected.setdefault(key, set()).update(way_ids)
     return selected
 
 
@@ -391,5 +406,21 @@ def apply_route_policy_bindings(
     return contig_graph
 
 
-def include_way_in_policy_candidate_graph(way_id: int, tags: dict[str, str], *, selected_way_ids: set[int], base_include: bool) -> bool:
-    return base_include or int(way_id) in selected_way_ids or has_policy_tags(tags)
+def include_segment_in_policy_candidate_graph(
+    way_id: int,
+    tags: dict[str, str],
+    *,
+    segment_key: tuple[int, int],
+    selected_segment_keys: set[tuple[int, int]],
+    selected_segment_way_ids: dict[tuple[int, int], set[int]],
+    base_include: bool,
+) -> bool:
+    if base_include:
+        return True
+    if segment_key in selected_segment_keys and int(way_id) in selected_segment_way_ids.get(segment_key, set()):
+        return True
+    if tags.get(LOCAL_ROUTING_STATE_TAG) == "include":
+        return True
+    if tags.get(LOCAL_BOUNDARY_ZONE_TAG) == "core" and has_policy_tags(tags):
+        return True
+    return False

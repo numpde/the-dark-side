@@ -31,6 +31,11 @@ export function emptyRoutePolicyDocument() {
 export const emptyPatchset = emptyRoutePolicyDocument;
 
 
+function isBufferZoneFeature(feature) {
+  return feature?.properties?.tags?.["local:boundary_zone"] === "buffer";
+}
+
+
 function requirePlainObject(value, label) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`${label} must be an object`);
@@ -359,6 +364,53 @@ function compactPolicy(policy) {
 }
 
 
+function mergePolicies(basePolicy, explicitPolicy) {
+  const merged = { ...basePolicy };
+  if (explicitPolicy.routingState !== "default") {
+    merged.routingState = explicitPolicy.routingState;
+  }
+  if (explicitPolicy.bikeability != null) {
+    merged.bikeability = explicitPolicy.bikeability;
+  }
+  if (explicitPolicy.bicycleDirection !== "both") {
+    merged.bicycleDirection = explicitPolicy.bicycleDirection;
+  }
+  if (explicitPolicy.unavailableUntil != null) {
+    merged.unavailableUntil = explicitPolicy.unavailableUntil;
+  }
+  return merged;
+}
+
+
+export function basePolicyForFeature(feature) {
+  const base = defaultWayPolicy();
+  if (isBufferZoneFeature(feature)) {
+    base.routingState = "exclude";
+  }
+  return base;
+}
+
+
+function explicitPolicyFromEffective(policy, basePolicy) {
+  return {
+    routingState: policy.routingState === basePolicy.routingState ? "default" : policy.routingState,
+    bikeability: policy.bikeability === basePolicy.bikeability ? null : policy.bikeability,
+    bicycleDirection: policy.bicycleDirection === basePolicy.bicycleDirection ? "both" : policy.bicycleDirection,
+    unavailableUntil: policy.unavailableUntil === basePolicy.unavailableUntil ? null : policy.unavailableUntil,
+  };
+}
+
+
+function isDefaultPolicy(policy) {
+  return (
+    policy.routingState === "default" &&
+    policy.bikeability == null &&
+    policy.bicycleDirection === "both" &&
+    policy.unavailableUntil == null
+  );
+}
+
+
 function hashSelector(selector) {
   const text = JSON.stringify({
     way_ids: normalizeWayIds(selector.way_ids),
@@ -445,6 +497,7 @@ export function normalizeRoutePolicyDocument(rawDocument, featureById = new Map(
 
   return {
     meta: { ...document.meta },
+    featureByContigId: new Map(featureById),
     policyByContigId,
     ruleIdByContigId,
   };
@@ -455,28 +508,34 @@ export const normalizePatchset = normalizeRoutePolicyDocument;
 
 
 export function policyForContig(editorState, contigId) {
+  const contigKey = Number(contigId);
+  const explicitPolicy = editorState.policyByContigId.get(contigKey) || defaultWayPolicy();
+  const feature = editorState.featureByContigId?.get(contigKey);
+  return mergePolicies(basePolicyForFeature(feature), explicitPolicy);
+}
+
+
+export function explicitPolicyForContig(editorState, contigId) {
   return editorState.policyByContigId.get(Number(contigId)) || defaultWayPolicy();
 }
 
 
 export function setContigPolicy(editorState, contigId, nextPolicy) {
+  const contigKey = Number(contigId);
+  const basePolicy = basePolicyForFeature(editorState.featureByContigId?.get(contigKey));
   const normalized = {
     routingState: normalizeRoutingState(nextPolicy.routingState),
     bikeability: normalizeBikeability(nextPolicy.bikeability),
     bicycleDirection: normalizeBicycleDirection(nextPolicy.bicycleDirection),
     unavailableUntil: normalizeUnavailableUntil(nextPolicy.unavailableUntil),
   };
-  if (
-    normalized.routingState === "default" &&
-    normalized.bikeability == null &&
-    normalized.bicycleDirection === "both" &&
-    normalized.unavailableUntil == null
-  ) {
-    editorState.policyByContigId.delete(Number(contigId));
-    editorState.ruleIdByContigId.delete(Number(contigId));
+  const explicitPolicy = explicitPolicyFromEffective(normalized, basePolicy);
+  if (isDefaultPolicy(explicitPolicy)) {
+    editorState.policyByContigId.delete(contigKey);
+    editorState.ruleIdByContigId.delete(contigKey);
     return;
   }
-  editorState.policyByContigId.set(Number(contigId), normalized);
+  editorState.policyByContigId.set(contigKey, explicitPolicy);
 }
 
 

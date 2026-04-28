@@ -1,7 +1,7 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Route controller module");
 const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
-const { loadAppManifest, loadAreaNetwork } = await import(`./route-asset-runtime.mjs${moduleSuffix}`);
+const { loadAppManifest, loadAreaAssets } = await import(`./route-asset-runtime.mjs${moduleSuffix}`);
 const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`);
 const { createRouteSurfaceRuntime } = await import(`./route-surface-runtime.mjs${moduleSuffix}`);
 const {
@@ -63,6 +63,7 @@ export function createRouteController({
     route: null,
     loadingLabel: "Loading route options…",
     loopArrowPhase: 0,
+    backgroundNetwork: null,
     routeRuntime: createRouteRuntime({
       moduleVersion: MODULE_VERSION,
       parsePlannerWorkerResponse,
@@ -233,21 +234,23 @@ export function createRouteController({
     appState.routeStatus = "loading";
     appState.route = null;
     appState.network = null;
+    appState.backgroundNetwork = null;
     appState.controlsDisabledOverride = true;
     setLoadingLabel("Loading route network…");
     syncSurface();
-    routeSurfaceRuntime.renderNetwork(null);
+    routeSurfaceRuntime.renderBackgroundNetwork(null);
 
-    const networkPayload = await loadAreaNetwork(appManifestUrl, appState.manifest);
+    const { plannerNetwork, backgroundNetwork } = await loadAreaAssets(appManifestUrl, appState.manifest);
     if (loadId !== appState.activeAreaLoadId) {
       return;
     }
-    await initializePlanner(networkPayload);
+    appState.backgroundNetwork = backgroundNetwork;
+    routeSurfaceRuntime.renderBackgroundNetwork(backgroundNetwork);
+    await initializePlanner(plannerNetwork);
     if (loadId !== appState.activeAreaLoadId) {
       return;
     }
-    appState.network = networkPayload;
-    routeSurfaceRuntime.renderNetwork(networkPayload);
+    appState.network = plannerNetwork;
     appState.controlsDisabledOverride = false;
     syncSurface();
     await chooseRoute();

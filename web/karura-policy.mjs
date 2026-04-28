@@ -18,3 +18,23 @@ export function isCurrentlyUnavailable(tags = {}, onDateString = karuraTodayStri
   }
   return onDateString <= until;
 }
+
+
+export function boundaryZone(tags = {}) {
+  return tags["local:boundary_zone"] === "buffer" ? "buffer" : "core";
+}
+
+
+export function isBoundaryDefaultExcluded(tags = {}) {
+  return boundaryZone(tags) === "buffer";
+}
+
+export function routingState(tags = {}) {
+  return typeof tags["local:routing_state"] === "string"
+    ? tags["local:routing_state"]
+    : "default";
+}
+
+export function hasExplicitRoutingInclude(tags = {}) {
+  return routingState(tags) === "include";
+}

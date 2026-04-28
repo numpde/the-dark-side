@@ -1,11 +1,11 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T08:03:28.883949Z",
-    "asset_id": "karura-elevation-open-topo-data-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
+    "generated_at": "2026-04-28T09:47:56.236739Z",
+    "asset_id": "karura-elevation-open-topo-data-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
     "asset_kind": "graph_elevation",
     "provider": "open-topo-data",
-    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T073021786627Z-karura-map-patches-v1-353f97d06ba8",
-    "node_count": 3295
+    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "node_count": 3306
   },
   "nodes": {
     "260566257": {
@@ -16482,6 +16482,61 @@
       "lat": -1.235574,
       "lon": 36.820476,
       "elevation_m": 1705.0
+    },
+    "13769449745": {
+      "lat": -1.242461,
+      "lon": 36.843951,
+      "elevation_m": 1660.0
+    },
+    "13769449746": {
+      "lat": -1.242243,
+      "lon": 36.844036,
+      "elevation_m": 1662.0
+    },
+    "13769449747": {
+      "lat": -1.241661,
+      "lon": 36.843889,
+      "elevation_m": 1666.0
+    },
+    "13769449748": {
+      "lat": -1.241404,
+      "lon": 36.843959,
+      "elevation_m": 1667.0
+    },
+    "13769449749": {
+      "lat": -1.241202,
+      "lon": 36.843803,
+      "elevation_m": 1668.0
+    },
+    "13769449750": {
+      "lat": -1.240891,
+      "lon": 36.843889,
+      "elevation_m": 1667.0
+    },
+    "13769449751": {
+      "lat": -1.240332,
+      "lon": 36.843811,
+      "elevation_m": 1669.0
+    },
+    "13769449752": {
+      "lat": -1.239606,
+      "lon": 36.843314,
+      "elevation_m": 1670.0
+    },
+    "13769449753": {
+      "lat": -1.239857,
+      "lon": 36.8433,
+      "elevation_m": 1670.0
+    },
+    "13769449754": {
+      "lat": -1.240049,
+      "lon": 36.84342,
+      "elevation_m": 1670.0
+    },
+    "13769449755": {
+      "lat": -1.240151,
+      "lon": 36.843571,
+      "elevation_m": 1670.0
     }
   }
 }

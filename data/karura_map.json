@@ -1008,15 +1008,16 @@
     }
   },
   "meta": {
-    "asset_id": "karura-map-r13626194-r15417497-20260428T073021786627Z",
+    "asset_id": "karura-map-r13626194-r15417497-20260428T094743502991Z",
     "asset_kind": "map",
-    "downloaded_at": "2026-04-28T07:30:21.786627Z",
+    "boundary_buffer_m": 75.0,
+    "downloaded_at": "2026-04-28T09:47:43.502991Z",
     "fill_segment_gaps": true,
     "name": "Karura Forest + Karura Playground",
-    "node_count": 3295,
+    "node_count": 3306,
     "overpass_url": "https://overpass-api.de/api/interpreter",
     "query": "[out:json][timeout:180];\nrel(13626194)->.rel0;\n.rel0 map_to_area->.area0;\nrel(15417497)->.rel1;\n.rel1 map_to_area->.area1;\n(\n  .rel0;\n  way(r.rel0);\n  way(area.area0);\n  .rel1;\n  way(r.rel1);\n  way(area.area1);\n);\n(._;>;);\nout body;",
-    "raw_element_count": 3541,
+    "raw_element_count": 3554,
     "relation_ids": [
       13626194,
       15417497
@@ -1043,7 +1044,7 @@
       }
     ],
     "respect_inner_rings": false,
-    "way_count": 243
+    "way_count": 246
   },
   "nodes": {
     "10597364805": {
@@ -6815,6 +6816,61 @@
       "id": 13769413455,
       "lat": -1.2355737,
       "lon": 36.8204765
+    },
+    "13769449745": {
+      "id": 13769449745,
+      "lat": -1.2424609,
+      "lon": 36.843951
+    },
+    "13769449746": {
+      "id": 13769449746,
+      "lat": -1.2422434,
+      "lon": 36.8440364
+    },
+    "13769449747": {
+      "id": 13769449747,
+      "lat": -1.2416606,
+      "lon": 36.8438889
+    },
+    "13769449748": {
+      "id": 13769449748,
+      "lat": -1.2414042,
+      "lon": 36.8439588
+    },
+    "13769449749": {
+      "id": 13769449749,
+      "lat": -1.2412022,
+      "lon": 36.8438035
+    },
+    "13769449750": {
+      "id": 13769449750,
+      "lat": -1.2408914,
+      "lon": 36.8438889
+    },
+    "13769449751": {
+      "id": 13769449751,
+      "lat": -1.2403319,
+      "lon": 36.8438112
+    },
+    "13769449752": {
+      "id": 13769449752,
+      "lat": -1.2396058,
+      "lon": 36.8433135
+    },
+    "13769449753": {
+      "id": 13769449753,
+      "lat": -1.2398574,
+      "lon": 36.8433002
+    },
+    "13769449754": {
+      "id": 13769449754,
+      "lat": -1.2400486,
+      "lon": 36.8434202
+    },
+    "13769449755": {
+      "id": 13769449755,
+      "lat": -1.2401511,
+      "lon": 36.8435714
     },
     "1450512047": {
       "id": 1450512047,
@@ -17530,8 +17586,9 @@
         36.8409489,
         -1.227159
       ],
+      "buffer_length_m": 615.357,
       "id": 1013539596,
-      "inside_length_m": 1986.333,
+      "inside_length_m": 1979.065,
       "node_ids": [
         9923907681,
         9923907680,
@@ -17660,6 +17717,206 @@
         4803107868
       ],
       "segment_pairs": [
+        [
+          9923907681,
+          9923907680
+        ],
+        [
+          9923907680,
+          9923907679
+        ],
+        [
+          9923907679,
+          9923907678
+        ],
+        [
+          9923907678,
+          9923907677
+        ],
+        [
+          9923907677,
+          9923907676
+        ],
+        [
+          9923907676,
+          9923907675
+        ],
+        [
+          9923907675,
+          9923907674
+        ],
+        [
+          9923907674,
+          9923907673
+        ],
+        [
+          9923907673,
+          9923907672
+        ],
+        [
+          9923907672,
+          9923907671
+        ],
+        [
+          9923907671,
+          9923907670
+        ],
+        [
+          9923907670,
+          9923907669
+        ],
+        [
+          9923907669,
+          9923907668
+        ],
+        [
+          9923907668,
+          9923907667
+        ],
+        [
+          9923907667,
+          9350977863
+        ],
+        [
+          9350977863,
+          9350977864
+        ],
+        [
+          9350977864,
+          9350977865
+        ],
+        [
+          9350977865,
+          9350977866
+        ],
+        [
+          9350977866,
+          12339962274
+        ],
+        [
+          12339962274,
+          12339962273
+        ],
+        [
+          12339962273,
+          9350977867
+        ],
+        [
+          9350977867,
+          9350977868
+        ],
+        [
+          9350977868,
+          9350977869
+        ],
+        [
+          9350977869,
+          12339962272
+        ],
+        [
+          12339962272,
+          12330726042
+        ],
+        [
+          12330726042,
+          12339962271
+        ],
+        [
+          12339962271,
+          12330726041
+        ],
+        [
+          12330726041,
+          9350977870
+        ],
+        [
+          9350977870,
+          9350977871
+        ],
+        [
+          9350977871,
+          12330726040
+        ],
+        [
+          12330726040,
+          12339962262
+        ],
+        [
+          12339962262,
+          12330726039
+        ],
+        [
+          12330726039,
+          12339962261
+        ],
+        [
+          12339962261,
+          9350977872
+        ],
+        [
+          9350977872,
+          12339962270
+        ],
+        [
+          12339962270,
+          12330726038
+        ],
+        [
+          12330726038,
+          12339962268
+        ],
+        [
+          12339962268,
+          12339962269
+        ],
+        [
+          12339962269,
+          12339962267
+        ],
+        [
+          12339962267,
+          12330726037
+        ],
+        [
+          12330726037,
+          12339962266
+        ],
+        [
+          12339962266,
+          9350977873
+        ],
+        [
+          9350977873,
+          12339962265
+        ],
+        [
+          12339962265,
+          12339962264
+        ],
+        [
+          12339962264,
+          12339962263
+        ],
+        [
+          12339962263,
+          9350977874
+        ],
+        [
+          9350977874,
+          9350977875
+        ],
+        [
+          9350977875,
+          9350977876
+        ],
+        [
+          9350977876,
+          9350977877
+        ],
+        [
+          9350977877,
+          9350977944
+        ],
         [
           9350977944,
           12330726061
@@ -17957,6 +18214,132 @@
           4803107868
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "name": "Ruiruaka River",
         "waterway": "river"
@@ -17970,6 +18353,7 @@
         36.843909,
         -1.2352874
       ],
+      "buffer_length_m": 0.0,
       "id": 1013539597,
       "inside_length_m": 584.348,
       "node_ids": [
@@ -18127,6 +18511,38 @@
           2847824320
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "highway": "footway",
@@ -18142,6 +18558,7 @@
         36.842677,
         -1.2351962
       ],
+      "buffer_length_m": 0.0,
       "id": 1013539598,
       "inside_length_m": 18.753,
       "node_ids": [
@@ -18153,6 +18570,9 @@
           2847824320,
           9350977947
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -18169,6 +18589,7 @@
         36.8290441,
         -1.2411326
       ],
+      "buffer_length_m": 0.0,
       "id": 1017555912,
       "inside_length_m": 267.627,
       "node_ids": [
@@ -18246,6 +18667,22 @@
           9385598420
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "natural": "wetland",
         "wetland": "marsh"
@@ -18259,6 +18696,7 @@
         36.8335848,
         -1.2418016
       ],
+      "buffer_length_m": 0.0,
       "id": 1017555913,
       "inside_length_m": 874.287,
       "node_ids": [
@@ -18326,6 +18764,20 @@
           9385598434
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "landuse": "residential",
         "name": "Ranger Village"
@@ -18339,6 +18791,7 @@
         36.8346451,
         -1.2415887
       ],
+      "buffer_length_m": 0.0,
       "id": 1017555914,
       "inside_length_m": 686.023,
       "node_ids": [
@@ -18471,6 +18924,33 @@
           9385598446
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "natural": "grassland"
       },
@@ -18483,6 +18963,7 @@
         36.8405111,
         -1.2440128
       ],
+      "buffer_length_m": 0.0,
       "id": 1017555915,
       "inside_length_m": 978.642,
       "node_ids": [
@@ -18560,6 +19041,22 @@
           9385598471
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "landuse": "farmland"
       },
@@ -18572,6 +19069,7 @@
         36.8390772,
         -1.2462457
       ],
+      "buffer_length_m": 0.0,
       "id": 1017555916,
       "inside_length_m": 438.24,
       "node_ids": [
@@ -18599,6 +19097,12 @@
           9385598484
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "landuse": "farmland"
       },
@@ -18611,6 +19115,7 @@
         36.836742,
         -1.247585
       ],
+      "buffer_length_m": 0.0,
       "id": 1033465745,
       "inside_length_m": 86.156,
       "node_ids": [
@@ -18622,6 +19127,9 @@
           9521536668,
           2847824199
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway"
@@ -18635,6 +19143,7 @@
         36.8443607,
         -1.240015
       ],
+      "buffer_length_m": 0.0,
       "id": 1062504944,
       "inside_length_m": 336.07,
       "node_ids": [
@@ -18672,6 +19181,14 @@
           9761022836
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "barrier": "fence"
       },
@@ -18684,6 +19201,7 @@
         36.840002,
         -1.248966
       ],
+      "buffer_length_m": 0.0,
       "id": 1068716473,
       "inside_length_m": 205.776,
       "node_ids": [
@@ -18751,6 +19269,20 @@
           2847945664
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -18763,6 +19295,7 @@
         36.8400244,
         -1.2434886
       ],
+      "buffer_length_m": 0.0,
       "id": 1068716474,
       "inside_length_m": 1164.778,
       "node_ids": [
@@ -18925,6 +19458,39 @@
           9810272388
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "barrier": "fence"
       },
@@ -18937,6 +19503,7 @@
         36.839915,
         -1.2505541
       ],
+      "buffer_length_m": 0.0,
       "id": 1068716500,
       "inside_length_m": 34.379,
       "node_ids": [
@@ -18974,6 +19541,14 @@
           9810272375
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track"
       },
@@ -18986,6 +19561,7 @@
         36.8439998,
         -1.2400487
       ],
+      "buffer_length_m": 0.0,
       "id": 1068718240,
       "inside_length_m": 20.814,
       "node_ids": [
@@ -19013,6 +19589,12 @@
           9810327685
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19025,6 +19607,7 @@
         36.829406,
         -1.2270765
       ],
+      "buffer_length_m": 0.0,
       "id": 1068718241,
       "inside_length_m": 240.881,
       "node_ids": [
@@ -19112,6 +19695,24 @@
           9810327703
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -19124,8 +19725,9 @@
         36.8552537,
         -1.2478051
       ],
+      "buffer_length_m": 11.546,
       "id": 1074126118,
-      "inside_length_m": 25.454,
+      "inside_length_m": 13.908,
       "node_ids": [
         9852527461,
         9852527460,
@@ -19216,6 +19818,25 @@
           9852527461
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19228,8 +19849,9 @@
         36.8555005,
         -1.247657
       ],
+      "buffer_length_m": 347.172,
       "id": 1074126126,
-      "inside_length_m": 20.085,
+      "inside_length_m": 0.0,
       "node_ids": [
         9852561234,
         9852561233,
@@ -19262,13 +19884,142 @@
       ],
       "segment_pairs": [
         [
+          9852561234,
+          9852561233
+        ],
+        [
+          9852561233,
+          9852561232
+        ],
+        [
+          9852561232,
+          9852561231
+        ],
+        [
+          9852561231,
+          9852561230
+        ],
+        [
+          9852561230,
+          9852561229
+        ],
+        [
           9852561229,
           9852561228
         ],
         [
           9852561228,
           9852561227
+        ],
+        [
+          9852561227,
+          9852561226
+        ],
+        [
+          9852561226,
+          9852561225
+        ],
+        [
+          9852561225,
+          9852561224
+        ],
+        [
+          9852561224,
+          9852561223
+        ],
+        [
+          9852561223,
+          9852561222
+        ],
+        [
+          9852561222,
+          9852561221
+        ],
+        [
+          9852561221,
+          9852561220
+        ],
+        [
+          9852561220,
+          9852561219
+        ],
+        [
+          9852561219,
+          9852561218
+        ],
+        [
+          9852561218,
+          9852561217
+        ],
+        [
+          9852561217,
+          9852527516
+        ],
+        [
+          9852527516,
+          9852527515
+        ],
+        [
+          9852527515,
+          9852527514
+        ],
+        [
+          9852527514,
+          9852527513
+        ],
+        [
+          9852527513,
+          9852527512
+        ],
+        [
+          9852527512,
+          9852527511
+        ],
+        [
+          9852527511,
+          9852527510
+        ],
+        [
+          9852527510,
+          9852527509
+        ],
+        [
+          9852527509,
+          9852527508
+        ],
+        [
+          9852527508,
+          9852561234
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -19282,8 +20033,9 @@
         36.8543125,
         -1.2474127
       ],
+      "buffer_length_m": 25.306,
       "id": 1074126127,
-      "inside_length_m": 27.123,
+      "inside_length_m": 9.883,
       "node_ids": [
         9852561240,
         9852561239,
@@ -19313,7 +20065,19 @@
         [
           9852561236,
           9852561235
+        ],
+        [
+          9852561235,
+          9852561240
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -19327,8 +20091,9 @@
         36.8512469,
         -1.249702
       ],
+      "buffer_length_m": 497.284,
       "id": 1074409554,
-      "inside_length_m": 80.221,
+      "inside_length_m": 0.0,
       "node_ids": [
         9854949050,
         9854949049,
@@ -19374,13 +20139,207 @@
       ],
       "segment_pairs": [
         [
+          9854949050,
+          9854949049
+        ],
+        [
+          9854949049,
+          9854949048
+        ],
+        [
+          9854949048,
+          9854949047
+        ],
+        [
+          9854949047,
+          9854949046
+        ],
+        [
+          9854949046,
+          9854949045
+        ],
+        [
           9854949045,
           9854949044
         ],
         [
           9854949044,
           9854949043
+        ],
+        [
+          9854949043,
+          9854949042
+        ],
+        [
+          9854949042,
+          9854949041
+        ],
+        [
+          9854949041,
+          9854949040
+        ],
+        [
+          9854949040,
+          9854949039
+        ],
+        [
+          9854949039,
+          9854949038
+        ],
+        [
+          9854949038,
+          9854949037
+        ],
+        [
+          9854949037,
+          9854949036
+        ],
+        [
+          9854949036,
+          9854949035
+        ],
+        [
+          9854949035,
+          9854949034
+        ],
+        [
+          9854949034,
+          9854949033
+        ],
+        [
+          9854949033,
+          9854949032
+        ],
+        [
+          9854949032,
+          9854949031
+        ],
+        [
+          9854949031,
+          9854949030
+        ],
+        [
+          9854949030,
+          9854949029
+        ],
+        [
+          9854949029,
+          9854949028
+        ],
+        [
+          9854949028,
+          9854949027
+        ],
+        [
+          9854949027,
+          9854949026
+        ],
+        [
+          9854949026,
+          9854949025
+        ],
+        [
+          9854949025,
+          9854949024
+        ],
+        [
+          9854949024,
+          9854949023
+        ],
+        [
+          9854949023,
+          9854949022
+        ],
+        [
+          9854949022,
+          9854949021
+        ],
+        [
+          9854949021,
+          9854949020
+        ],
+        [
+          9854949020,
+          9854949019
+        ],
+        [
+          9854949019,
+          9854949018
+        ],
+        [
+          9854949018,
+          9854949017
+        ],
+        [
+          9854949017,
+          9854942716
+        ],
+        [
+          9854942716,
+          9854942715
+        ],
+        [
+          9854942715,
+          9854942714
+        ],
+        [
+          9854942714,
+          9854942713
+        ],
+        [
+          9854942713,
+          9854942712
+        ],
+        [
+          9854942712,
+          9854942711
+        ],
+        [
+          9854942711,
+          9854949050
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -19394,8 +20353,9 @@
         36.8537778,
         -1.2500107
       ],
+      "buffer_length_m": 97.608,
       "id": 1074420847,
-      "inside_length_m": 137.923,
+      "inside_length_m": 40.314,
       "node_ids": [
         9854999365,
         9854999364,
@@ -19446,6 +20406,17 @@
           9854999365
         ]
       ],
+      "segment_zones": [
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19458,8 +20429,9 @@
         36.8535479,
         -1.2504784
       ],
+      "buffer_length_m": 89.617,
       "id": 1074420849,
-      "inside_length_m": 89.617,
+      "inside_length_m": 0.0,
       "node_ids": [
         9854999373,
         9854999372,
@@ -19485,6 +20457,12 @@
           9854999373
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19497,8 +20475,9 @@
         36.8530733,
         -1.251102
       ],
+      "buffer_length_m": 93.761,
       "id": 1074420852,
-      "inside_length_m": 102.624,
+      "inside_length_m": 8.863,
       "node_ids": [
         9854999385,
         9854999384,
@@ -19524,6 +20503,12 @@
           9854999385
         ]
       ],
+      "segment_zones": [
+        "core",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19536,8 +20521,9 @@
         36.8529016,
         -1.2509679
       ],
+      "buffer_length_m": 39.354,
       "id": 1074420853,
-      "inside_length_m": 49.66,
+      "inside_length_m": 10.306,
       "node_ids": [
         9854999389,
         9854999388,
@@ -19563,6 +20549,12 @@
           9854999389
         ]
       ],
+      "segment_zones": [
+        "core",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19575,8 +20567,9 @@
         36.8528842,
         -1.2513088
       ],
+      "buffer_length_m": 90.053,
       "id": 1074420854,
-      "inside_length_m": 90.053,
+      "inside_length_m": 0.0,
       "node_ids": [
         9854999393,
         9854999392,
@@ -19602,6 +20595,12 @@
           9854999393
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19614,8 +20613,9 @@
         36.8591322,
         -1.2448836
       ],
+      "buffer_length_m": 170.383,
       "id": 1074432799,
-      "inside_length_m": 170.383,
+      "inside_length_m": 0.0,
       "node_ids": [
         9855108312,
         9855108311,
@@ -19641,6 +20641,12 @@
           9855108312
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19653,8 +20659,9 @@
         36.8586399,
         -1.2457358
       ],
+      "buffer_length_m": 33.821,
       "id": 1074432800,
-      "inside_length_m": 33.821,
+      "inside_length_m": 0.0,
       "node_ids": [
         9855108316,
         9855108315,
@@ -19680,6 +20687,12 @@
           9855108316
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19692,6 +20705,7 @@
         36.8584331,
         -1.2451527
       ],
+      "buffer_length_m": 0.0,
       "id": 1074761532,
       "inside_length_m": 34.731,
       "node_ids": [
@@ -19719,6 +20733,12 @@
           9857637370
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -19731,6 +20751,7 @@
         36.8209955,
         -1.230029
       ],
+      "buffer_length_m": 0.0,
       "id": 1082822652,
       "inside_length_m": 269.486,
       "node_ids": [
@@ -19838,6 +20859,28 @@
           9189127987
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -19850,6 +20893,7 @@
         36.8212286,
         -1.2311815
       ],
+      "buffer_length_m": 0.0,
       "id": 1082822653,
       "inside_length_m": 758.529,
       "node_ids": [
@@ -20167,6 +21211,70 @@
           9189127987
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -20179,6 +21287,7 @@
         36.8205048,
         -1.2420059
       ],
+      "buffer_length_m": 0.0,
       "id": 1136841297,
       "inside_length_m": 25.21,
       "node_ids": [
@@ -20196,6 +21305,10 @@
           10597364811
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway"
       },
@@ -20208,6 +21321,7 @@
         36.8206383,
         -1.2420161
       ],
+      "buffer_length_m": 0.0,
       "id": 1136841298,
       "inside_length_m": 35.746,
       "node_ids": [
@@ -20240,6 +21354,13 @@
           10597364807
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "amenity": "toilets",
         "building": "yes"
@@ -20253,6 +21374,7 @@
         36.8205435,
         -1.2420059
       ],
+      "buffer_length_m": 0.0,
       "id": 1136841299,
       "inside_length_m": 4.66,
       "node_ids": [
@@ -20264,6 +21386,9 @@
           10597364811,
           10597364813
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway"
@@ -20277,6 +21402,7 @@
         36.8206582,
         -1.241907
       ],
+      "buffer_length_m": 0.0,
       "id": 1136841300,
       "inside_length_m": 18.058,
       "node_ids": [
@@ -20288,6 +21414,9 @@
           10597364813,
           10597364814
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway"
@@ -20301,6 +21430,7 @@
         36.8205143,
         -1.2429467
       ],
+      "buffer_length_m": 0.0,
       "id": 1136841301,
       "inside_length_m": 55.657,
       "node_ids": [
@@ -20318,6 +21448,10 @@
           10597364823
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway"
       },
@@ -20330,6 +21464,7 @@
         36.8295543,
         -1.2366521
       ],
+      "buffer_length_m": 0.0,
       "id": 1136914474,
       "inside_length_m": 79.216,
       "node_ids": [
@@ -20377,6 +21512,16 @@
           2068386553
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "handrail": "yes",
         "highway": "steps",
@@ -20392,8 +21537,9 @@
         36.8537872,
         -1.2514755
       ],
+      "buffer_length_m": 141.676,
       "id": 1161338721,
-      "inside_length_m": 91.978,
+      "inside_length_m": 0.0,
       "node_ids": [
         10801643832,
         10801643838,
@@ -20403,7 +21549,15 @@
         [
           10801643832,
           10801643838
+        ],
+        [
+          10801643838,
+          10801643831
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "access": "private",
@@ -20419,6 +21573,7 @@
         36.8202278,
         -1.2409845
       ],
+      "buffer_length_m": 0.0,
       "id": 1161647081,
       "inside_length_m": 1253.15,
       "node_ids": [
@@ -20496,6 +21651,22 @@
           10804172147
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "leisure": "park",
         "name": "Amani Picnic Site, Playground and Park"
@@ -20509,8 +21680,9 @@
         36.8471976,
         -1.2312254
       ],
+      "buffer_length_m": 1494.927,
       "id": 1192584767,
-      "inside_length_m": 1842.419,
+      "inside_length_m": 1375.828,
       "node_ids": [
         11070676668,
         11070676667,
@@ -20584,6 +21756,78 @@
         11070676598
       ],
       "segment_pairs": [
+        [
+          11070676659,
+          11070676658
+        ],
+        [
+          11070676658,
+          11070676657
+        ],
+        [
+          11070676657,
+          11070676656
+        ],
+        [
+          11070676656,
+          11070676655
+        ],
+        [
+          11070676655,
+          11070676654
+        ],
+        [
+          11070676654,
+          11070676653
+        ],
+        [
+          11070676653,
+          11070676652
+        ],
+        [
+          11070676652,
+          11070676651
+        ],
+        [
+          11070676651,
+          11070676650
+        ],
+        [
+          11070676650,
+          11070676649
+        ],
+        [
+          11070676649,
+          11070676648
+        ],
+        [
+          11070676648,
+          11070676647
+        ],
+        [
+          11070676647,
+          11070676646
+        ],
+        [
+          11070676646,
+          11070676645
+        ],
+        [
+          11070676645,
+          11070676644
+        ],
+        [
+          11070676644,
+          11070676643
+        ],
+        [
+          11070676643,
+          11070676642
+        ],
+        [
+          11070676642,
+          11070676641
+        ],
         [
           11070676641,
           11070676640
@@ -20719,7 +21963,101 @@
         [
           11070676608,
           11070676607
+        ],
+        [
+          11070676607,
+          11070676606
+        ],
+        [
+          11070676606,
+          11070676605
+        ],
+        [
+          11070676605,
+          11070676604
+        ],
+        [
+          11070676604,
+          11070676603
+        ],
+        [
+          11070676603,
+          11070676602
+        ],
+        [
+          11070676602,
+          11070676601
+        ],
+        [
+          11070676601,
+          11070676600
+        ],
+        [
+          11070676600,
+          11070676598
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "admin_level": "6",
@@ -20734,8 +22072,9 @@
         36.8423375,
         -1.2220369
       ],
+      "buffer_length_m": 5724.294,
       "id": 1207805546,
-      "inside_length_m": 5343.936,
+      "inside_length_m": 1235.465,
       "node_ids": [
         11072543757,
         12123495453,
@@ -20834,6 +22173,14 @@
         11070676598
       ],
       "segment_pairs": [
+        [
+          11191120238,
+          11191120237
+        ],
+        [
+          11191120237,
+          11191104536
+        ],
         [
           11191104536,
           11191104535
@@ -21029,7 +22376,105 @@
         [
           11191104492,
           11191104491
+        ],
+        [
+          11191104491,
+          11191104490
+        ],
+        [
+          11191104490,
+          11191104489
+        ],
+        [
+          11191104489,
+          11191104488
+        ],
+        [
+          11191104488,
+          11191104487
+        ],
+        [
+          11191104487,
+          11191104486
+        ],
+        [
+          11191104486,
+          11191104485
+        ],
+        [
+          11191104485,
+          11191104484
+        ],
+        [
+          11191104484,
+          11191104483
+        ],
+        [
+          11191104483,
+          11070676598
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {},
       "total_length_m": 10470.547
@@ -21041,8 +22486,9 @@
         36.8223221,
         -1.2244311
       ],
+      "buffer_length_m": 187.039,
       "id": 1213220384,
-      "inside_length_m": 259.462,
+      "inside_length_m": 221.366,
       "node_ids": [
         2847949714,
         11240465990,
@@ -21097,7 +22543,48 @@
         [
           11240465997,
           11240465998
+        ],
+        [
+          11240465998,
+          13768011702
+        ],
+        [
+          13768011702,
+          11240465999
+        ],
+        [
+          11240465999,
+          11240466000
+        ],
+        [
+          11240466000,
+          11240466001
+        ],
+        [
+          11240466001,
+          11240466002
+        ],
+        [
+          11240466002,
+          11240466003
         ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "path"
@@ -21111,6 +22598,7 @@
         36.8428446,
         -1.246126
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810541,
       "inside_length_m": 17.068,
       "node_ids": [
@@ -21138,6 +22626,12 @@
           11819393857
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21150,6 +22644,7 @@
         36.8428059,
         -1.2461542
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810542,
       "inside_length_m": 21.988,
       "node_ids": [
@@ -21177,6 +22672,12 @@
           11819393861
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21189,6 +22690,7 @@
         36.8427987,
         -1.2461076
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810543,
       "inside_length_m": 13.63,
       "node_ids": [
@@ -21216,6 +22718,12 @@
           11819393865
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21228,6 +22736,7 @@
         36.8427691,
         -1.2460787
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810544,
       "inside_length_m": 18.546,
       "node_ids": [
@@ -21255,6 +22764,12 @@
           11819417069
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21267,6 +22782,7 @@
         36.8429763,
         -1.246026
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810545,
       "inside_length_m": 27.674,
       "node_ids": [
@@ -21294,6 +22810,12 @@
           11819417073
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21306,6 +22828,7 @@
         36.8427059,
         -1.2459659
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810546,
       "inside_length_m": 28.293,
       "node_ids": [
@@ -21333,6 +22856,12 @@
           11819417077
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21345,6 +22874,7 @@
         36.842964,
         -1.245438
       ],
+      "buffer_length_m": 0.0,
       "id": 1272810547,
       "inside_length_m": 29.145,
       "node_ids": [
@@ -21372,6 +22902,12 @@
           11819417081
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21384,6 +22920,7 @@
         36.8426925,
         -1.2463148
       ],
+      "buffer_length_m": 0.0,
       "id": 1272811656,
       "inside_length_m": 19.899,
       "node_ids": [
@@ -21411,6 +22948,12 @@
           11819388523
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21423,6 +22966,7 @@
         36.8429358,
         -1.2461245
       ],
+      "buffer_length_m": 0.0,
       "id": 1272811657,
       "inside_length_m": 24.674,
       "node_ids": [
@@ -21450,6 +22994,12 @@
           11819388527
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21462,6 +23012,7 @@
         36.8439939,
         -1.2400132
       ],
+      "buffer_length_m": 0.0,
       "id": 1272814104,
       "inside_length_m": 19.538,
       "node_ids": [
@@ -21489,6 +23040,12 @@
           11819444150
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21501,8 +23058,9 @@
         36.8437106,
         -1.2478975
       ],
+      "buffer_length_m": 61.167,
       "id": 1276417737,
-      "inside_length_m": 27.935,
+      "inside_length_m": 0.0,
       "node_ids": [
         11850277247,
         11850277244,
@@ -21522,13 +23080,77 @@
       ],
       "segment_pairs": [
         [
+          11850277247,
+          11850277244
+        ],
+        [
           11850277244,
           11850277245
         ],
         [
           11850277245,
           11850277246
+        ],
+        [
+          11850277246,
+          11850277242
+        ],
+        [
+          11850277242,
+          11850277241
+        ],
+        [
+          11850277241,
+          11850277240
+        ],
+        [
+          11850277240,
+          11850277243
+        ],
+        [
+          11850277243,
+          11850277239
+        ],
+        [
+          11850277239,
+          11850277237
+        ],
+        [
+          11850277237,
+          11850277234
+        ],
+        [
+          11850277234,
+          11850277235
+        ],
+        [
+          11850277235,
+          11850277236
+        ],
+        [
+          11850277236,
+          11850277238
+        ],
+        [
+          11850277238,
+          11850277247
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -21542,8 +23164,9 @@
         36.8446051,
         -1.2494576
       ],
+      "buffer_length_m": 14.134,
       "id": 1276417739,
-      "inside_length_m": 28.267,
+      "inside_length_m": 14.134,
       "node_ids": [
         11850277255,
         11850277254,
@@ -21569,6 +23192,12 @@
           11850277255
         ]
       ],
+      "segment_zones": [
+        "core",
+        "buffer",
+        "buffer",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21581,8 +23210,9 @@
         36.8443578,
         -1.2486773
       ],
+      "buffer_length_m": 29.89,
       "id": 1276417740,
-      "inside_length_m": 14.945,
+      "inside_length_m": 0.0,
       "node_ids": [
         11850277259,
         11850277258,
@@ -21592,6 +23222,14 @@
       ],
       "segment_pairs": [
         [
+          11850277259,
+          11850277258
+        ],
+        [
+          11850277258,
+          11850277257
+        ],
+        [
           11850277257,
           11850277256
         ],
@@ -21599,6 +23237,12 @@
           11850277256,
           11850277259
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -21612,8 +23256,9 @@
         36.8438701,
         -1.2477204
       ],
+      "buffer_length_m": 8.62,
       "id": 1276417756,
-      "inside_length_m": 17.255,
+      "inside_length_m": 8.636,
       "node_ids": [
         11850303047,
         11850303044,
@@ -21639,6 +23284,12 @@
           11850303047
         ]
       ],
+      "segment_zones": [
+        "core",
+        "buffer",
+        "buffer",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21651,8 +23302,9 @@
         36.8438555,
         -1.2477394
       ],
+      "buffer_length_m": 26.842,
       "id": 1276417757,
-      "inside_length_m": 26.85,
+      "inside_length_m": 9.941,
       "node_ids": [
         11850303051,
         11850303048,
@@ -21672,7 +23324,17 @@
         [
           11850303049,
           11850303050
+        ],
+        [
+          11850303050,
+          11850303051
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -21686,8 +23348,9 @@
         36.8437191,
         -1.2475234
       ],
+      "buffer_length_m": 48.319,
       "id": 1276417758,
-      "inside_length_m": 36.453,
+      "inside_length_m": 8.83,
       "node_ids": [
         11850303059,
         11850303056,
@@ -21701,6 +23364,10 @@
       ],
       "segment_pairs": [
         [
+          11850303059,
+          11850303056
+        ],
+        [
           11850303056,
           11850303057
         ],
@@ -21711,7 +23378,33 @@
         [
           11850303058,
           11850303055
+        ],
+        [
+          11850303055,
+          11850303053
+        ],
+        [
+          11850303053,
+          11850303052
+        ],
+        [
+          11850303052,
+          11850303054
+        ],
+        [
+          11850303054,
+          11850303059
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -21725,6 +23418,7 @@
         36.8382454,
         -1.2474706
       ],
+      "buffer_length_m": 0.0,
       "id": 1276426562,
       "inside_length_m": 28.092,
       "node_ids": [
@@ -21752,6 +23446,12 @@
           11850343809
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21764,6 +23464,7 @@
         36.8426013,
         -1.2461948
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599335,
       "inside_length_m": 18.386,
       "node_ids": [
@@ -21791,6 +23492,12 @@
           11860226668
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21803,6 +23510,7 @@
         36.8426234,
         -1.2461074
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599336,
       "inside_length_m": 27.255,
       "node_ids": [
@@ -21830,6 +23538,12 @@
           11860228072
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21842,6 +23556,7 @@
         36.8425441,
         -1.2461268
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599337,
       "inside_length_m": 15.196,
       "node_ids": [
@@ -21869,6 +23584,12 @@
           11860228076
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21881,6 +23602,7 @@
         36.8425504,
         -1.2461003
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599338,
       "inside_length_m": 10.511,
       "node_ids": [
@@ -21908,6 +23630,12 @@
           11860228080
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21920,6 +23648,7 @@
         36.8424813,
         -1.2460706
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599339,
       "inside_length_m": 10.81,
       "node_ids": [
@@ -21947,6 +23676,12 @@
           11860228084
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21959,6 +23694,7 @@
         36.8424432,
         -1.2460229
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599340,
       "inside_length_m": 11.291,
       "node_ids": [
@@ -21986,6 +23722,12 @@
           11860228088
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -21998,6 +23740,7 @@
         36.8425642,
         -1.2459053
       ],
+      "buffer_length_m": 0.0,
       "id": 1277599341,
       "inside_length_m": 26.75,
       "node_ids": [
@@ -22025,6 +23768,12 @@
           11860228092
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22037,8 +23786,9 @@
         36.8193436,
         -1.2375072
       ],
+      "buffer_length_m": 71.301,
       "id": 1277611558,
-      "inside_length_m": 30.509,
+      "inside_length_m": 0.0,
       "node_ids": [
         11860317188,
         11860317183,
@@ -22050,13 +23800,37 @@
       ],
       "segment_pairs": [
         [
+          11860317188,
+          11860317183
+        ],
+        [
+          11860317183,
+          11860317184
+        ],
+        [
+          11860317184,
+          11860317187
+        ],
+        [
           11860317187,
           11860317186
         ],
         [
           11860317186,
           11860317185
+        ],
+        [
+          11860317185,
+          11860317188
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -22070,8 +23844,9 @@
         36.819508,
         -1.2370627
       ],
+      "buffer_length_m": 73.896,
       "id": 1277611560,
-      "inside_length_m": 73.907,
+      "inside_length_m": 7.66,
       "node_ids": [
         11860317200,
         11860317197,
@@ -22080,6 +23855,10 @@
         11860317200
       ],
       "segment_pairs": [
+        [
+          11860317200,
+          11860317197
+        ],
         [
           11860317197,
           11860317198
@@ -22093,6 +23872,12 @@
           11860317200
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22105,6 +23890,7 @@
         36.8417428,
         -1.2524187
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465695,
       "inside_length_m": 14.473,
       "node_ids": [
@@ -22132,6 +23918,12 @@
           11916385710
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22144,6 +23936,7 @@
         36.8413683,
         -1.2523725
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465696,
       "inside_length_m": 18.313,
       "node_ids": [
@@ -22171,6 +23964,12 @@
           11916385718
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22183,6 +23982,7 @@
         36.8415551,
         -1.2523638
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465697,
       "inside_length_m": 29.691,
       "node_ids": [
@@ -22210,6 +24010,12 @@
           11916385722
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22222,6 +24028,7 @@
         36.8414383,
         -1.2524315
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465698,
       "inside_length_m": 54.218,
       "node_ids": [
@@ -22269,6 +24076,16 @@
           11916385726
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22281,6 +24098,7 @@
         36.8409176,
         -1.2524012
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465699,
       "inside_length_m": 62.251,
       "node_ids": [
@@ -22318,6 +24136,14 @@
           11916385732
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22330,6 +24156,7 @@
         36.8407565,
         -1.2524895
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465700,
       "inside_length_m": 22.122,
       "node_ids": [
@@ -22357,6 +24184,12 @@
           11916385736
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22369,6 +24202,7 @@
         36.8407395,
         -1.2523698
       ],
+      "buffer_length_m": 0.0,
       "id": 1284465701,
       "inside_length_m": 41.295,
       "node_ids": [
@@ -22396,6 +24230,12 @@
           11916385740
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22408,6 +24248,7 @@
         36.8199581,
         -1.2424785
       ],
+      "buffer_length_m": 0.0,
       "id": 1288934867,
       "inside_length_m": 62.745,
       "node_ids": [
@@ -22435,6 +24276,12 @@
           11952125959
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22447,6 +24294,7 @@
         36.820537,
         -1.2417133
       ],
+      "buffer_length_m": 0.0,
       "id": 1288934868,
       "inside_length_m": 53.377,
       "node_ids": [
@@ -22474,6 +24322,12 @@
           11952125964
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22486,6 +24340,7 @@
         36.820517,
         -1.2418701
       ],
+      "buffer_length_m": 0.0,
       "id": 1288934869,
       "inside_length_m": 54.544,
       "node_ids": [
@@ -22513,6 +24368,12 @@
           11952125968
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22525,6 +24386,7 @@
         36.816668,
         -1.2466784
       ],
+      "buffer_length_m": 0.0,
       "id": 1288935238,
       "inside_length_m": 51.628,
       "node_ids": [
@@ -22582,6 +24444,18 @@
           11952130710
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22594,6 +24468,7 @@
         36.8169532,
         -1.2467621
       ],
+      "buffer_length_m": 0.0,
       "id": 1288935239,
       "inside_length_m": 100.721,
       "node_ids": [
@@ -22641,6 +24516,16 @@
           11952130714
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22653,6 +24538,7 @@
         36.8164107,
         -1.2465173
       ],
+      "buffer_length_m": 0.0,
       "id": 1288935240,
       "inside_length_m": 35.21,
       "node_ids": [
@@ -22680,6 +24566,12 @@
           11952130718
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22692,6 +24584,7 @@
         36.8161942,
         -1.2462647
       ],
+      "buffer_length_m": 0.0,
       "id": 1288935241,
       "inside_length_m": 32.609,
       "node_ids": [
@@ -22719,6 +24612,12 @@
           11952130722
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22731,6 +24630,7 @@
         36.8334156,
         -1.2445852
       ],
+      "buffer_length_m": 0.0,
       "id": 1288941920,
       "inside_length_m": 10.532,
       "node_ids": [
@@ -22758,6 +24658,12 @@
           11952184378
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22770,6 +24676,7 @@
         36.8384184,
         -1.2460041
       ],
+      "buffer_length_m": 0.0,
       "id": 1288942507,
       "inside_length_m": 14.461,
       "node_ids": [
@@ -22827,6 +24734,18 @@
           11952185430
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22839,8 +24758,9 @@
         36.8307737,
         -1.2487217
       ],
+      "buffer_length_m": 18.377,
       "id": 1289385354,
-      "inside_length_m": 36.753,
+      "inside_length_m": 18.377,
       "node_ids": [
         11956034245,
         11956034242,
@@ -22866,6 +24786,12 @@
           11956034245
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22878,6 +24804,7 @@
         36.8311813,
         -1.2484613
       ],
+      "buffer_length_m": 0.0,
       "id": 1289385355,
       "inside_length_m": 52.049,
       "node_ids": [
@@ -22925,6 +24852,16 @@
           11956034253
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -22937,8 +24874,9 @@
         36.8310819,
         -1.2485111
       ],
+      "buffer_length_m": 54.793,
       "id": 1289385356,
-      "inside_length_m": 145.691,
+      "inside_length_m": 90.898,
       "node_ids": [
         11956038287,
         11956034261,
@@ -23114,6 +25052,42 @@
           11956038287
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -23126,6 +25100,7 @@
         36.831773,
         -1.2477959
       ],
+      "buffer_length_m": 0.0,
       "id": 1305800084,
       "inside_length_m": 21.568,
       "node_ids": [
@@ -23153,6 +25128,12 @@
           12093980117
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes",
         "source": "microsoft/BuildingFootprints"
@@ -23166,8 +25147,9 @@
         36.8335257,
         -1.2477615
       ],
+      "buffer_length_m": 100.623,
       "id": 1305964245,
-      "inside_length_m": 76.229,
+      "inside_length_m": 19.348,
       "node_ids": [
         12095349582,
         12095349583,
@@ -23209,7 +25191,31 @@
         [
           12095349588,
           12095349589
+        ],
+        [
+          12095349589,
+          12095349590
+        ],
+        [
+          12095349590,
+          12095349591
+        ],
+        [
+          12095349591,
+          12095349582
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes",
@@ -23224,8 +25230,9 @@
         36.8331441,
         -1.2477571
       ],
+      "buffer_length_m": 31.698,
       "id": 1305964246,
-      "inside_length_m": 27.089,
+      "inside_length_m": 10.069,
       "node_ids": [
         12095349592,
         12095349593,
@@ -23236,6 +25243,18 @@
         12095349592
       ],
       "segment_pairs": [
+        [
+          12095349592,
+          12095349593
+        ],
+        [
+          12095349593,
+          12095349594
+        ],
+        [
+          12095349594,
+          12095349595
+        ],
         [
           12095349595,
           12095349596
@@ -23248,6 +25267,14 @@
           12095349597,
           12095349592
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer"
       ],
       "tags": {
         "building": "yes",
@@ -23262,8 +25289,9 @@
         36.8334327,
         -1.2477339
       ],
+      "buffer_length_m": 28.717,
       "id": 1305964394,
-      "inside_length_m": 42.548,
+      "inside_length_m": 13.83,
       "node_ids": [
         12095414544,
         12095414545,
@@ -23289,6 +25317,12 @@
           12095414544
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -23301,8 +25335,9 @@
         36.8283336,
         -1.2285795
       ],
+      "buffer_length_m": 218.653,
       "id": 1332841823,
-      "inside_length_m": 72.005,
+      "inside_length_m": 57.433,
       "node_ids": [
         12330717272,
         12330717271,
@@ -23325,6 +25360,54 @@
       ],
       "segment_pairs": [
         [
+          12330717272,
+          12330717271
+        ],
+        [
+          12330717271,
+          12330717270
+        ],
+        [
+          12330717270,
+          12330717269
+        ],
+        [
+          12330717269,
+          12330717268
+        ],
+        [
+          12330717268,
+          12330717267
+        ],
+        [
+          12330717267,
+          12330717266
+        ],
+        [
+          12330717266,
+          12330717265
+        ],
+        [
+          12330717265,
+          12330717264
+        ],
+        [
+          12330717264,
+          12330717263
+        ],
+        [
+          12330717263,
+          12330717262
+        ],
+        [
+          12330717262,
+          12330717261
+        ],
+        [
+          12330717261,
+          12330717260
+        ],
+        [
           12330717260,
           12330717259
         ],
@@ -23345,6 +25428,25 @@
           12330717255
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -23357,6 +25459,7 @@
         36.8286955,
         -1.2279849
       ],
+      "buffer_length_m": 0.0,
       "id": 1332841836,
       "inside_length_m": 57.564,
       "node_ids": [
@@ -23379,6 +25482,11 @@
           12330726043
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -23391,6 +25499,7 @@
         36.8285196,
         -1.2274244
       ],
+      "buffer_length_m": 0.0,
       "id": 1332841837,
       "inside_length_m": 125.489,
       "node_ids": [
@@ -23423,6 +25532,13 @@
           12330726046
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -23435,8 +25551,9 @@
         36.840414,
         -1.226658
       ],
+      "buffer_length_m": 208.72,
       "id": 1332841838,
-      "inside_length_m": 2055.802,
+      "inside_length_m": 1869.67,
       "node_ids": [
         12330726060,
         2847949524,
@@ -23911,7 +26028,108 @@
         [
           2847949705,
           272329805
+        ],
+        [
+          272329805,
+          272328863
         ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "footway",
@@ -23927,6 +26145,7 @@
         36.8283857,
         -1.2288142
       ],
+      "buffer_length_m": 0.0,
       "id": 1332841839,
       "inside_length_m": 735.231,
       "node_ids": [
@@ -24089,6 +26308,39 @@
           2847949523
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Tara Path",
@@ -24103,6 +26355,7 @@
         36.8452012,
         -1.250001
       ],
+      "buffer_length_m": 0.0,
       "id": 1333781896,
       "inside_length_m": 27.667,
       "node_ids": [
@@ -24130,6 +26383,12 @@
           12339849336
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24142,8 +26401,9 @@
         36.8449334,
         -1.2496936
       ],
+      "buffer_length_m": 26.928,
       "id": 1333781897,
-      "inside_length_m": 13.464,
+      "inside_length_m": 0.0,
       "node_ids": [
         12339849340,
         12339849339,
@@ -24153,13 +26413,27 @@
       ],
       "segment_pairs": [
         [
+          12339849340,
+          12339849339
+        ],
+        [
           12339849339,
           12339849338
         ],
         [
           12339849338,
           12339849337
+        ],
+        [
+          12339849337,
+          12339849340
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -24173,6 +26447,7 @@
         36.845067,
         -1.2497488
       ],
+      "buffer_length_m": 0.0,
       "id": 1333781898,
       "inside_length_m": 49.509,
       "node_ids": [
@@ -24200,6 +26475,12 @@
           12339849346
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24212,8 +26493,9 @@
         36.8448897,
         -1.2496923
       ],
+      "buffer_length_m": 109.425,
       "id": 1333781900,
-      "inside_length_m": 54.706,
+      "inside_length_m": 0.0,
       "node_ids": [
         12339849354,
         12339849353,
@@ -24231,7 +26513,31 @@
         [
           12339849353,
           12339849352
+        ],
+        [
+          12339849352,
+          12339849341
+        ],
+        [
+          12339849341,
+          12339849342
+        ],
+        [
+          12339849342,
+          12339849351
+        ],
+        [
+          12339849351,
+          12339849354
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "building": "yes"
@@ -24245,6 +26551,7 @@
         36.8178428,
         -1.2406177
       ],
+      "buffer_length_m": 0.0,
       "id": 1334973005,
       "inside_length_m": 47.969,
       "node_ids": [
@@ -24272,6 +26579,12 @@
           12350432693
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes",
         "source": "microsoft/BuildingFootprints"
@@ -24285,6 +26598,7 @@
         36.8178404,
         -1.2405303
       ],
+      "buffer_length_m": 0.0,
       "id": 1334973006,
       "inside_length_m": 40.907,
       "node_ids": [
@@ -24322,6 +26636,14 @@
           12350432697
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes",
         "source": "microsoft/BuildingFootprints"
@@ -24335,8 +26657,9 @@
         36.8561255,
         -1.2480044
       ],
+      "buffer_length_m": 57.503,
       "id": 1335913330,
-      "inside_length_m": 72.661,
+      "inside_length_m": 21.109,
       "node_ids": [
         12357729141,
         12357729140,
@@ -24366,7 +26689,19 @@
         [
           12357729137,
           12357729136
+        ],
+        [
+          12357729136,
+          12357729135
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "service"
@@ -24380,6 +26715,7 @@
         36.8185332,
         -1.2405105
       ],
+      "buffer_length_m": 0.0,
       "id": 1341070735,
       "inside_length_m": 22.649,
       "node_ids": [
@@ -24407,6 +26743,12 @@
           12405344429
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24419,6 +26761,7 @@
         36.8172149,
         -1.2404915
       ],
+      "buffer_length_m": 0.0,
       "id": 1377280969,
       "inside_length_m": 18.145,
       "node_ids": [
@@ -24446,6 +26789,12 @@
           12752874622
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24458,6 +26807,7 @@
         36.8172377,
         -1.2404745
       ],
+      "buffer_length_m": 0.0,
       "id": 1377280970,
       "inside_length_m": 11.233,
       "node_ids": [
@@ -24485,6 +26835,12 @@
           12752874626
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24497,6 +26853,7 @@
         36.8169808,
         -1.2480897
       ],
+      "buffer_length_m": 0.0,
       "id": 1378160228,
       "inside_length_m": 80.186,
       "node_ids": [
@@ -24524,6 +26881,12 @@
           12760595289
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -24536,8 +26899,9 @@
         36.8216923,
         -1.2478265
       ],
+      "buffer_length_m": 21.024,
       "id": 1378160232,
-      "inside_length_m": 14.075,
+      "inside_length_m": 8.042,
       "node_ids": [
         12760595313,
         12760595321,
@@ -24555,6 +26919,26 @@
         12760595313
       ],
       "segment_pairs": [
+        [
+          12760595313,
+          12760595321
+        ],
+        [
+          12760595321,
+          12760595322
+        ],
+        [
+          12760595322,
+          12760595323
+        ],
+        [
+          12760595323,
+          12760595324
+        ],
+        [
+          12760595324,
+          12760595314
+        ],
         [
           12760595314,
           12760595315
@@ -24582,7 +26966,26 @@
         [
           12760595318,
           12760595319
+        ],
+        [
+          12760595319,
+          12760595313
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "leisure": "swimming_pool"
@@ -24596,8 +26999,9 @@
         36.8219486,
         -1.2478828
       ],
+      "buffer_length_m": 23.067,
       "id": 1378160233,
-      "inside_length_m": 21.141,
+      "inside_length_m": 12.13,
       "node_ids": [
         12760595330,
         12760595331,
@@ -24615,6 +27019,26 @@
         12760595330
       ],
       "segment_pairs": [
+        [
+          12760595330,
+          12760595331
+        ],
+        [
+          12760595331,
+          12760595332
+        ],
+        [
+          12760595332,
+          12760595333
+        ],
+        [
+          12760595333,
+          12760595334
+        ],
+        [
+          12760595334,
+          12760595335
+        ],
         [
           12760595335,
           12760595336
@@ -24648,6 +27072,21 @@
           12760595330
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer"
+      ],
       "tags": {
         "leisure": "swimming_pool"
       },
@@ -24660,6 +27099,7 @@
         36.8263091,
         -1.2342315
       ],
+      "buffer_length_m": 0.0,
       "id": 142061035,
       "inside_length_m": 1018.32,
       "node_ids": [
@@ -24822,6 +27262,39 @@
           1554843754
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -24835,6 +27308,7 @@
         36.829256,
         -1.236668
       ],
+      "buffer_length_m": 0.0,
       "id": 142061036,
       "inside_length_m": 77.24,
       "node_ids": [
@@ -24857,6 +27331,11 @@
           747730084
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -24870,6 +27349,7 @@
         36.818703,
         -1.2437565
       ],
+      "buffer_length_m": 0.0,
       "id": 142061818,
       "inside_length_m": 344.455,
       "node_ids": [
@@ -24932,6 +27412,19 @@
           1554851731
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Olive Path",
@@ -24946,8 +27439,9 @@
         36.8409489,
         -1.2304919
       ],
+      "buffer_length_m": 143.619,
       "id": 142061819,
-      "inside_length_m": 2655.409,
+      "inside_length_m": 2625.468,
       "node_ids": [
         9350977862,
         9350977861,
@@ -25013,6 +27507,26 @@
         4803107868
       ],
       "segment_pairs": [
+        [
+          9350977850,
+          9350977849
+        ],
+        [
+          9350977849,
+          9350977848
+        ],
+        [
+          9350977848,
+          9350977847
+        ],
+        [
+          9350977847,
+          9350977846
+        ],
+        [
+          9350977846,
+          9350977845
+        ],
         [
           9350977845,
           9350977844
@@ -25190,6 +27704,57 @@
           4803107868
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "name": "Karura River",
         "waterway": "river"
@@ -25203,6 +27768,7 @@
         36.8182937,
         -1.2403519
       ],
+      "buffer_length_m": 0.0,
       "id": 1421599727,
       "inside_length_m": 16.753,
       "node_ids": [
@@ -25220,6 +27786,10 @@
           13064001313
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway"
       },
@@ -25232,6 +27802,7 @@
         36.8177339,
         -1.2463324
       ],
+      "buffer_length_m": 0.0,
       "id": 1422774607,
       "inside_length_m": 124.158,
       "node_ids": [
@@ -25324,6 +27895,25 @@
           13075347375
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "no",
         "highway": "path",
@@ -25338,6 +27928,7 @@
         36.8206563,
         -1.2442726
       ],
+      "buffer_length_m": 0.0,
       "id": 1422774608,
       "inside_length_m": 262.614,
       "node_ids": [
@@ -25440,6 +28031,27 @@
           13075347395
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "unpaved"
@@ -25453,6 +28065,7 @@
         36.839299,
         -1.243434
       ],
+      "buffer_length_m": 0.0,
       "id": 142776095,
       "inside_length_m": 299.402,
       "node_ids": [
@@ -25500,6 +28113,16 @@
           1562475927
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -25513,6 +28136,7 @@
         36.8417263,
         -1.237042
       ],
+      "buffer_length_m": 0.0,
       "id": 142776097,
       "inside_length_m": 1631.645,
       "node_ids": [
@@ -25790,6 +28414,62 @@
           747730084
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -25803,6 +28483,7 @@
         36.8306975,
         -1.2353588
       ],
+      "buffer_length_m": 0.0,
       "id": 142776098,
       "inside_length_m": 389.863,
       "node_ids": [
@@ -25875,6 +28556,21 @@
           2068386508
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -25888,8 +28584,9 @@
         36.8407463,
         -1.245925
       ],
+      "buffer_length_m": 146.991,
       "id": 142776101,
-      "inside_length_m": 441.641,
+      "inside_length_m": 294.65,
       "node_ids": [
         1562475927,
         9810272408,
@@ -25925,6 +28622,14 @@
           745351464
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "highway": "track",
         "surface": "dirt"
@@ -25938,6 +28643,7 @@
         36.8350879,
         -1.2423843
       ],
+      "buffer_length_m": 0.0,
       "id": 142776560,
       "inside_length_m": 262.297,
       "node_ids": [
@@ -25980,6 +28686,15 @@
           748782536
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track",
         "surface": "dirt"
@@ -25993,6 +28708,7 @@
         36.8281256,
         -1.2413712
       ],
+      "buffer_length_m": 0.0,
       "id": 142777583,
       "inside_length_m": 459.889,
       "node_ids": [
@@ -26035,6 +28751,15 @@
           747730118
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -26048,6 +28773,7 @@
         36.8325244,
         -1.2414581
       ],
+      "buffer_length_m": 0.0,
       "id": 142777584,
       "inside_length_m": 158.105,
       "node_ids": [
@@ -26065,6 +28791,10 @@
           748782349
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track",
         "surface": "dirt",
@@ -26079,6 +28809,7 @@
         36.828673,
         -1.2346372
       ],
+      "buffer_length_m": 0.0,
       "id": 142777585,
       "inside_length_m": 352.768,
       "node_ids": [
@@ -26146,6 +28877,20 @@
           1554843701
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -26159,6 +28904,7 @@
         36.8283058,
         -1.2287508
       ],
+      "buffer_length_m": 0.0,
       "id": 142777586,
       "inside_length_m": 8.311,
       "node_ids": [
@@ -26170,6 +28916,9 @@
           2847949523,
           12330726060
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -26187,6 +28936,7 @@
         36.8405875,
         -1.2383025
       ],
+      "buffer_length_m": 0.0,
       "id": 142777587,
       "inside_length_m": 2922.68,
       "node_ids": [
@@ -26379,6 +29129,45 @@
           6503768700
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "name": "Middle Track",
@@ -26393,8 +29182,9 @@
         36.8254072,
         -1.249037
       ],
+      "buffer_length_m": 389.73,
       "id": 1442814916,
-      "inside_length_m": 430.822,
+      "inside_length_m": 159.104,
       "node_ids": [
         13238906944,
         13238906943,
@@ -26416,7 +29206,17 @@
         [
           13238906940,
           13238906939
+        ],
+        [
+          13238906939,
+          13238906944
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "landuse": "grass"
@@ -26430,8 +29230,9 @@
         36.8262387,
         -1.249201
       ],
+      "buffer_length_m": 796.194,
       "id": 1442814917,
-      "inside_length_m": 796.194,
+      "inside_length_m": 0.0,
       "node_ids": [
         13238906949,
         13238906948,
@@ -26467,6 +29268,14 @@
           13238906949
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "landuse": "grass"
       },
@@ -26479,8 +29288,9 @@
         36.8348245,
         -1.2477705
       ],
+      "buffer_length_m": 679.716,
       "id": 1443673379,
-      "inside_length_m": 86.133,
+      "inside_length_m": 0.0,
       "node_ids": [
         13247580601,
         13247562300,
@@ -26500,13 +29310,57 @@
       ],
       "segment_pairs": [
         [
+          13247562298,
+          13247562297
+        ],
+        [
+          13247562297,
+          13247562296
+        ],
+        [
+          13247562296,
+          13247562295
+        ],
+        [
+          13247562295,
+          13247562294
+        ],
+        [
+          13247562294,
+          13247562293
+        ],
+        [
           13247562293,
           13247562292
         ],
         [
           13247562292,
           13247562291
+        ],
+        [
+          13247562291,
+          13247562290
+        ],
+        [
+          13247562290,
+          13247562289
+        ],
+        [
+          13247562289,
+          13247562288
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "landuse": "grass"
@@ -26520,6 +29374,7 @@
         36.8329536,
         -1.24593
       ],
+      "buffer_length_m": 0.0,
       "id": 1473592038,
       "inside_length_m": 251.671,
       "node_ids": [
@@ -26557,6 +29412,14 @@
           13519277170
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -26569,8 +29432,9 @@
         36.8451206,
         -1.2482397
       ],
+      "buffer_length_m": 1398.394,
       "id": 1481723983,
-      "inside_length_m": 1159.91,
+      "inside_length_m": 190.973,
       "node_ids": [
         13589368056,
         13589368055,
@@ -26621,6 +29485,18 @@
         13589368010
       ],
       "segment_pairs": [
+        [
+          13589368056,
+          13589368055
+        ],
+        [
+          13589368055,
+          13589368054
+        ],
+        [
+          13589368054,
+          13589368053
+        ],
         [
           13589368053,
           13589368052
@@ -26764,7 +29640,83 @@
         [
           13589368018,
           13589368017
+        ],
+        [
+          13589368017,
+          13589368016
+        ],
+        [
+          13589368016,
+          13589368015
+        ],
+        [
+          13589368015,
+          13589368014
+        ],
+        [
+          13589368014,
+          13589368013
+        ],
+        [
+          13589368013,
+          13589368012
+        ],
+        [
+          13589368012,
+          13589368011
+        ],
+        [
+          13589368011,
+          13589368010
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {},
       "total_length_m": 1589.367
@@ -26776,8 +29728,9 @@
         36.8461813,
         -1.2461759
       ],
+      "buffer_length_m": 932.732,
       "id": 1481723985,
-      "inside_length_m": 1688.118,
+      "inside_length_m": 960.633,
       "node_ids": [
         13589376815,
         13589376814,
@@ -27060,7 +30013,84 @@
         [
           13589368061,
           13589368060
+        ],
+        [
+          13589368060,
+          13589368059
+        ],
+        [
+          13589368059,
+          13589368058
+        ],
+        [
+          13589368058,
+          13589368057
+        ],
+        [
+          13589368057,
+          13589368056
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {},
       "total_length_m": 1893.364
@@ -27072,8 +30102,9 @@
         36.8210665,
         -1.2250751
       ],
+      "buffer_length_m": 45.023,
       "id": 1504625701,
-      "inside_length_m": 191.357,
+      "inside_length_m": 146.334,
       "node_ids": [
         13768011702,
         13768011703,
@@ -27104,6 +30135,13 @@
           13768011707
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "foot": "yes",
@@ -27120,8 +30158,9 @@
         36.8285443,
         -1.2253684
       ],
+      "buffer_length_m": 50.014,
       "id": 1504644448,
-      "inside_length_m": 982.011,
+      "inside_length_m": 931.996,
       "node_ids": [
         11240465998,
         13768222683,
@@ -27342,6 +30381,51 @@
           6503768691
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "designated",
@@ -27358,6 +30442,7 @@
         36.829076,
         -1.226947
       ],
+      "buffer_length_m": 0.0,
       "id": 1504644453,
       "inside_length_m": 94.23,
       "node_ids": [
@@ -27375,6 +30460,10 @@
           12330726051
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "foot": "yes",
@@ -27391,6 +30480,7 @@
         36.828468,
         -1.226658
       ],
+      "buffer_length_m": 0.0,
       "id": 1504644454,
       "inside_length_m": 90.66,
       "node_ids": [
@@ -27408,6 +30498,10 @@
           12330726051
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "foot": "yes",
@@ -27424,6 +30518,7 @@
         36.834417,
         -1.245196
       ],
+      "buffer_length_m": 0.0,
       "id": 1504647712,
       "inside_length_m": 236.533,
       "node_ids": [
@@ -27461,6 +30556,14 @@
           2847945496
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "foot": "yes",
@@ -27477,6 +30580,7 @@
         36.8361045,
         -1.2472412
       ],
+      "buffer_length_m": 0.0,
       "id": 1504647728,
       "inside_length_m": 384.326,
       "node_ids": [
@@ -27534,6 +30638,18 @@
           9521536668
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "yes",
@@ -27550,6 +30666,7 @@
         36.820951,
         -1.2444431
       ],
+      "buffer_length_m": 0.0,
       "id": 1504672083,
       "inside_length_m": 65.74,
       "node_ids": [
@@ -27567,6 +30684,10 @@
           13768348456
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "designated",
@@ -27583,6 +30704,7 @@
         36.826149,
         -1.2446923
       ],
+      "buffer_length_m": 0.0,
       "id": 1504672084,
       "inside_length_m": 774.206,
       "node_ids": [
@@ -27720,6 +30842,34 @@
           2847824077
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "designated",
@@ -27736,6 +30886,7 @@
         36.8234028,
         -1.2450378
       ],
+      "buffer_length_m": 0.0,
       "id": 1504672085,
       "inside_length_m": 185.626,
       "node_ids": [
@@ -27758,6 +30909,11 @@
           13768348483
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "designated",
@@ -27774,6 +30930,7 @@
         36.8260301,
         -1.244449
       ],
+      "buffer_length_m": 0.0,
       "id": 1504672086,
       "inside_length_m": 669.472,
       "node_ids": [
@@ -27871,6 +31028,26 @@
           13768348481
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "permissive",
         "foot": "designated",
@@ -27887,6 +31064,7 @@
         36.8237977,
         -1.2330979
       ],
+      "buffer_length_m": 0.0,
       "id": 1504673113,
       "inside_length_m": 158.073,
       "node_ids": [
@@ -27914,6 +31092,12 @@
           13768277794
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -27930,6 +31114,7 @@
         36.8401151,
         -1.231572
       ],
+      "buffer_length_m": 0.0,
       "id": 1504822990,
       "inside_length_m": 1708.685,
       "node_ids": [
@@ -28287,6 +31472,78 @@
           13769333327
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28303,6 +31560,7 @@
         36.8399422,
         -1.2491314
       ],
+      "buffer_length_m": 0.0,
       "id": 1504824091,
       "inside_length_m": 205.744,
       "node_ids": [
@@ -28350,6 +31608,16 @@
           9810272384
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28366,6 +31634,7 @@
         36.8432734,
         -1.2376485
       ],
+      "buffer_length_m": 0.0,
       "id": 1504829330,
       "inside_length_m": 429.215,
       "node_ids": [
@@ -28448,6 +31717,23 @@
           2847824359
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28464,6 +31750,7 @@
         36.8435464,
         -1.2383087
       ],
+      "buffer_length_m": 0.0,
       "id": 1504829331,
       "inside_length_m": 167.584,
       "node_ids": [
@@ -28501,6 +31788,14 @@
           13769344200
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28517,6 +31812,7 @@
         36.8437757,
         -1.2393538
       ],
+      "buffer_length_m": 0.0,
       "id": 1504838854,
       "inside_length_m": 91.004,
       "node_ids": [
@@ -28539,6 +31835,11 @@
           13769374298
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28555,6 +31856,7 @@
         36.8438627,
         -1.2392868
       ],
+      "buffer_length_m": 0.0,
       "id": 1504838855,
       "inside_length_m": 62.922,
       "node_ids": [
@@ -28577,6 +31879,11 @@
           13769374300
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "designated",
         "foot": "designated",
@@ -28593,6 +31900,7 @@
         36.8204765,
         -1.2354076
       ],
+      "buffer_length_m": 0.0,
       "id": 1504844701,
       "inside_length_m": 400.024,
       "node_ids": [
@@ -28665,6 +31973,21 @@
           9923907622
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "foot": "no",
@@ -28674,6 +31997,130 @@
       },
       "total_length_m": 400.024
     },
+    "1504852415": {
+      "bounds": [
+        36.8438035,
+        -1.2426336,
+        36.8440364,
+        -1.2400688
+      ],
+      "buffer_length_m": 0.0,
+      "id": 1504852415,
+      "inside_length_m": 301.87,
+      "node_ids": [
+        745351635,
+        13769449745,
+        13769449746,
+        13769449747,
+        13769449748,
+        13769449749,
+        13769449750,
+        13769449751,
+        745351649
+      ],
+      "segment_pairs": [
+        [
+          745351635,
+          13769449745
+        ],
+        [
+          13769449745,
+          13769449746
+        ],
+        [
+          13769449746,
+          13769449747
+        ],
+        [
+          13769449747,
+          13769449748
+        ],
+        [
+          13769449748,
+          13769449749
+        ],
+        [
+          13769449749,
+          13769449750
+        ],
+        [
+          13769449750,
+          13769449751
+        ],
+        [
+          13769449751,
+          745351649
+        ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
+      "tags": {
+        "bicycle": "yes",
+        "foot": "yes",
+        "highway": "path",
+        "mtb:scale": "1+",
+        "source": "Strava Global Heatmap"
+      },
+      "total_length_m": 301.87
+    },
+    "1504852416": {
+      "bounds": [
+        36.8433002,
+        -1.2403319,
+        36.8438112,
+        -1.2396058
+      ],
+      "buffer_length_m": 0.0,
+      "id": 1504852416,
+      "inside_length_m": 106.813,
+      "node_ids": [
+        13769449752,
+        13769449753,
+        13769449754,
+        13769449755,
+        13769449751
+      ],
+      "segment_pairs": [
+        [
+          13769449752,
+          13769449753
+        ],
+        [
+          13769449753,
+          13769449754
+        ],
+        [
+          13769449754,
+          13769449755
+        ],
+        [
+          13769449755,
+          13769449751
+        ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
+      "tags": {
+        "bicycle": "permissive",
+        "foot": "yes",
+        "highway": "path",
+        "mtb:scale": "1+",
+        "source": "Strava Global Heatmap"
+      },
+      "total_length_m": 106.813
+    },
     "196510835": {
       "bounds": [
         36.8191006,
@@ -28681,6 +32128,7 @@
         36.8195344,
         -1.238357
       ],
+      "buffer_length_m": 0.0,
       "id": 196510835,
       "inside_length_m": 289.592,
       "node_ids": [
@@ -28748,6 +32196,20 @@
           747730080
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "check_date:surface": "2026-03-14",
         "highway": "footway",
@@ -28762,6 +32224,7 @@
         36.8249416,
         -1.2336645
       ],
+      "buffer_length_m": 0.0,
       "id": 196510836,
       "inside_length_m": 90.395,
       "node_ids": [
@@ -28814,6 +32277,17 @@
           1554843748
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "check_date:surface": "2026-03-14",
         "highway": "footway",
@@ -28828,6 +32302,7 @@
         36.8179563,
         -1.2414384
       ],
+      "buffer_length_m": 0.0,
       "id": 196510837,
       "inside_length_m": 220.603,
       "node_ids": [
@@ -28900,6 +32375,21 @@
           750599858
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -28913,6 +32403,7 @@
         36.818676,
         -1.242688
       ],
+      "buffer_length_m": 0.0,
       "id": 196510838,
       "inside_length_m": 276.064,
       "node_ids": [
@@ -28995,6 +32486,23 @@
           2068386722
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "lit": "yes",
@@ -29011,6 +32519,7 @@
         36.8263374,
         -1.2344488
       ],
+      "buffer_length_m": 0.0,
       "id": 196510839,
       "inside_length_m": 9.993,
       "node_ids": [
@@ -29022,6 +32531,9 @@
           1554843754,
           2068386481
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -29038,6 +32550,7 @@
         36.8278382,
         -1.2352949
       ],
+      "buffer_length_m": 0.0,
       "id": 196510840,
       "inside_length_m": 8.002,
       "node_ids": [
@@ -29049,6 +32562,9 @@
           2068386508,
           2068386506
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -29065,6 +32581,7 @@
         36.8179763,
         -1.2434621
       ],
+      "buffer_length_m": 0.0,
       "id": 196510841,
       "inside_length_m": 8.796,
       "node_ids": [
@@ -29076,6 +32593,9 @@
           2068386793,
           2068386801
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway",
@@ -29090,6 +32610,7 @@
         36.8243761,
         -1.2315153
       ],
+      "buffer_length_m": 0.0,
       "id": 196510842,
       "inside_length_m": 390.313,
       "node_ids": [
@@ -29202,6 +32723,29 @@
           2068386428
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -29215,6 +32759,7 @@
         36.8178849,
         -1.2416446
       ],
+      "buffer_length_m": 0.0,
       "id": 196510844,
       "inside_length_m": 24.138,
       "node_ids": [
@@ -29232,6 +32777,10 @@
           2068386682
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -29245,6 +32794,7 @@
         36.8265215,
         -1.2342925
       ],
+      "buffer_length_m": 0.0,
       "id": 196510845,
       "inside_length_m": 28.295,
       "node_ids": [
@@ -29267,6 +32817,11 @@
           1554843709
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "check_date:surface": "2026-03-14",
         "highway": "footway",
@@ -29281,6 +32836,7 @@
         36.8227607,
         -1.2315153
       ],
+      "buffer_length_m": 0.0,
       "id": 196510846,
       "inside_length_m": 936.623,
       "node_ids": [
@@ -29513,6 +33069,53 @@
           2068386820
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Kima Trail",
@@ -29527,6 +33130,7 @@
         36.8233095,
         -1.2437565
       ],
+      "buffer_length_m": 0.0,
       "id": 196510851,
       "inside_length_m": 547.571,
       "node_ids": [
@@ -29614,6 +33218,24 @@
           747730112
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Lake Trail",
@@ -29628,6 +33250,7 @@
         36.8278712,
         -1.2342307
       ],
+      "buffer_length_m": 0.0,
       "id": 196510852,
       "inside_length_m": 200.921,
       "node_ids": [
@@ -29670,6 +33293,15 @@
           1554843709
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -29683,6 +33315,7 @@
         36.8180056,
         -1.2417617
       ],
+      "buffer_length_m": 0.0,
       "id": 196510854,
       "inside_length_m": 92.477,
       "node_ids": [
@@ -29730,6 +33363,16 @@
           2068386709
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -29743,6 +33386,7 @@
         36.8177546,
         -1.2467494
       ],
+      "buffer_length_m": 0.0,
       "id": 196518254,
       "inside_length_m": 364.785,
       "node_ids": [
@@ -29825,6 +33469,23 @@
           2068421852
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "access": "customers",
         "amenity": "parking",
@@ -29840,6 +33501,7 @@
         36.818207,
         -1.240255
       ],
+      "buffer_length_m": 0.0,
       "id": 196520365,
       "inside_length_m": 67.379,
       "node_ids": [
@@ -29867,6 +33529,12 @@
           2068437188
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes",
         "name": "KFEET"
@@ -29880,6 +33548,7 @@
         36.8191062,
         -1.2403522
       ],
+      "buffer_length_m": 0.0,
       "id": 225679634,
       "inside_length_m": 189.51,
       "node_ids": [
@@ -29907,6 +33576,12 @@
           2344359376
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "access": "yes",
         "leisure": "pitch",
@@ -29922,8 +33597,9 @@
         36.8524459,
         -1.2503851
       ],
+      "buffer_length_m": 1630.161,
       "id": 24040039,
-      "inside_length_m": 687.609,
+      "inside_length_m": 0.0,
       "node_ids": [
         260713580,
         5106129043,
@@ -29966,7 +33642,31 @@
         [
           260713582,
           260713583
+        ],
+        [
+          260713583,
+          268643500
+        ],
+        [
+          268643500,
+          268644761
+        ],
+        [
+          268644761,
+          268644835
+        ],
+        [
+          268644835,
+          268645004
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "leisure": "golf_course",
@@ -29984,8 +33684,9 @@
         36.8494569,
         -1.2474789
       ],
+      "buffer_length_m": 727.193,
       "id": 244390749,
-      "inside_length_m": 343.829,
+      "inside_length_m": 0.0,
       "node_ids": [
         2517162529,
         5106128156,
@@ -30002,6 +33703,22 @@
       ],
       "segment_pairs": [
         [
+          2517162529,
+          5106128156
+        ],
+        [
+          5106128156,
+          5106128152
+        ],
+        [
+          5106128152,
+          5106128153
+        ],
+        [
+          5106128153,
+          2517162530
+        ],
+        [
           2517162530,
           2517162531
         ],
@@ -30016,7 +33733,32 @@
         [
           2517162532,
           2517162533
+        ],
+        [
+          2517162533,
+          5106128155
+        ],
+        [
+          5106128155,
+          2517162535
+        ],
+        [
+          2517162535,
+          2517162529
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "landuse": "residential",
@@ -30032,6 +33774,7 @@
         36.8184003,
         -1.2417662
       ],
+      "buffer_length_m": 0.0,
       "id": 24968681,
       "inside_length_m": 534.435,
       "node_ids": [
@@ -30229,6 +33972,46 @@
           271326863
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "name": "Lily Lake",
         "natural": "water",
@@ -30243,8 +34026,9 @@
         36.8590335,
         -1.223588
       ],
+      "buffer_length_m": 11065.858,
       "id": 24994769,
-      "inside_length_m": 18462.736,
+      "inside_length_m": 7940.305,
       "node_ids": [
         13589368010,
         260713461,
@@ -30411,6 +34195,10 @@
         13589376815
       ],
       "segment_pairs": [
+        [
+          13589368010,
+          260713461
+        ],
         [
           260713461,
           260713462
@@ -31034,7 +34822,191 @@
         [
           2517162532,
           2517162533
+        ],
+        [
+          2517162533,
+          5106128155
+        ],
+        [
+          5106128155,
+          1283113640
+        ],
+        [
+          1283113640,
+          2517162529
+        ],
+        [
+          2517162529,
+          10815801724
+        ],
+        [
+          10815801724,
+          13589376815
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {},
       "total_length_m": 19006.163
@@ -31046,8 +35018,9 @@
         36.8607149,
         -1.2466084
       ],
+      "buffer_length_m": 202.247,
       "id": 25796448,
-      "inside_length_m": 224.601,
+      "inside_length_m": 56.727,
       "node_ids": [
         5106127641,
         281377313,
@@ -31109,7 +35082,28 @@
         [
           281377324,
           281376828
+        ],
+        [
+          281376828,
+          281376830
+        ],
+        [
+          281376830,
+          281376832
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "service"
@@ -31123,8 +35117,9 @@
         36.8552899,
         -1.2480812
       ],
+      "buffer_length_m": 82.803,
       "id": 25796477,
-      "inside_length_m": 183.714,
+      "inside_length_m": 153.993,
       "node_ids": [
         281377360,
         281377361,
@@ -31147,6 +35142,14 @@
         281377360
       ],
       "segment_pairs": [
+        [
+          281377360,
+          281377361
+        ],
+        [
+          281377361,
+          281377362
+        ],
         [
           281377362,
           281377363
@@ -31202,7 +35205,35 @@
         [
           281377375,
           281377376
+        ],
+        [
+          281377376,
+          281377377
+        ],
+        [
+          281377377,
+          281377360
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "service"
@@ -31216,6 +35247,7 @@
         36.8204619,
         -1.2413982
       ],
+      "buffer_length_m": 0.0,
       "id": 280720863,
       "inside_length_m": 462.991,
       "node_ids": [
@@ -31283,6 +35315,20 @@
           11952125949
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -31295,6 +35341,7 @@
         36.828156,
         -1.2450072
       ],
+      "buffer_length_m": 0.0,
       "id": 280720865,
       "inside_length_m": 688.849,
       "node_ids": [
@@ -31432,6 +35479,34 @@
           2068421873
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Pipeline Path",
@@ -31447,6 +35522,7 @@
         36.8316199,
         -1.2421472
       ],
+      "buffer_length_m": 0.0,
       "id": 280720866,
       "inside_length_m": 807.909,
       "node_ids": [
@@ -31689,6 +35765,55 @@
           747730037
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "name": "Turaco Path",
@@ -31704,6 +35829,7 @@
         36.834155,
         -1.2465999
       ],
+      "buffer_length_m": 0.0,
       "id": 280720869,
       "inside_length_m": 1981.735,
       "node_ids": [
@@ -32031,6 +36157,72 @@
           2026570585
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "name": "Family Trail",
@@ -32046,6 +36238,7 @@
         36.837529,
         -1.2437539
       ],
+      "buffer_length_m": 0.0,
       "id": 280720870,
       "inside_length_m": 1000.83,
       "node_ids": [
@@ -32253,6 +36446,48 @@
           2847824180
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -32265,6 +36500,7 @@
         36.842394,
         -1.242441
       ],
+      "buffer_length_m": 0.0,
       "id": 280720871,
       "inside_length_m": 405.161,
       "node_ids": [
@@ -32362,6 +36598,26 @@
           747730050
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -32374,6 +36630,7 @@
         36.843899,
         -1.241211
       ],
+      "buffer_length_m": 0.0,
       "id": 280720872,
       "inside_length_m": 386.862,
       "node_ids": [
@@ -32446,6 +36703,21 @@
           745351633
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -32458,6 +36730,7 @@
         36.8425351,
         -1.233241
       ],
+      "buffer_length_m": 0.0,
       "id": 280720873,
       "inside_length_m": 735.431,
       "node_ids": [
@@ -32625,6 +36898,40 @@
           2847824295
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "name": "Fika Bikeshare"
@@ -32638,6 +36945,7 @@
         36.8434199,
         -1.2297715
       ],
+      "buffer_length_m": 0.0,
       "id": 280720874,
       "inside_length_m": 2145.321,
       "node_ids": [
@@ -33045,6 +37353,88 @@
           2847949514
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "bicycle": "yes",
         "highway": "path",
@@ -33060,8 +37450,9 @@
         36.8183536,
         -1.2381547
       ],
+      "buffer_length_m": 19.045,
       "id": 280734301,
-      "inside_length_m": 129.075,
+      "inside_length_m": 122.698,
       "node_ids": [
         271326718,
         8231754957,
@@ -33074,6 +37465,10 @@
         2847941626
       ],
       "segment_pairs": [
+        [
+          271326718,
+          8231754957
+        ],
         [
           8231754957,
           2847941622
@@ -33103,6 +37498,16 @@
           2847941626
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "paving_stones"
@@ -33116,8 +37521,9 @@
         36.843568,
         -1.2508098
       ],
+      "buffer_length_m": 156.301,
       "id": 280734413,
-      "inside_length_m": 224.106,
+      "inside_length_m": 204.137,
       "node_ids": [
         2847940694,
         2847940686,
@@ -33204,7 +37610,59 @@
         [
           2847940688,
           2847945605
+        ],
+        [
+          2847945605,
+          2847945606
+        ],
+        [
+          2847945606,
+          2847940689
+        ],
+        [
+          2847940689,
+          2847945607
+        ],
+        [
+          2847945607,
+          2847945608
+        ],
+        [
+          2847945608,
+          2847940690
+        ],
+        [
+          2847940690,
+          2847945609
+        ],
+        [
+          2847945609,
+          2847945610
         ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "path"
@@ -33218,6 +37676,7 @@
         36.8420879,
         -1.2508209
       ],
+      "buffer_length_m": 0.0,
       "id": 280734414,
       "inside_length_m": 341.078,
       "node_ids": [
@@ -33310,6 +37769,25 @@
           747730073
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track"
       },
@@ -33322,8 +37800,9 @@
         36.8403629,
         -1.2484467
       ],
+      "buffer_length_m": 36.902,
       "id": 280734415,
-      "inside_length_m": 245.934,
+      "inside_length_m": 209.032,
       "node_ids": [
         747730088,
         2847945650,
@@ -33384,6 +37863,19 @@
           2847945649
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer"
+      ],
       "tags": {
         "highway": "track"
       },
@@ -33396,6 +37888,7 @@
         36.8400468,
         -1.247224
       ],
+      "buffer_length_m": 0.0,
       "id": 280734416,
       "inside_length_m": 356.458,
       "node_ids": [
@@ -33508,6 +38001,29 @@
           2847824208
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -33520,6 +38036,7 @@
         36.835969,
         -1.2443982
       ],
+      "buffer_length_m": 0.0,
       "id": 280734426,
       "inside_length_m": 313.425,
       "node_ids": [
@@ -33627,6 +38144,28 @@
           2847945484
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -33639,6 +38178,7 @@
         36.8271996,
         -1.2244254
       ],
+      "buffer_length_m": 0.0,
       "id": 280734650,
       "inside_length_m": 1964.053,
       "node_ids": [
@@ -33811,6 +38351,41 @@
           2847949713
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -33823,6 +38398,7 @@
         36.8222417,
         -1.2272829
       ],
+      "buffer_length_m": 0.0,
       "id": 280734651,
       "inside_length_m": 425.954,
       "node_ids": [
@@ -33840,6 +38416,10 @@
           2847949714
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -33852,6 +38432,7 @@
         36.826647,
         -1.2290341
       ],
+      "buffer_length_m": 0.0,
       "id": 280734652,
       "inside_length_m": 774.838,
       "node_ids": [
@@ -33889,6 +38470,14 @@
           2847949507
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -33901,6 +38490,7 @@
         36.826219,
         -1.232878
       ],
+      "buffer_length_m": 0.0,
       "id": 280734653,
       "inside_length_m": 218.553,
       "node_ids": [
@@ -33943,6 +38533,15 @@
           2068386376
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -33956,6 +38555,7 @@
         36.8392492,
         -1.232239
       ],
+      "buffer_length_m": 0.0,
       "id": 313840891,
       "inside_length_m": 1537.018,
       "node_ids": [
@@ -34028,6 +38628,21 @@
           6503767356
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track",
         "name": "Wangari Maathai Track"
@@ -34041,8 +38656,9 @@
         36.8436505,
         -1.2530228
       ],
+      "buffer_length_m": 112.471,
       "id": 320506389,
-      "inside_length_m": 35.054,
+      "inside_length_m": 0.0,
       "node_ids": [
         271139909,
         6369683285,
@@ -34060,9 +38676,37 @@
       ],
       "segment_pairs": [
         [
+          271139897,
+          8527118180
+        ],
+        [
+          8527118180,
+          8527118179
+        ],
+        [
+          8527118179,
+          8527118181
+        ],
+        [
+          8527118181,
+          271139898
+        ],
+        [
+          271139898,
+          12339849322
+        ],
+        [
           12339849322,
           12339849321
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "residential",
@@ -34077,6 +38721,7 @@
         36.8206405,
         -1.240879
       ],
+      "buffer_length_m": 0.0,
       "id": 431217470,
       "inside_length_m": 326.213,
       "node_ids": [
@@ -34154,6 +38799,22 @@
           7361764222
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "service",
         "surface": "compacted"
@@ -34167,6 +38828,7 @@
         36.8213799,
         -1.2423853
       ],
+      "buffer_length_m": 0.0,
       "id": 487923440,
       "inside_length_m": 344.404,
       "node_ids": [
@@ -34244,6 +38906,22 @@
           4803107887
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "access": "customers",
         "amenity": "parking",
@@ -34259,8 +38937,9 @@
         36.8565035,
         -1.2473595
       ],
+      "buffer_length_m": 492.274,
       "id": 524757968,
-      "inside_length_m": 826.786,
+      "inside_length_m": 334.512,
       "node_ids": [
         5106127844,
         5106127845,
@@ -34316,6 +38995,18 @@
           5106127844
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core"
+      ],
       "tags": {
         "office": "government"
       },
@@ -34328,8 +39019,9 @@
         36.8561539,
         -1.2481267
       ],
+      "buffer_length_m": 95.598,
       "id": 524757969,
-      "inside_length_m": 77.956,
+      "inside_length_m": 57.467,
       "node_ids": [
         281376832,
         12357729141,
@@ -34344,6 +39036,30 @@
         281376839
       ],
       "segment_pairs": [
+        [
+          281376832,
+          12357729141
+        ],
+        [
+          12357729141,
+          12357729134
+        ],
+        [
+          12357729134,
+          281377326
+        ],
+        [
+          281377326,
+          12357729132
+        ],
+        [
+          12357729132,
+          281376834
+        ],
+        [
+          281376834,
+          281377327
+        ],
         [
           281377327,
           281376836
@@ -34361,6 +39077,18 @@
           281376839
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "service"
       },
@@ -34373,8 +39101,9 @@
         36.8593896,
         -1.2444596
       ],
+      "buffer_length_m": 68.921,
       "id": 524770054,
-      "inside_length_m": 60.041,
+      "inside_length_m": 54.005,
       "node_ids": [
         5106250679,
         8559123478,
@@ -34390,6 +39119,34 @@
       ],
       "segment_pairs": [
         [
+          5106250679,
+          8559123478
+        ],
+        [
+          8559123478,
+          8559123479
+        ],
+        [
+          8559123479,
+          8559123480
+        ],
+        [
+          8559123480,
+          8559123481
+        ],
+        [
+          8559123481,
+          8559123484
+        ],
+        [
+          8559123484,
+          8559123482
+        ],
+        [
+          8559123482,
+          8559123483
+        ],
+        [
           8559123483,
           8559123485
         ],
@@ -34401,6 +39158,18 @@
           8559123486,
           5106250680
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core"
       ],
       "tags": {
         "highway": "service",
@@ -34415,6 +39184,7 @@
         36.8307088,
         -1.236626
       ],
+      "buffer_length_m": 0.0,
       "id": 575075442,
       "inside_length_m": 2.94,
       "node_ids": [
@@ -34426,6 +39196,9 @@
           5518866301,
           5518866302
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -34442,6 +39215,7 @@
         36.8334033,
         -1.2352663
       ],
+      "buffer_length_m": 0.0,
       "id": 575075444,
       "inside_length_m": 417.491,
       "node_ids": [
@@ -34544,6 +39318,27 @@
           5518868721
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -34556,6 +39351,7 @@
         36.8424253,
         -1.2458475
       ],
+      "buffer_length_m": 0.0,
       "id": 59946873,
       "inside_length_m": 27.436,
       "node_ids": [
@@ -34583,6 +39379,12 @@
           745351579
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "yes"
       },
@@ -34595,6 +39397,7 @@
         36.8438448,
         -1.2443534
       ],
+      "buffer_length_m": 0.0,
       "id": 59946876,
       "inside_length_m": 21.786,
       "node_ids": [
@@ -34617,6 +39420,11 @@
           745351613
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -34629,6 +39437,7 @@
         36.8441815,
         -1.2398552
       ],
+      "buffer_length_m": 0.0,
       "id": 59946877,
       "inside_length_m": 519.402,
       "node_ids": [
@@ -34706,6 +39515,22 @@
           6159312406
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -34718,6 +39543,7 @@
         36.8441463,
         -1.2398552
       ],
+      "buffer_length_m": 0.0,
       "id": 59946878,
       "inside_length_m": 28.452,
       "node_ids": [
@@ -34735,6 +39561,10 @@
           6159312406
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track"
       },
@@ -34747,6 +39577,7 @@
         36.8398371,
         -1.246945
       ],
+      "buffer_length_m": 0.0,
       "id": 60200205,
       "inside_length_m": 777.636,
       "node_ids": [
@@ -34839,6 +39670,25 @@
           747730057
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -34851,6 +39701,7 @@
         36.831305,
         -1.2398736
       ],
+      "buffer_length_m": 0.0,
       "id": 60200206,
       "inside_length_m": 188.442,
       "node_ids": [
@@ -34873,6 +39724,11 @@
           747730117
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -34886,8 +39742,9 @@
         36.8191006,
         -1.240704
       ],
+      "buffer_length_m": 29.109,
       "id": 60200207,
-      "inside_length_m": 1245.813,
+      "inside_length_m": 1234.554,
       "node_ids": [
         6366642364,
         2847941633,
@@ -34944,6 +39801,10 @@
         2068386644
       ],
       "segment_pairs": [
+        [
+          6366642364,
+          2847941633
+        ],
         [
           2847941633,
           2026570598
@@ -35149,6 +40010,60 @@
           2068386644
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "unclassified",
         "name": "KFEET Track",
@@ -35163,6 +40078,7 @@
         36.8312374,
         -1.2412284
       ],
+      "buffer_length_m": 0.0,
       "id": 60200209,
       "inside_length_m": 353.194,
       "node_ids": [
@@ -35200,6 +40116,14 @@
           748782348
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -35213,6 +40137,7 @@
         36.8350879,
         -1.2420622
       ],
+      "buffer_length_m": 0.0,
       "id": 60200210,
       "inside_length_m": 648.843,
       "node_ids": [
@@ -35335,6 +40260,31 @@
           748782536
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "residential",
         "surface": "dirt"
@@ -35348,8 +40298,9 @@
         36.8438132,
         -1.2445431
       ],
+      "buffer_length_m": 516.935,
       "id": 60200211,
-      "inside_length_m": 746.653,
+      "inside_length_m": 359.247,
       "node_ids": [
         9761022838,
         745351391,
@@ -35396,6 +40347,34 @@
         745351613
       ],
       "segment_pairs": [
+        [
+          9761022838,
+          745351391
+        ],
+        [
+          745351391,
+          745351400
+        ],
+        [
+          745351400,
+          745351404
+        ],
+        [
+          745351404,
+          745351411
+        ],
+        [
+          745351411,
+          745351422
+        ],
+        [
+          745351422,
+          745351425
+        ],
+        [
+          745351425,
+          745351446
+        ],
         [
           745351446,
           745351458
@@ -35537,6 +40516,50 @@
           745351613
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "access": "private",
         "bicycle": "yes",
@@ -35552,6 +40575,7 @@
         36.8331427,
         -1.2420622
       ],
+      "buffer_length_m": 0.0,
       "id": 60257575,
       "inside_length_m": 77.528,
       "node_ids": [
@@ -35569,6 +40593,10 @@
           748782346
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "track",
         "surface": "dirt"
@@ -35582,6 +40610,7 @@
         36.838289,
         -1.2436536
       ],
+      "buffer_length_m": 0.0,
       "id": 60257635,
       "inside_length_m": 488.008,
       "node_ids": [
@@ -35634,6 +40663,17 @@
           1562475927
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -35647,8 +40687,9 @@
         36.8471917,
         -1.2259284
       ],
+      "buffer_length_m": 2276.336,
       "id": 643633767,
-      "inside_length_m": 1964.438,
+      "inside_length_m": 750.618,
       "node_ids": [
         5348839010,
         6276224575,
@@ -35744,6 +40785,122 @@
         260566414
       ],
       "segment_pairs": [
+        [
+          6159125526,
+          260566282
+        ],
+        [
+          260566282,
+          7716741677
+        ],
+        [
+          7716741677,
+          500125440
+        ],
+        [
+          500125440,
+          8548474331
+        ],
+        [
+          8548474331,
+          260566281
+        ],
+        [
+          260566281,
+          2350044075
+        ],
+        [
+          2350044075,
+          6159125525
+        ],
+        [
+          6159125525,
+          260566280
+        ],
+        [
+          260566280,
+          6159125524
+        ],
+        [
+          6159125524,
+          6159125523
+        ],
+        [
+          6159125523,
+          260566279
+        ],
+        [
+          260566279,
+          6159125522
+        ],
+        [
+          6159125522,
+          260566278
+        ],
+        [
+          260566278,
+          6159125521
+        ],
+        [
+          6159125521,
+          6159125520
+        ],
+        [
+          6159125520,
+          260566277
+        ],
+        [
+          260566277,
+          6159125519
+        ],
+        [
+          6159125519,
+          260566276
+        ],
+        [
+          260566276,
+          2350044401
+        ],
+        [
+          2350044401,
+          13112223812
+        ],
+        [
+          13112223812,
+          13112223808
+        ],
+        [
+          13112223808,
+          9436447707
+        ],
+        [
+          9436447707,
+          6159125518
+        ],
+        [
+          6159125518,
+          8548507817
+        ],
+        [
+          8548507817,
+          9625715420
+        ],
+        [
+          9625715420,
+          260566275
+        ],
+        [
+          260566275,
+          8548505464
+        ],
+        [
+          8548505464,
+          280251075
+        ],
+        [
+          280251075,
+          260566274
+        ],
         [
           260566274,
           2475596947
@@ -35857,6 +41014,65 @@
           260566258
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
       "tags": {
         "highway": "trunk",
         "name": "Kiambu Road",
@@ -35874,8 +41090,9 @@
         36.8462793,
         -1.2476382
       ],
+      "buffer_length_m": 525.987,
       "id": 680252127,
-      "inside_length_m": 149.373,
+      "inside_length_m": 7.385,
       "node_ids": [
         6369379433,
         6369379431,
@@ -35899,6 +41116,46 @@
       ],
       "segment_pairs": [
         [
+          6369379433,
+          6369379431
+        ],
+        [
+          6369379431,
+          6369379434
+        ],
+        [
+          6369379434,
+          6369379435
+        ],
+        [
+          6369379435,
+          6369379429
+        ],
+        [
+          6369379429,
+          6369379436
+        ],
+        [
+          6369379436,
+          6369379428
+        ],
+        [
+          6369379428,
+          6369379437
+        ],
+        [
+          6369379437,
+          8527118164
+        ],
+        [
+          8527118164,
+          6369379438
+        ],
+        [
+          6369379438,
+          6369379439
+        ],
+        [
           6369379439,
           6369379440
         ],
@@ -35909,7 +41166,47 @@
         [
           6369379427,
           6369379445
+        ],
+        [
+          6369379445,
+          6369379444
+        ],
+        [
+          6369379444,
+          6369379441
+        ],
+        [
+          6369379441,
+          6369379426
+        ],
+        [
+          6369379426,
+          6369379442
+        ],
+        [
+          6369379442,
+          6369379443
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "core",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "residential",
@@ -35924,11 +41221,13 @@
         36.8439087,
         -1.2379639
       ],
+      "buffer_length_m": 0.0,
       "id": 692748275,
       "inside_length_m": 601.204,
       "node_ids": [
         6503767357,
         6503768697,
+        13769449752,
         13769374300,
         13769344200,
         6159312406
@@ -35940,6 +41239,10 @@
         ],
         [
           6503768697,
+          13769449752
+        ],
+        [
+          13769449752,
           13769374300
         ],
         [
@@ -35950,6 +41253,13 @@
           13769344200,
           6159312406
         ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
       ],
       "tags": {
         "highway": "track",
@@ -35964,6 +41274,7 @@
         36.8393955,
         -1.2378987
       ],
+      "buffer_length_m": 0.0,
       "id": 692748276,
       "inside_length_m": 17.807,
       "node_ids": [
@@ -35975,6 +41286,9 @@
           6503767356,
           6503767357
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -35991,6 +41305,7 @@
         36.8191544,
         -1.2387275
       ],
+      "buffer_length_m": 0.0,
       "id": 692748277,
       "inside_length_m": 479.438,
       "node_ids": [
@@ -36113,6 +41428,31 @@
           6503767372
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "leisure": "track",
@@ -36129,6 +41469,7 @@
         36.8185415,
         -1.2403852
       ],
+      "buffer_length_m": 0.0,
       "id": 692748278,
       "inside_length_m": 157.623,
       "node_ids": [
@@ -36171,6 +41512,15 @@
           2068386644
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "amenity": "parking",
         "fee": "yes",
@@ -36186,6 +41536,7 @@
         36.8243761,
         -1.2331621
       ],
+      "buffer_length_m": 0.0,
       "id": 692748279,
       "inside_length_m": 56.666,
       "node_ids": [
@@ -36203,6 +41554,10 @@
           2068386428
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -36216,6 +41571,7 @@
         36.8243849,
         -1.232944
       ],
+      "buffer_length_m": 0.0,
       "id": 692748280,
       "inside_length_m": 26.416,
       "node_ids": [
@@ -36227,6 +41583,9 @@
           2068386376,
           6503768686
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "bridge": "yes",
@@ -36243,6 +41602,7 @@
         36.8246387,
         -1.2285129
       ],
+      "buffer_length_m": 0.0,
       "id": 692748281,
       "inside_length_m": 353.197,
       "node_ids": [
@@ -36265,6 +41625,11 @@
           2847949726
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -36278,6 +41643,7 @@
         36.8286087,
         -1.2289647
       ],
+      "buffer_length_m": 0.0,
       "id": 692748282,
       "inside_length_m": 101.081,
       "node_ids": [
@@ -36305,6 +41671,12 @@
           747730055
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -36318,6 +41690,7 @@
         36.8376661,
         -1.2355053
       ],
+      "buffer_length_m": 0.0,
       "id": 692748283,
       "inside_length_m": 172.33,
       "node_ids": [
@@ -36335,6 +41708,10 @@
           6503768696
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway"
       },
@@ -36347,6 +41724,7 @@
         36.8404999,
         -1.2374955
       ],
+      "buffer_length_m": 0.0,
       "id": 692748284,
       "inside_length_m": 109.485,
       "node_ids": [
@@ -36364,6 +41742,10 @@
           6503768697
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -36377,6 +41759,7 @@
         36.8417263,
         -1.242441
       ],
+      "buffer_length_m": 0.0,
       "id": 692748285,
       "inside_length_m": 388.579,
       "node_ids": [
@@ -36419,6 +41802,15 @@
           747730050
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -36432,6 +41824,7 @@
         36.838434,
         -1.24207
       ],
+      "buffer_length_m": 0.0,
       "id": 692748286,
       "inside_length_m": 78.963,
       "node_ids": [
@@ -36449,6 +41842,10 @@
           6503768702
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway"
       },
@@ -36461,6 +41858,7 @@
         36.8378557,
         -1.2418587
       ],
+      "buffer_length_m": 0.0,
       "id": 692748287,
       "inside_length_m": 369.435,
       "node_ids": [
@@ -36508,6 +41906,16 @@
           6503768702
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "name": "Butterfly Pond",
         "natural": "wetland",
@@ -36524,6 +41932,7 @@
         36.838289,
         -1.245925
       ],
+      "buffer_length_m": 0.0,
       "id": 692748288,
       "inside_length_m": 169.417,
       "node_ids": [
@@ -36535,6 +41944,9 @@
           1562475927,
           6503768711
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway",
@@ -36549,6 +41961,7 @@
         36.8347637,
         -1.243471
       ],
+      "buffer_length_m": 0.0,
       "id": 692748289,
       "inside_length_m": 208.45,
       "node_ids": [
@@ -36591,6 +42004,15 @@
           6503768714
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -36604,6 +42026,7 @@
         36.833544,
         -1.247045
       ],
+      "buffer_length_m": 0.0,
       "id": 692748290,
       "inside_length_m": 338.603,
       "node_ids": [
@@ -36641,6 +42064,14 @@
           5927778335
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -36654,6 +42085,7 @@
         36.8242877,
         -1.2413712
       ],
+      "buffer_length_m": 0.0,
       "id": 692748291,
       "inside_length_m": 419.408,
       "node_ids": [
@@ -36671,6 +42103,10 @@
           6164312038
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "footway",
         "surface": "dirt"
@@ -36684,6 +42120,7 @@
         36.824217,
         -1.2445228
       ],
+      "buffer_length_m": 0.0,
       "id": 692748292,
       "inside_length_m": 120.544,
       "node_ids": [
@@ -36695,6 +42132,9 @@
           6503768722,
           2847824066
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "footway",
@@ -36709,6 +42149,7 @@
         36.8296896,
         -1.236668
       ],
+      "buffer_length_m": 0.0,
       "id": 692748293,
       "inside_length_m": 341.557,
       "node_ids": [
@@ -36786,6 +42227,22 @@
           747730028
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -36799,6 +42256,7 @@
         36.8206508,
         -1.2417699
       ],
+      "buffer_length_m": 0.0,
       "id": 697602145,
       "inside_length_m": 75.012,
       "node_ids": [
@@ -36826,6 +42284,12 @@
           6551317347
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "building": "retail",
         "building:levels": "1",
@@ -36840,6 +42304,7 @@
         36.8172343,
         -1.2468887
       ],
+      "buffer_length_m": 0.0,
       "id": 723312824,
       "inside_length_m": 88.395,
       "node_ids": [
@@ -36851,6 +42316,9 @@
           6784413870,
           6784413869
         ]
+      ],
+      "segment_zones": [
+        "core"
       ],
       "tags": {
         "highway": "service",
@@ -36866,8 +42334,9 @@
         36.8232782,
         -1.2314982
       ],
+      "buffer_length_m": 289.227,
       "id": 772265506,
-      "inside_length_m": 4000.919,
+      "inside_length_m": 3711.692,
       "node_ids": [
         7209566815,
         493618608,
@@ -37033,6 +42502,40 @@
           7209566815
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {},
       "total_length_m": 4000.919
     },
@@ -37043,6 +42546,7 @@
         36.8171445,
         -1.2423945
       ],
+      "buffer_length_m": 0.0,
       "id": 823367031,
       "inside_length_m": 102.814,
       "node_ids": [
@@ -37090,6 +42594,16 @@
           7687039159
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -37102,6 +42616,7 @@
         36.8177039,
         -1.2422491
       ],
+      "buffer_length_m": 0.0,
       "id": 823367032,
       "inside_length_m": 83.378,
       "node_ids": [
@@ -37139,6 +42654,14 @@
           2068386704
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path"
       },
@@ -37151,6 +42674,7 @@
         36.81982,
         -1.2432975
       ],
+      "buffer_length_m": 0.0,
       "id": 823368190,
       "inside_length_m": 125.492,
       "node_ids": [
@@ -37193,6 +42717,15 @@
           7687057404
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "highway": "path",
         "surface": "dirt"
@@ -37206,8 +42739,9 @@
         36.8436994,
         -1.2345778
       ],
+      "buffer_length_m": 23.148,
       "id": 826489068,
-      "inside_length_m": 23.148,
+      "inside_length_m": 0.0,
       "node_ids": [
         4803107795,
         4803107828
@@ -37217,6 +42751,9 @@
           4803107795,
           4803107828
         ]
+      ],
+      "segment_zones": [
+        "buffer"
       ],
       "tags": {
         "layer": "-1",
@@ -37232,6 +42769,7 @@
         36.8435037,
         -1.2346489
       ],
+      "buffer_length_m": 0.0,
       "id": 826489069,
       "inside_length_m": 442.23,
       "node_ids": [
@@ -37329,6 +42867,26 @@
           4803107795
         ]
       ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core",
+        "core"
+      ],
       "tags": {
         "name": "Ruiruaka River",
         "waterway": "river"
@@ -37342,8 +42900,9 @@
         36.8436304,
         -1.2476516
       ],
+      "buffer_length_m": 43.639,
       "id": 918118555,
-      "inside_length_m": 49.292,
+      "inside_length_m": 5.653,
       "node_ids": [
         6369379428,
         8527118151,
@@ -37369,10 +42928,62 @@
           8527118148
         ]
       ],
+      "segment_zones": [
+        "buffer",
+        "core",
+        "core",
+        "buffer"
+      ],
       "tags": {
         "highway": "residential"
       },
       "total_length_m": 49.292
+    },
+    "918118562": {
+      "bounds": [
+        36.84482,
+        -1.2503412,
+        36.8454328,
+        -1.250006
+      ],
+      "buffer_length_m": 78.079,
+      "id": 918118562,
+      "inside_length_m": 0.0,
+      "node_ids": [
+        6369379445,
+        8527118185,
+        8527118184,
+        8527118183,
+        8527118182
+      ],
+      "segment_pairs": [
+        [
+          6369379445,
+          8527118185
+        ],
+        [
+          8527118185,
+          8527118184
+        ],
+        [
+          8527118184,
+          8527118183
+        ],
+        [
+          8527118183,
+          8527118182
+        ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer",
+        "buffer",
+        "buffer"
+      ],
+      "tags": {
+        "highway": "service"
+      },
+      "total_length_m": 78.079
     },
     "919077290": {
       "bounds": [
@@ -37381,8 +42992,9 @@
         36.8453629,
         -1.2406465
       ],
+      "buffer_length_m": 126.766,
       "id": 919077290,
-      "inside_length_m": 75.488,
+      "inside_length_m": 0.0,
       "node_ids": [
         2639598616,
         8536024877,
@@ -37390,9 +43002,17 @@
       ],
       "segment_pairs": [
         [
+          2639598616,
+          8536024877
+        ],
+        [
           8536024877,
           2639598617
         ]
+      ],
+      "segment_zones": [
+        "buffer",
+        "buffer"
       ],
       "tags": {
         "highway": "service"
@@ -37406,6 +43026,7 @@
         36.821757,
         -1.2311815
       ],
+      "buffer_length_m": 0.0,
       "id": 995112827,
       "inside_length_m": 108.718,
       "node_ids": [
@@ -37432,6 +43053,12 @@
           9923907665,
           9189127987
         ]
+      ],
+      "segment_zones": [
+        "core",
+        "core",
+        "core",
+        "core"
       ],
       "tags": {
         "highway": "path",

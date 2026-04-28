@@ -22,6 +22,11 @@ from .karura_common import (
 
 def add_boundary_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
+        "--boundary-buffer-m",
+        type=float,
+        default=75.0,
+    )
+    parser.add_argument(
         "--fill-segment-gaps",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -75,6 +80,7 @@ def editor_rebuild_argv_from_namespace(
         "--junction-bindings-json", str(args.junction_bindings_json),
         "--route-policy-bindings-json", str(args.route_policy_bindings_json),
         "--output-editor-network", str(args.output_editor_network),
+        "--boundary-buffer-m", str(args.boundary_buffer_m),
         "--fill-segment-gaps" if args.fill_segment_gaps else "--no-fill-segment-gaps",
         "--respect-inner-rings" if args.respect_inner_rings else "--no-respect-inner-rings",
     ]

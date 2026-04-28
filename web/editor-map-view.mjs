@@ -1,7 +1,8 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 requireVersionedModuleContext(import.meta, "Editor map view module");
 
-export function styleForPolicy(policy, isCurrentlyUnavailable) {
+export function styleForPolicy(policy, feature, isCurrentlyUnavailable) {
+  const isBufferZone = feature?.properties?.tags?.["local:boundary_zone"] === "buffer";
   const bikeability = policy.bikeability == null ? 0 : Number(policy.bikeability);
   const extraWeight = Math.max(0, bikeability - 1) * 0.5;
   if (isCurrentlyUnavailable(policy)) {
@@ -17,6 +18,14 @@ export function styleForPolicy(policy, isCurrentlyUnavailable) {
       color: "#2d8c4d",
       weight: 4 + extraWeight,
       opacity: 0.9,
+    };
+  }
+  if (isBufferZone && policy.routingState === "exclude") {
+    return {
+      color: "#c07a2d",
+      weight: 3.6 + extraWeight,
+      opacity: 0.82,
+      dashArray: "8 6",
     };
   }
   if (policy.routingState === "exclude") {

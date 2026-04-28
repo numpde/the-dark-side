@@ -123,6 +123,57 @@ test("browser planner respects unavailable_until tags", () => {
   assert.ok(!route.contig_id_sequence.includes(11));
 });
 
+test("browser planner treats buffer-zone segments as excluded unless explicitly included", () => {
+  const payload = {
+    type: "FeatureCollection",
+    features: [
+      feature(14, [10, 11], [[36.821, -1.241], [36.8214, -1.2414]], { length_m: 70 }),
+      feature(15, [11, 13], [[36.8214, -1.2414], [36.8218, -1.2418]], {
+        length_m: 70,
+        tags: { "local:boundary_zone": "buffer" },
+      }),
+      feature(16, [11, 12], [[36.8214, -1.2414], [36.8219, -1.2407]], { length_m: 75 }),
+      feature(17, [12, 13], [[36.8219, -1.2407], [36.8218, -1.2418]], { length_m: 75 }),
+    ],
+  };
+
+  const graph = buildGraphFromGeoJson(payload);
+  const route = planBrowserRoute(graph, {
+    startNodeId: 10,
+    endNodeId: 13,
+    seed: 13,
+    config: CONFIG,
+  });
+
+  assert.equal(route.complete, true);
+  assert.deepEqual(route.contig_id_sequence, [14, 16, 17]);
+  assert.ok(!route.contig_id_sequence.includes(15));
+});
+
+test("browser planner can use buffer-zone segments when route policy explicitly includes them", () => {
+  const payload = {
+    type: "FeatureCollection",
+    features: [
+      feature(18, [20, 21], [[36.821, -1.241], [36.8214, -1.2414]], { length_m: 70 }),
+      feature(19, [21, 22], [[36.8214, -1.2414], [36.8218, -1.2418]], {
+        length_m: 70,
+        tags: { "local:boundary_zone": "buffer", "local:routing_state": "include" },
+      }),
+    ],
+  };
+
+  const graph = buildGraphFromGeoJson(payload);
+  const route = planBrowserRoute(graph, {
+    startNodeId: 20,
+    endNodeId: 22,
+    seed: 21,
+    config: CONFIG,
+  });
+
+  assert.equal(route.complete, true);
+  assert.deepEqual(route.contig_id_sequence, [18, 19]);
+});
+
 test("browser planner returns a non-empty loop for start=end scenarios", () => {
   const payload = {
     type: "FeatureCollection",

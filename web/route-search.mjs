@@ -1,6 +1,6 @@
 const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route search module");
-const { karuraTodayString, isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
+const { karuraTodayString, isBoundaryDefaultExcluded, isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
 const { sampleWeighted } = await import(`./route-selection.mjs${moduleSuffix}`);
 
 function isShortConnector(contig, config) {
@@ -8,10 +8,14 @@ function isShortConnector(contig, config) {
 }
 
 function canTraverseContig(contig, visitCount, overlapLengthM, config, fromNodeId, toNodeId, todayString) {
-  if (contig.tags["local:routing_state"] === "exclude") {
+  const routingState = contig.tags["local:routing_state"];
+  if (routingState === "exclude") {
     return { allowed: false, reused: false };
   }
   if (isCurrentlyUnavailable(contig.tags, todayString)) {
+    return { allowed: false, reused: false };
+  }
+  if (routingState !== "include" && isBoundaryDefaultExcluded(contig.tags)) {
     return { allowed: false, reused: false };
   }
   const direction = contig.tags["local:bicycle_direction"] || "both";

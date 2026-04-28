@@ -20120,6 +20120,72 @@
       "type": "node"
     },
     {
+      "id": 13769449745,
+      "lat": -1.2424609,
+      "lon": 36.843951,
+      "type": "node"
+    },
+    {
+      "id": 13769449746,
+      "lat": -1.2422434,
+      "lon": 36.8440364,
+      "type": "node"
+    },
+    {
+      "id": 13769449747,
+      "lat": -1.2416606,
+      "lon": 36.8438889,
+      "type": "node"
+    },
+    {
+      "id": 13769449748,
+      "lat": -1.2414042,
+      "lon": 36.8439588,
+      "type": "node"
+    },
+    {
+      "id": 13769449749,
+      "lat": -1.2412022,
+      "lon": 36.8438035,
+      "type": "node"
+    },
+    {
+      "id": 13769449750,
+      "lat": -1.2408914,
+      "lon": 36.8438889,
+      "type": "node"
+    },
+    {
+      "id": 13769449751,
+      "lat": -1.2403319,
+      "lon": 36.8438112,
+      "type": "node"
+    },
+    {
+      "id": 13769449752,
+      "lat": -1.2396058,
+      "lon": 36.8433135,
+      "type": "node"
+    },
+    {
+      "id": 13769449753,
+      "lat": -1.2398574,
+      "lon": 36.8433002,
+      "type": "node"
+    },
+    {
+      "id": 13769449754,
+      "lat": -1.2400486,
+      "lon": 36.8434202,
+      "type": "node"
+    },
+    {
+      "id": 13769449755,
+      "lat": -1.2401511,
+      "lon": 36.8435714,
+      "type": "node"
+    },
+    {
       "id": 24040039,
       "nodes": [
         260713580,
@@ -22594,6 +22660,7 @@
       "nodes": [
         6503767357,
         6503768697,
+        13769449752,
         13769374300,
         13769344200,
         6159312406
@@ -26194,6 +26261,46 @@
       "type": "way"
     },
     {
+      "id": 1504852415,
+      "nodes": [
+        745351635,
+        13769449745,
+        13769449746,
+        13769449747,
+        13769449748,
+        13769449749,
+        13769449750,
+        13769449751,
+        745351649
+      ],
+      "tags": {
+        "bicycle": "yes",
+        "foot": "yes",
+        "highway": "path",
+        "mtb:scale": "1+",
+        "source": "Strava Global Heatmap"
+      },
+      "type": "way"
+    },
+    {
+      "id": 1504852416,
+      "nodes": [
+        13769449752,
+        13769449753,
+        13769449754,
+        13769449755,
+        13769449751
+      ],
+      "tags": {
+        "bicycle": "permissive",
+        "foot": "yes",
+        "highway": "path",
+        "mtb:scale": "1+",
+        "source": "Strava Global Heatmap"
+      },
+      "type": "way"
+    },
+    {
       "id": 13626194,
       "members": [
         {
@@ -26297,8 +26404,8 @@
   "generator": "Overpass API 0.7.62.11 87bfad18",
   "osm3s": {
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
-    "timestamp_areas_base": "2026-04-28T00:23:29Z",
-    "timestamp_osm_base": "2026-04-28T07:28:45Z"
+    "timestamp_areas_base": "2026-04-28T01:06:23Z",
+    "timestamp_osm_base": "2026-04-28T09:46:15Z"
   },
   "version": 0.6
 }

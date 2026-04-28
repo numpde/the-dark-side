@@ -15,6 +15,7 @@ from typing import Any
 from .asset_contracts import load_required_route_policy
 from .download_karura_map import load_map
 from .karura_common import (
+    LOCAL_BOUNDARY_ZONE_TAG,
     CONTIGS_JSON as DEFAULT_OUT_JSON,
     ROUTE_POLICY_JSON,
     include_baseline_way,
@@ -30,9 +31,10 @@ from .route_policy import (
     contig_tags_for_segments,
     edge_policy_signature,
     extract_policy_tags,
-    include_way_in_policy_candidate_graph,
+    include_segment_in_policy_candidate_graph,
     merge_policy_tags,
-    selected_way_ids,
+    selected_segment_keys,
+    selected_segment_way_ids,
 )
 
 
@@ -78,11 +80,19 @@ def build_edge_graph(
     for way_id_text, way in payload["ways"].items():
         way_id = int(way_id_text)
         tags = dict(way["tags"])
-        if not include_way(way_id, tags):
-            continue
+        segment_zones = list(way.get("segment_zones", ["core"] * len(way["segment_pairs"])))
+        if len(segment_zones) != len(way["segment_pairs"]):
+            raise ValueError(f"way {way_id} has mismatched segment_zones and segment_pairs lengths")
 
-        for first_id, second_id in way["segment_pairs"]:
+        for (first_id, second_id), segment_zone in zip(way["segment_pairs"], segment_zones):
             if first_id not in nodes or second_id not in nodes:
+                continue
+            segment_tags = {
+                **tags,
+                LOCAL_BOUNDARY_ZONE_TAG: str(segment_zone),
+                "__segment_node_ids__": (int(first_id), int(second_id)),
+            }
+            if not include_way(way_id, segment_tags):
                 continue
             key = edge_key(first_id, second_id)
             if key not in edges:
@@ -100,9 +110,13 @@ def build_edge_graph(
                 edge["highway_types"][tags["highway"]] += 1
             if tags.get("name"):
                 edge["way_names"].add(tags["name"])
+            existing_zone = edge["tags"].get(LOCAL_BOUNDARY_ZONE_TAG)
+            if existing_zone is not None and existing_zone != str(segment_zone):
+                raise ValueError(f"source map edge {first_id}->{second_id} spans conflicting boundary zones")
+            edge["tags"][LOCAL_BOUNDARY_ZONE_TAG] = str(segment_zone)
             edge["tags"] = merge_policy_tags(
                 edge["tags"],
-                extract_policy_tags(tags),
+                extract_policy_tags(segment_tags),
                 label=f"source map edge {first_id}->{second_id}",
             )
             adjacency[first_id].add(second_id)
@@ -226,7 +240,8 @@ def build_contigs(
     effective_include_way = include_way
     applied_rule_ids: list[str] = []
     if route_policy is not None:
-        selected = selected_way_ids(route_policy)
+        selected = selected_segment_keys(route_policy)
+        selected_way_ids_by_segment = selected_segment_way_ids(route_policy)
 
         def base_include_for_tags(way_id: int, tags: dict[str, str]) -> bool:
             try:
@@ -235,10 +250,15 @@ def build_contigs(
                 return bool(include_way(tags))
 
         def effective_include_way(way_id: int, tags: dict[str, str]) -> bool:
-            return include_way_in_policy_candidate_graph(
+            node_ids = tags.get("__segment_node_ids__")
+            if not isinstance(node_ids, tuple) or len(node_ids) != 2:
+                raise ValueError("segment-aware include path requires __segment_node_ids__ metadata")
+            return include_segment_in_policy_candidate_graph(
                 way_id,
                 tags,
-                selected_way_ids=selected,
+                segment_key=edge_key(int(node_ids[0]), int(node_ids[1])),
+                selected_segment_keys=selected,
+                selected_segment_way_ids=selected_way_ids_by_segment,
                 base_include=base_include_for_tags(way_id, tags),
             )
 

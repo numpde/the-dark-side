@@ -18,6 +18,7 @@ from .asset_contracts import load_required_json
 from .karura_common import (
     MAP_JSON as DEFAULT_MAP_JSON,
     RAW_JSON as DEFAULT_RAW_JSON,
+    mercator,
     print_json_document,
     utc_now_z,
     write_json_document,
@@ -25,6 +26,7 @@ from .karura_common import (
 
 DEFAULT_RELATION_IDS = [13626194, 15417497]
 DEFAULT_OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+DEFAULT_BOUNDARY_BUFFER_M = 75.0
 USER_AGENT = "karura-map-downloader/1.0"
 
 
@@ -53,8 +55,10 @@ class WayRecord:
     node_ids: list[int]
     tags: dict[str, str]
     segment_pairs: list[list[int]]
+    segment_zones: list[str]
     total_length_m: float
     inside_length_m: float
+    buffer_length_m: float
     bounds: list[float]
 
     def to_dict(self) -> dict[str, Any]:
@@ -63,8 +67,10 @@ class WayRecord:
             "node_ids": self.node_ids,
             "tags": self.tags,
             "segment_pairs": self.segment_pairs,
+            "segment_zones": self.segment_zones,
             "total_length_m": round(self.total_length_m, 3),
             "inside_length_m": round(self.inside_length_m, 3),
+            "buffer_length_m": round(self.buffer_length_m, 3),
             "bounds": self.bounds,
         }
 
@@ -149,6 +155,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--pause-seconds", type=float, default=2.0)
+    parser.add_argument("--boundary-buffer-m", type=float, default=DEFAULT_BOUNDARY_BUFFER_M)
     parser.add_argument(
         "--fill-segment-gaps",
         action=argparse.BooleanOptionalAction,
@@ -274,8 +281,118 @@ def haversine_meters(a: NodeRecord, b: NodeRecord) -> float:
     return 2 * 6371000.0 * asin(sqrt(value))
 
 
-def keep_segment_by_endpoint(first: NodeRecord, second: NodeRecord, inside_karura) -> bool:
-    return inside_karura((first.lon, first.lat)) or inside_karura((second.lon, second.lat))
+def point_segment_distance_m(point: tuple[float, float], start: tuple[float, float], end: tuple[float, float]) -> float:
+    point_x, point_y = point
+    start_x, start_y = start
+    end_x, end_y = end
+    delta_x = end_x - start_x
+    delta_y = end_y - start_y
+    length_squared = delta_x * delta_x + delta_y * delta_y
+    if length_squared == 0.0:
+        dx = point_x - start_x
+        dy = point_y - start_y
+        return (dx * dx + dy * dy) ** 0.5
+    projection = ((point_x - start_x) * delta_x + (point_y - start_y) * delta_y) / length_squared
+    clamped = max(0.0, min(1.0, projection))
+    closest_x = start_x + clamped * delta_x
+    closest_y = start_y + clamped * delta_y
+    dx = point_x - closest_x
+    dy = point_y - closest_y
+    return (dx * dx + dy * dy) ** 0.5
+
+
+def min_ring_distance_m(point: tuple[float, float], ring: list[tuple[float, float]]) -> float:
+    if len(ring) < 2:
+        return float("inf")
+    point_xy = mercator(point[0], point[1])
+    ring_xy = [mercator(lon, lat) for lon, lat in ring]
+    best = float("inf")
+    for start, end in zip(ring_xy, ring_xy[1:]):
+        best = min(best, point_segment_distance_m(point_xy, start, end))
+    return best
+
+
+def build_boundary_zone_classifier(
+    boundary: BoundaryRecord,
+    nodes: dict[int, NodeRecord],
+    *,
+    boundary_buffer_m: float,
+    respect_inner_rings: bool = False,
+):
+    component_coords = [
+        (
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.inner_rings],
+        )
+        for component in boundary.iter_components()
+    ]
+
+    def inside_core(point: tuple[float, float]) -> bool:
+        for outer_ring_coords, inner_ring_coords in component_coords:
+            if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
+                continue
+            if respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords):
+                continue
+            return True
+        return False
+
+    def boundary_zone(point: tuple[float, float]) -> str:
+        if inside_core(point):
+            return "core"
+        if boundary_buffer_m <= 0:
+            return "outside"
+        nearest = float("inf")
+        for outer_ring_coords, inner_ring_coords in component_coords:
+            for ring in outer_ring_coords:
+                nearest = min(nearest, min_ring_distance_m(point, ring))
+            if respect_inner_rings:
+                for ring in inner_ring_coords:
+                    nearest = min(nearest, min_ring_distance_m(point, ring))
+        if nearest <= boundary_buffer_m:
+            return "buffer"
+        return "outside"
+
+    return boundary_zone
+
+
+def build_inside_karura(
+    boundary: BoundaryRecord,
+    nodes: dict[int, NodeRecord],
+    *,
+    respect_inner_rings: bool = False,
+):
+    boundary_zone = build_boundary_zone_classifier(
+        boundary,
+        nodes,
+        boundary_buffer_m=0.0,
+        respect_inner_rings=respect_inner_rings,
+    )
+
+    def inside_karura(point: tuple[float, float]) -> bool:
+        return boundary_zone(point) == "core"
+
+    return inside_karura
+
+
+def classify_segment_zone(
+    first: NodeRecord,
+    second: NodeRecord,
+    boundary_zone_for_point,
+) -> str:
+    first_zone = boundary_zone_for_point((first.lon, first.lat))
+    second_zone = boundary_zone_for_point((second.lon, second.lat))
+    if first_zone == "core" and second_zone == "core":
+        return "core"
+    if first_zone != "outside" or second_zone != "outside":
+        return "buffer"
+    return "outside"
+
+
+def keep_segment_by_endpoint(first: NodeRecord, second: NodeRecord, boundary_zone_for_point) -> bool:
+    return (
+        boundary_zone_for_point((first.lon, first.lat)) != "outside"
+        or boundary_zone_for_point((second.lon, second.lat)) != "outside"
+    )
 
 
 def fill_kept_segment_gaps(keep_flags: list[bool]) -> list[bool]:
@@ -296,6 +413,7 @@ def build_map(
     overpass_url: str,
     query: str,
     *,
+    boundary_buffer_m: float = DEFAULT_BOUNDARY_BUFFER_M,
     fill_segment_gaps: bool = True,
     respect_inner_rings: bool = False,
 ) -> KaruraMap:
@@ -346,22 +464,21 @@ def build_map(
             )
         )
 
-    component_coords = [
-        (
-            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
-            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.inner_rings],
-        )
-        for component in boundary_components
-    ]
+    relation_names = [relations[relation_id].get("tags", {}).get("name", str(relation_id)) for relation_id in relation_ids]
+    boundary = BoundaryRecord(
+        relation_id=relation_ids[0],
+        relation_tags={"name": "Karura union boundary", "type": "derived_union"},
+        outer_rings=[ring for component in boundary_components for ring in component.outer_rings],
+        inner_rings=[ring for component in boundary_components for ring in component.inner_rings],
+        components=boundary_components,
+    )
 
-    def inside_karura(point: tuple[float, float]) -> bool:
-        for outer_ring_coords, inner_ring_coords in component_coords:
-            if not any(point_in_ring(point, ring) for ring in outer_ring_coords):
-                continue
-            if respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords):
-                continue
-            return True
-        return False
+    boundary_zone_for_point = build_boundary_zone_classifier(
+        boundary,
+        nodes,
+        boundary_buffer_m=boundary_buffer_m,
+        respect_inner_rings=respect_inner_rings,
+    )
 
     ways: dict[int, WayRecord] = {}
     for way_id, row in way_rows.items():
@@ -370,8 +487,10 @@ def build_map(
             continue
 
         segment_pairs: list[list[int]] = []
+        segment_zones: list[str] = []
         total_length_m = 0.0
         inside_length_m = 0.0
+        buffer_length_m = 0.0
 
         lats = [nodes[node_id].lat for node_id in node_ids]
         lons = [nodes[node_id].lon for node_id in node_ids]
@@ -380,20 +499,30 @@ def build_map(
         segments = list(zip(node_ids, node_ids[1:]))
         keep_flags = []
         segment_lengths = []
+        raw_segment_zones = []
         for first_id, second_id in segments:
             first = nodes[first_id]
             second = nodes[second_id]
             segment_length = haversine_meters(first, second)
             total_length_m += segment_length
             segment_lengths.append(segment_length)
-            keep_flags.append(keep_segment_by_endpoint(first, second, inside_karura))
+            segment_zone = classify_segment_zone(first, second, boundary_zone_for_point)
+            raw_segment_zones.append(segment_zone)
+            keep_flags.append(keep_segment_by_endpoint(first, second, boundary_zone_for_point))
 
         if fill_segment_gaps:
             keep_flags = fill_kept_segment_gaps(keep_flags)
-        for (first_id, second_id), segment_length, keep in zip(segments, segment_lengths, keep_flags):
+        for index, ((first_id, second_id), segment_length, keep) in enumerate(zip(segments, segment_lengths, keep_flags)):
             if keep:
+                segment_zone = raw_segment_zones[index]
+                if segment_zone == "outside":
+                    segment_zone = "buffer"
                 segment_pairs.append([first_id, second_id])
-                inside_length_m += segment_length
+                segment_zones.append(segment_zone)
+                if segment_zone == "core":
+                    inside_length_m += segment_length
+                elif segment_zone == "buffer":
+                    buffer_length_m += segment_length
 
         if not segment_pairs and way_id not in boundary_way_refs:
             continue
@@ -403,19 +532,12 @@ def build_map(
             node_ids=node_ids,
             tags=row["tags"],
             segment_pairs=segment_pairs,
+            segment_zones=segment_zones,
             total_length_m=total_length_m,
             inside_length_m=inside_length_m,
+            buffer_length_m=buffer_length_m,
             bounds=[round(value, 7) for value in bounds],
         )
-
-    relation_names = [relations[relation_id].get("tags", {}).get("name", str(relation_id)) for relation_id in relation_ids]
-    boundary = BoundaryRecord(
-        relation_id=relation_ids[0],
-        relation_tags={"name": "Karura union boundary", "type": "derived_union"},
-        outer_rings=[ring for component in boundary_components for ring in component.outer_rings],
-        inner_rings=[ring for component in boundary_components for ring in component.inner_rings],
-        components=boundary_components,
-    )
 
     downloaded_at = utc_now_z()
     meta = {
@@ -435,6 +557,7 @@ def build_map(
         ],
         "fill_segment_gaps": fill_segment_gaps,
         "respect_inner_rings": respect_inner_rings,
+        "boundary_buffer_m": boundary_buffer_m,
         "node_count": len(nodes),
         "way_count": len(ways),
         "raw_element_count": len(payload.get("elements", [])),
@@ -475,8 +598,16 @@ def load_map(path: Path) -> KaruraMap:
             node_ids=[int(node_id) for node_id in way_payload["node_ids"]],
             tags=dict(way_payload["tags"]),
             segment_pairs=[[int(node_id) for node_id in pair] for pair in way_payload["segment_pairs"]],
+            segment_zones=[
+                str(zone)
+                for zone in way_payload.get(
+                    "segment_zones",
+                    ["core"] * len(way_payload["segment_pairs"]),
+                )
+            ],
             total_length_m=float(way_payload["total_length_m"]),
             inside_length_m=float(way_payload["inside_length_m"]),
+            buffer_length_m=float(way_payload.get("buffer_length_m", 0.0)),
             bounds=[float(value) for value in way_payload["bounds"]],
         )
         for way_id, way_payload in payload["ways"].items()
@@ -503,6 +634,7 @@ def main() -> None:
         query=query,
         fill_segment_gaps=args.fill_segment_gaps,
         respect_inner_rings=args.respect_inner_rings,
+        boundary_buffer_m=args.boundary_buffer_m,
     )
     write_json_document(args.map_json, karura_map.to_dict(), sort_keys=True)
 
@@ -516,6 +648,7 @@ def main() -> None:
         "inner_ring_count": len(karura_map.boundary.inner_rings),
         "fill_segment_gaps": args.fill_segment_gaps,
         "respect_inner_rings": args.respect_inner_rings,
+        "boundary_buffer_m": args.boundary_buffer_m,
     }
     print_json_document(summary)
 

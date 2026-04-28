@@ -84,6 +84,8 @@ def build_app_manifest(
             "algorithm": "browser-mcts-v1",
             "network_path": args.output_network.name,
             "network_version": graph.asset_id,
+            "background_network_path": editor_manifest["editor"]["network_path"],
+            "background_network_version": editor_manifest["editor"]["network_version"],
             "config": planner_config,
         },
         "areas": [

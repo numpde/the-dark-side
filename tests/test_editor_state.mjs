@@ -16,12 +16,13 @@ const {
   setContigPolicy,
 } = await import(`../web/editor-state.mjs?v=${encodeURIComponent(editorVersion)}`);
 
-function feature(contigId, wayIds, nodeIds) {
+function feature(contigId, wayIds, nodeIds, tags = {}) {
   return {
     properties: {
       contig_id: contigId,
       way_ids: wayIds,
       node_ids: nodeIds,
+      tags,
     },
   };
 }
@@ -245,6 +246,58 @@ test("setContigPolicy removes default policy from managed state", () => {
   assert.notDeepEqual(policyForContig(editorState, 11), defaultWayPolicy());
   setContigPolicy(editorState, 11, defaultWayPolicy());
   assert.deepEqual(policyForContig(editorState, 11), defaultWayPolicy());
+});
+
+test("buffer-zone contigs are excluded by default without explicit route policy", () => {
+  const features = featureMap(
+    feature(90, [9001], [900, 901], { "local:boundary_zone": "buffer" }),
+  );
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument(), features);
+
+  assert.deepEqual(policyForContig(editorState, 90), {
+    routingState: "exclude",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+  assert.equal(editorState.policyByContigId.size, 0);
+});
+
+test("setting buffer-zone contig back to exclude keeps it implicit on export", () => {
+  const features = featureMap(
+    feature(91, [9101], [910, 911], { "local:boundary_zone": "buffer" }),
+  );
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument(), features);
+
+  setContigPolicy(editorState, 91, {
+    routingState: "exclude",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+
+  assert.equal(editorState.policyByContigId.size, 0);
+  assert.equal(buildRoutePolicyDocument(editorState, features).rules.length, 0);
+});
+
+test("including a buffer-zone contig creates an explicit route policy rule", () => {
+  const features = featureMap(
+    feature(92, [9201], [920, 921], { "local:boundary_zone": "buffer" }),
+  );
+  const editorState = normalizeRoutePolicyDocument(emptyRoutePolicyDocument(), features);
+
+  setContigPolicy(editorState, 92, {
+    routingState: "include",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+
+  const document = buildRoutePolicyDocument(editorState, features);
+  assert.equal(document.rules.length, 1);
+  assert.deepEqual(document.rules[0].policy, {
+    routing_state: "include",
+  });
 });
 
 test("buildRoutePolicyDocument fails if a selected policy no longer matches the current graph", () => {
