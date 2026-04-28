@@ -598,8 +598,7 @@
           2068386670
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1695.0,
@@ -3658,8 +3657,7 @@
           13768253221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1659.0,
@@ -4126,8 +4124,7 @@
           2847949545
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1690.0,
@@ -5066,8 +5063,7 @@
           6503768722
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1685.0,
@@ -5587,7 +5583,8 @@
           2847945484
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "include"
         },
         "elevations_m": [
           1674.0,
@@ -5655,8 +5652,7 @@
           2068386722
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1692.0,
@@ -6311,8 +6307,7 @@
           2068386428
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1680.0,
@@ -8846,8 +8841,7 @@
           13768277794
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1687.0,
@@ -8983,8 +8977,7 @@
           13768277790
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1687.0,
@@ -9122,8 +9115,7 @@
           9189127987
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1687.0,
@@ -9183,7 +9175,8 @@
           2068421872
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         },
         "elevations_m": [
           1669.0,
@@ -9256,7 +9249,8 @@
           2068421872
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         },
         "elevations_m": [
           1669.0,
@@ -9679,8 +9673,7 @@
           2068421886
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1655.0,
@@ -10619,8 +10612,7 @@
           2847824221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1676.0,
@@ -11022,8 +11014,7 @@
           6503768711
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1670.0,
@@ -11080,8 +11071,7 @@
           2847945496
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1683.0,
@@ -11562,8 +11552,7 @@
           9810327703
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1665.0,
@@ -12012,8 +12001,7 @@
           13769374299
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1662.0,
@@ -12100,8 +12088,7 @@
           2847824359
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1662.0,
@@ -12153,8 +12140,7 @@
           2847824369
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1661.0,
@@ -12246,8 +12232,7 @@
           13769344192
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1661.0,
@@ -12471,8 +12456,7 @@
           13769333327
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1659.0,
@@ -13139,7 +13123,7 @@
         ],
         "tags": {
           "local:boundary_zone": "core",
-          "local:routing_state": "exclude"
+          "local:routing_state": "include"
         },
         "elevations_m": [
           1670.0,
@@ -14322,8 +14306,7 @@
           13769333317
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1686.0,
@@ -14663,8 +14646,7 @@
           6503768690
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1679.0,
@@ -15522,8 +15504,7 @@
           11240465997
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1690.0,
@@ -16144,8 +16125,7 @@
           13519277170
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1654.0,
@@ -18122,7 +18102,8 @@
           6784413870
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         },
         "elevations_m": [
           1673.0,
@@ -19402,7 +19383,8 @@
           13768011702
         ],
         "tags": {
-          "local:boundary_zone": "buffer"
+          "local:boundary_zone": "buffer",
+          "local:routing_state": "include"
         },
         "elevations_m": [
           1686.0,
@@ -20443,7 +20425,8 @@
           13768011703
         ],
         "tags": {
-          "local:boundary_zone": "buffer"
+          "local:boundary_zone": "buffer",
+          "local:routing_state": "include"
         },
         "elevations_m": [
           1686.0,
@@ -20578,8 +20561,7 @@
           13768253221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         },
         "elevations_m": [
           1687.0,

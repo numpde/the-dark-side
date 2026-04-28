@@ -96,12 +96,22 @@ export function createEditorShellView({
       clearDisabled,
     }) {
     const disabled = !feature;
+    const isBufferZone = feature?.properties?.tags?.["local:boundary_zone"] === "buffer";
+    const metaParts = feature
+      ? [
+          `#${feature.properties.contig_id}`,
+          `${Math.round(feature.properties.length_m)} m`,
+          `ways ${feature.properties.way_ids.join(", ")}`,
+          ...(isBufferZone ? ["buffer zone"] : []),
+          ...(isBufferZone && clearDisabled && policy.routingState === "exclude" ? ["excluded by default"] : []),
+        ]
+      : [];
 
     wayHeading.textContent = feature
       ? feature.properties.way_names?.[0] || `Contig ${feature.properties.contig_id}`
       : "Select a contig";
     wayMeta.textContent = feature
-      ? `#${feature.properties.contig_id} · ${Math.round(feature.properties.length_m)} m · ways ${feature.properties.way_ids.join(", ")}`
+      ? metaParts.join(" · ")
       : "";
 
     for (const button of stateButtons) {

@@ -9,6 +9,7 @@ const editorVersion = frontendManifest.modules.editor_version;
 const {
   POLICY_TAGS,
   buildRoutePolicyDocument,
+  countRoutePolicyChanges,
   defaultWayPolicy,
   emptyRoutePolicyDocument,
   normalizeRoutePolicyDocument,
@@ -176,9 +177,81 @@ test("normalizeRoutePolicyDocument expands split selectors across multiple curre
     bicycleDirection: "both",
     unavailableUntil: null,
   });
-  assert.match(editorState.ruleIdByContigId.get(10), /^split-rule--[0-9a-f]{8}$/);
-  assert.match(editorState.ruleIdByContigId.get(11), /^split-rule--[0-9a-f]{8}$/);
-  assert.notEqual(editorState.ruleIdByContigId.get(10), editorState.ruleIdByContigId.get(11));
+  assert.equal(editorState.ruleIdByContigId.get(10), "split-rule");
+  assert.equal(editorState.ruleIdByContigId.get(11), "split-rule");
+});
+
+test("buildRoutePolicyDocument preserves split selectors without edits", () => {
+  const features = featureMap(
+    feature(10, [1001], [420, 421]),
+    feature(11, [1001], [421, 422]),
+  );
+  const editorState = normalizeRoutePolicyDocument(
+    {
+      meta: {
+        asset_kind: "route_policy",
+        asset_id: "karura-route-policy-v1",
+      },
+      rules: [
+        {
+          id: "split-rule",
+          selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+          policy: { routing_state: "exclude" },
+        },
+      ],
+    },
+    features,
+  );
+
+  const document = buildRoutePolicyDocument(editorState, features);
+  assert.deepEqual(document.rules, [
+    {
+      id: "split-rule",
+      selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+      policy: { routing_state: "exclude" },
+    },
+  ]);
+  assert.equal(countRoutePolicyChanges(editorState, features), 0);
+});
+
+test("buildRoutePolicyDocument splits edited runs from an originally grouped rule", () => {
+  const features = featureMap(
+    feature(10, [1001], [420, 421]),
+    feature(11, [1001], [421, 422]),
+  );
+  const editorState = normalizeRoutePolicyDocument(
+    {
+      meta: {
+        asset_kind: "route_policy",
+        asset_id: "karura-route-policy-v1",
+      },
+      rules: [
+        {
+          id: "split-rule",
+          selector: { way_ids: [1001], node_ids: [420, 421, 422] },
+          policy: { routing_state: "exclude" },
+        },
+      ],
+    },
+    features,
+  );
+
+  setContigPolicy(editorState, 11, {
+    routingState: "include",
+    bikeability: null,
+    bicycleDirection: "both",
+    unavailableUntil: null,
+  });
+
+  const document = buildRoutePolicyDocument(editorState, features);
+  assert.equal(document.rules.length, 2);
+  assert.match(document.rules[0].id, /^route-policy-path-[0-9a-f]{8}$/);
+  assert.deepEqual(document.rules[0].selector, { way_ids: [1001], node_ids: [420, 421] });
+  assert.deepEqual(document.rules[0].policy, { routing_state: "exclude" });
+  assert.match(document.rules[1].id, /^route-policy-path-[0-9a-f]{8}$/);
+  assert.deepEqual(document.rules[1].selector, { way_ids: [1001], node_ids: [421, 422] });
+  assert.deepEqual(document.rules[1].policy, { routing_state: "include" });
+  assert.equal(countRoutePolicyChanges(editorState, features), 3);
 });
 
 test("normalizeRoutePolicyDocument rejects malformed route policy documents", () => {

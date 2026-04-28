@@ -127,5 +127,100 @@ test("editor shell loads and resolves editor provenance", async ({ page }) => {
   await expect(page.locator("#export-target-path")).toHaveText("source/karura-route-policy.json");
   await expect(page.locator("#export-hint")).toContainText("source/karura-route-policy.json");
   await expect(page.locator("#editor-graph-asset")).not.toHaveText("–");
+  await expect(page.locator("#change-count")).toHaveText("0 changed");
   await expect(page.locator("#patch-preview")).toContainText("\"rules\":");
+  const counts = await page.evaluate(async () => {
+    const preview = JSON.parse(document.querySelector("#patch-preview").textContent);
+    const source = await fetch("./source/karura-route-policy.json").then((response) => response.json());
+    return {
+      previewRuleCount: preview.rules.length,
+      sourceRuleCount: source.rules.length,
+    };
+  });
+  expect(counts.previewRuleCount).toBe(counts.sourceRuleCount);
+});
+
+test("editor shows default-excluded buffer contigs distinctly", async ({ page }) => {
+  await page.addInitScript(() => {
+    let leafletValue = null;
+    Object.defineProperty(window, "L", {
+      configurable: true,
+      get() {
+        return leafletValue;
+      },
+      set(value) {
+        if (value && typeof value.map === "function" && !value.__capturedMapPatched) {
+          const originalMap = value.map.bind(value);
+          value.map = function(...args) {
+            const map = originalMap(...args);
+            window.__capturedLeafletMap = map;
+            return map;
+          };
+          value.__capturedMapPatched = true;
+        }
+        leafletValue = value;
+      },
+    });
+  });
+
+  await page.goto("/editor.html");
+
+  const state = await page.evaluate(() => {
+    const map = window.__capturedLeafletMap;
+    if (!map) {
+      throw new Error("Leaflet map was not captured");
+    }
+    const geoLayers = [];
+    map.eachLayer((layer) => {
+      if (layer.feature && layer.feature.properties && layer.feature.properties.contig_id != null) {
+        geoLayers.push(layer);
+      }
+    });
+    const visibleById = new Map();
+    const hitById = new Map();
+    for (const layer of geoLayers) {
+      const contigId = layer.feature.properties.contig_id;
+      if (layer._events && layer._events.click) {
+        hitById.set(contigId, layer);
+      } else {
+        visibleById.set(contigId, layer);
+      }
+    }
+    for (const [contigId, hitLayer] of hitById.entries()) {
+      const visibleLayer = visibleById.get(contigId);
+      if (!visibleLayer) {
+        continue;
+      }
+      if (visibleLayer.feature.properties.tags?.["local:boundary_zone"] !== "buffer") {
+        continue;
+      }
+      hitLayer.fire("click");
+      const activeState = [...document.querySelectorAll(".state-button")]
+        .find((button) => button.classList.contains("is-active"))
+        ?.dataset.routingState;
+      const clearDisabled = document.querySelector("#clear-button").disabled;
+      if (activeState === "exclude" && clearDisabled) {
+        return {
+          found: true,
+          heading: document.querySelector("#way-heading").textContent,
+          meta: document.querySelector("#way-meta").textContent,
+          activeState,
+          clearDisabled,
+          visibleStyle: {
+            color: visibleLayer.options?.color ?? null,
+            dashArray: visibleLayer.options?.dashArray ?? null,
+          },
+        };
+      }
+    }
+    return { found: false };
+  });
+
+  expect(state.found).toBe(true);
+  expect(state.heading.length).toBeGreaterThan(0);
+  expect(state.meta).toContain("buffer zone");
+  expect(state.activeState).toBe("exclude");
+  expect(state.clearDisabled).toBe(true);
+  expect(state.visibleStyle.color).toBe("#c07a2d");
+  expect(state.visibleStyle.dashArray).toBe("8 6");
 });

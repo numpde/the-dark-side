@@ -565,8 +565,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         196510835
@@ -3216,8 +3215,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1332841839
@@ -3615,8 +3613,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1332841838
@@ -4412,8 +4409,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         692748291
@@ -4888,7 +4884,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_zone": "core",
+        "local:routing_state": "include"
       },
       "way_ids": [
         60200210
@@ -4954,8 +4951,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         60200207
@@ -5536,8 +5532,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         196510836
@@ -7787,8 +7782,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         196510842
@@ -7919,8 +7913,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         196510846
@@ -7973,8 +7966,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         995112827
@@ -8033,7 +8025,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_zone": "core",
+        "local:routing_state": "exclude"
       },
       "way_ids": [
         196518254
@@ -8107,7 +8100,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_zone": "core",
+        "local:routing_state": "exclude"
       },
       "way_ids": [
         196518254
@@ -8454,8 +8448,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720869
@@ -9299,8 +9292,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720870
@@ -9615,8 +9607,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280734416
@@ -9712,8 +9703,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280734426
@@ -10264,8 +10254,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1332841838
@@ -10487,8 +10476,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1013539597
@@ -10526,8 +10514,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720874
@@ -10615,8 +10602,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720874
@@ -10664,8 +10650,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1504829330
@@ -10849,8 +10834,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         692748284
@@ -11456,7 +11440,7 @@
       ],
       "tags": {
         "local:boundary_zone": "core",
-        "local:routing_state": "exclude"
+        "local:routing_state": "include"
       },
       "way_ids": [
         280734426
@@ -12710,8 +12694,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1504822990
@@ -12762,8 +12745,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720874
@@ -13531,8 +13513,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1213220384
@@ -14056,8 +14037,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         280720869
@@ -15790,7 +15770,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_zone": "core",
+        "local:routing_state": "exclude"
       },
       "way_ids": [
         723312824
@@ -16900,7 +16881,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "buffer"
+        "local:boundary_zone": "buffer",
+        "local:routing_state": "include"
       },
       "way_ids": [
         1213220384
@@ -17811,7 +17793,8 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "buffer"
+        "local:boundary_zone": "buffer",
+        "local:routing_state": "include"
       },
       "way_ids": [
         1504625701
@@ -18083,8 +18066,7 @@
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
-        "local:routing_state": "include"
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         1504644448
@@ -20603,7 +20585,6 @@
     "applied_route_policy_rule_ids": [
       "route-policy-path-f2145925",
       "route-policy-path-a8a20433",
-      "route-policy-path-2a875f65",
       "route-policy-path-54d1cb96",
       "route-policy-path-e1a813f9",
       "route-policy-path-8d9e7100",
@@ -20613,49 +20594,34 @@
       "route-policy-path-138c4666",
       "route-policy-path-574193a1",
       "route-policy-path-3e2fb6b3",
-      "route-policy-path-2382edc6",
       "route-policy-path-815cdcb8",
       "route-policy-path-51312351",
-      "route-policy-path-f9e9d997",
       "route-policy-path-4072f335",
-      "route-policy-path-8f0a19e1",
       "route-policy-path-f668653a",
-      "route-policy-path-e0f9f797",
       "route-policy-path-a564a492",
-      "route-policy-path-6d80c70d",
       "route-policy-path-664cc072",
       "route-policy-path-a887750a",
       "route-policy-path-74b4a4d9",
       "route-policy-path-952440e1",
       "route-policy-path-ff3d3776",
-      "route-policy-path-0f9851d3",
-      "route-policy-path-6a82394f",
-      "route-policy-path-1bc12aeb",
-      "route-policy-path-2f597776",
-      "route-policy-path-0d732f72",
-      "route-policy-path-373ea854",
-      "route-policy-path-90266a54",
-      "route-policy-path-d10f2f0e",
-      "route-policy-path-6504554a",
-      "route-policy-path-5d10cfaa",
-      "route-policy-path-38b9b322",
-      "route-policy-path-b7785255",
-      "route-policy-path-9a55b6fc",
       "route-policy-path-e73dbf01",
       "route-policy-path-4c45610b",
       "route-policy-path-34808dd6",
-      "route-policy-path-fe590c98",
+      "route-policy-path-5d72d17c",
       "route-policy-path-838a062c",
       "route-policy-path-ab1dc0dc",
       "route-policy-path-66da1b65",
       "route-policy-path-ac3b6eeb",
-      "route-policy-path-cea8cde4",
-      "route-policy-path-f98fa1cd",
-      "route-policy-path-3080215c",
+      "route-policy-path-fb5f12e3",
       "route-policy-path-9317044b",
-      "route-policy-path-595438fe",
       "route-policy-path-f5ac3be5",
-      "route-policy-path-23c711d3"
+      "route-policy-path-23c711d3",
+      "route-policy-path-433a5a5e",
+      "route-policy-path-4723b84d",
+      "route-policy-path-34c5b9a9",
+      "route-policy-path-79b82212",
+      "route-policy-path-2b9a4bdd",
+      "route-policy-path-01d77f50"
     ],
     "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
     "asset_kind": "contig_graph",
@@ -20665,8 +20631,8 @@
     "graph_mode": "ride",
     "node_count": 3306,
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-13fbb6b0eb61",
-    "route_policy_digest": "13fbb6b0eb61",
+    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-7ee3ea091917",
+    "route_policy_digest": "7ee3ea091917",
     "route_policy_path": "source/karura-route-policy.json",
     "source_asset_id": "karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
     "source_map": "data/karura_map_patched.json"

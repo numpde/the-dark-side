@@ -429,14 +429,8 @@ function generatedRuleIdForSelector(selector) {
   return `route-policy-path-${hashSelector(selector)}`;
 }
 
-
-function derivedRuleIdForSplitRule(ruleId, selector) {
-  return `${ruleId}--${hashSelector(selector)}`;
-}
-
-
-function ruleIdForContig(editorState, contigId, selector) {
-  return editorState.ruleIdByContigId.get(Number(contigId)) || generatedRuleIdForSelector(selector);
+function policiesEqual(left, right) {
+  return JSON.stringify(compactPolicy(left)) === JSON.stringify(compactPolicy(right));
 }
 
 
@@ -458,6 +452,103 @@ function buildRulesFromDocument(rawDocument, featureById) {
   throw new Error(`Unsupported editor policy document asset kind ${meta.asset_kind}`);
 }
 
+function resolveMatchesForSelector(selector, featureById, label) {
+  const byEdge = buildFeatureLookupByEdge(featureById);
+  const matches = [];
+  let previousContigId = null;
+  let currentMatch = null;
+  for (const [edgeIndex, key] of selectorEdgeKeys(selector).entries()) {
+    const candidateFeatures = (byEdge.get(key) ?? [])
+      .filter((feature) => selectorsShareWayIds(selector, featureSelector(feature)));
+    if (candidateFeatures.length === 0) {
+      throw new Error(`${label} selector no longer matches the current graph`);
+    }
+    if (candidateFeatures.length > 1) {
+      throw new Error(`${label} selector matches multiple current contigs`);
+    }
+    const feature = candidateFeatures[0];
+    const contigId = featureContigId(feature);
+    if (previousContigId === contigId && currentMatch) {
+      currentMatch.endEdgeIndex = edgeIndex;
+      continue;
+    }
+    currentMatch = {
+      contigId,
+      feature,
+      startEdgeIndex: edgeIndex,
+      endEdgeIndex: edgeIndex,
+    };
+    matches.push(currentMatch);
+    previousContigId = contigId;
+  }
+  return matches;
+}
+
+
+function normalizeExportedRule(rule) {
+  return {
+    id: String(rule.id),
+    selector: {
+      way_ids: [...rule.selector.way_ids].map((value) => Number(value)),
+      node_ids: [...rule.selector.node_ids].map((value) => Number(value)),
+    },
+    policy: compactPolicy(rule.policy),
+  };
+}
+
+
+function selectorForContigRun(loadedRule, matches, startIndex, endIndex, featureById) {
+  if (startIndex === 0 && endIndex === matches.length - 1) {
+    return {
+      way_ids: [...loadedRule.selector.way_ids],
+      node_ids: [...loadedRule.selector.node_ids],
+    };
+  }
+  const startEdgeIndex = matches[startIndex].startEdgeIndex;
+  const endEdgeIndex = matches[endIndex].endEdgeIndex;
+  const node_ids = loadedRule.selector.node_ids.slice(startEdgeIndex, endEdgeIndex + 2);
+  const way_ids = [];
+  const seenWayIds = new Set();
+  for (let matchIndex = startIndex; matchIndex <= endIndex; matchIndex += 1) {
+    const feature = featureById.get(matches[matchIndex].contigId);
+    if (!feature) {
+      throw new Error(
+        `Current graph is missing contig ${matches[matchIndex].contigId}; rebuild editor assets before exporting route policy`
+      );
+    }
+    for (const wayId of featureSelector(feature).way_ids) {
+      if (seenWayIds.has(wayId)) {
+        continue;
+      }
+      seenWayIds.add(wayId);
+      way_ids.push(wayId);
+    }
+  }
+  return { way_ids, node_ids };
+}
+
+
+function currentExplicitPolicy(editorState, contigId) {
+  return editorState.policyByContigId.get(Number(contigId)) || defaultWayPolicy();
+}
+
+
+function countDocumentChanges(baselineDocument, nextDocument) {
+  const baselineById = new Map(
+    baselineDocument.rules.map((rule) => [String(rule.id), JSON.stringify(rule)]),
+  );
+  const nextById = new Map(
+    nextDocument.rules.map((rule) => [String(rule.id), JSON.stringify(rule)]),
+  );
+  let changed = 0;
+  for (const ruleId of new Set([...baselineById.keys(), ...nextById.keys()])) {
+    if (baselineById.get(ruleId) !== nextById.get(ruleId)) {
+      changed += 1;
+    }
+  }
+  return changed;
+}
+
 
 export function normalizeRoutePolicyDocument(rawDocument, featureById = new Map()) {
   const document = requireRoutePolicyDocument(
@@ -476,28 +567,38 @@ export function normalizeRoutePolicyDocument(rawDocument, featureById = new Map(
   );
 
   const policyByContigId = new Map();
+  const loadedRuleIdByContigId = new Map();
   const ruleIdByContigId = new Map();
-  for (const rule of buildRulesFromDocument(document, featureById)) {
-    const features = resolveFeaturesForSelector(rule.selector, featureById, `Rule ${rule.id}`);
-    const isSplitAcrossContigs = features.length > 1;
-    for (const feature of features) {
-      const contigId = featureContigId(feature);
+  const loadedRules = buildRulesFromDocument(document, featureById);
+  const loadedRuleMatchesById = new Map();
+  for (const rule of loadedRules) {
+    const matches = resolveMatchesForSelector(rule.selector, featureById, `Rule ${rule.id}`);
+    loadedRuleMatchesById.set(rule.id, matches.map((match) => ({
+      contigId: match.contigId,
+      startEdgeIndex: match.startEdgeIndex,
+      endEdgeIndex: match.endEdgeIndex,
+    })));
+    for (const match of matches) {
+      const contigId = match.contigId;
       if (policyByContigId.has(contigId)) {
         throw new Error(`Multiple route policy rules resolve to contig ${contigId}`);
       }
       policyByContigId.set(contigId, rule.policy);
-      ruleIdByContigId.set(
-        contigId,
-        isSplitAcrossContigs
-          ? derivedRuleIdForSplitRule(rule.id, featureSelector(feature))
-          : rule.id,
-      );
+      loadedRuleIdByContigId.set(contigId, rule.id);
+      ruleIdByContigId.set(contigId, rule.id);
     }
   }
 
   return {
     meta: { ...document.meta },
     featureByContigId: new Map(featureById),
+    loadedDocument: {
+      meta: { ...document.meta },
+      rules: loadedRules.map(normalizeExportedRule),
+    },
+    loadedRules,
+    loadedRuleIdByContigId,
+    loadedRuleMatchesById,
     policyByContigId,
     ruleIdByContigId,
   };
@@ -509,7 +610,7 @@ export const normalizePatchset = normalizeRoutePolicyDocument;
 
 export function policyForContig(editorState, contigId) {
   const contigKey = Number(contigId);
-  const explicitPolicy = editorState.policyByContigId.get(contigKey) || defaultWayPolicy();
+  const explicitPolicy = currentExplicitPolicy(editorState, contigKey);
   const feature = editorState.featureByContigId?.get(contigKey);
   return mergePolicies(basePolicyForFeature(feature), explicitPolicy);
 }
@@ -532,23 +633,81 @@ export function setContigPolicy(editorState, contigId, nextPolicy) {
   const explicitPolicy = explicitPolicyFromEffective(normalized, basePolicy);
   if (isDefaultPolicy(explicitPolicy)) {
     editorState.policyByContigId.delete(contigKey);
-    editorState.ruleIdByContigId.delete(contigKey);
+    if (editorState.loadedRuleIdByContigId?.has(contigKey)) {
+      editorState.ruleIdByContigId.set(contigKey, editorState.loadedRuleIdByContigId.get(contigKey));
+    } else {
+      editorState.ruleIdByContigId.delete(contigKey);
+    }
     return;
   }
   editorState.policyByContigId.set(contigKey, explicitPolicy);
+  if (!editorState.loadedRuleIdByContigId?.has(contigKey)) {
+    const feature = editorState.featureByContigId?.get(contigKey);
+    if (feature) {
+      editorState.ruleIdByContigId.set(contigKey, generatedRuleIdForSelector(featureSelector(feature)));
+    }
+  }
 }
 
 
 export function buildRoutePolicyDocument(editorState, featureById = new Map()) {
   const rules = [];
+  const emittedContigIds = new Set();
+  for (const loadedRule of editorState.loadedRules ?? []) {
+    const matches = editorState.loadedRuleMatchesById?.get(loadedRule.id) ?? [];
+    let run = null;
+    const flushRun = () => {
+      if (!run || isDefaultPolicy(run.policy)) {
+        run = null;
+        return;
+      }
+      const selector = selectorForContigRun(loadedRule, matches, run.startIndex, run.endIndex, featureById);
+      const preservesOriginalRule =
+        run.startIndex === 0 &&
+        run.endIndex === matches.length - 1 &&
+        policiesEqual(run.policy, loadedRule.policy);
+      rules.push({
+        id: preservesOriginalRule ? loadedRule.id : generatedRuleIdForSelector(selector),
+        selector,
+        policy: compactPolicy(run.policy),
+      });
+      run = null;
+    };
+    matches.forEach((match, matchIndex) => {
+      emittedContigIds.add(match.contigId);
+      const explicitPolicy = currentExplicitPolicy(editorState, match.contigId);
+      if (!run) {
+        run = {
+          startIndex: matchIndex,
+          endIndex: matchIndex,
+          policy: explicitPolicy,
+        };
+        return;
+      }
+      if (policiesEqual(run.policy, explicitPolicy)) {
+        run.endIndex = matchIndex;
+        return;
+      }
+      flushRun();
+      run = {
+        startIndex: matchIndex,
+        endIndex: matchIndex,
+        policy: explicitPolicy,
+      };
+    });
+    flushRun();
+  }
   for (const [contigId, policy] of [...editorState.policyByContigId.entries()].sort((a, b) => a[0] - b[0])) {
+    if (emittedContigIds.has(Number(contigId))) {
+      continue;
+    }
     const feature = featureById.get(Number(contigId));
     if (!feature) {
       throw new Error(`Current graph is missing contig ${contigId}; rebuild editor assets before exporting route policy`);
     }
     const selector = featureSelector(feature);
     rules.push({
-      id: ruleIdForContig(editorState, contigId, selector),
+      id: editorState.ruleIdByContigId.get(Number(contigId)) || generatedRuleIdForSelector(selector),
       selector,
       policy: compactPolicy(policy),
     });
@@ -561,3 +720,11 @@ export function buildRoutePolicyDocument(editorState, featureById = new Map()) {
 
 
 export const buildPatchsetDocument = buildRoutePolicyDocument;
+
+
+export function countRoutePolicyChanges(editorState, featureById = new Map()) {
+  return countDocumentChanges(
+    editorState.loadedDocument ?? emptyRoutePolicyDocument(),
+    buildRoutePolicyDocument(editorState, featureById),
+  );
+}

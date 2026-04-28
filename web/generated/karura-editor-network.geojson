@@ -960,8 +960,7 @@
           2068386670
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -3879,8 +3878,7 @@
           13768253221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -4286,8 +4284,7 @@
           2847949545
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -5097,8 +5094,7 @@
           6503768722
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -5557,7 +5553,8 @@
           2847945484
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "include"
         }
       },
       "geometry": {
@@ -5617,8 +5614,7 @@
           2068386722
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -6354,8 +6350,7 @@
           2068386428
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -8580,8 +8575,7 @@
           13768277794
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -8698,8 +8692,7 @@
           13768277790
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -8814,8 +8807,7 @@
           9189127987
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -8868,7 +8860,8 @@
           2068421872
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         }
       },
       "geometry": {
@@ -8932,7 +8925,8 @@
           2068421872
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         }
       },
       "geometry": {
@@ -9293,8 +9287,7 @@
           2068421886
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -10330,8 +10323,7 @@
           2847824221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -10678,8 +10670,7 @@
           6503768711
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -10731,8 +10722,7 @@
           2847945496
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11145,8 +11135,7 @@
           9810327703
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11520,8 +11509,7 @@
           13769374299
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11595,8 +11583,7 @@
           2847824359
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11644,8 +11631,7 @@
           2847824369
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11723,8 +11709,7 @@
           13769344192
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -11916,8 +11901,7 @@
           13769333327
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -12499,7 +12483,7 @@
         ],
         "tags": {
           "local:boundary_zone": "core",
-          "local:routing_state": "exclude"
+          "local:routing_state": "include"
         }
       },
       "geometry": {
@@ -13541,8 +13525,7 @@
           13769333317
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -13819,8 +13802,7 @@
           6503768690
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -14569,8 +14551,7 @@
           11240465997
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -15438,8 +15419,7 @@
           13519277170
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {
@@ -17178,7 +17158,8 @@
           6784413870
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         }
       },
       "geometry": {
@@ -19561,7 +19542,8 @@
           13768011702
         ],
         "tags": {
-          "local:boundary_zone": "buffer"
+          "local:boundary_zone": "buffer",
+          "local:routing_state": "include"
         }
       },
       "geometry": {
@@ -22119,7 +22101,8 @@
           13768011703
         ],
         "tags": {
-          "local:boundary_zone": "buffer"
+          "local:boundary_zone": "buffer",
+          "local:routing_state": "include"
         }
       },
       "geometry": {
@@ -22243,8 +22226,7 @@
           13768253221
         ],
         "tags": {
-          "local:boundary_zone": "core",
-          "local:routing_state": "include"
+          "local:boundary_zone": "core"
         }
       },
       "geometry": {

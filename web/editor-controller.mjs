@@ -2,6 +2,7 @@ const { requireVersionedModuleContext } = await import(`./module-context.mjs${ne
 const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor controller module");
 const {
   buildRoutePolicyDocument,
+  countRoutePolicyChanges,
   explicitPolicyForContig,
   defaultWayPolicy,
   emptyRoutePolicyDocument,
@@ -103,7 +104,7 @@ export function createEditorController({ editorManifestUrl, reportError }) {
       canonicalRoutePolicyPath: canonicalRoutePolicyPath(),
       editorGraphAssetId: appState.editorManifest.meta.editor_graph_asset_id,
       editorGeneratedAtText: appState.editorManifest.meta.generated_at,
-      changedCount: appState.editorState.policyByContigId.size,
+      changedCount: countRoutePolicyChanges(appState.editorState, mapView.getContigFeatures()),
       routePolicyDocument: currentRoutePolicyDocument(),
       clearDisabled: !feature || isDefaultPolicy(explicitPolicy),
     });
@@ -148,6 +149,7 @@ export function createEditorController({ editorManifestUrl, reportError }) {
     mapView.renderWays(waysGeojson);
     appState.editorState = normalizeRoutePolicyDocument(routePolicy, mapView.getContigFeatures());
     appState.loadedRoutePolicyLabel = canonicalRoutePolicyPath();
+    mapView.updateAllContigStyles();
     renderShell();
   }
 
