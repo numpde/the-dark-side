@@ -7,8 +7,6 @@ import math
 from collections.abc import Iterable
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
-
 from .asset_contracts import load_required_json, load_required_patchset
 from .download_karura_map import load_map
 from .karura_common import mercator, print_json_document
@@ -16,6 +14,16 @@ from .karura_routing import load_route_graph
 
 
 BASE_IMAGE_ALPHA = 0.7
+
+
+def require_pillow():
+    try:
+        from PIL import Image, ImageDraw, ImageFont, ImageOps
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "Pillow is required for image rendering. Install the 'Pillow' package to use renderer CLIs."
+        ) from exc
+    return Image, ImageDraw, ImageFont, ImageOps
 
 
 def load_viewport(path: Path) -> dict:
@@ -32,7 +40,8 @@ def load_viewport(path: Path) -> dict:
     return normalized
 
 
-def prepare_base_image(path: Path, *, alpha: float = BASE_IMAGE_ALPHA) -> Image.Image:
+def prepare_base_image(path: Path, *, alpha: float = BASE_IMAGE_ALPHA):
+    Image, _, _, ImageOps = require_pillow()
     source = Image.open(path).convert("RGBA")
     grayscale = ImageOps.grayscale(source).convert("RGBA")
     grayscale.putalpha(int(round(255 * alpha)))
@@ -45,7 +54,8 @@ def load_screenshot_canvas(
     *,
     screenshot_path: Path,
     viewport_path: Path,
-) -> tuple[dict, Image.Image, ImageDraw.ImageDraw]:
+) -> tuple[dict, object, object]:
+    _, ImageDraw, _, _ = require_pillow()
     viewport = load_viewport(viewport_path)
     image = prepare_base_image(screenshot_path)
     draw = ImageDraw.Draw(image, "RGBA")
@@ -158,7 +168,7 @@ def project_graph_node_ids(
     ]
 
 
-def save_render_output(image: Image.Image, *, output: Path, payload: dict) -> None:
+def save_render_output(image, *, output: Path, payload: dict) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
     image.save(output)
     print_json_document(payload)

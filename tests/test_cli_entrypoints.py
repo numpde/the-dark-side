@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+import os
 import subprocess
+import tempfile
+import textwrap
 import unittest
+from pathlib import Path
 
 from the_dark_side.karura_common import REPO_ROOT
 
@@ -42,3 +46,46 @@ class CliEntrypointTests(unittest.TestCase):
                     0,
                     msg=f"{module} --help failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}",
                 )
+
+    def test_renderer_cli_help_does_not_require_pillow(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            sitecustomize = (
+                Path(tmpdir) / "sitecustomize.py"
+            )
+            sitecustomize.write_text(
+                textwrap.dedent(
+                    """
+                    import builtins
+
+                    _orig_import = builtins.__import__
+
+                    def _guarded_import(name, globals=None, locals=None, fromlist=(), level=0):
+                        if name == "PIL" or name.startswith("PIL."):
+                            raise ModuleNotFoundError("No module named 'PIL'")
+                        return _orig_import(name, globals, locals, fromlist, level)
+
+                    builtins.__import__ = _guarded_import
+                    """
+                ),
+                encoding="utf-8",
+            )
+            env = dict(os.environ)
+            env["PYTHONPATH"] = tmpdir
+            for module in (
+                "the_dark_side.render_karura_overlay",
+                "the_dark_side.render_karura_route",
+                "the_dark_side.render_karura_figures",
+            ):
+                with self.subTest(module=module):
+                    result = subprocess.run(
+                        ["python3", "-m", module, "--help"],
+                        cwd=REPO_ROOT,
+                        env=env,
+                        capture_output=True,
+                        text=True,
+                    )
+                    self.assertEqual(
+                        result.returncode,
+                        0,
+                        msg=f"{module} --help failed without Pillow:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}",
+                    )

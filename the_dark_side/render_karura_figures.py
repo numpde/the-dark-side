@@ -6,8 +6,6 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
-
 from .asset_contracts import load_required_figure_catalog
 from .karura_common import (
     CONTIGS_JSON,
@@ -18,7 +16,7 @@ from .karura_common import (
     VIEWPORT,
 )
 from .karura_routing import load_graph_junction_context, resolve_context_junction_ref
-from .render_support import load_viewport, project_lon_lat, save_render_output
+from .render_support import load_viewport, project_lon_lat, require_pillow, save_render_output
 
 
 FIGURES_JSON = CURATED_DIR / "karura_figures.json"
@@ -39,14 +37,15 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_font(size: int) -> ImageFont.ImageFont:
+def load_font(size: int):
+    _, _, ImageFont, _ = require_pillow()
     try:
         return ImageFont.truetype("DejaVuSans.ttf", size=size)
     except OSError:
         return ImageFont.load_default()
 
 
-def draw_marker(draw: ImageDraw.ImageDraw, point: tuple[float, float], color: tuple[int, int, int, int]) -> None:
+def draw_marker(draw, point: tuple[float, float], color: tuple[int, int, int, int]) -> None:
     x, y = point
     draw.ellipse((x - 16, y - 16, x + 16, y + 16), fill=(255, 255, 255, 240))
     draw.ellipse((x - 11, y - 11, x + 11, y + 11), fill=color)
@@ -62,8 +61,8 @@ def draw_label(
     color: tuple[int, int, int, int],
     label_dx: int,
     label_dy: int,
-    title_font: ImageFont.ImageFont,
-    subtitle_font: ImageFont.ImageFont,
+    title_font,
+    subtitle_font,
 ) -> None:
     x, y = point
     box_x = x + label_dx
@@ -101,6 +100,7 @@ def resolve_figure(payload: dict, figure_id: str) -> dict:
 
 def main() -> None:
     args = parse_args()
+    Image, ImageDraw, _, _ = require_pillow()
     figures_payload = load_required_figure_catalog(args.figures_json, label="figure catalog")
     figure = resolve_figure(figures_payload, args.figure_id)
     overlay_path = OVERLAY_BY_ASSET_KIND["contig_graph"]
