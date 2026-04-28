@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import math
-import hashlib
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -36,65 +35,15 @@ FIGURES_DIR = ASSETS_DIR / "figures"
 SCREENSHOT = REFERENCE_DIR / "karura-source-screenshot.png"
 VIEWPORT = REFERENCE_DIR / "karura-viewport.json"
 WEB_DIR = REPO_ROOT / "web"
+DIST_DIR = REPO_ROOT / "dist"
 WEB_SOURCE_DIR = WEB_DIR / "source"
 WEB_GENERATED_DIR = WEB_DIR / "generated"
 EDITOR_MANIFEST_JSON = WEB_GENERATED_DIR / "editor-manifest.json"
 APP_MANIFEST_JSON = WEB_GENERATED_DIR / "app-manifest.json"
-FRONTEND_MANIFEST_JSON = WEB_GENERATED_DIR / "frontend-manifest.json"
 MAP_PATCHES_JSON = SOURCE_DIR / "karura-map-patches.json"
 ROUTE_POLICY_JSON = SOURCE_DIR / "karura-route-policy.json"
 CATALOG_BUILD_JSON = SOURCE_DIR / "catalog_build.json"
 SOURCE_ASSET_PATHS = (MAP_PATCHES_JSON, ROUTE_POLICY_JSON, CATALOG_BUILD_JSON)
-BOOTSTRAP_MODULE_PATHS = (
-    WEB_DIR / "entry-bootstrap.mjs",
-    WEB_DIR / "error-presentation.mjs",
-    WEB_DIR / "module-context.mjs",
-)
-APP_MODULE_PATHS = (
-    WEB_DIR / "app.js",
-    WEB_DIR / "contract-primitives.mjs",
-    WEB_DIR / "error-presentation.mjs",
-    WEB_DIR / "fatal-error-runtime.mjs",
-    WEB_DIR / "gpx.mjs",
-    WEB_DIR / "karura-policy.mjs",
-    WEB_DIR / "module-context.mjs",
-    WEB_DIR / "planner-client.mjs",
-    WEB_DIR / "planner-worker-contracts.mjs",
-    WEB_DIR / "route-asset-runtime.mjs",
-    WEB_DIR / "route-controller.mjs",
-    WEB_DIR / "route-graph.mjs",
-    WEB_DIR / "route-map-view.mjs",
-    WEB_DIR / "route-network-contracts.mjs",
-    WEB_DIR / "route-runtime.mjs",
-    WEB_DIR / "route-search.mjs",
-    WEB_DIR / "route-selection-controls.mjs",
-    WEB_DIR / "route-selection-view.mjs",
-    WEB_DIR / "route-surface-runtime.mjs",
-    WEB_DIR / "route-url-state.mjs",
-    WEB_DIR / "route-scenarios.mjs",
-    WEB_DIR / "route-shell-view.mjs",
-    WEB_DIR / "route-summary-view.mjs",
-    WEB_DIR / "route-selection.mjs",
-    WEB_DIR / "runtime-contracts.mjs",
-    WEB_DIR / "route-worker.js",
-    WEB_DIR / "route-planner.mjs",
-)
-EDITOR_MODULE_PATHS = (
-    WEB_DIR / "contract-primitives.mjs",
-    WEB_DIR / "editor-asset-runtime.mjs",
-    WEB_DIR / "editor-controller.mjs",
-    WEB_DIR / "editor-map-view.mjs",
-    WEB_DIR / "editor-policy-contracts.mjs",
-    WEB_DIR / "editor.js",
-    WEB_DIR / "editor-shell-view.mjs",
-    WEB_DIR / "error-presentation.mjs",
-    WEB_DIR / "fatal-error-runtime.mjs",
-    WEB_DIR / "editor-state.mjs",
-    WEB_DIR / "karura-policy.mjs",
-    WEB_DIR / "module-context.mjs",
-    WEB_DIR / "runtime-contracts.mjs",
-    WEB_DIR / "view-runtime.mjs",
-)
 
 R = 6378137.0
 LOCAL_ROUTING_STATE_TAG = "local:routing_state"
@@ -185,17 +134,6 @@ def sync_web_source_assets() -> list[Path]:
         missing_paths = ", ".join(repo_rel(path) for path in missing)
         raise FileNotFoundError(f"missing canonical source assets: {missing_paths}")
     return synced
-
-def digest_paths(paths: tuple[Path, ...] | list[Path]) -> str:
-    digest = hashlib.sha256()
-    for path in paths:
-        digest.update(repo_rel(path).encode("utf-8"))
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()[:12]
-
-
 def mercator(lon: float, lat: float) -> tuple[float, float]:
     lon_r = math.radians(lon)
     lat_r = math.radians(lat)

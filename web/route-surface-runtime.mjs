@@ -1,13 +1,11 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route surface runtime module");
-const { wireGpxDownload } = await import(`./gpx.mjs${moduleSuffix}`);
-const { createRouteMapView } = await import(`./route-map-view.mjs${moduleSuffix}`);
-const {
+import { wireGpxDownload } from "./gpx.mjs";
+import { createRouteMapView } from "./route-map-view.mjs";
+import {
   setControlsDisabled,
   updateRouteSurfaceState,
   updateDownloadLinkState,
-} = await import(`./route-shell-view.mjs${moduleSuffix}`);
-const { renderRouteSummary } = await import(`./route-summary-view.mjs${moduleSuffix}`);
+} from "./route-shell-view.mjs";
+import { renderRouteSummary } from "./route-summary-view.mjs";
 
 export function createRouteSurfaceRuntime({
   areaSelect,

@@ -1,13 +1,11 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route selection controls module");
-const {
+import {
   resolveCanonicalSelection,
   resolveScenarioSelection,
-} = await import(`./route-scenarios.mjs${moduleSuffix}`);
-const {
+} from "./route-scenarios.mjs";
+import {
   populateAreaOptions,
   populateJunctionSelectors,
-} = await import(`./route-selection-view.mjs${moduleSuffix}`);
+} from "./route-selection-view.mjs";
 
 export function syncSelectorsFromQuery(manifest, search, areaSelect, startSelect, endSelect) {
   const resolved = resolveCanonicalSelection(manifest, search);

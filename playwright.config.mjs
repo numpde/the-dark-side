@@ -11,7 +11,7 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: "python3 -m http.server 8765 --directory web",
+    command: "npm run preview:web",
     url: "http://127.0.0.1:8765/",
     reuseExistingServer: true,
     stdout: "pipe",

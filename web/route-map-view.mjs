@@ -1,10 +1,8 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route map view module");
-const {
+import {
   hasExplicitRoutingInclude,
   isBoundaryDefaultExcluded,
   isCurrentlyUnavailable,
-} = await import(`./karura-policy.mjs${moduleSuffix}`);
+} from "./karura-policy.mjs";
 
 function mixColor(start, end, fraction) {
   const clamped = Math.max(0, Math.min(1, fraction));

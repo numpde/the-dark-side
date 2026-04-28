@@ -1,6 +1,4 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route graph module");
-const { normalizeRouteNetworkFeatureCollection } = await import(`./route-network-contracts.mjs${moduleSuffix}`);
+import { normalizeRouteNetworkFeatureCollection } from "./route-network-contracts.mjs";
 
 function haversineMeters(lonA, latA, lonB, latB) {
   const toRad = Math.PI / 180;

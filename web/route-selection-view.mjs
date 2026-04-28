@@ -1,5 +1,3 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Route selection view module");
 
 export function installSelectionPlaceholders(areaSelect, startSelect, endSelect) {
   areaSelect.innerHTML = "<option>Loading…</option>";

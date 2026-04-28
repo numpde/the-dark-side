@@ -1,14 +1,10 @@
+import { ROUTE_WORKER_URL } from "./asset-urls.mjs";
+
 export function createPlannerClient({
-  moduleVersion,
   parsePlannerWorkerResponse,
   onUnhandledError = null,
 }) {
-  if (!moduleVersion) {
-    throw new Error("Planner client requires a module version");
-  }
-
-  const workerUrl = new URL("./route-worker.js", import.meta.url);
-  workerUrl.searchParams.set("v", moduleVersion);
+  const workerUrl = new URL(ROUTE_WORKER_URL, import.meta.url);
   const worker = new Worker(workerUrl, { type: "module" });
 
   let nextRequestId = 0;

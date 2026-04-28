@@ -1,13 +1,11 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Planner worker contracts module");
-const {
+import {
   requireCoordinatePair,
   requireFiniteNumber,
   requireInteger,
   requireIntegerArray,
   requireObject,
   requireString,
-} = await import(`./contract-primitives.mjs${moduleSuffix}`);
+} from "./contract-primitives.mjs";
 
 export function requireRouteHistory(value, label) {
   if (value == null) {

@@ -3,13 +3,16 @@
   "private": true,
   "description": "Dev-only frontend tooling for the-dark-side static app.",
   "scripts": {
-    "serve:web": "python3 -m http.server 8765 --directory web",
-    "check:web": "for f in web/*.js web/*.mjs; do node --check \"$f\"; done",
+    "build:web": "python3 -m the_dark_side.rebuild_app_assets && node scripts/build-web-dist.mjs",
+    "preview:web": "python3 -m http.server 8765 --directory dist",
+    "serve:web": "npm run build:web && npm run preview:web",
+    "check:web": "for f in web/*.js web/*.mjs scripts/*.mjs; do node --check \"$f\"; done",
     "test:web": "node --test tests/test_gpx.mjs && node --test tests/test_editor_state.mjs && node --test tests/test_planner_worker_contracts.mjs && node --test tests/test_route_planner.mjs && node --test tests/test_route_scenarios.mjs",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build:web && playwright test",
     "test:frontend": "npm run test:web && npm run check:web && npm run test:e2e"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1"
+    "@playwright/test": "^1.59.1",
+    "esbuild": "^0.28.0"
   }
 }

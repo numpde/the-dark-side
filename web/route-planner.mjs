@@ -1,12 +1,10 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route planner module");
-const { requireFiniteNumber, requireInteger } = await import(`./contract-primitives.mjs${moduleSuffix}`);
-const { buildGraphFromGeoJson, buildRoutePayload } = await import(`./route-graph.mjs${moduleSuffix}`);
-const {
+import { requireFiniteNumber, requireInteger } from "./contract-primitives.mjs";
+import { buildGraphFromGeoJson, buildRoutePayload } from "./route-graph.mjs";
+import {
   normalizeRouteHistory,
   pickHistoryAwarePrimaryCandidate,
-} = await import(`./route-selection.mjs${moduleSuffix}`);
-const {
+} from "./route-selection.mjs";
+import {
   createInitialState,
   expandMctsNode,
   rankCandidates,
@@ -14,7 +12,7 @@ const {
   routeReward,
   uniqueRankedCandidates,
   karuraTodayString,
-} = await import(`./route-search.mjs${moduleSuffix}`);
+} from "./route-search.mjs";
 
 export { buildGraphFromGeoJson };
 

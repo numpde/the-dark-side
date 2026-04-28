@@ -1,7 +1,5 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor runtime");
-const { createEditorController } = await import(`./editor-controller.mjs${moduleSuffix}`);
-const { createFatalErrorReporter, installWindowErrorHandlers } = await import(`./fatal-error-runtime.mjs${moduleSuffix}`);
+import { createEditorController } from "./editor-controller.mjs";
+import { createFatalErrorReporter, installWindowErrorHandlers } from "./fatal-error-runtime.mjs";
 
 const reportFatalError = createFatalErrorReporter({
   errorElementId: "error-box",

@@ -1,12 +1,10 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Runtime contracts module");
-const {
+import {
   requireArray,
   requireFiniteNumber,
   requireInteger,
   requireObject,
   requireString,
-} = await import(`./contract-primitives.mjs${moduleSuffix}`);
+} from "./contract-primitives.mjs";
 
 function validateJunction(junction, areaIndex, index) {
   const context = "App manifest";

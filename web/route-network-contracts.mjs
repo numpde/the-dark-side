@@ -1,12 +1,10 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route network contracts module");
-const {
+import {
   requireArray,
   requireCoordinatePair,
   requireFiniteNumber,
   requireInteger,
   requireObject,
-} = await import(`./contract-primitives.mjs${moduleSuffix}`);
+} from "./contract-primitives.mjs";
 
 function roundCoordinate(value) {
   return Math.round(value * 1_000_000) / 1_000_000;

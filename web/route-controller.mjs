@@ -1,30 +1,28 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleVersion: MODULE_VERSION, moduleSuffix } = requireVersionedModuleContext(import.meta, "Route controller module");
-const { parsePlannerWorkerResponse } = await import(`./planner-worker-contracts.mjs${moduleSuffix}`);
-const { loadAppManifest, loadAreaAssets } = await import(`./route-asset-runtime.mjs${moduleSuffix}`);
-const { createRouteRuntime } = await import(`./route-runtime.mjs${moduleSuffix}`);
-const { createRouteSurfaceRuntime } = await import(`./route-surface-runtime.mjs${moduleSuffix}`);
-const {
+import { parsePlannerWorkerResponse } from "./planner-worker-contracts.mjs";
+import { loadAppManifest, loadAreaAssets } from "./route-asset-runtime.mjs";
+import { createRouteRuntime } from "./route-runtime.mjs";
+import { createRouteSurfaceRuntime } from "./route-surface-runtime.mjs";
+import {
   installShellPlaceholders,
   showError,
   clearError,
-} = await import(`./route-shell-view.mjs${moduleSuffix}`);
-const {
+} from "./route-shell-view.mjs";
+import {
   canonicalizeSelectorScenario,
   syncSelectorsFromQuery,
-} = await import(`./route-selection-controls.mjs${moduleSuffix}`);
-const { populateJunctionSelectors } = await import(`./route-selection-view.mjs${moduleSuffix}`);
-const {
+} from "./route-selection-controls.mjs";
+import { populateJunctionSelectors } from "./route-selection-view.mjs";
+import {
   replaceUrlWithSelection,
   syncUrlFromSelectors,
-} = await import(`./route-url-state.mjs${moduleSuffix}`);
-const { setSummaryText } = await import(`./route-summary-view.mjs${moduleSuffix}`);
-const {
+} from "./route-url-state.mjs";
+import { setSummaryText } from "./route-summary-view.mjs";
+import {
   recentRoutesForScenario,
   rememberRouteForScenario,
   requireScenario,
   junctionsForScenario,
-} = await import(`./route-scenarios.mjs${moduleSuffix}`);
+} from "./route-scenarios.mjs";
 
 export function createRouteController({
   appManifestUrl,
@@ -65,7 +63,6 @@ export function createRouteController({
     loopArrowPhase: 0,
     backgroundNetwork: null,
     routeRuntime: createRouteRuntime({
-      moduleVersion: MODULE_VERSION,
       parsePlannerWorkerResponse,
       onUnhandledError: (error) => {
         showError(errorCard, error.message || String(error));

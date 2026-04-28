@@ -1,5 +1,3 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Route URL state module");
 
 export function replaceUrlWithSelection(selection) {
   const query = new URLSearchParams(window.location.search);

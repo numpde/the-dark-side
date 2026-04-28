@@ -1,7 +1,5 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "App runtime");
-const { createRouteController } = await import(`./route-controller.mjs${moduleSuffix}`);
-const { createFatalErrorReporter, installWindowErrorHandlers } = await import(`./fatal-error-runtime.mjs${moduleSuffix}`);
+import { createRouteController } from "./route-controller.mjs";
+import { createFatalErrorReporter, installWindowErrorHandlers } from "./fatal-error-runtime.mjs";
 
 const appManifestUrl = new URL("./generated/app-manifest.json", window.location.href);
 

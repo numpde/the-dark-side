@@ -1,6 +1,4 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor state module");
-const editorPolicyContracts = await import(`./editor-policy-contracts.mjs${moduleSuffix}`);
+import * as editorPolicyContracts from "./editor-policy-contracts.mjs";
 
 export const {
   POLICY_TAGS,

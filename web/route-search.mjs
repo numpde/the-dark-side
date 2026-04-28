@@ -1,7 +1,5 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route search module");
-const { karuraTodayString, isBoundaryDefaultExcluded, isCurrentlyUnavailable } = await import(`./karura-policy.mjs${moduleSuffix}`);
-const { sampleWeighted } = await import(`./route-selection.mjs${moduleSuffix}`);
+import { karuraTodayString, isBoundaryDefaultExcluded, isCurrentlyUnavailable } from "./karura-policy.mjs";
+import { sampleWeighted } from "./route-selection.mjs";
 
 function isShortConnector(contig, config) {
   return contig.lengthM <= config.short_connector_max_length_m;

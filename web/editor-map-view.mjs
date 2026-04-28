@@ -1,5 +1,3 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Editor map view module");
 
 export function styleForPolicy(policy, feature, isCurrentlyUnavailable) {
   const isBufferZone = feature?.properties?.tags?.["local:boundary_zone"] === "buffer";

@@ -1,11 +1,5 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
-
-const frontendManifest = JSON.parse(
-  fs.readFileSync(new URL("../web/generated/frontend-manifest.json", import.meta.url), "utf8")
-);
-const editorVersion = frontendManifest.modules.editor_version;
 const {
   POLICY_TAGS,
   buildRoutePolicyDocument,
@@ -15,7 +9,7 @@ const {
   normalizeRoutePolicyDocument,
   policyForContig,
   setContigPolicy,
-} = await import(`../web/editor-state.mjs?v=${encodeURIComponent(editorVersion)}`);
+} = await import("../web/editor-state.mjs");
 
 function feature(contigId, wayIds, nodeIds, tags = {}) {
   return {

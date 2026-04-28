@@ -22,6 +22,7 @@ CLI_MODULES = [
     "the_dark_side.rebuild_all",
     "the_dark_side.verify_editor_assets",
     "the_dark_side.verify_app_assets",
+    "the_dark_side.verify_web_dist",
     "the_dark_side.verify_assets",
 ]
 
@@ -41,4 +42,3 @@ class CliEntrypointTests(unittest.TestCase):
                     0,
                     msg=f"{module} --help failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}",
                 )
-

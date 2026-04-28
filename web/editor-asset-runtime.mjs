@@ -1,5 +1,3 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Editor asset runtime module");
 
 async function fetchJson(url, init) {
   const response = await fetch(url, init);

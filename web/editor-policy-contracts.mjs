@@ -1,5 +1,3 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-requireVersionedModuleContext(import.meta, "Editor policy contracts module");
 
 export const POLICY_TAGS = {
   routingState: "local:routing_state",

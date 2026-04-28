@@ -1,9 +1,6 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route runtime module");
-const { createPlannerClient } = await import(`./planner-client.mjs${moduleSuffix}`);
+import { createPlannerClient } from "./planner-client.mjs";
 
 export function createRouteRuntime({
-  moduleVersion,
   parsePlannerWorkerResponse,
   onUnhandledError = null,
   initialSeed = Math.floor(Math.random() * 1_000_000),
@@ -17,7 +14,6 @@ export function createRouteRuntime({
       return plannerClient;
     }
     plannerClient = createPlannerClient({
-      moduleVersion,
       parsePlannerWorkerResponse,
       onUnhandledError: (error) => {
         plannerReady = false;

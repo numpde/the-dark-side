@@ -1,6 +1,4 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Fatal error runtime module");
-const { formatError, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
+import { formatError, showErrorText } from "./error-presentation.mjs";
 
 function findErrorElement(errorElementId) {
   return document.getElementById(errorElementId);

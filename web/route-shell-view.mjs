@@ -1,8 +1,6 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route shell view module");
-const { clearErrorText, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
-const { installSelectionPlaceholders } = await import(`./route-selection-view.mjs${moduleSuffix}`);
-const { setSummaryText } = await import(`./route-summary-view.mjs${moduleSuffix}`);
+import { clearErrorText, showErrorText } from "./error-presentation.mjs";
+import { installSelectionPlaceholders } from "./route-selection-view.mjs";
+import { setSummaryText } from "./route-summary-view.mjs";
 
 export function setControlsDisabled(
   areaSelect,

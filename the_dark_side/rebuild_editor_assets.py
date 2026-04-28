@@ -14,16 +14,11 @@ from .build_karura_contigs import build_contigs
 from .download_karura_map import load_map
 from .junction_bindings import build_junction_bindings
 from .karura_common import (
-    APP_MODULE_PATHS,
-    BOOTSTRAP_MODULE_PATHS,
     CONTIGS_JSON,
-    EDITOR_MODULE_PATHS,
     EDITOR_MANIFEST_JSON,
-    FRONTEND_MANIFEST_JSON,
     include_baseline_way,
     repo_rel,
     sync_web_source_assets,
-    digest_paths,
     utc_now_z,
     write_json_document,
 )
@@ -120,20 +115,6 @@ def build_editor_manifest(args: argparse.Namespace, patched_payload: dict, conti
         },
     }
 
-
-def build_frontend_manifest() -> dict:
-    return {
-        "meta": {
-            "asset_kind": "frontend_manifest",
-        },
-        "modules": {
-            "bootstrap_version": digest_paths(BOOTSTRAP_MODULE_PATHS),
-            "app_version": digest_paths(APP_MODULE_PATHS),
-            "editor_version": digest_paths(EDITOR_MODULE_PATHS),
-        },
-    }
-
-
 def rebuild_editor_assets(args: argparse.Namespace) -> dict[str, dict]:
     sync_web_source_assets()
     patched_payload = rebuild_patched_map(args)
@@ -148,9 +129,7 @@ def rebuild_editor_assets(args: argparse.Namespace) -> dict[str, dict]:
         bindings_payload,
         editor_graph_payload,
     )
-    frontend_manifest = build_frontend_manifest()
     write_json_document(args.output_editor_manifest, manifest)
-    write_json_document(FRONTEND_MANIFEST_JSON, frontend_manifest)
     return {
         "patched_payload": patched_payload,
         "contig_payload": contig_payload,
@@ -158,7 +137,6 @@ def rebuild_editor_assets(args: argparse.Namespace) -> dict[str, dict]:
         "editor_graph_payload": editor_graph_payload,
         "editor_network": editor_network,
         "editor_manifest": manifest,
-        "frontend_manifest": frontend_manifest,
     }
 
 

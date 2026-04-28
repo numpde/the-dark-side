@@ -1,11 +1,9 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor shell view module");
-const { clearErrorText, showErrorText } = await import(`./error-presentation.mjs${moduleSuffix}`);
-const {
+import { clearErrorText, showErrorText } from "./error-presentation.mjs";
+import {
   requireElement,
   guard,
   guardAsync,
-} = await import(`./view-runtime.mjs${moduleSuffix}`);
+} from "./view-runtime.mjs";
 
 export function createEditorShellView({
   reportError,

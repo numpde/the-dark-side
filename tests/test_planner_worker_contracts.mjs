@@ -1,14 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
-
-const frontendManifest = JSON.parse(
-  fs.readFileSync(new URL("../web/generated/frontend-manifest.json", import.meta.url), "utf8")
-);
-const appVersion = frontendManifest.modules.app_version;
-const { parsePlannerWorkerResponse } = await import(
-  `../web/planner-worker-contracts.mjs?v=${encodeURIComponent(appVersion)}`
-);
+const { parsePlannerWorkerResponse } = await import("../web/planner-worker-contracts.mjs");
 
 function routePayload(overrides = {}) {
   return {

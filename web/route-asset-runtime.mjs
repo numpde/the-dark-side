@@ -1,6 +1,4 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route asset runtime module");
-const { validateAppManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+import { validateAppManifest } from "./runtime-contracts.mjs";
 
 async function fetchJson(url, { cache = "no-store" } = {}) {
   const response = await fetch(url, { cache });

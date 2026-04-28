@@ -1,9 +1,8 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Route worker");
+import * as workerContracts from "./planner-worker-contracts.mjs";
+import { buildGraphFromGeoJson, planBrowserRoute } from "./route-planner.mjs";
+
 let plannerModule = null;
-let workerContracts = null;
 let plannerLoadError = null;
-const pendingEvents = [];
 
 let graph = null;
 let plannerConfig = null;
@@ -92,43 +91,11 @@ function handleMessage(event) {
   }
 }
 
-self.addEventListener("message", (event) => {
-  if ((!plannerModule || !workerContracts) && !plannerLoadError) {
-    pendingEvents.push(event);
-    return;
-  }
-  handleMessage(event);
-});
+self.addEventListener("message", handleMessage);
 
-(async () => {
-  try {
-    if (plannerLoadError) {
-      throw plannerLoadError;
-    }
-    [workerContracts, plannerModule] = await Promise.all([
-      import(`./planner-worker-contracts.mjs${moduleSuffix}`),
-      import(`./route-planner.mjs${moduleSuffix}`),
-    ]);
-    self.postMessage({
-      type: "booted",
-      requestId: 0,
-      payload: {},
-    });
-    while (pendingEvents.length) {
-      handleMessage(pendingEvents.shift());
-    }
-  } catch (error) {
-    plannerLoadError = error instanceof Error ? error : new Error(String(error));
-    while (pendingEvents.length) {
-      const event = pendingEvents.shift();
-      try {
-        const { requestId } = workerContracts
-          ? workerContracts.parsePlannerWorkerRequest(event.data)
-          : { requestId: undefined };
-        postWorkerError(requestId, plannerLoadError);
-      } catch {
-        postWorkerError(undefined, plannerLoadError);
-      }
-    }
-  }
-})();
+plannerModule = { buildGraphFromGeoJson, planBrowserRoute };
+self.postMessage({
+  type: "booted",
+  requestId: 0,
+  payload: {},
+});

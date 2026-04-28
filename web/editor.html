@@ -95,36 +95,6 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module">
-    async function boot() {
-      const response = await fetch("./generated/frontend-manifest.json", { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`Failed to load frontend manifest: ${response.status}`);
-      }
-      const manifest = await response.json();
-      const version = manifest?.modules?.bootstrap_version;
-      if (!version) {
-        throw new Error("Frontend manifest is missing modules.bootstrap_version");
-      }
-      const { bootPageEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
-      await bootPageEntry({
-        manifest,
-        errorElementId: "error-box",
-        failureLabel: "editor shell",
-        bootstrapVersionKey: "bootstrap_version",
-        entryVersionKey: "editor_version",
-        entryPath: "./editor.js",
-      });
-    }
-
-    boot().catch((error) => {
-      console.error("Failed to load editor shell", error);
-      const errorBox = document.getElementById("error-box");
-      if (errorBox) {
-        errorBox.textContent = `Failed to load editor shell: ${error.message || String(error)}`;
-        errorBox.classList.remove("hidden");
-      }
-    });
-  </script>
+  <script type="module" src="./editor.js"></script>
 </body>
 </html>

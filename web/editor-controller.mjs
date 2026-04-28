@@ -1,6 +1,4 @@
-const { requireVersionedModuleContext } = await import(`./module-context.mjs${new URL(import.meta.url).search}`);
-const { moduleSuffix } = requireVersionedModuleContext(import.meta, "Editor controller module");
-const {
+import {
   buildRoutePolicyDocument,
   countRoutePolicyChanges,
   explicitPolicyForContig,
@@ -9,19 +7,19 @@ const {
   normalizeRoutePolicyDocument,
   policyForContig,
   setContigPolicy,
-} = await import(`./editor-state.mjs${moduleSuffix}`);
-const {
+} from "./editor-state.mjs";
+import {
   karuraTodayString,
-  isCurrentlyUnavailable: isPolicyCurrentlyUnavailable,
-} = await import(`./karura-policy.mjs${moduleSuffix}`);
-const {
+  isCurrentlyUnavailable as isPolicyCurrentlyUnavailable,
+} from "./karura-policy.mjs";
+import {
   downloadJsonDocument,
   loadEditorBundle,
   readJsonFile,
-} = await import(`./editor-asset-runtime.mjs${moduleSuffix}`);
-const { createEditorMapView, styleForPolicy } = await import(`./editor-map-view.mjs${moduleSuffix}`);
-const { createEditorShellView } = await import(`./editor-shell-view.mjs${moduleSuffix}`);
-const { validateEditorManifest } = await import(`./runtime-contracts.mjs${moduleSuffix}`);
+} from "./editor-asset-runtime.mjs";
+import { createEditorMapView, styleForPolicy } from "./editor-map-view.mjs";
+import { createEditorShellView } from "./editor-shell-view.mjs";
+import { validateEditorManifest } from "./runtime-contracts.mjs";
 
 function isCurrentlyUnavailable(policy) {
   return isPolicyCurrentlyUnavailable(

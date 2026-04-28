@@ -64,36 +64,6 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module">
-    async function boot() {
-      const response = await fetch("./generated/frontend-manifest.json", { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`Failed to load frontend manifest: ${response.status}`);
-      }
-      const manifest = await response.json();
-      const version = manifest?.modules?.bootstrap_version;
-      if (!version) {
-        throw new Error("Frontend manifest is missing modules.bootstrap_version");
-      }
-      const { bootPageEntry, renderBootstrapFailure } = await import(`./entry-bootstrap.mjs?v=${encodeURIComponent(version)}`);
-      await bootPageEntry({
-        manifest,
-        errorElementId: "error-card",
-        failureLabel: "app shell",
-        bootstrapVersionKey: "bootstrap_version",
-        entryVersionKey: "app_version",
-        entryPath: "./app.js",
-      });
-    }
-
-    boot().catch((error) => {
-      console.error("Failed to load app shell", error);
-      const errorCard = document.getElementById("error-card");
-      if (errorCard) {
-        errorCard.textContent = `Failed to load app shell: ${error.message || String(error)}`;
-        errorCard.classList.remove("hidden");
-      }
-    });
-  </script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
