@@ -1792,14 +1792,58 @@
         ]
       },
       "status": "exact"
+    },
+    {
+      "matches": [
+        {
+          "contig_id": 245,
+          "node_ids": [
+            7687057404,
+            11952125960,
+            2847824051,
+            11952125955,
+            11952125954,
+            11952125953,
+            2847824052,
+            7209566820,
+            6164312039,
+            11952125949
+          ],
+          "way_ids": [
+            280720863
+          ]
+        }
+      ],
+      "policy": {
+        "routing_state": "exclude"
+      },
+      "rule_id": "route-policy-path-814e216a",
+      "selector": {
+        "node_ids": [
+          7687057404,
+          11952125960,
+          2847824051,
+          11952125955,
+          11952125954,
+          11952125953,
+          2847824052,
+          7209566820,
+          6164312039,
+          11952125949
+        ],
+        "way_ids": [
+          280720863
+        ]
+      },
+      "status": "exact"
     }
   ],
   "meta": {
-    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-7ee3ea091917",
+    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-7f3b8b5a9ba4",
     "asset_kind": "route_policy_bindings",
-    "binding_count": 39,
+    "binding_count": 40,
     "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_digest": "7ee3ea091917"
+    "route_policy_digest": "7f3b8b5a9ba4"
   }
 }

@@ -18353,7 +18353,8 @@
           11952125949
         ],
         "tags": {
-          "local:boundary_zone": "core"
+          "local:boundary_zone": "core",
+          "local:routing_state": "exclude"
         },
         "elevations_m": [
           1690.0,
