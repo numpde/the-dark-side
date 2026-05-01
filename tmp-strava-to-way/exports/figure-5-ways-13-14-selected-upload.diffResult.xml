@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<diffResult version="0.6" generator="tmp-strava-to-way-osm-upload/1.0">
-  <node old_id="-1" new_id="13768240204" new_version="1" />
-  <node old_id="-2" new_id="13768240205" new_version="1" />
-  <way old_id="-13" new_id="1504644453" new_version="1" />
-  <way old_id="-14" new_id="1504644454" new_version="1" />
-</diffResult>
