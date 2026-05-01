@@ -1,450 +1,278 @@
 # the-dark-side
 
-Static GitHub Pages app and route-planning toolkit for long, low-overlap bike routes through Karura Forest.
+Random bike routes through Karura Forest, plus the data/build tooling behind the published app.
 
-## Layout
+## App
+
+- Live app: `https://numpde.github.io/the-dark-side/`
+- Local app: `http://127.0.0.1:8765/`
+- Local editor: `http://127.0.0.1:8765/editor.html`
+
+What the app does:
+- generates long, low-overlap routes in the browser
+- shows the route over OpenStreetMap
+- exports GPX in the browser
+
+What the editor does:
+- shows the current candidate graph, including default-excluded buffer segments
+- edits canonical route policy
+- exports a replacement for `source/karura-route-policy.json`
+
+## Repo
 
 ```text
 .
 ├── the_dark_side/        Python package
-├── source/               Canonical patch + catalog build inputs
-├── web/                  Static frontend and published/generated web data
-├── data/                 Baseline map, elevation cache, and derived graph data
-├── curated/              Hand-edited junction and figure catalogs
-├── assets/
-│   ├── reference/        Screenshot + fitted viewport
-│   ├── figures/          Tracked presentation figures
-│   └── debug/            Regenerable debug overlays (ignored)
-├── tests/                Route diversity audit
-└── .github/workflows/    GitHub Pages deployment
+├── source/               Canonical structural patches, route policy, planner config
+├── curated/              Canonical junction + figure catalogs
+├── data/                 Downloaded map, elevation cache, and derived graph assets
+├── web/                  Frontend source
+├── dist/                 Built Pages artifact
+├── assets/               Screenshot, viewport, and figure/debug outputs
+├── tests/                Python, Node, and Playwright tests
+└── .github/workflows/    CI and Pages deployment
 ```
 
-## Python modules
+## Architecture
 
-- `the_dark_side.download_karura_map`
-  Downloads the union of relations `13626194` (`Karura Forest`) and `15417497` (`Karura Playground`) from Overpass and writes:
-  - `data/karura_overpass.json`
-  - `data/karura_map.json`
-- `the_dark_side.build_karura_contigs`
-  Collapses the ride graph into maximal chains between crossings and writes:
-  - `data/karura_contigs.json`
-- `the_dark_side.apply_karura_patches`
-  Applies local structural patches to the normalized map asset and writes:
-  - `data/karura_map_patched.json`
-- `the_dark_side.build_karura_elevation`
-  Annotates the contig graph nodes with elevation values and writes:
-  - `data/karura_elevation.json`
-- `the_dark_side.junction_bindings`
-  Resolves curated junction locations onto the current contig graph and writes:
-  - `data/karura_junction_bindings.json`
-- `the_dark_side.karura_routing`
-  Shared graph/junction loaders plus route planners.
-- Browser planner
-  Product path: the published app composes routes client-side from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
-- `the_dark_side.elevation`
-  Elevation clients plus helpers for graph and route profile summarization.
-- `the_dark_side.plan_karura_route`
-  Debug/oracle tool: generates one-off Python-planned route candidates between curated junctions under `data/routes/`.
-- `the_dark_side.benchmark_karura_routes`
-  Debug/oracle tool: benchmarks the Python route planners across seeds and scenarios.
-- `the_dark_side.render_karura_overlay`
-  Renders debug overlays from `data/karura_map.json`.
-- `the_dark_side.render_karura_figures`
-  Renders curated figures from the figure catalog.
-- `the_dark_side.render_karura_route`
-  Debug tool: renders one-off planned route candidates on the aligned screenshot.
-- `the_dark_side.export_karura_web_catalog`
-  Debug/oracle tool: exports only the precomputed route catalog into `data/routes/`.
-- `the_dark_side.rebuild_editor_assets`
-  Rebuilds the patched map, contigs, derived junction bindings, and editor-facing assets.
-- `the_dark_side.verify_editor_assets`
-  Verifies that the editor-facing derived assets match the current canonical inputs.
-- `the_dark_side.rebuild_app_assets`
-  Rebuilds the editor assets, then exports the app-facing graph/manifests used by the browser-side planner.
-- `the_dark_side.verify_app_assets`
-  Verifies the editor assets, elevation cache binding, and published app assets.
-- `the_dark_side.rebuild_all`
-  Convenience wrapper that rebuilds the full editor + app stack; use `--with-elevation` to refresh the external cache first.
-- `the_dark_side.verify_assets`
-  Convenience wrapper around app verification.
+The project has three layers:
+
+1. Canonical source
+   - `source/karura-map-patches.json`
+   - `source/karura-route-policy.json`
+   - `source/catalog_build.json`
+   - `curated/karura_junctions.json`
+   - `curated/karura_figures.json`
+
+2. Derived data
+   - patched map
+   - contig graphs
+   - route-policy bindings
+   - junction bindings
+   - generated app/editor manifests
+
+3. Built frontend artifact
+   - `dist/`
+   - bundled hashed JS
+   - generated HTML
+   - copied runtime JSON/GeoJSON
+
+GitHub Pages now serves `dist/`, not raw `web/` source files.
 
 ## Setup
+
+Install Python requirements:
 
 ```bash
 python3 -m pip install -r requirements.txt
 ```
 
-The frontend is plain HTML/CSS/JS. No Node build step is required.
-
-## Common commands
-
-Download and normalize the map:
+Install frontend tooling:
 
 ```bash
-python3 -m the_dark_side.download_karura_map
+npm ci
 ```
 
-By default the baseline inclusion region uses the topological outer shell of the Karura relations and ignores inner rings. Add `--respect-inner-rings` to treat relation holes as exclusions again, or `--no-fill-segment-gaps` to disable continuity repair along clipped ways for debugging.
+## Main workflows
 
-Build contigs from the ride graph:
-
-```bash
-python3 -m the_dark_side.build_karura_contigs
-```
-
-Apply local structural map patches:
-
-```bash
-python3 -m the_dark_side.apply_karura_patches
-```
-
-This step also supports `--respect-inner-rings` and `--no-fill-segment-gaps` if you want patched way geometry to preserve stricter relation clipping behavior.
-
-`build_karura_contigs` will prefer `data/karura_map_patched.json` when it exists, and fall back to `data/karura_map.json` otherwise.
-
-Render the ride graph overlay:
-
-```bash
-python3 -m the_dark_side.render_karura_overlay --mode ride
-```
-
-Render the control overlay with all ways clipped to the current baseline boundary union:
-
-```bash
-python3 -m the_dark_side.render_karura_overlay --mode all
-```
-
-Render the contig overlay:
-
-```bash
-python3 -m the_dark_side.render_karura_overlay --mode contigs
-```
-
-Build the graph elevation asset:
-
-```bash
-python3 -m the_dark_side.build_karura_elevation --provider open-topo-data
-```
-
-Render the curated junction figure:
-
-```bash
-python3 -m the_dark_side.render_karura_figures --figure-id junctions_primary
-```
-
-Generate route candidates for debugging or planner comparison:
-
-```bash
-python3 -m the_dark_side.plan_karura_route --algorithm naive
-python3 -m the_dark_side.plan_karura_route --algorithm beam
-python3 -m the_dark_side.plan_karura_route --algorithm mcts
-```
-
-These Python planners are offline debug/oracle tools. They now take their defaults from `source/catalog_build.json`. To try an alternate tuning document without changing the canonical source, pass `--build-config-json /path/to/catalog_build.json`.
-
-The current MCTS defaults are tuned toward longer coverage-heavy routes:
-
-- `--mcts-iterations 640`
-- `--mcts-rollout-top-k 3`
-- `--mcts-rollout-samples 3`
-- `--mcts-prior-weight 0.5`
-- `--end-stop-unused-slack-m 400`
-- `--mcts-loop-late-return-bonus 180`
-- `--mcts-loop-overlap-penalty-per-m 4`
-
-These one-off route assets are debug/oracle output only. The published app composes routes in the browser from `web/generated/app-manifest.json` plus `web/generated/karura-network.geojson`.
-
-Render the top route from one of those debug assets:
-
-```bash
-python3 -m the_dark_side.render_karura_route data/routes/karura-route-naive-family_trail_west-to-kiambu_side_exit-seed7.json
-```
-
-Run the route diversity audit:
-
-```bash
-python3 -m unittest -v tests.test_route_diversity
-```
-
-Run the GPX export and download-link tests:
-
-```bash
-node --test tests/test_gpx.mjs
-node --test tests/test_editor_state.mjs
-```
-
-For local frontend development, install the dev-only Node tooling once:
-
-```bash
-npm install
-```
-
-Then use:
+### Build and preview the site
 
 ```bash
 npm run serve:web
-npm run preview:web
-npm run test:web
-npm run check:web
-npm run test:e2e
-npm run test:frontend
 ```
 
-`npm run serve:web` rebuilds the Python-derived assets and the bundled browser runtime, then serves the built `dist/` artifact.
-`npm run preview:web` serves the existing `dist/` artifact without rebuilding it.
+This:
+- rebuilds the Python-derived app assets
+- bundles the frontend into `dist/`
+- serves `dist/` on port `8765`
 
-Run the route benchmark summary:
+If `dist/` already exists and you just want to serve it:
 
 ```bash
-python3 -m the_dark_side.benchmark_karura_routes --seed-start 1 --seed-end 10
+npm run preview:web
 ```
 
-Like the one-off route planner, the benchmark tool also derives planner defaults from `source/catalog_build.json` unless you override `--build-config-json`.
+### Rebuild the data/app stack
 
-This writes:
-- `data/benchmarks/karura-route-benchmark.json`
-- `data/benchmarks/karura-route-benchmark.md`
-
-Rebuild the editor-facing derived assets from canonical inputs:
+Rebuild editor-facing assets:
 
 ```bash
 python3 -m the_dark_side.rebuild_editor_assets
 ```
 
-This writes:
-- `data/karura_map_patched.json`
-- `data/karura_contigs.json`
-- `data/karura_junction_bindings.json`
-- `data/karura_route_policy_bindings.json`
-- `web/generated/karura-editor-network.geojson`
-- `web/generated/editor-manifest.json`
-- published copies in `web/source/` of:
-  - `source/karura-map-patches.json`
-  - `source/karura-route-policy.json`
-  - `source/catalog_build.json`
-
-Rebuild the published route app assets:
+Rebuild app-facing assets:
 
 ```bash
 python3 -m the_dark_side.rebuild_app_assets
 ```
 
-This writes:
-- `web/generated/karura-network.geojson`
-- `web/generated/app-manifest.json`
-
-Rebuild including a refreshed elevation cache:
+Rebuild everything, optionally refreshing elevation first:
 
 ```bash
 python3 -m the_dark_side.rebuild_all --with-elevation
 ```
 
-Verify editor-facing derived assets:
+### Verify
+
+Verify canonical inputs against derived editor assets:
 
 ```bash
 python3 -m the_dark_side.verify_editor_assets
 ```
 
-Verify the published app assets:
+Verify app assets:
 
 ```bash
 python3 -m the_dark_side.verify_app_assets
 ```
 
-The browser-planner build parameters live in `source/catalog_build.json`. The published app uses a bounded seeded MCTS planner in a Web Worker; `rebuild_app_assets` exports the graph and the planner config needed by that worker.
-
-The graph elevation step uses the public Open Topo Data API with the global `mapzen` dataset and caches responses under `data/elevation_cache/`.
-The frontend shows gain/loss and GPX downloads include `<ele>` values when those fields are present on the generated route graph.
-
-Serve the frontend locally:
+Verify the built `dist/` artifact:
 
 ```bash
-cd web
-python3 -m http.server 8765
+python3 -m the_dark_side.verify_web_dist
 ```
 
-Then open:
+### Test
 
-```text
-http://127.0.0.1:8765/
+Source-level frontend checks:
+
+```bash
+npm run check:web
+npm run test:web
 ```
 
-The visual contig editor lives at:
+Browser tests against `dist/`:
 
-```text
-http://127.0.0.1:8765/editor.html
+```bash
+npm run test:e2e
 ```
 
-The page will:
-- choose a fresh seeded route for the selected start/end pair on each refresh
-- render the route over OpenStreetMap with the Karura contig network faintly underneath
-- generate a GPX download in the browser for the current route
+Selected Python tests:
 
-The editor will:
-- load the current route policy automatically
-- let you mark baseline transport contigs (all kept `highway=*` plus `amenity=parking`) as `default`, `include`, or `exclude`
-- annotate `bikeability` and allowed bike direction
-- annotate contigs as unavailable until a specific date
-- export a replacement for `source/karura-route-policy.json`
+```bash
+python3 -m unittest -v tests.test_route_diversity
+python3 -m unittest -v tests.test_cli_entrypoints
+```
 
-GitHub Pages deployment is wired in `.github/workflows/deploy-pages.yml`. The workflow rebuilds the editor/app assets, bundles the frontend into `dist/`, verifies both provenance and the built artifact, and publishes `dist/`.
-It also runs on a daily schedule so `unavailable until` dates can expire out of the published browser-planner graph without a manual push.
+## Canonical editing model
 
-## Local patch strategy
+### Structural map patches
 
-The repo treats OpenStreetMap as the upstream base layer, then applies a local override layer for product-specific corrections.
+Use `source/karura-map-patches.json` for map-layer fixes that should affect normalization before graph building.
 
-Use `source/karura-map-patches.json` only for structural fixes that should affect the normalized map before graph building. The current patch language supports:
-
+Current patch types:
 - `add_way`
 - `remove_way`
 - `update_way_tags`
 - `replace_way_geometry`
 
-This is the right place for:
-
+Use this file for:
 - missing local paths
-- local-only geometry fixes
-- access or surface tag overrides
-- removing paths that should not exist in the local product graph
+- geometry fixes
+- local tag overrides
+- removing paths that should not exist in the normalized map
 
-Use `source/karura-route-policy.json` for canonical route policy that should be rebound onto each refreshed contig graph. This is the right place for:
+### Route policy
 
-- include / exclude decisions
-- bikeability ratings
-- bicycle direction constraints
-- `unavailable_until` dates
+Use `source/karura-route-policy.json` for routing policy:
+- include / exclude
+- bikeability
+- bicycle direction
+- `unavailable_until`
 
-`data/karura_route_policy_bindings.json` is the derived binding layer that resolves those canonical rules onto the current ride graph. Rebuilds should fail if a canonical rule no longer matches the refreshed graph.
+This is canonical source. It is rebound onto the current ride graph during rebuild.
 
-`curated/karura_routing_overrides.json` remains reserved for future time-varying or experimental routing knowledge that should sit above the canonical route-policy layer rather than alter the base map. This catalog is reserved for:
+### Bindings
 
-- temporary closures
-- construction
-- bikeability penalties
-- connector eligibility
+These are derived, not source of truth:
+- `data/karura_route_policy_bindings.json`
+- `data/karura_junction_bindings.json`
 
-The intended build order is:
+Rebuilds should fail if canonical rules or curated junctions can no longer be resolved cleanly onto the refreshed graph.
 
-1. `download_karura_map`
-2. `rebuild_editor_assets`
-3. `build_karura_elevation` when you intentionally refresh the external cache
-4. `rebuild_app_assets`
+## Boundary model
 
-Canonical inputs:
+The normalized map uses two zones:
+
+- `A`: core boundary
+- `B`: buffered boundary
+
+Segments in `B - A`:
+- are preserved in the editor/app background graph
+- are tagged `local:boundary_zone=buffer`
+- are excluded from routing by default
+- can be explicitly re-included via route policy
+
+This keeps near-boundary connectors visible and editable without silently making them routable.
+
+## Useful modules
+
+Core pipeline:
+- `the_dark_side.download_karura_map`
+- `the_dark_side.apply_karura_patches`
+- `the_dark_side.build_karura_contigs`
+- `the_dark_side.build_karura_elevation`
+- `the_dark_side.junction_bindings`
+- `the_dark_side.route_policy`
+- `the_dark_side.web_assets`
+
+App/editor rebuild + verification:
+- `the_dark_side.rebuild_editor_assets`
+- `the_dark_side.rebuild_app_assets`
+- `the_dark_side.rebuild_all`
+- `the_dark_side.verify_editor_assets`
+- `the_dark_side.verify_app_assets`
+- `the_dark_side.verify_web_dist`
+
+Offline debug/oracle tools:
+- `the_dark_side.plan_karura_route`
+- `the_dark_side.benchmark_karura_routes`
+- `the_dark_side.export_karura_web_catalog`
+- `the_dark_side.render_karura_overlay`
+- `the_dark_side.render_karura_route`
+- `the_dark_side.render_karura_figures`
+
+The published app does not use the Python route generators. It plans routes in the browser from:
+- `web/generated/app-manifest.json`
+- `web/generated/karura-network.geojson`
+
+## Data outputs
+
+Important derived files:
 
 - `data/karura_map.json`
-- `source/karura-map-patches.json`
-- `source/karura-route-policy.json`
-- `source/catalog_build.json`
-- `curated/karura_junctions.json`
-- `curated/karura_figures.json`
+  - normalized OSM snapshot
+- `data/karura_map_patched.json`
+  - normalized map after structural patches
+- `data/karura_contigs.json`
+  - derived contig graph
+- `data/karura_route_policy_bindings.json`
+  - canonical route policy projected onto the current graph
+- `data/karura_junction_bindings.json`
+  - curated junctions projected onto the current graph
+- `web/generated/karura-editor-network.geojson`
+  - editor/background network
+- `web/generated/karura-network.geojson`
+  - planner network
+- `web/generated/editor-manifest.json`
+  - editor bootstrap payload
+- `web/generated/app-manifest.json`
+  - app bootstrap payload
 
-Pinned external cache:
+## Deployment
 
-- `data/karura_elevation.json`
+GitHub Pages deployment is defined in `.github/workflows/deploy-pages.yml`.
 
-Everything else in `data/`, `web/generated/`, and `dist/` is derived. After changing a canonical input, regenerate and verify before pushing:
+On push to `main`, CI:
+1. checks out the repo
+2. installs Python, Node, and Playwright
+3. runs source checks and tests
+4. rebuilds Python-derived assets
+5. bundles the frontend into hashed files in `dist/`
+6. verifies source assets and the built `dist/` artifact
+7. runs Playwright against `dist/`
+8. uploads and deploys `dist/` to GitHub Pages
 
-```bash
-npm run build:web
-python3 -m the_dark_side.verify_editor_assets
-python3 -m the_dark_side.verify_app_assets
-python3 -m the_dark_side.verify_web_dist
-```
+The public URL stays:
 
-## Data shape
-
-`data/karura_map.json` contains:
-
-- `meta`: download metadata and query info
-- `boundary`: outer and inner rings for the Karura relation union
-- `nodes`: node id to `{lat, lon}`
-- `ways`: way id to:
-  - `tags`
-  - `node_ids`
-  - `segment_pairs`
-  - `total_length_m`
-  - `inside_length_m`
-  - `bounds`
-
-`segment_pairs` are the kept segments after boundary clipping. By default the baseline uses the union of the relations' outer shells, ignoring inner rings so relation holes do not punch topological breaks into the route graph. A segment is kept if either endpoint is inside that baseline region, and short internal gaps between kept runs on the same way are filled by default to preserve topology near the boundary.
-
-`data/karura_contigs.json` contains the collapsed baseline transport graph used for routing:
-
-- `crossings`: graph nodes with degree other than `2`
-- `contigs`: maximal chains of kept baseline transport segments between crossings or dead ends
-
-`source/karura-map-patches.json` contains local structural edits layered on top of the downloaded map asset:
-
-- `meta`: patchset metadata
-- `patches`: ordered patch operations
-
-`source/karura-route-policy.json` contains the canonical route policy:
-
-- `meta`: route-policy metadata
-- `rules[*].selector`: stable `way_ids` plus `node_ids` signatures for the current path segment
-- `rules[*].policy`: include / exclude, bikeability, direction, and availability settings
-
-`source/catalog_build.json` contains the canonical browser-planner build parameters:
-
-- planner list
-- seed range
-- candidate limits
-- selection window
-- all planner tuning values that affect the published app graph/manifests
-
-`data/karura_map_patched.json` contains the derived patched map asset:
-
-- `meta.source_asset_id`: the upstream normalized map asset
-- `meta.patchset_id`: the local patch catalog used to derive it
-- `meta.patchset_digest`: a content digest of the enabled applied patches
-- `meta.applied_patch_ids`: the patch operations that were enabled and applied
-- `nodes` / `ways`: the map payload after local structural edits
-
-`data/karura_route_policy_bindings.json` contains the derived ride-graph binding for the canonical route policy:
-
-- `meta.graph_asset_id` identifies the ride graph it was built against
-- `meta.route_policy_asset_id` identifies the canonical source policy
-- `bindings[*].contig_id` is the current ride-graph contig
-- `bindings[*].way_ids` / `bindings[*].node_ids` are the matched graph signature
-- `bindings[*].policy` is the applied canonical rule payload
-
-`curated/karura_junctions.json` is the manual layer for named junctions:
-
-- `location` is the stable geographic point
-
-`data/karura_junction_bindings.json` contains the derived graph binding for those stable junctions:
-
-- `meta.graph_asset_id` identifies the contig graph it was built against
-- `bindings[*].graph_node_id` is the resolved graph node
-- `bindings[*].incident_contig_ids` are the contigs touching that node
-
-`curated/karura_figures.json` is the manual layer for presentation figures:
-
-- `figures` contains stable figure ids
-- figure items reference stable curated entities such as `junction_id`
-
-`data/routes/karura-route-catalog.json` remains available as a precomputed/debug route bundle from `export_karura_web_catalog.py`, but it is no longer used by the published app, is not part of the Pages artifact, and does not rebuild app/editor runtime assets.
-
-`web/generated/app-manifest.json` contains the live route-app bootstrap payload:
-
-- `planner` contains the browser-side algorithm id, the ride-network asset path, and bounded planner config
-- the canonical build config is split into:
-  - `debug_catalog`
-  - `planner`
-  - `browser_runtime`
-- the browser runtime knobs come from explicit `browser_runtime.browser_*` entries in `source/catalog_build.json`, not hidden Python clamps
-- `areas` contains the currently supported areas, starting with `karura`
-- each area contains:
-  - `junctions`
-  - `scenarios`
-  - `bounds`
-
-`web/generated/karura-network.geojson` contains the contig graph used by the browser planner:
-
-- one feature per ride-graph contig
-- `node_ids`, `endpoint_node_ids`, `way_ids`, `tags`, and `length_m`
-- `elevations_m` aligned with the feature geometry when the pinned elevation cache matches the current graph
-
-`web/generated/editor-manifest.json` and `web/generated/app-manifest.json` expose the active graph asset ids, patch digest, build config digest, and generated timestamps so stale assets are visible in the UI and CI.
+`https://numpde.github.io/the-dark-side/`
