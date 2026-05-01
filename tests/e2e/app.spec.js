@@ -144,20 +144,41 @@ test("editor shell loads and resolves editor provenance", async ({ page }) => {
 test("editor shows default-excluded buffer contigs distinctly", async ({ page }) => {
   await page.addInitScript(() => {
     let leafletValue = null;
+    const captureMapFactory = (value) => {
+      if (typeof value !== "function" || value.__capturedMapPatched) {
+        return value;
+      }
+      const originalMap = value;
+      const patchedMap = function(...args) {
+        const map = originalMap.apply(this, args);
+        window.__capturedLeafletMap = map;
+        return map;
+      };
+      patchedMap.__capturedMapPatched = true;
+      return patchedMap;
+    };
     Object.defineProperty(window, "L", {
       configurable: true,
       get() {
         return leafletValue;
       },
       set(value) {
-        if (value && typeof value.map === "function" && !value.__capturedMapPatched) {
-          const originalMap = value.map.bind(value);
-          value.map = function(...args) {
-            const map = originalMap(...args);
-            window.__capturedLeafletMap = map;
-            return map;
-          };
-          value.__capturedMapPatched = true;
+        if (value && typeof value === "object") {
+          if (typeof value.map === "function") {
+            value.map = captureMapFactory(value.map);
+          }
+          // Leaflet's UMD build assigns window.L first, then mutates L.map onto it.
+          leafletValue = new Proxy(value, {
+            set(target, property, propertyValue, receiver) {
+              return Reflect.set(
+                target,
+                property,
+                property === "map" ? captureMapFactory(propertyValue) : propertyValue,
+                receiver
+              );
+            },
+          });
+          return;
         }
         leafletValue = value;
       },
@@ -165,6 +186,7 @@ test("editor shows default-excluded buffer contigs distinctly", async ({ page })
   });
 
   await page.goto("/editor.html");
+  await page.waitForFunction(() => window.__capturedLeafletMap);
 
   const state = await page.evaluate(() => {
     const map = window.__capturedLeafletMap;
