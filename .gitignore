@@ -11,3 +11,4 @@ dist/
 .parcel-dev/
 playwright-report/
 test-results/
+.codex
