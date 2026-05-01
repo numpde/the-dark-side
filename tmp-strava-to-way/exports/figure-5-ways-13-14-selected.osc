@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="Strava to Way Fit Editor">
+  <create>
+    <node id="-1" lat="-1.2271988" lon="36.8289663" />
+    <node id="-2" lat="-1.2271693" lon="36.8283182" />
+    <way id="-13">
+      <nd ref="2847949545" />
+      <nd ref="-1" />
+      <nd ref="12330726051" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="yes" />
+      <tag k="bicycle" v="yes" />
+      <tag k="mtb:scale" v="2" />
+    </way>
+    <way id="-14">
+      <nd ref="747730076" />
+      <nd ref="-2" />
+      <nd ref="12330726051" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="yes" />
+      <tag k="bicycle" v="yes" />
+      <tag k="mtb:scale" v="2" />
+    </way>
+  </create>
+  <modify>
+  </modify>
+</osmChange>

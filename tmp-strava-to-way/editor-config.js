@@ -8,6 +8,86 @@ export const MAP_INTERACTION_CONFIG = {
   zoomSnap: 0,
   scrollWheelZoom: false,
 };
+export const TRACE_WAY_SOURCE = "Strava Global Heatmap";
+export const TRACE_WAY_TAG_PRESETS = {
+  custom: null,
+  blank: {
+    highway: "",
+    foot: "",
+    bicycle: "",
+    mtbScale: "",
+  },
+  footMtbPath: {
+    highway: "path",
+    foot: "yes",
+    bicycle: "yes",
+    mtbScale: "2+",
+  },
+  footPath: {
+    highway: "path",
+    foot: "yes",
+    bicycle: "",
+    mtbScale: "",
+  },
+  cyclePath: {
+    highway: "path",
+    foot: "",
+    bicycle: "yes",
+    mtbScale: "",
+  },
+};
+export const TRACE_WAY_TAG_FIELDS = [
+  {
+    key: "highway",
+    label: "Highway",
+    options: [
+      { value: "", label: "Unset" },
+      { value: "path", label: "path" },
+      { value: "track", label: "track" },
+      { value: "footway", label: "footway" },
+      { value: "cycleway", label: "cycleway" },
+      { value: "bridleway", label: "bridleway" },
+    ],
+  },
+  {
+    key: "foot",
+    label: "Foot",
+    options: [
+      { value: "", label: "Unset" },
+      { value: "yes", label: "yes" },
+      { value: "designated", label: "designated" },
+      { value: "permissive", label: "permissive" },
+      { value: "no", label: "no" },
+    ],
+  },
+  {
+    key: "bicycle",
+    label: "Bicycle",
+    options: [
+      { value: "", label: "Unset" },
+      { value: "yes", label: "yes" },
+      { value: "designated", label: "designated" },
+      { value: "permissive", label: "permissive" },
+      { value: "no", label: "no" },
+    ],
+  },
+  {
+    key: "mtbScale",
+    label: "MTB Scale",
+    options: [
+      { value: "", label: "Unset" },
+      { value: "0", label: "0" },
+      { value: "0+", label: "0+" },
+      { value: "1", label: "1" },
+      { value: "1+", label: "1+" },
+      { value: "2", label: "2" },
+      { value: "2+", label: "2+" },
+      { value: "3", label: "3" },
+      { value: "3+", label: "3+" },
+      { value: "4", label: "4" },
+    ],
+  },
+];
 
 export function createDefaultUiState() {
   return {
@@ -24,6 +104,34 @@ export function createDefaultFigureState() {
     selectedPointId: null,
     points: [],
     lastFit: null,
+    views: createDefaultFigureViews(),
+    trace: createDefaultTraceState(),
+  };
+}
+
+export function createDefaultFigureViews() {
+  return {
+    control: null,
+    trace: null,
+  };
+}
+
+export function createDefaultTraceState() {
+  return {
+    nextWayNumber: 1,
+    nextVertexNumber: 1,
+    selectedWayId: null,
+    selectedVertexId: null,
+    ways: [],
+  };
+}
+
+export function createDefaultTraceWayTags() {
+  return {
+    highway: "",
+    foot: "",
+    bicycle: "",
+    mtbScale: "",
   };
 }
 

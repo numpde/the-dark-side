@@ -14,7 +14,7 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""
   />
-  <link rel="stylesheet" href="./styles.css?v=20260427s" />
+  <link rel="stylesheet" href="./styles.css?v=20260427aw" />
 </head>
 <body>
   <main class="shell">
@@ -110,6 +110,81 @@
         <pre id="result-box" class="result-box"></pre>
       </div>
     </section>
+
+    <section class="trace-editor">
+      <section class="trace-pane">
+        <div class="pane-header">
+          <div class="pane-title">Way editor</div>
+          <div class="pane-caption">Trace directly on the fitted screenshot. Blue circles are existing OSM nodes; clicking near a grey segment inserts a shared node into that way.</div>
+        </div>
+        <div class="button-row trace-button-row">
+          <button type="button" id="add-way-button">Add way</button>
+          <button type="button" id="delete-way-button" class="secondary">Delete way</button>
+          <button type="button" id="delete-vertex-button" class="secondary">Delete vertex</button>
+        </div>
+        <div class="trace-viewport" id="trace-viewport">
+          <div class="trace-canvas" id="trace-canvas">
+            <img id="trace-image" alt="Tracing screenshot" draggable="false" />
+          </div>
+          <svg class="trace-overlay" id="trace-overlay" aria-hidden="true"></svg>
+          <div class="placement-ghost hidden" id="trace-placement-ghost" aria-hidden="true">
+            <div class="placement-ghost-marker image-placement-ghost-marker">
+              <span class="placement-ghost-index" id="trace-placement-ghost-index">1</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="trace-sidebar">
+        <div class="trace-way-panel">
+          <div class="section-heading">Ways</div>
+          <div class="point-list" id="way-list"></div>
+        </div>
+
+        <div class="trace-tag-panel">
+          <div class="section-heading">Selected way tags</div>
+          <div class="trace-tag-grid">
+            <label class="field">
+              <span>Preset</span>
+              <select id="trace-way-preset" aria-label="Way tag preset">
+                <option value="custom">Custom</option>
+                <option value="blank">Blank</option>
+                <option value="footMtbPath">Foot + MTB path</option>
+                <option value="footPath">Foot path</option>
+                <option value="cyclePath">Cycle path</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Highway</span>
+              <select id="trace-way-highway" aria-label="Way highway tag"></select>
+            </label>
+            <label class="field">
+              <span>Foot</span>
+              <select id="trace-way-foot" aria-label="Way foot tag"></select>
+            </label>
+            <label class="field">
+              <span>Bicycle</span>
+              <select id="trace-way-bicycle" aria-label="Way bicycle tag"></select>
+            </label>
+            <label class="field">
+              <span>MTB Scale</span>
+              <select id="trace-way-mtb-scale" aria-label="Way mtb scale tag"></select>
+            </label>
+          </div>
+          <div class="status" id="trace-tag-status-box">Select a way to edit its OSM tags.</div>
+        </div>
+      </section>
+
+    </section>
+
+    <section class="trace-export-panel">
+      <div class="result-heading-row">
+        <div class="section-heading">OSM Changeset Preview</div>
+        <button type="button" id="copy-trace-export-button" class="secondary" disabled>Copy `.osc`</button>
+      </div>
+      <div class="status" id="trace-status-box">Select a way to preview its OSM changeset.</div>
+      <pre id="trace-export-box" class="result-box"></pre>
+    </section>
   </main>
 
   <script
@@ -117,6 +192,6 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""
   ></script>
-  <script type="module" src="./app.js?v=20260427ac"></script>
+  <script type="module" src="./app.js?v=20260427aw"></script>
 </body>
 </html>

@@ -20,6 +20,8 @@
   --frame-radius: 12px;
   --workspace-height: minmax(360px, 56vh);
   --inspector-height: minmax(220px, 32vh);
+  --trace-pane-height: clamp(360px, 52vh, 720px);
+  --trace-export-box-height: clamp(240px, 30vh, 420px);
 }
 
 * {
@@ -99,7 +101,7 @@ select {
   width: min(var(--page-width), calc(100% - (var(--page-gutter) * 2)));
   margin: var(--page-gutter) auto;
   display: grid;
-  grid-template-rows: auto auto auto var(--workspace-height) var(--inspector-height);
+  grid-template-rows: auto auto auto var(--workspace-height) var(--inspector-height) auto auto;
   gap: var(--gap);
 }
 
@@ -107,7 +109,10 @@ select {
 .controls,
 .selection-strip,
 .pane,
+.trace-pane,
 .inspector,
+.trace-way-panel,
+.trace-export-panel,
 .point-item,
 .status,
 .result-box {
@@ -215,7 +220,9 @@ h1 {
 }
 
 .workspace,
-.inspector {
+.inspector,
+.trace-editor,
+.trace-sidebar {
   display: grid;
   gap: var(--gap);
   min-height: 0;
@@ -230,15 +237,26 @@ h1 {
   padding: var(--card-pad);
 }
 
+.trace-editor {
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.9fr);
+  align-items: start;
+}
+
 .pane,
 .point-panel,
-.result-panel {
+.result-panel,
+.trace-pane,
+.trace-way-panel,
+.trace-tag-panel,
+.trace-export-panel {
   min-width: 0;
   min-height: 0;
 }
 
 .pane,
-.point-panel {
+.point-panel,
+.trace-way-panel,
+.trace-tag-panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 10px;
@@ -248,9 +266,47 @@ h1 {
   padding: var(--card-pad);
 }
 
+.trace-pane {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+}
+
+.trace-pane,
+.trace-way-panel,
+.trace-tag-panel,
+.trace-export-panel {
+  padding: var(--card-pad);
+}
+
 .result-panel {
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.trace-sidebar {
+  grid-template-rows: auto auto;
+  align-content: start;
+  align-self: start;
+}
+
+.trace-export-panel {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.trace-tag-panel {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+  align-content: start;
+}
+
+.trace-tag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -261,34 +317,54 @@ h1 {
 }
 
 .image-viewport,
+.trace-viewport,
 .map-shell,
 .map-view {
   min-height: 0;
   height: 100%;
 }
 
+.trace-viewport {
+  height: var(--trace-pane-height);
+}
+
 .image-viewport,
+.trace-viewport,
 .map-view {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--line-strong);
   border-radius: var(--frame-radius);
   background: rgba(255, 255, 255, 0.55);
+  touch-action: none;
 }
 
 .image-viewport {
   cursor: grab;
 }
 
-.image-viewport.is-panning {
+.image-viewport.is-panning,
+.trace-viewport.is-panning {
   cursor: grabbing;
 }
 
-.image-viewport.hide-placement-cursor:not(.is-panning) {
+.image-viewport.hide-placement-cursor:not(.is-panning),
+.trace-viewport.hide-placement-cursor:not(.is-panning) {
   cursor: none;
 }
 
+.trace-viewport {
+  cursor: crosshair;
+}
+
 .image-canvas {
+  position: relative;
+  transform-origin: 0 0;
+  line-height: 0;
+  will-change: transform;
+}
+
+.trace-canvas {
   position: relative;
   transform-origin: 0 0;
   line-height: 0;
@@ -301,10 +377,24 @@ h1 {
   user-select: none;
 }
 
+#trace-image {
+  display: block;
+  max-width: none;
+  user-select: none;
+}
+
 .image-markers {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+.trace-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .map-shell {
@@ -349,7 +439,8 @@ h1 {
 }
 
 .point-panel,
-.result-panel {
+.result-panel,
+.trace-tag-panel {
   display: grid;
 }
 
@@ -425,10 +516,85 @@ h1 {
   word-break: break-word;
 }
 
+.trace-export-panel .result-box {
+  min-height: var(--trace-export-box-height);
+  max-height: var(--trace-export-box-height);
+}
+
 .map-point {
   width: 28px;
   height: 28px;
   box-shadow: 0 4px 12px rgba(18, 27, 24, 0.18);
+}
+
+.trace-way-line {
+  fill: none;
+  stroke: rgba(27, 111, 87, 0.82);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.trace-way-line.active {
+  stroke: #d26a26;
+  stroke-width: 4;
+}
+
+.trace-way-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 18;
+  cursor: pointer;
+}
+
+.trace-vertex {
+  fill: rgba(255, 255, 255, 0.94);
+  stroke: rgba(18, 27, 24, 0.88);
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+.trace-vertex.active {
+  fill: var(--warning);
+}
+
+.trace-vertex-label {
+  fill: var(--ink);
+  font: 700 12px/1 var(--font-sans);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.trace-button-row {
+  justify-content: flex-start;
+}
+
+.region-trace-line-halo,
+.region-trace-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.region-trace-line-halo {
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 6.4;
+}
+
+.region-trace-line {
+  stroke: rgba(204, 78, 32, 0.88);
+  stroke-width: 3.2;
+}
+
+.region-trace-node {
+  fill: rgba(255, 255, 255, 0.98);
+  stroke: rgba(36, 82, 255, 0.98);
+  stroke-width: 3;
+  pointer-events: none;
 }
 
 .placement-ghost {

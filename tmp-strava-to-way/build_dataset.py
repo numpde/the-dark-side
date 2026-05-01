@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Iterable
 from urllib.parse import urlparse
+from xml.etree import ElementTree
 
 
 ROOT = Path(__file__).resolve().parent
@@ -133,60 +134,53 @@ def expand_bounds(bounds: dict[str, float], factor: float) -> dict[str, float]:
     }
 
 
-def overpass_query(bounds: dict[str, float]) -> dict:
-    query = (
-        "[out:json][timeout:25];"
-        f'(way["highway"]({bounds["south"]},{bounds["west"]},{bounds["north"]},{bounds["east"]}););'
-        "out geom tags;"
+def fetch_osm_map(bounds: dict[str, float]) -> str:
+    bbox = f'{bounds["west"]},{bounds["south"]},{bounds["east"]},{bounds["north"]}'
+    endpoint = f"https://api.openstreetmap.org/api/0.6/map?bbox={bbox}"
+    result = subprocess.run(
+        [
+            "curl",
+            "--silent",
+            "--show-error",
+            "--fail",
+            "--header",
+            "Accept: application/xml",
+            "--header",
+            "User-Agent: the-dark-side strava-fit-builder",
+            endpoint,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
     )
-    endpoints = [
-        "https://overpass-api.de/api/interpreter",
-        "https://overpass.kumi.systems/api/interpreter",
-        "https://lz4.overpass-api.de/api/interpreter",
-    ]
-    last_error: Exception | None = None
-    for endpoint in endpoints:
-        try:
-            result = subprocess.run(
-                [
-                    "curl",
-                    "--silent",
-                    "--show-error",
-                    "--fail",
-                    "--header",
-                    "Accept: application/json",
-                    "--header",
-                    "User-Agent: the-dark-side strava-fit-builder",
-                    "--data-urlencode",
-                    f"data={query}",
-                    endpoint,
-                ],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-            return json.loads(result.stdout)
-        except Exception as error:  # noqa: BLE001
-            last_error = error
-    raise RuntimeError(f"All Overpass endpoints failed for bounds {bounds}") from last_error
+    return result.stdout
 
 
-def to_feature_collection(overpass_payload: dict) -> dict:
+def to_feature_collection(osm_xml: str) -> dict:
+    root = ElementTree.fromstring(osm_xml)
+    nodes: dict[int, tuple[float, float]] = {}
+    for node in root.findall("node"):
+        node_id = int(node.attrib["id"])
+        nodes[node_id] = (float(node.attrib["lon"]), float(node.attrib["lat"]))
+
     features = []
-    for element in overpass_payload.get("elements", []):
-        if element.get("type") != "way":
+    for way in root.findall("way"):
+        tags = {tag.attrib["k"]: tag.attrib["v"] for tag in way.findall("tag")}
+        if "highway" not in tags:
+          continue
+        node_ids = [int(node.attrib["ref"]) for node in way.findall("nd")]
+        coordinates = [nodes[node_id] for node_id in node_ids if node_id in nodes]
+        if len(coordinates) < 2:
             continue
-        geometry = element.get("geometry") or []
-        if len(geometry) < 2:
-            continue
-        coordinates = [[point["lon"], point["lat"]] for point in geometry]
         features.append(
             {
                 "type": "Feature",
-                "id": f'way/{element["id"]}',
+                "id": f'way/{way.attrib["id"]}',
                 "properties": {
-                    "way_id": element["id"],
-                    **(element.get("tags") or {}),
+                    "way_id": int(way.attrib["id"]),
+                    "way_version": int(way.attrib.get("version", "0")),
+                    "node_ids": node_ids,
+                    **tags,
                 },
                 "geometry": {
                     "type": "LineString",
@@ -219,7 +213,7 @@ def build_dataset(records: Iterable[SourceRecord]) -> dict:
         region_bounds = expand_bounds(approx_bounds, REGION_MARGIN_FACTOR)
         region_slug = slugify(record.file_name)
         region_path = REGIONS_DIR / f"{region_slug}.geojson"
-        region_fc = to_feature_collection(overpass_query(region_bounds))
+        region_fc = to_feature_collection(fetch_osm_map(region_bounds))
         region_path.write_text(json.dumps(region_fc, indent=2) + "\n", encoding="utf-8")
 
         figures.append(

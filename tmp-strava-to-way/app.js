@@ -4,25 +4,13 @@ import {
   MAP_WHEEL_ZOOM_DELTA_LIMIT,
   MAP_WHEEL_ZOOM_SENSITIVITY,
   MAX_MAP_ZOOM,
-} from "./editor-config.js?v=20260427ac";
-import { buildFitResult } from "./editor-fit.js?v=20260427ac";
-import { createEditorStore } from "./editor-store.js?v=20260427ac";
-import { createRenderer } from "./editor-render.js?v=20260427ac";
+  TRACE_WAY_TAG_FIELDS,
+} from "./editor-config.js?v=20260427aw";
+import { buildFitResult } from "./editor-fit.js?v=20260427aw";
+import { createEditorStore } from "./editor-store.js?v=20260427aw";
+import { createRenderer } from "./editor-render.js?v=20260427aw";
 
 const dom = getDom();
-
-const runtime = {
-  imagePointer: {
-    active: false,
-    moved: false,
-    suppressClick: false,
-    pointerId: null,
-    startX: 0,
-    startY: 0,
-    originOffsetX: 0,
-    originOffsetY: 0,
-  },
-};
 
 boot().catch((error) => {
   console.error(error);
@@ -46,6 +34,14 @@ async function boot() {
       store.assignPointMap(pointId, latlng);
       renderer.renderAll();
     },
+    selectTraceWay(wayId) {
+      store.selectTraceWay(wayId);
+      renderer.renderAll();
+    },
+    selectTraceVertex(wayId, vertexId) {
+      store.selectTraceVertex(wayId, vertexId);
+      renderer.renderAll();
+    },
   };
   renderer = createRenderer({
     dom,
@@ -56,9 +52,11 @@ async function boot() {
   });
 
   populateFigureSelect(dataset.figures);
+  populateTraceWayTagControls();
   syncUiControls(store);
   wireControls({ store, renderer, map: mapParts.map });
   bindImageViewportInteractions({ store, renderer });
+  bindTraceViewportInteractions({ store, renderer });
 
   await renderer.loadCurrentFigureScene({ resetMapView: true });
   renderer.setStatus("Ready. Select or add a point, place it on both sides, then run fit.");
@@ -83,9 +81,28 @@ function getDom() {
     imageMarkers: document.getElementById("image-markers"),
     imagePlacementGhost: document.getElementById("image-placement-ghost"),
     imagePlacementGhostIndex: document.getElementById("image-placement-ghost-index"),
+    traceViewport: document.getElementById("trace-viewport"),
+    traceCanvas: document.getElementById("trace-canvas"),
+    traceImage: document.getElementById("trace-image"),
+    traceOverlay: document.getElementById("trace-overlay"),
+    tracePlacementGhost: document.getElementById("trace-placement-ghost"),
+    tracePlacementGhostIndex: document.getElementById("trace-placement-ghost-index"),
     mapPlacementGhost: document.getElementById("map-placement-ghost"),
     mapPlacementGhostIndex: document.getElementById("map-placement-ghost-index"),
     pointList: document.getElementById("point-list"),
+    addWayButton: document.getElementById("add-way-button"),
+    deleteWayButton: document.getElementById("delete-way-button"),
+    deleteVertexButton: document.getElementById("delete-vertex-button"),
+    wayList: document.getElementById("way-list"),
+    traceWayPreset: document.getElementById("trace-way-preset"),
+    traceWayHighway: document.getElementById("trace-way-highway"),
+    traceWayFoot: document.getElementById("trace-way-foot"),
+    traceWayBicycle: document.getElementById("trace-way-bicycle"),
+    traceWayMtbScale: document.getElementById("trace-way-mtb-scale"),
+    traceTagStatusBox: document.getElementById("trace-tag-status-box"),
+    copyTraceExportButton: document.getElementById("copy-trace-export-button"),
+    traceStatusBox: document.getElementById("trace-status-box"),
+    traceExportBox: document.getElementById("trace-export-box"),
     copyFitButton: document.getElementById("copy-fit-button"),
     statusBox: document.getElementById("status-box"),
     resultBox: document.getElementById("result-box"),
@@ -139,6 +156,28 @@ function populateFigureSelect(figures) {
   }
 }
 
+function populateTraceWayTagControls() {
+  const fieldSelectMap = {
+    highway: dom.traceWayHighway,
+    foot: dom.traceWayFoot,
+    bicycle: dom.traceWayBicycle,
+    mtbScale: dom.traceWayMtbScale,
+  };
+  for (const field of TRACE_WAY_TAG_FIELDS) {
+    const select = fieldSelectMap[field.key];
+    if (!select) {
+      continue;
+    }
+    select.innerHTML = "";
+    for (const optionDef of field.options) {
+      const option = document.createElement("option");
+      option.value = optionDef.value;
+      option.textContent = optionDef.label;
+      select.append(option);
+    }
+  }
+}
+
 function syncUiControls(store) {
   const uiState = store.getUiState();
   dom.figureSelect.value = uiState.figureId ?? "";
@@ -173,6 +212,11 @@ function wireControls({ store, renderer, map }) {
     renderer.renderAll();
   });
 
+  dom.addWayButton.addEventListener("click", () => {
+    store.addTraceWay();
+    renderer.renderAll();
+  });
+
   dom.undoButton.addEventListener("click", () => {
     triggerUndo({ store, renderer });
   });
@@ -195,8 +239,41 @@ function wireControls({ store, renderer, map }) {
     runFit({ store, renderer });
   });
 
+  dom.deleteWayButton.addEventListener("click", () => {
+    store.deleteSelectedTraceWay();
+    renderer.renderAll();
+  });
+
+  dom.deleteVertexButton.addEventListener("click", () => {
+    store.deleteSelectedTraceVertex();
+    renderer.renderAll();
+  });
+
+  dom.traceWayPreset.addEventListener("change", () => {
+    store.applySelectedTraceWayPreset(dom.traceWayPreset.value);
+    renderer.renderAll();
+  });
+
+  const syncSelectedTraceWayTags = () => {
+    store.updateSelectedTraceWayTags({
+      highway: dom.traceWayHighway.value,
+      foot: dom.traceWayFoot.value,
+      bicycle: dom.traceWayBicycle.value,
+      mtbScale: dom.traceWayMtbScale.value,
+    });
+    renderer.renderAll();
+  };
+  dom.traceWayHighway.addEventListener("change", syncSelectedTraceWayTags);
+  dom.traceWayFoot.addEventListener("change", syncSelectedTraceWayTags);
+  dom.traceWayBicycle.addEventListener("change", syncSelectedTraceWayTags);
+  dom.traceWayMtbScale.addEventListener("change", syncSelectedTraceWayTags);
+
   dom.copyFitButton.addEventListener("click", async () => {
     await copyFitResult(renderer);
+  });
+
+  dom.copyTraceExportButton.addEventListener("click", async () => {
+    await copyTraceExport(renderer);
   });
 
   map.on("click", (event) => {
@@ -206,7 +283,9 @@ function wireControls({ store, renderer, map }) {
 
   window.addEventListener("resize", () => {
     store.ensureImageViewForCurrentFigure(dom.imageViewport);
+    store.ensureTraceViewForCurrentFigure(dom.traceViewport);
     renderer.renderImageStage();
+    renderer.renderTraceStage();
     renderer.invalidateMapSize();
   });
 
@@ -220,105 +299,237 @@ function wireControls({ store, renderer, map }) {
 }
 
 function bindImageViewportInteractions({ store, renderer }) {
-  dom.imageViewport.addEventListener(
+  bindViewportWheelZoom({
+    viewportElement: dom.imageViewport,
+    ensureView: () => store.ensureImageViewForCurrentFigure(dom.imageViewport),
+    updateView: (mutator, options) => store.updateCurrentImageView(mutator, options),
+    renderStage: () => renderer.renderImageStage(),
+  });
+  bindViewportPointerController({
+    viewportElement: dom.imageViewport,
+    ensureView: () => store.ensureImageViewForCurrentFigure(dom.imageViewport),
+    updateView: (mutator) => store.updateCurrentImageView(mutator),
+    persistState: () => store.persistState(),
+    renderPanFrame: () => renderer.renderImageStage(),
+    renderMutationFrame: () => renderer.renderAll(),
+    setPreviewNavigating: (navigating) => renderer.setImagePlacementPreviewNavigating(navigating),
+    placeFromClick: (event) => {
+      placeImagePointFromPointerEvent(event, { store, renderer });
+    },
+  });
+}
+
+function bindTraceViewportInteractions({ store, renderer }) {
+  bindViewportWheelZoom({
+    viewportElement: dom.traceViewport,
+    ensureView: () => store.ensureTraceViewForCurrentFigure(dom.traceViewport),
+    updateView: (mutator, options) => store.updateCurrentTraceView(mutator, options),
+    renderStage: () => renderer.renderTraceStage(),
+  });
+  bindViewportPointerController({
+    viewportElement: dom.traceViewport,
+    ensureView: () => store.ensureTraceViewForCurrentFigure(dom.traceViewport),
+    updateView: (mutator) => store.updateCurrentTraceView(mutator),
+    persistState: () => store.persistState(),
+    renderPanFrame: () => renderer.renderTraceStage(),
+    renderMutationFrame: () => renderer.renderAll(),
+    setPreviewNavigating: (navigating) => renderer.setTracePlacementPreviewNavigating(navigating),
+    resolveDragTarget: (event) => {
+      const target = getTraceTarget(event.target);
+      if (target?.kind !== "vertex") {
+        return null;
+      }
+      return target;
+    },
+    selectDragTarget: (target) => {
+      store.selectTraceVertex(target.wayId, target.vertexId);
+    },
+    moveDragTarget: (target, event, dragState) => {
+      const placement = renderer.resolveTracePlacement(
+        getViewportPoint(event, dom.traceViewport),
+        buildTracePlacementContext(store, {
+          wayId: target.wayId,
+          vertexId: target.vertexId,
+        })
+      );
+      if (!placement) {
+        return false;
+      }
+      store.assignTraceVertex(target.wayId, target.vertexId, placement, {
+        history: !dragState.historyCaptured,
+        persist: false,
+      });
+      dragState.historyCaptured = true;
+      return true;
+    },
+    handleTargetClick: (event) => {
+      const target = getTraceTarget(event.target);
+      if (target?.kind === "vertex") {
+        store.selectTraceVertex(target.wayId, target.vertexId);
+        renderer.renderAll();
+        return true;
+      }
+      if (target?.kind === "way") {
+        store.selectTraceWay(target.wayId);
+        renderer.renderAll();
+        return true;
+      }
+      return false;
+    },
+    placeFromClick: (event) => {
+      placeTraceVertexFromPointerEvent(event, { store, renderer });
+    },
+  });
+}
+
+function bindViewportPointerController({
+  viewportElement,
+  ensureView,
+  updateView,
+  persistState,
+  renderPanFrame,
+  renderMutationFrame,
+  setPreviewNavigating,
+  resolveDragTarget = () => null,
+  selectDragTarget = () => {},
+  moveDragTarget = () => false,
+  handleTargetClick = () => false,
+  placeFromClick,
+}) {
+  const dragState = createViewportDragState();
+
+  viewportElement.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+    const view = ensureView();
+    if (!view) {
+      return;
+    }
+    const dragTarget = resolveDragTarget(event);
+    dragState.active = true;
+    dragState.moved = false;
+    dragState.suppressClick = false;
+    dragState.pointerId = event.pointerId;
+    dragState.startX = event.clientX;
+    dragState.startY = event.clientY;
+    dragState.originOffsetX = view.offsetX;
+    dragState.originOffsetY = view.offsetY;
+    dragState.historyCaptured = false;
+    dragState.target = dragTarget;
+    dragState.mode = dragTarget ? "target-drag" : "pan";
+    if (dragTarget) {
+      selectDragTarget(dragTarget);
+      renderMutationFrame();
+    }
+    event.preventDefault();
+    viewportElement.setPointerCapture(event.pointerId);
+    viewportElement.classList.add("is-panning");
+  });
+
+  viewportElement.addEventListener("pointermove", (event) => {
+    if (!dragState.active || dragState.pointerId !== event.pointerId) {
+      return;
+    }
+    const dx = event.clientX - dragState.startX;
+    const dy = event.clientY - dragState.startY;
+    const wasMoved = dragState.moved;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
+      dragState.moved = true;
+    }
+    if (!wasMoved && dragState.moved) {
+      setPreviewNavigating(true);
+    }
+    if (!dragState.moved) {
+      return;
+    }
+    event.preventDefault();
+    if (dragState.mode === "target-drag") {
+      const didMoveTarget = moveDragTarget(dragState.target, event, dragState);
+      if (didMoveTarget) {
+        renderMutationFrame();
+      }
+      return;
+    }
+    updateView((view) => {
+      view.offsetX = dragState.originOffsetX + dx;
+      view.offsetY = dragState.originOffsetY + dy;
+    });
+    renderPanFrame();
+  });
+
+  const finishPointer = (event) => {
+    if (!dragState.active || dragState.pointerId !== event.pointerId) {
+      return;
+    }
+    if (viewportElement.hasPointerCapture(event.pointerId)) {
+      viewportElement.releasePointerCapture(event.pointerId);
+    }
+    viewportElement.classList.remove("is-panning");
+    dragState.active = false;
+    dragState.pointerId = null;
+    dragState.suppressClick = dragState.moved;
+    dragState.target = null;
+    dragState.mode = null;
+    setPreviewNavigating(false);
+    if (dragState.moved || dragState.historyCaptured) {
+      persistState();
+    }
+  };
+
+  viewportElement.addEventListener("pointerup", finishPointer);
+  viewportElement.addEventListener("pointercancel", finishPointer);
+  viewportElement.addEventListener("click", (event) => {
+    if (dragState.suppressClick) {
+      dragState.suppressClick = false;
+      return;
+    }
+    if (handleTargetClick(event)) {
+      return;
+    }
+    placeFromClick(event);
+  });
+}
+
+function createViewportDragState() {
+  return {
+    active: false,
+    moved: false,
+    suppressClick: false,
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    originOffsetX: 0,
+    originOffsetY: 0,
+    mode: null,
+    historyCaptured: false,
+    target: null,
+  };
+}
+
+function bindViewportWheelZoom({ viewportElement, ensureView, updateView, renderStage }) {
+  viewportElement.addEventListener(
     "wheel",
     (event) => {
-      const figure = store.getCurrentFigure();
-      if (!figure) {
-        return;
-      }
-      const imageView = store.ensureImageViewForCurrentFigure(dom.imageViewport);
+      const imageView = ensureView();
       if (!imageView) {
         return;
       }
       event.preventDefault();
-      const rect = dom.imageViewport.getBoundingClientRect();
-      const pointerX = event.clientX - rect.left;
-      const pointerY = event.clientY - rect.top;
-      const imageX = (pointerX - imageView.offsetX) / imageView.scale;
-      const imageY = (pointerY - imageView.offsetY) / imageView.scale;
+      const pointer = getViewportPoint(event, viewportElement);
+      const imageX = (pointer.x - imageView.offsetX) / imageView.scale;
+      const imageY = (pointer.y - imageView.offsetY) / imageView.scale;
       const zoomFactor = Math.exp(-event.deltaY * 0.0015);
       const nextScale = clamp(imageView.scale * zoomFactor, 0.15, 6);
-      store.updateCurrentImageView((view) => {
-        view.offsetX = pointerX - imageX * nextScale;
-        view.offsetY = pointerY - imageY * nextScale;
+      updateView((view) => {
+        view.offsetX = pointer.x - imageX * nextScale;
+        view.offsetY = pointer.y - imageY * nextScale;
         view.scale = nextScale;
       }, { persist: true });
-      renderer.renderImageStage();
+      renderStage();
     },
     { passive: false }
   );
-
-  dom.imageViewport.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0) {
-      return;
-    }
-    const imageView = store.ensureImageViewForCurrentFigure(dom.imageViewport);
-    if (!imageView) {
-      return;
-    }
-    runtime.imagePointer.active = true;
-    runtime.imagePointer.moved = false;
-    runtime.imagePointer.pointerId = event.pointerId;
-    runtime.imagePointer.startX = event.clientX;
-    runtime.imagePointer.startY = event.clientY;
-    runtime.imagePointer.originOffsetX = imageView.offsetX;
-    runtime.imagePointer.originOffsetY = imageView.offsetY;
-    runtime.imagePointer.suppressClick = false;
-    dom.imageViewport.setPointerCapture(event.pointerId);
-    dom.imageViewport.classList.add("is-panning");
-  });
-
-  dom.imageViewport.addEventListener("pointermove", (event) => {
-    if (!runtime.imagePointer.active || runtime.imagePointer.pointerId !== event.pointerId) {
-      return;
-    }
-    const dx = event.clientX - runtime.imagePointer.startX;
-    const dy = event.clientY - runtime.imagePointer.startY;
-    const wasMoved = runtime.imagePointer.moved;
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-      runtime.imagePointer.moved = true;
-    }
-    if (!wasMoved && runtime.imagePointer.moved) {
-      renderer.setImagePlacementPreviewNavigating(true);
-    }
-    if (!runtime.imagePointer.moved) {
-      return;
-    }
-    store.updateCurrentImageView((imageView) => {
-      imageView.offsetX = runtime.imagePointer.originOffsetX + dx;
-      imageView.offsetY = runtime.imagePointer.originOffsetY + dy;
-    });
-    renderer.renderImageStage();
-  });
-
-  const finishPointer = (event) => {
-    if (!runtime.imagePointer.active || runtime.imagePointer.pointerId !== event.pointerId) {
-      return;
-    }
-    if (dom.imageViewport.hasPointerCapture(event.pointerId)) {
-      dom.imageViewport.releasePointerCapture(event.pointerId);
-    }
-    dom.imageViewport.classList.remove("is-panning");
-    const wasMoved = runtime.imagePointer.moved;
-    runtime.imagePointer.active = false;
-    runtime.imagePointer.pointerId = null;
-    runtime.imagePointer.suppressClick = wasMoved;
-    renderer.setImagePlacementPreviewNavigating(false);
-    if (wasMoved) {
-      store.persistState();
-    }
-  };
-
-  dom.imageViewport.addEventListener("pointerup", finishPointer);
-  dom.imageViewport.addEventListener("pointercancel", finishPointer);
-  dom.imageViewport.addEventListener("click", (event) => {
-    if (runtime.imagePointer.suppressClick) {
-      runtime.imagePointer.suppressClick = false;
-      return;
-    }
-    placeImagePointFromPointerEvent(event, { store, renderer });
-  });
 }
 
 function placeImagePointFromPointerEvent(event, { store, renderer }) {
@@ -338,6 +549,28 @@ function placeImagePointFromPointerEvent(event, { store, renderer }) {
   }
   store.assignSelectedPointImage(imageX, imageY);
   renderer.renderAll();
+}
+
+function placeTraceVertexFromPointerEvent(event, { store, renderer }) {
+  if (!dom.traceImage.complete) {
+    return;
+  }
+  const placement = renderer.resolveTracePlacement(
+    getViewportPoint(event, dom.traceViewport),
+    buildTracePlacementContext(store)
+  );
+  if (!placement) {
+    return;
+  }
+  store.addTraceVertex(placement);
+  renderer.renderAll();
+}
+
+function buildTracePlacementContext(store, { wayId = store.getSelectedTraceWay()?.id ?? null, vertexId = null } = {}) {
+  return {
+    sourceWayId: wayId,
+    sourceVertexId: vertexId,
+  };
 }
 
 function runFit({ store, renderer }) {
@@ -379,6 +612,21 @@ async function copyFitResult(renderer) {
   } catch (error) {
     console.error(error);
     renderer.setStatus(`Copy failed: ${error.message || String(error)}`);
+  }
+}
+
+async function copyTraceExport(renderer) {
+  const exportText = dom.traceExportBox.textContent || "";
+  if (!exportText.trim()) {
+    renderer.setTraceStatus("No trace export is available to copy.");
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(exportText);
+    renderer.setTraceStatus("Trace export copied to clipboard.");
+  } catch (error) {
+    console.error(error);
+    renderer.setTraceStatus(`Copy failed: ${error.message || String(error)}`);
   }
 }
 
@@ -431,6 +679,61 @@ async function loadDataset() {
 
 function setStatus(message) {
   dom.statusBox.textContent = message;
+}
+
+function getViewportPoint(event, viewportElement) {
+  const rect = viewportElement.getBoundingClientRect();
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top,
+  };
+}
+
+function pointerEventToImagePoint(event, viewportElement, imageView) {
+  if (!imageView) {
+    return null;
+  }
+  const viewportPoint = getViewportPoint(event, viewportElement);
+  return {
+    x: (viewportPoint.x - imageView.offsetX) / imageView.scale,
+    y: (viewportPoint.y - imageView.offsetY) / imageView.scale,
+  };
+}
+
+function clampImagePointToFigure(imagePoint, figure) {
+  if (!imagePoint || !figure) {
+    return null;
+  }
+  if (imagePoint.x < 0 || imagePoint.y < 0 || imagePoint.x > figure.imageSize.width || imagePoint.y > figure.imageSize.height) {
+    return null;
+  }
+  return {
+    x: imagePoint.x,
+    y: imagePoint.y,
+  };
+}
+
+function getTraceTarget(target) {
+  if (!(target instanceof Element)) {
+    return null;
+  }
+  const vertexElement = target.closest("[data-trace-vertex-id]");
+  if (vertexElement) {
+    return {
+      kind: "vertex",
+      wayId: Number(vertexElement.getAttribute("data-trace-way-id")),
+      vertexId: Number(vertexElement.getAttribute("data-trace-vertex-id")),
+    };
+  }
+  const wayElement = target.closest("[data-trace-way-id]");
+  if (wayElement) {
+    return {
+      kind: "way",
+      wayId: Number(wayElement.getAttribute("data-trace-way-id")),
+      vertexId: null,
+    };
+  }
+  return null;
 }
 
 function clamp(value, min, max) {

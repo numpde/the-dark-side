@@ -1,0 +1,21 @@
+{
+  "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-122624",
+  "selectedWayId": 1,
+  "includedDraftWays": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "wayCount": 4,
+  "modifiedWayCount": 1,
+  "createdNodeCount": 46,
+  "skippedWays": [],
+  "modifiedWayIds": [
+    {
+      "wayId": 196510851,
+      "version": 8,
+      "nodeRefCount": 17
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "changeset_id": 181925065,
+  "comment": "Add traced Karura paths from Strava heatmap (Figure 4 ways 1 and 3)",
+  "source": "Strava Global Heatmap",
+  "modified_way_ids": [
+    692748275
+  ],
+  "new_way_old_ids": [
+    -12,
+    -13
+  ],
+  "created_nodes": [
+    {
+      "old_id": -1,
+      "new_id": 13769449745
+    },
+    {
+      "old_id": -2,
+      "new_id": 13769449746
+    },
+    {
+      "old_id": -3,
+      "new_id": 13769449747
+    },
+    {
+      "old_id": -4,
+      "new_id": 13769449748
+    },
+    {
+      "old_id": -5,
+      "new_id": 13769449749
+    },
+    {
+      "old_id": -6,
+      "new_id": 13769449750
+    },
+    {
+      "old_id": -7,
+      "new_id": 13769449751
+    },
+    {
+      "old_id": -8,
+      "new_id": 13769449752
+    },
+    {
+      "old_id": -9,
+      "new_id": 13769449753
+    },
+    {
+      "old_id": -10,
+      "new_id": 13769449754
+    },
+    {
+      "old_id": -11,
+      "new_id": 13769449755
+    }
+  ],
+  "created_ways": [
+    {
+      "old_id": -12,
+      "new_id": 1504852415
+    },
+    {
+      "old_id": -13,
+      "new_id": 1504852416
+    },
+    {
+      "old_id": 692748275,
+      "new_id": 692748275
+    }
+  ]
+}

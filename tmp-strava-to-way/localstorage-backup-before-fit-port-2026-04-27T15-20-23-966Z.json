@@ -1,0 +1,99 @@
+{
+  "ui": {
+    "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123620",
+    "fitMode": "axis-aligned",
+    "showRegion": true,
+    "showBounds": true
+  },
+  "figures": {
+    "strava-global-heatmap-ride-nairobi-2026-04-27-122624": {
+      "nextPointNumber": 1,
+      "selectedPointId": null,
+      "points": [],
+      "lastFit": null,
+      "imageView": {
+        "scale": 0.1654,
+        "offsetX": 8.76,
+        "offsetY": 312.04
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123314": {
+      "nextPointNumber": 1,
+      "selectedPointId": null,
+      "points": [],
+      "lastFit": null,
+      "imageView": {
+        "scale": 0.15,
+        "offsetX": 7.56,
+        "offsetY": 82.79
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123620": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 1366.89,
+            "y": 552.05
+          },
+          "map": {
+            "lat": -1.2281523,
+            "lon": 36.8316221
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1690.17,
+            "y": 412.25
+          },
+          "map": {
+            "lat": -1.222209,
+            "lon": 36.8233086
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 2017.82,
+            "y": 386.04
+          },
+          "map": {
+            "lat": -1.2221018,
+            "lon": 36.8233609
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 1446.59,
+            "y": 402.97
+          },
+          "map": {
+            "lat": -1.2284175,
+            "lon": 36.8199556
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 2317.37,
+            "y": 248.84
+          },
+          "map": {
+            "lat": -1.2253814,
+            "lon": 36.8286232
+          }
+        }
+      ],
+      "lastFit": null,
+      "imageView": {
+        "scale": 0.3081649815965831,
+        "offsetX": -263.62889267842,
+        "offsetY": 111.63070833523085
+      }
+    }
+  }
+}

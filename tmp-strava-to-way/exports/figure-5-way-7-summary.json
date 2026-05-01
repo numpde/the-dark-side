@@ -1,0 +1,79 @@
+{
+  "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123620",
+  "selectedWayId": 7,
+  "selectedWay": {
+    "id": 7,
+    "vertices": [
+      {
+        "id": 22,
+        "x": 520.43,
+        "y": 184.03,
+        "osmNodeId": null,
+        "osmLat": -1.225086,
+        "osmLon": 36.8210665,
+        "segmentSnap": {
+          "wayId": 1213220384,
+          "wayVersion": 1,
+          "segmentIndex": 9,
+          "startNodeId": 11240465998,
+          "endNodeId": 11240465999,
+          "t": 0.544681
+        }
+      },
+      {
+        "id": 23,
+        "x": 424.4,
+        "y": 194.06,
+        "osmNodeId": null,
+        "osmLat": null,
+        "osmLon": null,
+        "segmentSnap": null
+      },
+      {
+        "id": 24,
+        "x": 315.41,
+        "y": 181.42,
+        "osmNodeId": null,
+        "osmLat": null,
+        "osmLon": null,
+        "segmentSnap": null
+      },
+      {
+        "id": 25,
+        "x": 228.54,
+        "y": 200.37,
+        "osmNodeId": null,
+        "osmLat": null,
+        "osmLon": null,
+        "segmentSnap": null
+      },
+      {
+        "id": 27,
+        "x": 187.22,
+        "y": 236.52,
+        "osmNodeId": null,
+        "osmLat": null,
+        "osmLon": null,
+        "segmentSnap": null
+      },
+      {
+        "id": 28,
+        "x": 147.18,
+        "y": 281.66,
+        "osmNodeId": null,
+        "osmLat": -1.2254952,
+        "osmLon": 36.8195009,
+        "segmentSnap": {
+          "wayId": 280734650,
+          "wayVersion": 3,
+          "segmentIndex": 24,
+          "startNodeId": 2847949714,
+          "endNodeId": 2847949753,
+          "t": 0.758153
+        }
+      }
+    ]
+  },
+  "traceStatus": "Trace export copied to clipboard.",
+  "exportXml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<osm version=\"0.6\" generator=\"Strava to Way Fit Editor\">\n  <!-- Draft traced from Figure 5 -->\n  <!-- https://www.strava.com/maps/global-heatmap?sport=RideLike&amp;style=standard&amp;terrain=false&amp;labels=false&amp;poi=false&amp;cPhotos=false&amp;3d=false&amp;gColor=mobileblue&amp;gOpacity=100#16.36/-1.226955/36.823957 -->\n  <node id=\"-1\" visible=\"true\" lat=\"-1.2250860\" lon=\"36.8210665\" />\n  <node id=\"-2\" visible=\"true\" lat=\"-1.2251281\" lon=\"36.8206637\" />\n  <node id=\"-3\" visible=\"true\" lat=\"-1.2250751\" lon=\"36.8202066\" />\n  <node id=\"-4\" visible=\"true\" lat=\"-1.2251545\" lon=\"36.8198422\" />\n  <node id=\"-5\" visible=\"true\" lat=\"-1.2253060\" lon=\"36.8196689\" />\n  <node id=\"-6\" visible=\"true\" lat=\"-1.2254952\" lon=\"36.8195010\" />\n  <way id=\"1213220384\" version=\"1\" visible=\"true\">\n    <nd ref=\"2847949714\" />\n    <nd ref=\"11240465990\" />\n    <nd ref=\"11240465991\" />\n    <nd ref=\"11240465992\" />\n    <nd ref=\"11240465993\" />\n    <nd ref=\"11240465994\" />\n    <nd ref=\"11240465995\" />\n    <nd ref=\"11240465996\" />\n    <nd ref=\"11240465997\" />\n    <nd ref=\"11240465998\" />\n    <nd ref=\"-1\" />\n    <nd ref=\"11240465999\" />\n    <nd ref=\"11240466000\" />\n    <nd ref=\"11240466001\" />\n    <nd ref=\"11240466002\" />\n    <nd ref=\"11240466003\" />\n    <tag k=\"highway\" v=\"path\" />\n  </way>\n  <way id=\"280734650\" version=\"3\" visible=\"true\">\n    <nd ref=\"2847949514\" />\n    <nd ref=\"2847949715\" />\n    <nd ref=\"2847949716\" />\n    <nd ref=\"2847949718\" />\n    <nd ref=\"2847949720\" />\n    <nd ref=\"2847949721\" />\n    <nd ref=\"2847949722\" />\n    <nd ref=\"2847949723\" />\n    <nd ref=\"2847949724\" />\n    <nd ref=\"2847949725\" />\n    <nd ref=\"2847949726\" />\n    <nd ref=\"2847949727\" />\n    <nd ref=\"2847949728\" />\n    <nd ref=\"2847949729\" />\n    <nd ref=\"2847949730\" />\n    <nd ref=\"2847949731\" />\n    <nd ref=\"2847949706\" />\n    <nd ref=\"2847949732\" />\n    <nd ref=\"2847949733\" />\n    <nd ref=\"2847949734\" />\n    <nd ref=\"2847949735\" />\n    <nd ref=\"2847949736\" />\n    <nd ref=\"2847949737\" />\n    <nd ref=\"2847949738\" />\n    <nd ref=\"2847949714\" />\n    <nd ref=\"-6\" />\n    <nd ref=\"2847949753\" />\n    <nd ref=\"2847949757\" />\n    <nd ref=\"9923907711\" />\n    <nd ref=\"9923907712\" />\n    <nd ref=\"9923907713\" />\n    <nd ref=\"2847949763\" />\n    <nd ref=\"2847949794\" />\n    <nd ref=\"2847949713\" />\n    <tag k=\"highway\" v=\"path\" />\n  </way>\n  <way id=\"-7\" visible=\"true\">\n    <nd ref=\"-1\" />\n    <nd ref=\"-2\" />\n    <nd ref=\"-3\" />\n    <nd ref=\"-4\" />\n    <nd ref=\"-5\" />\n    <nd ref=\"-6\" />\n    <tag k=\"source\" v=\"Strava Global Heatmap\" />\n    <tag k=\"fixme\" v=\"Add appropriate tags before upload\" />\n  </way>\n</osm>"
+}

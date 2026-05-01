@@ -1,3 +1,5 @@
+import { TRACE_WAY_SOURCE } from "./editor-config.js?v=20260427aw";
+
 const EARTH_RADIUS_METERS = 6378137;
 
 export const FIT_MODE_OPTIONS = {
@@ -32,6 +34,7 @@ export function buildFitResult({ figure, fitModeKey, fit, points }) {
   const residuals = buildFitResiduals(points, fit);
   const residualValues = residuals.map((item) => item.residualMeters);
   return {
+    fitModel: serializeFitModel(fit),
     polygonLatLngs: corners.map((corner) => [corner.lat, corner.lon]),
     output: {
       figureId: figure.id,
@@ -52,6 +55,181 @@ export function buildFitResult({ figure, fitModeKey, fit, points }) {
   };
 }
 
+export function projectImagePointToLatLon(fitRecord, imageX, imageY) {
+  const fitModel = getFitModelFromRecord(fitRecord);
+  if (!fitModel) {
+    throw new Error("This figure does not have a usable fit yet.");
+  }
+  const projected = applyFit(fitModel, imageX, imageY);
+  return mercatorMetersToLatLon(projected.x, projected.y);
+}
+
+export function projectLatLonToImagePoint(fitRecord, lat, lon) {
+  const fitModel = getFitModelFromRecord(fitRecord);
+  if (!fitModel) {
+    throw new Error("This figure does not have a usable fit yet.");
+  }
+  const projected = latLonToMercatorMeters(lat, lon);
+  const image = applyInverseFit(fitModel, projected.x, projected.y);
+  return {
+    x: roundTo(image.x, 2),
+    y: roundTo(image.y, 2),
+  };
+}
+
+export function resolveTraceVertexPlacement(trace, wayId, vertexId) {
+  const resolvedRef = resolveTraceVertexReference(trace, wayId, vertexId);
+  if (!resolvedRef) {
+    return null;
+  }
+  const { way, vertex } = resolvedRef;
+  return {
+    wayId: way.id,
+    vertexId: vertex.id,
+    x: vertex.x,
+    y: vertex.y,
+    osmNodeId: vertex.osmNodeId ?? null,
+    osmLat: vertex.osmLat ?? null,
+    osmLon: vertex.osmLon ?? null,
+    segmentSnap: vertex.segmentSnap ?? null,
+  };
+}
+
+export function traceVertexSnapWouldCycle(trace, sourceWayId, sourceVertexId, targetWayId, targetVertexId) {
+  if (sourceWayId == null || sourceVertexId == null || targetWayId == null || targetVertexId == null) {
+    return false;
+  }
+  if (sourceWayId === targetWayId && sourceVertexId === targetVertexId) {
+    return true;
+  }
+  const visited = new Set();
+  let currentWayId = targetWayId;
+  let currentVertexId = targetVertexId;
+  while (true) {
+    const visitKey = `${currentWayId}:${currentVertexId}`;
+    if (visited.has(visitKey)) {
+      return false;
+    }
+    visited.add(visitKey);
+    if (currentWayId === sourceWayId && currentVertexId === sourceVertexId) {
+      return true;
+    }
+    const way = trace.ways.find((candidate) => candidate.id === currentWayId);
+    const vertex = way?.vertices.find((candidate) => candidate.id === currentVertexId) ?? null;
+    if (!vertex?.traceVertexSnap) {
+      return false;
+    }
+    currentWayId = vertex.traceVertexSnap.wayId;
+    currentVertexId = vertex.traceVertexSnap.vertexId;
+  }
+}
+
+export function buildTraceOsmExport({ figure, fitRecord, trace, regionGeoJsonData, selectedWayId = null }) {
+  const fitModel = getFitModelFromRecord(fitRecord);
+  if (!fitModel) {
+    throw new Error("Trace export requires a fit result.");
+  }
+
+  const regionWaysById = new Map(
+    (regionGeoJsonData?.features || []).map((feature) => [feature?.properties?.way_id, feature])
+  );
+
+  const traceWays = selectTraceExportWays(trace, selectedWayId);
+
+  const draftWays = traceWays.map((way) => ({
+    wayId: way.id,
+    tags: buildDraftWayTags(way.tags),
+    vertices: way.vertices.map((vertex) => {
+      const resolved = resolveTraceVertexPlacement(trace, way.id, vertex.id);
+      const imageX = resolved?.x ?? vertex.x;
+      const imageY = resolved?.y ?? vertex.y;
+      const latLon =
+        resolved?.osmNodeId && resolved?.osmLat != null && resolved?.osmLon != null
+          ? { lat: resolved.osmLat, lon: resolved.osmLon }
+          : resolved?.osmLat != null && resolved?.osmLon != null
+            ? { lat: resolved.osmLat, lon: resolved.osmLon }
+            : projectImagePointToLatLon({ fitModel }, imageX, imageY);
+      return {
+        vertexId: vertex.id,
+        resolvedWayId: resolved?.wayId ?? way.id,
+        resolvedVertexId: resolved?.vertexId ?? vertex.id,
+        osmNodeId: resolved?.osmNodeId ?? null,
+        segmentSnap: resolved?.segmentSnap ?? null,
+        image: {
+          x: roundTo(imageX, 2),
+          y: roundTo(imageY, 2),
+        },
+        map: {
+          lat: roundTo(latLon.lat, 7),
+          lon: roundTo(latLon.lon, 7),
+        },
+      };
+    }),
+  }));
+
+  const exportableWays = draftWays.filter((way) => way.vertices.length >= 2);
+  const skippedWays = draftWays.filter((way) => way.vertices.length < 2).map((way) => way.wayId);
+  let nextNodeId = -1;
+  const modifiedWayInsertions = new Map();
+  const assignedNodesByResolvedVertex = new Map();
+  const createdNodes = [];
+
+  const draftWayPayloads = exportableWays.map((way) => ({
+    sourceWayId: way.wayId,
+    tags: way.tags,
+    nodes: way.vertices.map((vertex) => {
+      const resolvedVertexKey = `${vertex.resolvedWayId}:${vertex.resolvedVertexId}`;
+      if (assignedNodesByResolvedVertex.has(resolvedVertexKey)) {
+        return assignedNodesByResolvedVertex.get(resolvedVertexKey);
+      }
+      if (vertex.osmNodeId) {
+        const node = {
+          nodeId: vertex.osmNodeId,
+          existing: true,
+          ...vertex,
+        };
+        assignedNodesByResolvedVertex.set(resolvedVertexKey, node);
+        return node;
+      }
+      const node = {
+        nodeId: nextNodeId--,
+        existing: false,
+        ...vertex,
+      };
+      createdNodes.push(node);
+      if (vertex.segmentSnap) {
+        rememberSegmentInsertion(modifiedWayInsertions, vertex.segmentSnap, node.nodeId);
+      }
+      assignedNodesByResolvedVertex.set(resolvedVertexKey, node);
+      return node;
+    }),
+  }));
+
+  let nextWayId = nextNodeId;
+  const osmWays = draftWayPayloads.map((way) => ({
+    ...way,
+    wayId: nextWayId--,
+  }));
+
+  const modifiedWays = buildModifiedWays(modifiedWayInsertions, regionWaysById);
+
+  return {
+    figureId: figure.id,
+    figureLabel: figure.label,
+    sourceUrl: figure.sourceUrl,
+    selectedWayId,
+    fitMode: fitRecord?.output?.fitMode ?? fitModel.type,
+    wayCount: osmWays.length,
+    modifiedWayCount: modifiedWays.length,
+    skippedWays,
+    ways: osmWays,
+    modifiedWays,
+    createdNodes,
+    osmXml: buildOsmXml({ figure, createdNodes, ways: osmWays, modifiedWays }),
+    osmChangeXml: buildOsmChangeXml({ createdNodes, ways: osmWays, modifiedWays }),
+  };
+}
+
 function buildFitControlPoints(points) {
   return points.map((point) => ({
     pointId: point.id,
@@ -64,6 +242,296 @@ function buildFitControlPoints(points) {
       lon: roundTo(point.map.lon, 7),
     },
   }));
+}
+
+function serializeFitModel(fit) {
+  if (fit.type === "axis-aligned") {
+    return {
+      type: fit.type,
+      xScale: fit.xScale,
+      xOffset: fit.xOffset,
+      yScale: fit.yScale,
+      yOffset: fit.yOffset,
+    };
+  }
+  if (fit.type === "similarity") {
+    return {
+      type: fit.type,
+      a: fit.a,
+      b: fit.b,
+      tx: fit.tx,
+      ty: fit.ty,
+    };
+  }
+  return {
+    type: fit.type,
+    a: fit.a,
+    b: fit.b,
+    c: fit.c,
+    d: fit.d,
+    tx: fit.tx,
+    ty: fit.ty,
+  };
+}
+
+function getFitModelFromRecord(fitRecord) {
+  if (!fitRecord) {
+    return null;
+  }
+  if (fitRecord.fitModel?.type) {
+    return fitRecord.fitModel;
+  }
+  const transform = fitRecord.output?.transform;
+  if (!transform?.type) {
+    return null;
+  }
+  if (transform.type === "axis-aligned") {
+    return {
+      type: transform.type,
+      xScale: transform.xMetersPerPixel,
+      xOffset: transform.xOffsetMeters,
+      yScale: transform.yMetersPerPixel,
+      yOffset: transform.yOffsetMeters,
+    };
+  }
+  if (transform.type === "similarity") {
+    return {
+      type: transform.type,
+      a: transform.a,
+      b: transform.b,
+      tx: transform.txMeters,
+      ty: transform.tyMeters,
+    };
+  }
+  return {
+    type: transform.type,
+    a: transform.a,
+    b: transform.b,
+    c: transform.c,
+    d: transform.d,
+    tx: transform.txMeters,
+    ty: transform.tyMeters,
+  };
+}
+
+function buildOsmXml({ figure, createdNodes, ways, modifiedWays }) {
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<osm version="0.6" generator="Strava to Way Fit Editor">`,
+    `  <!-- Draft traced from ${escapeXml(figure.label)} -->`,
+    `  <!-- ${escapeXml(figure.sourceUrl)} -->`,
+  ];
+
+  for (const node of createdNodes) {
+    lines.push(
+      `  <node id="${node.nodeId}" visible="true" lat="${node.map.lat.toFixed(7)}" lon="${node.map.lon.toFixed(7)}" />`
+    );
+  }
+
+  for (const way of modifiedWays) {
+    lines.push(`  <way id="${way.wayId}" version="${way.version}" visible="true">`);
+    for (const nodeRef of way.nodeRefs) {
+      lines.push(`    <nd ref="${nodeRef}" />`);
+    }
+    for (const tag of way.tags) {
+      lines.push(`    <tag k="${escapeXml(tag.key)}" v="${escapeXml(tag.value)}" />`);
+    }
+    lines.push("  </way>");
+  }
+
+  for (const way of ways) {
+    lines.push(`  <way id="${way.wayId}" visible="true">`);
+    for (const node of way.nodes) {
+      lines.push(`    <nd ref="${node.nodeId}" />`);
+    }
+    for (const tag of way.tags) {
+      lines.push(`    <tag k="${escapeXml(tag.key)}" v="${escapeXml(tag.value)}" />`);
+    }
+    lines.push("  </way>");
+  }
+
+  lines.push("</osm>");
+  return lines.join("\n");
+}
+
+function buildOsmChangeXml({ createdNodes, ways, modifiedWays }) {
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<osmChange version="0.6" generator="Strava to Way Fit Editor">',
+    "  <create>",
+  ];
+
+  for (const node of createdNodes) {
+    lines.push(
+      `    <node id="${node.nodeId}" lat="${node.map.lat.toFixed(7)}" lon="${node.map.lon.toFixed(7)}" />`
+    );
+  }
+
+  for (const way of ways) {
+    lines.push(`    <way id="${way.wayId}">`);
+    for (const node of way.nodes) {
+      lines.push(`      <nd ref="${node.nodeId}" />`);
+    }
+    for (const tag of way.tags) {
+      lines.push(`      <tag k="${escapeXml(tag.key)}" v="${escapeXml(tag.value)}" />`);
+    }
+    lines.push("    </way>");
+  }
+  lines.push("  </create>");
+
+  lines.push("  <modify>");
+  for (const way of modifiedWays) {
+    lines.push(`    <way id="${way.wayId}" version="${way.version}">`);
+    for (const nodeRef of way.nodeRefs) {
+      lines.push(`      <nd ref="${nodeRef}" />`);
+    }
+    for (const tag of way.tags) {
+      lines.push(`      <tag k="${escapeXml(tag.key)}" v="${escapeXml(tag.value)}" />`);
+    }
+    lines.push("    </way>");
+  }
+  lines.push("  </modify>");
+  lines.push("</osmChange>");
+  return lines.join("\n");
+}
+
+function buildDraftWayTags(wayTags = {}) {
+  const tags = [{ key: "source", value: TRACE_WAY_SOURCE }];
+  if (wayTags.highway) {
+    tags.push({ key: "highway", value: wayTags.highway });
+  }
+  if (wayTags.foot) {
+    tags.push({ key: "foot", value: wayTags.foot });
+  }
+  if (wayTags.bicycle) {
+    tags.push({ key: "bicycle", value: wayTags.bicycle });
+  }
+  if (wayTags.mtbScale) {
+    tags.push({ key: "mtb:scale", value: wayTags.mtbScale });
+  }
+  if (!wayTags.highway) {
+    tags.push({ key: "fixme", value: "Add appropriate tags before upload" });
+  }
+  return tags;
+}
+
+function selectTraceExportWays(trace, selectedWayId) {
+  if (selectedWayId == null) {
+    return trace.ways;
+  }
+  const includedWayIds = new Set([selectedWayId]);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const way of trace.ways) {
+      const touchesIncluded = way.vertices.some((vertex) => {
+        const targetWayId = vertex.traceVertexSnap?.wayId;
+        return targetWayId != null && (includedWayIds.has(way.id) || includedWayIds.has(targetWayId));
+      });
+      if (touchesIncluded && !includedWayIds.has(way.id)) {
+        includedWayIds.add(way.id);
+        changed = true;
+      }
+      for (const vertex of way.vertices) {
+        const targetWayId = vertex.traceVertexSnap?.wayId;
+        if (targetWayId != null && includedWayIds.has(way.id) && !includedWayIds.has(targetWayId)) {
+          includedWayIds.add(targetWayId);
+          changed = true;
+        }
+      }
+    }
+  }
+  return trace.ways.filter((way) => includedWayIds.has(way.id));
+}
+
+function resolveTraceVertexReference(trace, wayId, vertexId) {
+  const visited = new Set();
+  let currentWayId = wayId;
+  let currentVertexId = vertexId;
+  while (true) {
+    const visitKey = `${currentWayId}:${currentVertexId}`;
+    if (visited.has(visitKey)) {
+      break;
+    }
+    visited.add(visitKey);
+    const way = trace.ways.find((candidate) => candidate.id === currentWayId);
+    const vertex = way?.vertices.find((candidate) => candidate.id === currentVertexId) ?? null;
+    if (!way || !vertex) {
+      return null;
+    }
+    if (!vertex.traceVertexSnap) {
+      return { way, vertex };
+    }
+    currentWayId = vertex.traceVertexSnap.wayId;
+    currentVertexId = vertex.traceVertexSnap.vertexId;
+  }
+  return null;
+}
+
+function rememberSegmentInsertion(modifiedWayInsertions, segmentSnap, nodeId) {
+  const insertions = modifiedWayInsertions.get(segmentSnap.wayId) ?? [];
+  insertions.push({
+    nodeId,
+    segmentIndex: segmentSnap.segmentIndex,
+    t: segmentSnap.t,
+  });
+  modifiedWayInsertions.set(segmentSnap.wayId, insertions);
+}
+
+function buildModifiedWays(modifiedWayInsertions, regionWaysById) {
+  const modifiedWays = [];
+  for (const [wayId, insertions] of modifiedWayInsertions.entries()) {
+    const feature = regionWaysById.get(wayId);
+    if (!feature) {
+      throw new Error(`Missing source way ${wayId} for snapped segment export.`);
+    }
+    const nodeIds = [...(feature.properties?.node_ids || [])];
+    const version = feature.properties?.way_version;
+    if (!nodeIds.length || !version) {
+      throw new Error(`Way ${wayId} is missing node_ids or version for export.`);
+    }
+    const insertionsBySegment = new Map();
+    for (const insertion of insertions) {
+      const segmentInsertions = insertionsBySegment.get(insertion.segmentIndex) ?? [];
+      segmentInsertions.push(insertion);
+      insertionsBySegment.set(insertion.segmentIndex, segmentInsertions);
+    }
+    const nodeRefs = [];
+    for (let index = 0; index < nodeIds.length - 1; index += 1) {
+      nodeRefs.push(nodeIds[index]);
+      const segmentInsertions = insertionsBySegment.get(index);
+      if (!segmentInsertions) {
+        continue;
+      }
+      segmentInsertions.sort((left, right) => left.t - right.t);
+      for (const insertion of segmentInsertions) {
+        nodeRefs.push(insertion.nodeId);
+      }
+    }
+    nodeRefs.push(nodeIds.at(-1));
+    modifiedWays.push({
+      wayId,
+      version,
+      nodeRefs,
+      tags: extractWayTags(feature.properties || {}),
+    });
+  }
+  return modifiedWays;
+}
+
+function extractWayTags(properties) {
+  const ignoredKeys = new Set(["way_id", "way_version", "node_ids"]);
+  return Object.entries(properties)
+    .filter(([key, value]) => !ignoredKeys.has(key) && value != null && value !== "")
+    .map(([key, value]) => ({ key, value: String(value) }));
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }
 
 function projectFigureCorners(figure, fit) {
@@ -236,6 +704,40 @@ function applyFit(fit, u, v) {
   return {
     x: fit.a * u + fit.b * v + fit.tx,
     y: fit.c * u + fit.d * v + fit.ty,
+  };
+}
+
+function applyInverseFit(fit, x, y) {
+  if (fit.type === "axis-aligned") {
+    if (Math.abs(fit.xScale) < 1e-12 || Math.abs(fit.yScale) < 1e-12) {
+      throw new Error("Axis-aligned fit is degenerate");
+    }
+    return {
+      x: (x - fit.xOffset) / fit.xScale,
+      y: (y - fit.yOffset) / fit.yScale,
+    };
+  }
+  if (fit.type === "similarity") {
+    const denom = fit.a * fit.a + fit.b * fit.b;
+    if (Math.abs(denom) < 1e-12) {
+      throw new Error("Similarity fit is degenerate");
+    }
+    const dx = x - fit.tx;
+    const dy = y - fit.ty;
+    return {
+      x: (fit.a * dx + fit.b * dy) / denom,
+      y: (-fit.b * dx + fit.a * dy) / denom,
+    };
+  }
+  const det = fit.a * fit.d - fit.b * fit.c;
+  if (Math.abs(det) < 1e-12) {
+    throw new Error("Affine fit is degenerate");
+  }
+  const dx = x - fit.tx;
+  const dy = y - fit.ty;
+  return {
+    x: (fit.d * dx - fit.b * dy) / det,
+    y: (-fit.c * dx + fit.a * dy) / det,
   };
 }
 

@@ -32,3 +32,13 @@ file: strava-global-heatmap-ride-nairobi-2026-04-27-123813.png
 source_url: https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#15.93/-1.23459/36.833437
 captured_from: /home/ra/Pictures/Screenshots/Screenshot from 2026-04-27 12-38-13.png
 captured_at: 2026-04-27 12:38:13
+
+file: strava-global-heatmap-ride-nairobi-2026-04-28-094922.png
+source_url: https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.41/-1.237252/36.841895
+captured_from: /home/ra/Pictures/Screenshots/Screenshot from 2026-04-28 09-49-22.png
+captured_at: 2026-04-28 09:49:22
+
+file: strava-global-heatmap-ride-nairobi-2026-04-28-095150.png
+source_url: https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.07/-1.23632/36.821436
+captured_from: /home/ra/Pictures/Screenshots/Screenshot from 2026-04-28 09-51-50.png
+captured_at: 2026-04-28 09:51:50

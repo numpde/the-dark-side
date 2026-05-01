@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osmChange version="0.6" generator="tmp-strava-to-way-osm-upload/1.0">
+  <create>
+    <node id="-1" changeset="181923535" lat="-1.2499798" lon="36.8394374" />
+    <node id="-2" changeset="181923535" lat="-1.2499963" lon="36.8395619" />
+    <node id="-3" changeset="181923535" lat="-1.2498680" lon="36.8396373" />
+    <node id="-4" changeset="181923535" lat="-1.2496477" lon="36.8394604" />
+    <node id="-5" changeset="181923535" lat="-1.2494734" lon="36.8393653" />
+    <node id="-6" changeset="181923535" lat="-1.2492432" lon="36.8393588" />
+    <node id="-7" changeset="181923535" lat="-1.2491314" lon="36.8395914" />
+    <way id="-8" changeset="181923535">
+      <nd ref="2847945632" />
+      <nd ref="-1" />
+      <nd ref="-2" />
+      <nd ref="-3" />
+      <nd ref="-4" />
+      <nd ref="-5" />
+      <nd ref="-6" />
+      <nd ref="-7" />
+      <nd ref="9810272384" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="designated" />
+      <tag k="bicycle" v="designated" />
+      <tag k="mtb:scale" v="1+" />
+    </way>
+  </create>
+  <modify />
+</osmChange>

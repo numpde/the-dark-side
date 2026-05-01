@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osmChange version="0.6" generator="tmp-strava-to-way-osm-upload/1.0">
+  <create>
+    <node id="-1" changeset="181909905" lat="-1.2336447" lon="36.8224950" />
+    <node id="-2" changeset="181909905" lat="-1.2335209" lon="36.8229567" />
+    <node id="-3" changeset="181909905" lat="-1.2333975" lon="36.8232649" />
+    <node id="-4" changeset="181909905" lat="-1.2332237" lon="36.8236011" />
+    <node id="-5" changeset="181909905" lat="-1.2330979" lon="36.8237977" />
+    <way id="-6" changeset="181909905">
+      <nd ref="-1" />
+      <nd ref="-2" />
+      <nd ref="-3" />
+      <nd ref="-4" />
+      <nd ref="-5" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="designated" />
+      <tag k="bicycle" v="designated" />
+      <tag k="mtb:scale" v="2" />
+    </way>
+  </create>
+  <modify>
+    <way id="196510846" version="6" changeset="181909905">
+      <nd ref="747730080" />
+      <nd ref="2068386590" />
+      <nd ref="2068386588" />
+      <nd ref="2068386585" />
+      <nd ref="2068386583" />
+      <nd ref="2068386580" />
+      <nd ref="2068386577" />
+      <nd ref="2068386569" />
+      <nd ref="2068386561" />
+      <nd ref="2068386556" />
+      <nd ref="2068386550" />
+      <nd ref="2068386527" />
+      <nd ref="2068386521" />
+      <nd ref="2068386517" />
+      <nd ref="9923873816" />
+      <nd ref="2068386514" />
+      <nd ref="2068386510" />
+      <nd ref="2068386499" />
+      <nd ref="2068386497" />
+      <nd ref="2068386495" />
+      <nd ref="2068386489" />
+      <nd ref="2068386475" />
+      <nd ref="9923907666" />
+      <nd ref="2068386461" />
+      <nd ref="2068386446" />
+      <nd ref="-1" />
+      <nd ref="2068386417" />
+      <nd ref="2068386409" />
+      <nd ref="2068386397" />
+      <nd ref="2068386386" />
+      <nd ref="2068386373" />
+      <nd ref="2068386365" />
+      <nd ref="2068386357" />
+      <nd ref="2068386349" />
+      <nd ref="2068386342" />
+      <nd ref="2068386334" />
+      <nd ref="2068386331" />
+      <nd ref="2068386326" />
+      <nd ref="2068386314" />
+      <nd ref="2068386308" />
+      <nd ref="2068386305" />
+      <nd ref="2068386303" />
+      <nd ref="2068386295" />
+      <nd ref="9923873815" />
+      <nd ref="2068386290" />
+      <nd ref="2068386820" />
+      <tag k="highway" v="path" />
+      <tag k="name" v="Kima Trail" />
+      <tag k="surface" v="dirt" />
+    </way>
+    <way id="196510842" version="3" changeset="181909905">
+      <nd ref="2068386820" />
+      <nd ref="2068386284" />
+      <nd ref="2068386287" />
+      <nd ref="2068386293" />
+      <nd ref="2068386297" />
+      <nd ref="2068386301" />
+      <nd ref="2068386307" />
+      <nd ref="2068386310" />
+      <nd ref="2068386318" />
+      <nd ref="2068386323" />
+      <nd ref="2068386328" />
+      <nd ref="2068386338" />
+      <nd ref="2068386346" />
+      <nd ref="2068386353" />
+      <nd ref="2068386361" />
+      <nd ref="2068386369" />
+      <nd ref="-5" />
+      <nd ref="2068386401" />
+      <nd ref="2068386415" />
+      <nd ref="2068386419" />
+      <nd ref="2068386422" />
+      <nd ref="2068386428" />
+      <tag k="highway" v="path" />
+      <tag k="surface" v="dirt" />
+    </way>
+  </modify>
+</osmChange>

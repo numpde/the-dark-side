@@ -1,0 +1,15 @@
+{
+  "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123436",
+  "figureLabel": "Figure 3",
+  "selectedWayId": 1,
+  "statusText": "Selected W1: prepared 1 new way, 0 existing way modifications and 7 new nodes for OSM changeset upload.",
+  "previewMatches": true,
+  "includedDraftWays": [
+    1
+  ],
+  "wayCount": 1,
+  "modifiedWayCount": 0,
+  "createdNodeCount": 7,
+  "skippedWays": [],
+  "modifiedWayIds": []
+}

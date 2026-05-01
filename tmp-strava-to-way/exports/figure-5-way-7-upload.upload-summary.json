@@ -1,0 +1,50 @@
+{
+  "changeset_id": 181907261,
+  "comment": "Add foot/MTB path in Karura traced from Strava heatmap",
+  "source": "Strava",
+  "modified_way_ids": [
+    1213220384,
+    280734650
+  ],
+  "new_way_old_id": -7,
+  "created_nodes": [
+    {
+      "old_id": -1,
+      "new_id": 13768011702
+    },
+    {
+      "old_id": -2,
+      "new_id": 13768011703
+    },
+    {
+      "old_id": -3,
+      "new_id": 13768011704
+    },
+    {
+      "old_id": -4,
+      "new_id": 13768011705
+    },
+    {
+      "old_id": -5,
+      "new_id": 13768011706
+    },
+    {
+      "old_id": -6,
+      "new_id": 13768011707
+    }
+  ],
+  "created_ways": [
+    {
+      "old_id": -7,
+      "new_id": 1504625701
+    },
+    {
+      "old_id": 1213220384,
+      "new_id": 1213220384
+    },
+    {
+      "old_id": 280734650,
+      "new_id": 280734650
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osmChange version="0.6" generator="Strava to Way Fit Editor">
+  <create>
+    <node id="-1" lat="-1.2384530" lon="36.8192456" />
+    <node id="-2" lat="-1.2382603" lon="36.8192203" />
+    <node id="-3" lat="-1.2380221" lon="36.8192557" />
+    <node id="-4" lat="-1.2378345" lon="36.8193822" />
+    <node id="-5" lat="-1.2375506" lon="36.8195137" />
+    <node id="-6" lat="-1.2373166" lon="36.8196468" />
+    <node id="-7" lat="-1.2370834" lon="36.8196417" />
+    <node id="-8" lat="-1.2366931" lon="36.8199503" />
+    <node id="-9" lat="-1.2361111" lon="36.8201780" />
+    <node id="-10" lat="-1.2357816" lon="36.8203955" />
+    <node id="-11" lat="-1.2356447" lon="36.8203854" />
+    <node id="-12" lat="-1.2355737" lon="36.8204765" />
+    <way id="-13">
+      <nd ref="271326712" />
+      <nd ref="-1" />
+      <nd ref="-2" />
+      <nd ref="-3" />
+      <nd ref="-4" />
+      <nd ref="-5" />
+      <nd ref="-6" />
+      <nd ref="-7" />
+      <nd ref="-8" />
+      <nd ref="-9" />
+      <nd ref="-10" />
+      <nd ref="-11" />
+      <nd ref="-12" />
+      <nd ref="9923907622" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="no" />
+      <tag k="bicycle" v="yes" />
+      <tag k="mtb:scale" v="1" />
+    </way>
+  </create>
+  <modify>
+  </modify>
+</osmChange>

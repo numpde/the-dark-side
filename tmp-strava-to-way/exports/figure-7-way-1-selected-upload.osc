@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osmChange version="0.6" generator="tmp-strava-to-way-osm-upload/1.0">
+  <create>
+    <node id="-1" changeset="181923210" lat="-1.2316695" lon="36.8271296" />
+    <node id="-2" changeset="181923210" lat="-1.2317463" lon="36.8274798" />
+    <node id="-3" changeset="181923210" lat="-1.2319350" lon="36.8277670" />
+    <node id="-4" changeset="181923210" lat="-1.2320957" lon="36.8279701" />
+    <node id="-5" changeset="181923210" lat="-1.2321390" lon="36.8282578" />
+    <node id="-6" changeset="181923210" lat="-1.2322306" lon="36.8285044" />
+    <node id="-7" changeset="181923210" lat="-1.2323793" lon="36.8287223" />
+    <node id="-8" changeset="181923210" lat="-1.2326024" lon="36.8289288" />
+    <node id="-9" changeset="181923210" lat="-1.2327568" lon="36.8291868" />
+    <node id="-10" changeset="181923210" lat="-1.2327855" lon="36.8294105" />
+    <node id="-11" changeset="181923210" lat="-1.2328859" lon="36.8295827" />
+    <node id="-12" changeset="181923210" lat="-1.2330172" lon="36.8297993" />
+    <node id="-13" changeset="181923210" lat="-1.2330832" lon="36.8299158" />
+    <node id="-14" changeset="181923210" lat="-1.2330455" lon="36.8300574" />
+    <node id="-15" changeset="181923210" lat="-1.2331083" lon="36.8302431" />
+    <node id="-16" changeset="181923210" lat="-1.2331554" lon="36.8304036" />
+    <node id="-17" changeset="181923210" lat="-1.2331617" lon="36.8305390" />
+    <node id="-18" changeset="181923210" lat="-1.2332809" lon="36.8306334" />
+    <node id="-19" changeset="181923210" lat="-1.2334599" lon="36.8306775" />
+    <node id="-20" changeset="181923210" lat="-1.2334860" lon="36.8308297" />
+    <node id="-21" changeset="181923210" lat="-1.2336368" lon="36.8309494" />
+    <node id="-22" changeset="181923210" lat="-1.2337466" lon="36.8310721" />
+    <node id="-23" changeset="181923210" lat="-1.2337906" lon="36.8312074" />
+    <node id="-24" changeset="181923210" lat="-1.2337937" lon="36.8313145" />
+    <node id="-25" changeset="181923210" lat="-1.2338911" lon="36.8314246" />
+    <node id="-26" changeset="181923210" lat="-1.2339758" lon="36.8315411" />
+    <node id="-27" changeset="181923210" lat="-1.2340421" lon="36.8316962" />
+    <node id="-28" changeset="181923210" lat="-1.2341237" lon="36.8318537" />
+    <node id="-29" changeset="181923210" lat="-1.2342336" lon="36.8319701" />
+    <node id="-30" changeset="181923210" lat="-1.2342838" lon="36.8321464" />
+    <node id="-31" changeset="181923210" lat="-1.2343152" lon="36.8323415" />
+    <node id="-32" changeset="181923210" lat="-1.2342995" lon="36.8325493" />
+    <node id="-33" changeset="181923210" lat="-1.2343058" lon="36.8327129" />
+    <node id="-34" changeset="181923210" lat="-1.2344923" lon="36.8328256" />
+    <node id="-35" changeset="181923210" lat="-1.2345802" lon="36.8329641" />
+    <node id="-36" changeset="181923210" lat="-1.2346681" lon="36.8331624" />
+    <node id="-37" changeset="181923210" lat="-1.2347592" lon="36.8333827" />
+    <node id="-38" changeset="181923210" lat="-1.2348596" lon="36.8335338" />
+    <node id="-39" changeset="181923210" lat="-1.2349648" lon="36.8337105" />
+    <node id="-40" changeset="181923210" lat="-1.2351124" lon="36.8339088" />
+    <node id="-41" changeset="181923210" lat="-1.2352160" lon="36.8340693" />
+    <node id="-42" changeset="181923210" lat="-1.2352820" lon="36.8342204" />
+    <node id="-43" changeset="181923210" lat="-1.2354421" lon="36.8343054" />
+    <node id="-44" changeset="181923210" lat="-1.2354986" lon="36.8344282" />
+    <node id="-45" changeset="181923210" lat="-1.2355022" lon="36.8345890" />
+    <node id="-46" changeset="181923210" lat="-1.2354938" lon="36.8348063" />
+    <node id="-47" changeset="181923210" lat="-1.2355253" lon="36.8349498" />
+    <node id="-48" changeset="181923210" lat="-1.2355148" lon="36.8351608" />
+    <node id="-49" changeset="181923210" lat="-1.2356243" lon="36.8352347" />
+    <node id="-50" changeset="181923210" lat="-1.2357400" lon="36.8353317" />
+    <node id="-51" changeset="181923210" lat="-1.2357841" lon="36.8354808" />
+    <node id="-52" changeset="181923210" lat="-1.2357757" lon="36.8356348" />
+    <node id="-53" changeset="181923210" lat="-1.2358535" lon="36.8357614" />
+    <node id="-54" changeset="181923210" lat="-1.2358746" lon="36.8358500" />
+    <node id="-55" changeset="181923210" lat="-1.2358620" lon="36.8359998" />
+    <node id="-56" changeset="181923210" lat="-1.2359280" lon="36.8362462" />
+    <node id="-57" changeset="181923210" lat="-1.2360359" lon="36.8365116" />
+    <node id="-58" changeset="181923210" lat="-1.2361156" lon="36.8367874" />
+    <node id="-59" changeset="181923210" lat="-1.2362167" lon="36.8370553" />
+    <node id="-60" changeset="181923210" lat="-1.2362546" lon="36.8371818" />
+    <node id="-61" changeset="181923210" lat="-1.2364837" lon="36.8376516" />
+    <node id="-62" changeset="181923210" lat="-1.2365340" lon="36.8378923" />
+    <node id="-63" changeset="181923210" lat="-1.2366043" lon="36.8381787" />
+    <node id="-64" changeset="181923210" lat="-1.2367260" lon="36.8384369" />
+    <node id="-65" changeset="181923210" lat="-1.2369399" lon="36.8386731" />
+    <node id="-66" changeset="181923210" lat="-1.2370710" lon="36.8390112" />
+    <node id="-67" changeset="181923210" lat="-1.2371132" lon="36.8393023" />
+    <node id="-68" changeset="181923210" lat="-1.2372116" lon="36.8396498" />
+    <node id="-69" changeset="181923210" lat="-1.2374692" lon="36.8398611" />
+    <node id="-70" changeset="181923210" lat="-1.2377958" lon="36.8401151" />
+    <way id="-71" changeset="181923210">
+      <nd ref="2847949509" />
+      <nd ref="-1" />
+      <nd ref="-2" />
+      <nd ref="-3" />
+      <nd ref="-4" />
+      <nd ref="-5" />
+      <nd ref="-6" />
+      <nd ref="-7" />
+      <nd ref="-8" />
+      <nd ref="-9" />
+      <nd ref="-10" />
+      <nd ref="-11" />
+      <nd ref="-12" />
+      <nd ref="-13" />
+      <nd ref="-14" />
+      <nd ref="-15" />
+      <nd ref="-16" />
+      <nd ref="-17" />
+      <nd ref="-18" />
+      <nd ref="-19" />
+      <nd ref="-20" />
+      <nd ref="-21" />
+      <nd ref="-22" />
+      <nd ref="-23" />
+      <nd ref="-24" />
+      <nd ref="-25" />
+      <nd ref="-26" />
+      <nd ref="-27" />
+      <nd ref="-28" />
+      <nd ref="-29" />
+      <nd ref="-30" />
+      <nd ref="-31" />
+      <nd ref="-32" />
+      <nd ref="-33" />
+      <nd ref="-34" />
+      <nd ref="-35" />
+      <nd ref="-36" />
+      <nd ref="-37" />
+      <nd ref="-38" />
+      <nd ref="-39" />
+      <nd ref="-40" />
+      <nd ref="-41" />
+      <nd ref="-42" />
+      <nd ref="-43" />
+      <nd ref="-44" />
+      <nd ref="-45" />
+      <nd ref="-46" />
+      <nd ref="-47" />
+      <nd ref="-48" />
+      <nd ref="-49" />
+      <nd ref="-50" />
+      <nd ref="-51" />
+      <nd ref="-52" />
+      <nd ref="-53" />
+      <nd ref="-54" />
+      <nd ref="-55" />
+      <nd ref="-56" />
+      <nd ref="-57" />
+      <nd ref="-58" />
+      <nd ref="-59" />
+      <nd ref="-60" />
+      <nd ref="-61" />
+      <nd ref="-62" />
+      <nd ref="-63" />
+      <nd ref="-64" />
+      <nd ref="-65" />
+      <nd ref="-66" />
+      <nd ref="-67" />
+      <nd ref="-68" />
+      <nd ref="-69" />
+      <nd ref="-70" />
+      <tag k="source" v="Strava Global Heatmap" />
+      <tag k="highway" v="path" />
+      <tag k="foot" v="designated" />
+      <tag k="bicycle" v="designated" />
+      <tag k="mtb:scale" v="1" />
+    </way>
+  </create>
+  <modify>
+    <way id="692748283" version="1" changeset="181923210">
+      <nd ref="6503768695" />
+      <nd ref="-60" />
+      <nd ref="6503768696" />
+      <tag k="highway" v="footway" />
+    </way>
+    <way id="692748284" version="1" changeset="181923210">
+      <nd ref="2847824369" />
+      <nd ref="-70" />
+      <nd ref="6503768697" />
+      <tag k="highway" v="footway" />
+      <tag k="surface" v="dirt" />
+    </way>
+  </modify>
+</osmChange>

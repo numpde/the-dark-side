@@ -1,0 +1,1460 @@
+{
+  "ui": {
+    "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-122624",
+    "fitMode": "axis-aligned",
+    "showRegion": true,
+    "showBounds": true
+  },
+  "figures": {
+    "strava-global-heatmap-ride-nairobi-2026-04-27-122624": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2451103,
+            "lon": 36.8217929
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2451103,
+            "lon": 36.8251439
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2469428,
+            "lon": 36.8251439
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2469428,
+            "lon": 36.8217929
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.2460265,
+            "lon": 36.8234684
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.244194005,
+            36.820117432
+          ],
+          [
+            -1.244194005,
+            36.826819431
+          ],
+          [
+            -1.24785901,
+            36.826819431
+          ],
+          [
+            -1.24785901,
+            36.820117432
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-122624",
+          "figureLabel": "Figure 1",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#17.02/-1.245855/36.823306",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.565,
+            "max": 0.885
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.885
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.388
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.24
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.747
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.244194005,
+              "lon": 36.820117432
+            },
+            {
+              "name": "topRight",
+              "lat": -1.244194005,
+              "lon": 36.826819431
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.24785901,
+              "lon": 36.826819431
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.24785901,
+              "lon": 36.820117432
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.244194005,
+            "south": -1.24785901,
+            "west": 36.820117432,
+            "east": 36.826819431
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.293495,
+            "yMetersPerPixel": -0.293585,
+            "xOffsetMeters": 4098796.723,
+            "yOffsetMeters": -138513.93
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2451103,
+                "lon": 36.8217929
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2451103,
+                "lon": 36.8251439
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2469428,
+                "lon": 36.8251439
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2469428,
+                "lon": 36.8217929
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.2460265,
+                "lon": 36.8234684
+              }
+            }
+          ]
+        }
+      },
+      "imageView": {
+        "scale": 0.1654,
+        "offsetX": 68.95140624999999,
+        "offsetY": 70.71968750000002
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123314": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2457035,
+            "lon": 36.8325976
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2457035,
+            "lon": 36.835952
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2475397,
+            "lon": 36.835952
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2475397,
+            "lon": 36.8325976
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.2466216,
+            "lon": 36.8342748
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.244785373,
+            36.830920328
+          ],
+          [
+            -1.244785373,
+            36.837629264
+          ],
+          [
+            -1.248457865,
+            36.837629264
+          ],
+          [
+            -1.248457865,
+            36.830920328
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123314",
+          "figureLabel": "Figure 2",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#17.02/-1.246448/36.834117",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.379,
+            "max": 0.513
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.486
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.275
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.224
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.398
+            },
+            {
+              "pointId": 5,
+              "residualMeters": 0.513
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.244785373,
+              "lon": 36.830920328
+            },
+            {
+              "name": "topRight",
+              "lat": -1.244785373,
+              "lon": 36.837629264
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.248457865,
+              "lon": 36.837629264
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.248457865,
+              "lon": 36.830920328
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.244785373,
+            "south": -1.248457865,
+            "west": 36.830920328,
+            "east": 36.837629264
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.293798,
+            "yMetersPerPixel": -0.294185,
+            "xOffsetMeters": 4099999.296,
+            "yOffsetMeters": -138579.776
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2457035,
+                "lon": 36.8325976
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2457035,
+                "lon": 36.835952
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2475397,
+                "lon": 36.835952
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2475397,
+                "lon": 36.8325976
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.2466216,
+                "lon": 36.8342748
+              }
+            }
+          ]
+        }
+      },
+      "imageView": {
+        "scale": 0.15,
+        "offsetX": 7.56,
+        "offsetY": 82.79
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123620": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 1366.89,
+            "y": 552.05
+          },
+          "map": {
+            "lat": -1.2281523,
+            "lon": 36.8316221
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1690.17,
+            "y": 412.25
+          },
+          "map": {
+            "lat": -1.222209,
+            "lon": 36.8233086
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 2017.82,
+            "y": 386.04
+          },
+          "map": {
+            "lat": -1.2221018,
+            "lon": 36.8233609
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 1446.59,
+            "y": 402.97
+          },
+          "map": {
+            "lat": -1.2284175,
+            "lon": 36.8199556
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 2317.37,
+            "y": 248.84
+          },
+          "map": {
+            "lat": -1.2253814,
+            "lon": 36.8286232
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.224314838,
+            36.818883665
+          ],
+          [
+            -1.224314838,
+            36.82954565
+          ],
+          [
+            -1.230139756,
+            36.82954565
+          ],
+          [
+            -1.230139756,
+            36.818883665
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123620",
+          "figureLabel": "Figure 5",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.36/-1.226955/36.823957",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.475,
+            "max": 0.625
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.625
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.551
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.26
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.409
+            },
+            {
+              "pointId": 5,
+              "residualMeters": 0.532
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.224314838,
+              "lon": 36.818883665
+            },
+            {
+              "name": "topRight",
+              "lat": -1.224314838,
+              "lon": 36.82954565
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.230139756,
+              "lon": 36.82954565
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.230139756,
+              "lon": 36.818883665
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.224314838,
+            "south": -1.230139756,
+            "west": 36.818883665,
+            "east": 36.82954565
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.466911,
+            "yMetersPerPixel": -0.466601,
+            "xOffsetMeters": 4098659.381,
+            "yOffsetMeters": -136300.477
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 1366.89,
+                "y": 552.05
+              },
+              "map": {
+                "lat": -1.2281523,
+                "lon": 36.8316221
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1690.17,
+                "y": 412.25
+              },
+              "map": {
+                "lat": -1.222209,
+                "lon": 36.8233086
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 2017.82,
+                "y": 386.04
+              },
+              "map": {
+                "lat": -1.2221018,
+                "lon": 36.8233609
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 1446.59,
+                "y": 402.97
+              },
+              "map": {
+                "lat": -1.2284175,
+                "lon": 36.8199556
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 2317.37,
+                "y": 248.84
+              },
+              "map": {
+                "lat": -1.2253814,
+                "lon": 36.8286232
+              }
+            }
+          ]
+        }
+      },
+      "imageView": {
+        "scale": 0.3081649815965831,
+        "offsetX": -331.651719312438,
+        "offsetY": 148.81652022849403
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123436": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2487217,
+            "lon": 36.8374947
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2487217,
+            "lon": 36.8408514
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2505637,
+            "lon": 36.8408514
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2505637,
+            "lon": 36.8374947
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.2496427,
+            "lon": 36.839173
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.247800715,
+            36.835816278
+          ],
+          [
+            -1.247800715,
+            36.842529811
+          ],
+          [
+            -1.251484712,
+            36.842529811
+          ],
+          [
+            -1.251484712,
+            36.835816278
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123436",
+          "figureLabel": "Figure 3",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#17.02/-1.249464/36.839015",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.468,
+            "max": 0.956
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.42
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.331
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.539
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.956
+            },
+            {
+              "pointId": 5,
+              "residualMeters": 0.096
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.247800715,
+              "lon": 36.835816278
+            },
+            {
+              "name": "topRight",
+              "lat": -1.247800715,
+              "lon": 36.842529811
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.251484712,
+              "lon": 36.842529811
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.251484712,
+              "lon": 36.835816278
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.247800715,
+            "south": -1.251484712,
+            "west": 36.835816278,
+            "east": 36.842529811
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.294,
+            "yMetersPerPixel": -0.295107,
+            "xOffsetMeters": 4100544.311,
+            "yOffsetMeters": -138915.522
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2487217,
+                "lon": 36.8374947
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2487217,
+                "lon": 36.8408514
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2505637,
+                "lon": 36.8408514
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2505637,
+                "lon": 36.8374947
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.2496427,
+                "lon": 36.839173
+              }
+            }
+          ]
+        }
+      },
+      "imageView": {
+        "scale": 0.2289,
+        "offsetX": 12.12,
+        "offsetY": 33.94
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123525": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2386791,
+            "lon": 36.8397325
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2386791,
+            "lon": 36.845065
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2415966,
+            "lon": 36.845065
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2415966,
+            "lon": 36.8397325
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.2401379,
+            "lon": 36.8423988
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.23722035,
+            36.83706631
+          ],
+          [
+            -1.23722035,
+            36.847731225
+          ],
+          [
+            -1.243055402,
+            36.847731225
+          ],
+          [
+            -1.243055402,
+            36.83706631
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123525",
+          "figureLabel": "Figure 4",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.36/-1.239862/36.842144",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.26,
+            "max": 0.392
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.065
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.392
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.223
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.36
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.23722035,
+              "lon": 36.83706631
+            },
+            {
+              "name": "topRight",
+              "lat": -1.23722035,
+              "lon": 36.847731225
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.243055402,
+              "lon": 36.847731225
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.243055402,
+              "lon": 36.83706631
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.23722035,
+            "south": -1.243055402,
+            "west": 36.83706631,
+            "east": 36.847731225
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.467039,
+            "yMetersPerPixel": -0.467415,
+            "xOffsetMeters": 4100683.464,
+            "yOffsetMeters": -137737.444
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2386791,
+                "lon": 36.8397325
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2386791,
+                "lon": 36.845065
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2415966,
+                "lon": 36.845065
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2415966,
+                "lon": 36.8397325
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.2401379,
+                "lon": 36.8423988
+              }
+            }
+          ]
+        }
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123700": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2326019,
+            "lon": 36.821622
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.2326019,
+            "lon": 36.8258479
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2349145,
+            "lon": 36.8258479
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2349145,
+            "lon": 36.821622
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.2337582,
+            "lon": 36.823735
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.231445569,
+            36.819509108
+          ],
+          [
+            -1.231445569,
+            36.827960834
+          ],
+          [
+            -1.236070778,
+            36.827960834
+          ],
+          [
+            -1.236070778,
+            36.819509108
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123700",
+          "figureLabel": "Figure 6",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.69/-1.233539/36.82353",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 0.551,
+            "max": 0.595
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 0.595
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.512
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.512
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 0.584
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.231445569,
+              "lon": 36.819509108
+            },
+            {
+              "name": "topRight",
+              "lat": -1.231445569,
+              "lon": 36.827960834
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.236070778,
+              "lon": 36.827960834
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.236070778,
+              "lon": 36.819509108
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.231445569,
+            "south": -1.236070778,
+            "west": 36.819509108,
+            "east": 36.827960834
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.370119,
+            "yMetersPerPixel": -0.3705,
+            "xOffsetMeters": 4098729.005,
+            "yOffsetMeters": -137094.449
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2326019,
+                "lon": 36.821622
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.2326019,
+                "lon": 36.8258479
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2349145,
+                "lon": 36.8258479
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2349145,
+                "lon": 36.821622
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.2337582,
+                "lon": 36.823735
+              }
+            }
+          ]
+        }
+      }
+    },
+    "strava-global-heatmap-ride-nairobi-2026-04-27-123813": {
+      "nextPointNumber": 6,
+      "selectedPointId": 5,
+      "points": [
+        {
+          "id": 1,
+          "image": {
+            "x": 635.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.233002,
+            "lon": 36.8301981
+          }
+        },
+        {
+          "id": 2,
+          "image": {
+            "x": 1906.5,
+            "y": 347.5
+          },
+          "map": {
+            "lat": -1.233002,
+            "lon": 36.837374
+          }
+        },
+        {
+          "id": 3,
+          "image": {
+            "x": 1906.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2369161,
+            "lon": 36.837374
+          }
+        },
+        {
+          "id": 4,
+          "image": {
+            "x": 635.5,
+            "y": 1042.5
+          },
+          "map": {
+            "lat": -1.2369161,
+            "lon": 36.8301981
+          }
+        },
+        {
+          "id": 5,
+          "image": {
+            "x": 1271,
+            "y": 695
+          },
+          "map": {
+            "lat": -1.234959,
+            "lon": 36.833786
+          }
+        }
+      ],
+      "lastFit": {
+        "polygonLatLngs": [
+          [
+            -1.231044965,
+            36.826610197
+          ],
+          [
+            -1.231044965,
+            36.840961901
+          ],
+          [
+            -1.238873081,
+            36.840961901
+          ],
+          [
+            -1.238873081,
+            36.826610197
+          ]
+        ],
+        "output": {
+          "figureId": "strava-global-heatmap-ride-nairobi-2026-04-27-123813",
+          "figureLabel": "Figure 7",
+          "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#15.93/-1.23459/36.833437",
+          "fitMode": "axis-aligned",
+          "controlPointCount": 5,
+          "residualSummaryMeters": {
+            "mean": 1.068,
+            "max": 2.14
+          },
+          "residuals": [
+            {
+              "pointId": 1,
+              "residualMeters": 1.366
+            },
+            {
+              "pointId": 2,
+              "residualMeters": 0.391
+            },
+            {
+              "pointId": 3,
+              "residualMeters": 0.948
+            },
+            {
+              "pointId": 4,
+              "residualMeters": 2.14
+            },
+            {
+              "pointId": 5,
+              "residualMeters": 0.496
+            }
+          ],
+          "corners": [
+            {
+              "name": "topLeft",
+              "lat": -1.231044965,
+              "lon": 36.826610197
+            },
+            {
+              "name": "topRight",
+              "lat": -1.231044965,
+              "lon": 36.840961901
+            },
+            {
+              "name": "bottomRight",
+              "lat": -1.238873081,
+              "lon": 36.840961901
+            },
+            {
+              "name": "bottomLeft",
+              "lat": -1.238873081,
+              "lon": 36.826610197
+            }
+          ],
+          "inferredBounds": {
+            "north": -1.231044965,
+            "south": -1.238873081,
+            "west": 36.826610197,
+            "east": 36.840961901
+          },
+          "transform": {
+            "type": "axis-aligned",
+            "xMetersPerPixel": 0.628491,
+            "yMetersPerPixel": -0.627068,
+            "xOffsetMeters": 4099519.495,
+            "yOffsetMeters": -137049.844
+          },
+          "controlPoints": [
+            {
+              "pointId": 1,
+              "image": {
+                "x": 635.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.233002,
+                "lon": 36.8301981
+              }
+            },
+            {
+              "pointId": 2,
+              "image": {
+                "x": 1906.5,
+                "y": 347.5
+              },
+              "map": {
+                "lat": -1.233002,
+                "lon": 36.837374
+              }
+            },
+            {
+              "pointId": 3,
+              "image": {
+                "x": 1906.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2369161,
+                "lon": 36.837374
+              }
+            },
+            {
+              "pointId": 4,
+              "image": {
+                "x": 635.5,
+                "y": 1042.5
+              },
+              "map": {
+                "lat": -1.2369161,
+                "lon": 36.8301981
+              }
+            },
+            {
+              "pointId": 5,
+              "image": {
+                "x": 1271,
+                "y": 695
+              },
+              "map": {
+                "lat": -1.234959,
+                "lon": 36.833786
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

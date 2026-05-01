@@ -1,0 +1,31 @@
+{
+  "changeset_id": 181909081,
+  "changeset_url": "https://www.openstreetmap.org/changeset/181909081",
+  "comment": "Add traced Karura paths from Strava heatmap (W13 and W14)",
+  "source": "Strava Global Heatmap",
+  "modified_way_ids": [],
+  "new_way_old_ids": [
+    -13,
+    -14
+  ],
+  "created_nodes": [
+    {
+      "old_id": -1,
+      "new_id": 13768240204
+    },
+    {
+      "old_id": -2,
+      "new_id": 13768240205
+    }
+  ],
+  "created_ways": [
+    {
+      "old_id": -13,
+      "new_id": 1504644453
+    },
+    {
+      "old_id": -14,
+      "new_id": 1504644454
+    }
+  ]
+}

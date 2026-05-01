@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="openstreetmap-cgimap 2.1.0 (1312248 spike-06.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <create>
+  <node id="13768240204" visible="true" version="1" changeset="181909081" timestamp="2026-04-27T20:00:21Z" user="r~~~" uid="8972973" lat="-1.2271988" lon="36.8289663"/>
+ </create>
+ <create>
+  <node id="13768240205" visible="true" version="1" changeset="181909081" timestamp="2026-04-27T20:00:21Z" user="r~~~" uid="8972973" lat="-1.2271693" lon="36.8283182"/>
+ </create>
+ <create>
+  <way id="1504644453" visible="true" version="1" changeset="181909081" timestamp="2026-04-27T20:00:21Z" user="r~~~" uid="8972973">
+   <nd ref="2847949545"/>
+   <nd ref="13768240204"/>
+   <nd ref="12330726051"/>
+   <tag k="bicycle" v="yes"/>
+   <tag k="foot" v="yes"/>
+   <tag k="highway" v="path"/>
+   <tag k="mtb:scale" v="2"/>
+   <tag k="source" v="Strava Global Heatmap"/>
+  </way>
+ </create>
+ <create>
+  <way id="1504644454" visible="true" version="1" changeset="181909081" timestamp="2026-04-27T20:00:21Z" user="r~~~" uid="8972973">
+   <nd ref="747730076"/>
+   <nd ref="13768240205"/>
+   <nd ref="12330726051"/>
+   <tag k="bicycle" v="yes"/>
+   <tag k="foot" v="yes"/>
+   <tag k="highway" v="path"/>
+   <tag k="mtb:scale" v="2"/>
+   <tag k="source" v="Strava Global Heatmap"/>
+  </way>
+ </create>
+</osmChange>

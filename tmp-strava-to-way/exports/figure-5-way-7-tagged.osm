@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<osm version="0.6" generator="Strava to Way Fit Editor">
+  <node id="-1" visible="true" lat="-1.2250860" lon="36.8210665" />
+  <node id="-2" visible="true" lat="-1.2251281" lon="36.8206637" />
+  <node id="-3" visible="true" lat="-1.2250751" lon="36.8202066" />
+  <node id="-4" visible="true" lat="-1.2251545" lon="36.8198422" />
+  <node id="-5" visible="true" lat="-1.2253060" lon="36.8196689" />
+  <node id="-6" visible="true" lat="-1.2254952" lon="36.8195010" />
+  <way id="1213220384" version="1" visible="true">
+    <nd ref="2847949714" />
+    <nd ref="11240465990" />
+    <nd ref="11240465991" />
+    <nd ref="11240465992" />
+    <nd ref="11240465993" />
+    <nd ref="11240465994" />
+    <nd ref="11240465995" />
+    <nd ref="11240465996" />
+    <nd ref="11240465997" />
+    <nd ref="11240465998" />
+    <nd ref="-1" />
+    <nd ref="11240465999" />
+    <nd ref="11240466000" />
+    <nd ref="11240466001" />
+    <nd ref="11240466002" />
+    <nd ref="11240466003" />
+    <tag k="highway" v="path" />
+  </way>
+  <way id="280734650" version="3" visible="true">
+    <nd ref="2847949514" />
+    <nd ref="2847949715" />
+    <nd ref="2847949716" />
+    <nd ref="2847949718" />
+    <nd ref="2847949720" />
+    <nd ref="2847949721" />
+    <nd ref="2847949722" />
+    <nd ref="2847949723" />
+    <nd ref="2847949724" />
+    <nd ref="2847949725" />
+    <nd ref="2847949726" />
+    <nd ref="2847949727" />
+    <nd ref="2847949728" />
+    <nd ref="2847949729" />
+    <nd ref="2847949730" />
+    <nd ref="2847949731" />
+    <nd ref="2847949706" />
+    <nd ref="2847949732" />
+    <nd ref="2847949733" />
+    <nd ref="2847949734" />
+    <nd ref="2847949735" />
+    <nd ref="2847949736" />
+    <nd ref="2847949737" />
+    <nd ref="2847949738" />
+    <nd ref="2847949714" />
+    <nd ref="-6" />
+    <nd ref="2847949753" />
+    <nd ref="2847949757" />
+    <nd ref="9923907711" />
+    <nd ref="9923907712" />
+    <nd ref="9923907713" />
+    <nd ref="2847949763" />
+    <nd ref="2847949794" />
+    <nd ref="2847949713" />
+    <tag k="highway" v="path" />
+  </way>
+  <way id="-7" visible="true">
+    <nd ref="-1" />
+    <nd ref="-2" />
+    <nd ref="-3" />
+    <nd ref="-4" />
+    <nd ref="-5" />
+    <nd ref="-6" />
+    <tag k="source" v="Strava Global Heatmap" />
+    <tag k="highway" v="path" />
+    <tag k="foot" v="yes" />
+    <tag k="bicycle" v="yes" />
+    <tag k="mtb:scale" v="2+" />
+  </way>
+</osm>

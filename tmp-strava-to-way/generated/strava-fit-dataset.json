@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-27T11:06:23.864421+00:00",
+  "generatedAt": "2026-04-28T07:45:41.529398+00:00",
   "tileSize": 512,
   "figures": [
     {
@@ -246,6 +246,76 @@
         "east": 36.84317072723803
       },
       "regionGeoJsonPath": "generated/regions/strava-global-heatmap-ride-nairobi-2026-04-27-123813.geojson"
+    },
+    {
+      "id": "strava-global-heatmap-ride-nairobi-2026-04-28-094922",
+      "index": 8,
+      "label": "Figure 8",
+      "fileName": "strava-global-heatmap-ride-nairobi-2026-04-28-094922.png",
+      "imagePath": "strava-global-heatmap-ride-nairobi-2026-04-28-094922.png",
+      "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.41/-1.237252/36.841895",
+      "capturedAt": "2026-04-28 09:49:22",
+      "capturedFrom": "/home/ra/Pictures/Screenshots/Screenshot from 2026-04-28 09-49-22.png",
+      "imageSize": {
+        "width": 2017,
+        "height": 1406
+      },
+      "assumedDevicePixelRatio": 2.0,
+      "view": {
+        "zoom": 16.41,
+        "center": {
+          "lat": -1.237252,
+          "lon": 36.841895
+        }
+      },
+      "approxBounds": {
+        "north": -1.2344143775760228,
+        "south": -1.2400896193888342,
+        "west": 36.83782329582007,
+        "east": 36.84596670417989
+      },
+      "regionBounds": {
+        "north": -1.2333928340497167,
+        "south": -1.2411111629151403,
+        "west": 36.83635748231531,
+        "east": 36.84743251768465
+      },
+      "regionGeoJsonPath": "generated/regions/strava-global-heatmap-ride-nairobi-2026-04-28-094922.geojson"
+    },
+    {
+      "id": "strava-global-heatmap-ride-nairobi-2026-04-28-095150",
+      "index": 9,
+      "label": "Figure 9",
+      "fileName": "strava-global-heatmap-ride-nairobi-2026-04-28-095150.png",
+      "imagePath": "strava-global-heatmap-ride-nairobi-2026-04-28-095150.png",
+      "sourceUrl": "https://www.strava.com/maps/global-heatmap?sport=RideLike&style=standard&terrain=false&labels=false&poi=false&cPhotos=false&3d=false&gColor=mobileblue&gOpacity=100#16.07/-1.23632/36.821436",
+      "capturedAt": "2026-04-28 09:51:50",
+      "capturedFrom": "/home/ra/Pictures/Screenshots/Screenshot from 2026-04-28 09-51-50.png",
+      "imageSize": {
+        "width": 1860,
+        "height": 1254
+      },
+      "assumedDevicePixelRatio": 2.0,
+      "view": {
+        "zoom": 16.07,
+        "center": {
+          "lat": -1.23632,
+          "lon": 36.821436
+        }
+      },
+      "approxBounds": {
+        "north": -1.233116555501488,
+        "south": -1.2395234406332019,
+        "west": 36.816683375939135,
+        "east": 36.826188624060904
+      },
+      "regionBounds": {
+        "north": -1.2319633161777794,
+        "south": -1.2406766799569104,
+        "west": 36.81497243127722,
+        "east": 36.82789956872282
+      },
+      "regionGeoJsonPath": "generated/regions/strava-global-heatmap-ride-nairobi-2026-04-28-095150.geojson"
     }
   ]
 }
