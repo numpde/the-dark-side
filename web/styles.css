@@ -243,6 +243,45 @@ button {
   pointer-events: none;
 }
 
+.bike-rental-links {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid rgba(22, 33, 30, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.bike-rental-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.bike-rental-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: baseline;
+}
+
+.bike-rental-group p {
+  min-width: 9.8rem;
+  margin: 0;
+  color: rgba(22, 33, 30, 0.62);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.bike-rental-group a {
+  color: var(--fern-deep);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 button:hover,
 .download-link:hover {
   transform: translateY(-1px);
@@ -321,6 +360,15 @@ button:hover,
     width: 100%;
     gap: 10px;
     flex-wrap: nowrap;
+  }
+
+  .bike-rental-group {
+    gap: 6px 10px;
+  }
+
+  .bike-rental-group p {
+    flex-basis: 100%;
+    min-width: 0;
   }
 
   .note {

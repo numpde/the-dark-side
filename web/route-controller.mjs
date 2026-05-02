@@ -39,6 +39,7 @@ export function createRouteController({
     downloadLink,
     routeStrip,
     buttonRow,
+    bikeRentalLinks,
     mapElement,
   } = elements;
 
@@ -139,6 +140,13 @@ export function createRouteController({
       controlsDisabledOverride: appState.controlsDisabledOverride,
       loadingLabel: appState.loadingLabel,
     });
+  }
+
+  function syncAreaSections() {
+    if (!bikeRentalLinks) {
+      return;
+    }
+    bikeRentalLinks.classList.toggle("hidden", appState.area?.id !== "karura");
   }
 
   function beginRouteRefresh({ preserveRoute, loadingLabel }) {
@@ -262,6 +270,7 @@ export function createRouteController({
         }
         appState.area = selectedArea;
         areaSelect.value = appState.area.id;
+        syncAreaSections();
         populateJunctionSelectors(
           startSelect,
           endSelect,
@@ -312,6 +321,7 @@ export function createRouteController({
       endSelect,
     );
     appState.area = resolved.area;
+    syncAreaSections();
     if (resolved.canonicalized) {
       console.warn("Canonicalized invalid route query parameters", resolved.canonical);
       replaceUrlWithSelection(resolved.canonical);

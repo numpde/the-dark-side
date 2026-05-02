@@ -22,6 +22,7 @@ const controller = createRouteController({
     downloadLink: document.getElementById("download-link"),
     routeStrip: document.querySelector(".route-strip"),
     buttonRow: document.querySelector(".button-row"),
+    bikeRentalLinks: document.getElementById("bike-rental-links"),
     mapElement: document.getElementById("map"),
   },
 });
