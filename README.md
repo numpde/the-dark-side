@@ -1,6 +1,6 @@
 # the-dark-side
 
-Random bike routes through Karura Forest, plus the data/build tooling behind the published app.
+Random bike routes through Karura Forest and Sigiria Forest, plus the data/build tooling behind the published app.
 
 ## App
 
@@ -9,6 +9,7 @@ Random bike routes through Karura Forest, plus the data/build tooling behind the
 - Local editor: `http://127.0.0.1:8765/editor.html`
 
 What the app does:
+- selects Karura Forest or Sigiria Forest
 - generates long, low-overlap routes in the browser
 - shows the route over OpenStreetMap
 - exports GPX in the browser
@@ -25,9 +26,9 @@ What the editor does:
 ├── the_dark_side/        Python package
 ├── source/               Canonical structural patches, route policy, planner config
 ├── curated/              Canonical junction + figure catalogs
-├── data/                 Downloaded map, elevation cache, and derived graph assets
+├── data/                 Downloaded map snapshot, elevation cache, and derived graph assets
 ├── web/                  Frontend source
-├── dist/                 Built Pages artifact
+├── dist/                 Built Pages artifact, generated locally and in CI
 ├── assets/               Screenshot, viewport, and figure/debug outputs
 ├── tests/                Python, Node, and Playwright tests
 └── .github/workflows/    CI and Pages deployment
@@ -59,15 +60,26 @@ The project has three layers:
 
 GitHub Pages now serves `dist/`, not raw `web/` source files.
 
-## Setup
+## Contained Development
 
-Build the locked dev toolchain images and install Node dependencies through the install container:
+All dev, test, build, and release commands run through Docker. Host-local `pip`, `npm ci`, `pytest`, `npx`, and direct `python -m ...` workflows are intentionally unsupported for this repo.
+
+Build the pinned toolchain images and install Node dependencies through the install container:
 
 ```bash
 make install
 ```
 
-Host-local `pip`, `npm ci`, `pytest`, `npx`, and direct `python -m ...` workflows are not supported for this repo. Use `make ...`, `npm run ...`, or `./scripts/dev-container.sh ...`; each route enters the locked container first. The normal check lane runs with no runtime network, dropped Linux capabilities, `no-new-privileges`, a read-only container root filesystem, and PID/RAM limits. External data refreshes must opt in with `./scripts/dev-container.sh --allow-network ...`.
+Use `make ...`, `npm run ...`, or `./scripts/dev-container.sh ...`; each route enters the container first.
+
+Normal command runs use:
+- no runtime network
+- dropped Linux capabilities
+- `no-new-privileges`
+- a read-only container root filesystem
+- PID and memory limits
+
+`make preview` and `make serve` publish only `127.0.0.1:${DARK_SIDE_HOST_PORT:-8765}` for a local browser. External refreshes, such as OSM or elevation downloads, must opt in with `./scripts/dev-container.sh --allow-network ...`.
 
 ## Main workflows
 
@@ -107,6 +119,18 @@ Rebuild everything, optionally refreshing elevation first:
 ```bash
 ./scripts/dev-container.sh --allow-network rebuild:all --with-elevation
 ```
+
+Refresh the OSM snapshot before rebuilding derived assets:
+
+```bash
+./scripts/dev-container.sh --allow-network run python -m the_dark_side.download_karura_map \
+  --boundary-way-id 24040003
+./scripts/dev-container.sh run python -m the_dark_side.apply_karura_patches
+./scripts/dev-container.sh run python -m the_dark_side.build_karura_contigs
+./scripts/dev-container.sh --allow-network rebuild:all --with-elevation
+```
+
+`24040003` is the current OSM way for Sigiria Forest. Karura Forest and Karura Playground are included by the downloader's default relations.
 
 ### Verify
 
@@ -198,9 +222,21 @@ These are derived, not source of truth:
 
 Rebuilds should fail if canonical rules or curated junctions can no longer be resolved cleanly onto the refreshed graph.
 
+### Areas and gates
+
+Areas are defined in `curated/karura_junctions.json` under `meta.areas`. Each curated junction has an `area_id`; the app manifest groups the area dropdown and start/end selectors from those values.
+
+Current published areas:
+- `karura`: Karura Forest
+- `sigiria`: Sigiria Forest
+
+Sigiria entrances are curated from OSM nodes:
+- Gate E / Limuru Road: `6950727290`
+- Gate F / Thigiri Lane: `2847789394`
+
 ## Boundary model
 
-The normalized map uses two zones:
+The normalized map unions the default Karura relations with optional closed boundary ways such as Sigiria Forest. The result uses two zones:
 
 - `A`: core boundary
 - `B`: buffered boundary
@@ -211,7 +247,7 @@ Segments in `B - A`:
 - are excluded from routing by default
 - can be explicitly re-included via route policy
 
-This keeps near-boundary connectors visible and editable without silently making them routable.
+This keeps near-boundary connectors visible and editable without silently making them routable. Simple closed OSM areas can stay as ways; relation conversion is only needed upstream in OSM if the geometry needs multipolygon semantics such as holes or multiple outer rings.
 
 ## Useful modules
 
@@ -271,16 +307,33 @@ Important derived files:
 
 GitHub Pages deployment is defined in `.github/workflows/deploy-pages.yml`.
 
-On push to `main`, CI:
+On push to `main`, CI uses the checked-in data assets and:
 1. checks out the repo
-2. installs Python, Node, and Playwright
-3. runs source checks and tests
-4. rebuilds Python-derived assets
-5. bundles the frontend into hashed files in `dist/`
-6. verifies source assets and the built `dist/` artifact
-7. runs Playwright against `dist/`
-8. uploads and deploys `dist/` to GitHub Pages
+2. builds the contained install/check images
+3. installs Node dependencies in the install container
+4. runs source checks, Python tests, and Node tests in the locked check container
+5. rebuilds Python-derived app assets
+6. bundles the frontend into hashed files in `dist/`
+7. verifies source assets and the built `dist/` artifact
+8. runs Playwright against `dist/`
+9. uploads and deploys `dist/` to GitHub Pages
+
+CI does not refresh OSM or elevation from external services. Do that locally with `--allow-network`, commit the resulting data assets, then push.
+
+The workflow has read-only repository contents permission plus the minimum Pages deployment permissions: `pages: write` and `id-token: write`.
 
 The public URL stays:
 
 `https://numpde.github.io/the-dark-side/`
+
+Publish the current `main` branch:
+
+```bash
+git push origin main
+```
+
+Manual Pages deploy:
+
+```bash
+gh workflow run "Deploy Static App"
+```
