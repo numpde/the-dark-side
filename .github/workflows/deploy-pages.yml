@@ -8,6 +8,9 @@ on:
     branches: ["main"]
     paths:
       - ".github/workflows/deploy-pages.yml"
+      - ".dockerignore"
+      - "Dockerfile"
+      - "Makefile"
       - "package.json"
       - "package-lock.json"
       - "playwright.config.mjs"
@@ -40,47 +43,11 @@ jobs:
 
       - uses: actions/configure-pages@v6
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
+      - name: Install contained dependencies
+        run: ./scripts/dev-container.sh --install
 
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-
-      - name: Install frontend dependencies
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run frontend JS checks
-        run: |
-          npm run check:web
-          npm run test:web
-
-      - name: Run Python asset tests
-        run: |
-          python3 -m unittest -v \
-            tests.test_cli_entrypoints \
-            tests.test_build_config \
-            tests.test_export_catalog \
-            tests.test_junction_bindings \
-            tests.test_map_patches \
-            tests.test_route_diversity \
-            tests.test_web_assets
-
-      - name: Build deploy artifact
-        run: npm run build:web
-
-      - name: Verify asset provenance
-        run: |
-          python3 -m the_dark_side.verify_editor_assets
-          python3 -m the_dark_side.verify_app_assets
-          python3 -m the_dark_side.verify_web_dist
-
-      - name: Run Playwright smoke tests against dist
-        run: npx playwright test
+      - name: Run contained checks and build Pages artifact
+        run: ./scripts/dev-container.sh ci
 
       - uses: actions/upload-pages-artifact@v5
         with:

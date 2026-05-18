@@ -50,6 +50,7 @@ from .web_assets import load_elevation_asset
 
 
 DEFAULT_CATALOG_JSON = ROUTE_CATALOG_JSON
+DEFAULT_AREA_ID = "karura"
 
 
 @dataclass(frozen=True)
@@ -85,6 +86,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
+    parser.add_argument("--area-id", default=DEFAULT_AREA_ID)
     parser.add_argument("--algorithm", choices=PLANNER_NAMES, action="append")
     add_debug_catalog_args(parser, build_defaults)
     add_planner_config_args(parser, build_defaults)
@@ -272,6 +274,23 @@ def area_bounds(graph) -> list[float]:
     ]
 
 
+def area_name_for_junction_catalog(junction_catalog: dict, area_id: str) -> str:
+    for area in junction_catalog.get("meta", {}).get("areas", []):
+        if area.get("id") == area_id:
+            return str(area.get("name") or area_id)
+    if area_id == DEFAULT_AREA_ID:
+        return "Karura Forest"
+    return area_id
+
+
+def junction_defs_for_area(junction_catalog: dict, area_id: str) -> list[dict]:
+    return [
+        junction
+        for junction in junction_catalog["junctions"]
+        if str(junction.get("area_id") or DEFAULT_AREA_ID) == area_id
+    ]
+
+
 def canonical_coordinates(record: RouteRecord) -> list[list[float]]:
     if record.direction_from_family == "forward":
         return record.coordinates
@@ -319,7 +338,9 @@ def plan_catalog_records(args: argparse.Namespace) -> dict[str, object]:
     )
     junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
-    junction_defs = junction_catalog["junctions"]
+    junction_defs = junction_defs_for_area(junction_catalog, args.area_id)
+    if not junction_defs:
+        raise ValueError(f"junction catalog has no junctions for area_id {args.area_id!r}")
     junction_ids = [junction["id"] for junction in junction_defs]
     junction_refs = {
         junction_id: resolve_junction_ref(junction_catalog, junction_id, graph.asset_id, junction_bindings)
@@ -463,8 +484,8 @@ def build_catalog_payload(args: argparse.Namespace) -> dict:
             "build_config": build_config_payload,
             "elevation_asset_path": repo_rel(args.elevation_json) if args.elevation_json and args.elevation_json.exists() else None,
             "elevation_asset_matches_graph": elevation_matches_graph,
-            "area_id": "karura",
-            "area_name": "Karura Forest",
+            "area_id": args.area_id,
+            "area_name": area_name_for_junction_catalog(junction_catalog, args.area_id),
             "bounds": area_bounds(graph),
         },
         "junctions": [

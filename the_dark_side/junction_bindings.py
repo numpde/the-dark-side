@@ -27,7 +27,13 @@ def haversine_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
 def nearest_graph_node(graph, *, lat: float, lon: float) -> tuple[int, float]:
     best_node_id = -1
     best_distance = float("inf")
-    for node_id, node in graph.nodes.items():
+    candidate_node_ids = [
+        node_id
+        for node_id in graph.nodes
+        if graph.adjacency.get(node_id)
+    ] or list(graph.nodes)
+    for node_id in candidate_node_ids:
+        node = graph.nodes[node_id]
         distance = haversine_meters(lat, lon, node.lat, node.lon)
         if distance < best_distance:
             best_node_id = node_id

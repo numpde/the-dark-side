@@ -31,11 +31,58 @@ from .web_assets import (
     network_geojson,
 )
 
+DEFAULT_AREA = {"id": "karura", "name": "Karura Forest"}
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     add_app_asset_args(parser)
     return parser.parse_args(argv)
+
+
+def junction_catalog_area_defs(junction_catalog: dict) -> list[dict[str, str]]:
+    area_defs = junction_catalog.get("meta", {}).get("areas")
+    if not area_defs:
+        return [dict(DEFAULT_AREA)]
+    return [
+        {
+            "id": str(area["id"]),
+            "name": str(area["name"]),
+        }
+        for area in area_defs
+    ]
+
+
+def junction_area_id(junction: dict, default_area_id: str) -> str:
+    return str(junction.get("area_id") or default_area_id)
+
+
+def scenarios_for_junctions(junction_defs: list[dict]) -> list[dict]:
+    return [
+        {
+            "id": f"{start['id']}__to__{end['id']}",
+            "start_junction_id": start["id"],
+            "end_junction_id": end["id"],
+            "is_loop": start["id"] == end["id"],
+        }
+        for start in junction_defs
+        for end in junction_defs
+    ]
+
+
+def bounds_for_junctions(junction_defs: list[dict], graph) -> list[float]:
+    if junction_defs:
+        lons = [float(junction["location"]["lon"]) for junction in junction_defs]
+        lats = [float(junction["location"]["lat"]) for junction in junction_defs]
+    else:
+        lons = [node.lon for node in graph.nodes.values()]
+        lats = [node.lat for node in graph.nodes.values()]
+    return [
+        round(min(lons), 6),
+        round(min(lats), 6),
+        round(max(lons), 6),
+        round(max(lats), 6),
+    ]
 
 
 def build_app_manifest(
@@ -54,17 +101,16 @@ def build_app_manifest(
         for binding in junction_bindings.get("bindings", [])
     }
     planner_config = browser_planner_config_from_build_config(build_config_payload)
-    junction_defs = junction_catalog["junctions"]
-    scenarios = [
-        {
-            "id": f"{start['id']}__to__{end['id']}",
-            "start_junction_id": start["id"],
-            "end_junction_id": end["id"],
-            "is_loop": start["id"] == end["id"],
-        }
-        for start in junction_defs
-        for end in junction_defs
-    ]
+    area_defs = junction_catalog_area_defs(junction_catalog)
+    default_area_id = area_defs[0]["id"]
+    junction_defs_by_area = {
+        area["id"]: [
+            junction
+            for junction in junction_catalog["junctions"]
+            if junction_area_id(junction, default_area_id) == area["id"]
+        ]
+        for area in area_defs
+    }
     return {
         "meta": {
             "generated_at": utc_now_z(),
@@ -88,23 +134,20 @@ def build_app_manifest(
         },
         "areas": [
             {
-                "id": "karura",
-                "name": "Karura Forest",
-                "bounds": [
-                    round(min(node.lon for node in graph.nodes.values()), 6),
-                    round(min(node.lat for node in graph.nodes.values()), 6),
-                    round(max(node.lon for node in graph.nodes.values()), 6),
-                    round(max(node.lat for node in graph.nodes.values()), 6),
-                ],
+                "id": area["id"],
+                "name": area["name"],
+                "bounds": bounds_for_junctions(junction_defs_by_area[area["id"]], graph),
                 "junctions": [
                     {
                         **junction,
                         "graph_node_id": junction_node_id_by_id[junction["id"]],
                     }
-                    for junction in junction_defs
+                    for junction in junction_defs_by_area[area["id"]]
                 ],
-                "scenarios": scenarios,
+                "scenarios": scenarios_for_junctions(junction_defs_by_area[area["id"]]),
             }
+            for area in area_defs
+            if junction_defs_by_area[area["id"]]
         ],
     }
 

@@ -7,6 +7,7 @@ const repoRoot = path.resolve(new URL("..", import.meta.url).pathname);
 const webDir = path.join(repoRoot, "web");
 const distDir = path.join(repoRoot, "dist");
 const assetsDir = path.join(distDir, "assets");
+const leafletDistDir = path.join(repoRoot, "node_modules", "leaflet", "dist");
 
 function rmrf(targetPath) {
   fs.rmSync(targetPath, { recursive: true, force: true });
@@ -27,6 +28,11 @@ function readText(filePath) {
 function writeText(filePath, text) {
   mkdirp(path.dirname(filePath));
   fs.writeFileSync(filePath, text);
+}
+
+function copyFile(sourcePath, targetPath) {
+  mkdirp(path.dirname(targetPath));
+  fs.copyFileSync(sourcePath, targetPath);
 }
 
 function relativeAssetPath(fromFilePath, toFilePath) {
@@ -120,6 +126,9 @@ async function main() {
     copyTree(path.join(webDir, "source"), path.join(distDir, "source"));
     copyTree(path.join(webDir, "styles.css"), path.join(distDir, "styles.css"));
     copyTree(path.join(webDir, "editor.css"), path.join(distDir, "editor.css"));
+    copyFile(path.join(leafletDistDir, "leaflet.css"), path.join(distDir, "vendor", "leaflet", "leaflet.css"));
+    copyFile(path.join(leafletDistDir, "leaflet.js"), path.join(distDir, "vendor", "leaflet", "leaflet.js"));
+    copyTree(path.join(leafletDistDir, "images"), path.join(distDir, "vendor", "leaflet", "images"));
 
     const indexHtml = replaceModuleScript(
       readText(path.join(webDir, "index.html")),

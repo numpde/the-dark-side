@@ -61,24 +61,20 @@ GitHub Pages now serves `dist/`, not raw `web/` source files.
 
 ## Setup
 
-Install Python requirements:
+Build the locked dev toolchain images and install Node dependencies through the install container:
 
 ```bash
-python3 -m pip install -r requirements.txt
+make install
 ```
 
-Install frontend tooling:
-
-```bash
-npm ci
-```
+Host-local `pip`, `npm ci`, `pytest`, `npx`, and direct `python -m ...` workflows are not supported for this repo. Use `make ...`, `npm run ...`, or `./scripts/dev-container.sh ...`; each route enters the locked container first. The normal check lane runs with no runtime network, dropped Linux capabilities, `no-new-privileges`, a read-only container root filesystem, and PID/RAM limits. External data refreshes must opt in with `./scripts/dev-container.sh --allow-network ...`.
 
 ## Main workflows
 
 ### Build and preview the site
 
 ```bash
-npm run serve:web
+make serve
 ```
 
 This:
@@ -89,7 +85,7 @@ This:
 If `dist/` already exists and you just want to serve it:
 
 ```bash
-npm run preview:web
+make preview
 ```
 
 ### Rebuild the data/app stack
@@ -97,19 +93,19 @@ npm run preview:web
 Rebuild editor-facing assets:
 
 ```bash
-python3 -m the_dark_side.rebuild_editor_assets
+make rebuild-editor
 ```
 
 Rebuild app-facing assets:
 
 ```bash
-python3 -m the_dark_side.rebuild_app_assets
+make rebuild-app
 ```
 
 Rebuild everything, optionally refreshing elevation first:
 
 ```bash
-python3 -m the_dark_side.rebuild_all --with-elevation
+./scripts/dev-container.sh --allow-network rebuild:all --with-elevation
 ```
 
 ### Verify
@@ -117,19 +113,25 @@ python3 -m the_dark_side.rebuild_all --with-elevation
 Verify canonical inputs against derived editor assets:
 
 ```bash
-python3 -m the_dark_side.verify_editor_assets
+./scripts/dev-container.sh run python -m the_dark_side.verify_editor_assets
 ```
 
 Verify app assets:
 
 ```bash
-python3 -m the_dark_side.verify_app_assets
+./scripts/dev-container.sh run python -m the_dark_side.verify_app_assets
 ```
 
 Verify the built `dist/` artifact:
 
 ```bash
-python3 -m the_dark_side.verify_web_dist
+./scripts/dev-container.sh run python -m the_dark_side.verify_web_dist
+```
+
+Run all asset verifiers:
+
+```bash
+make verify
 ```
 
 ### Test
@@ -137,21 +139,27 @@ python3 -m the_dark_side.verify_web_dist
 Source-level frontend checks:
 
 ```bash
-npm run check:web
-npm run test:web
+make check
+make test-web
 ```
 
 Browser tests against `dist/`:
 
 ```bash
-npm run test:e2e
+make test-e2e
+```
+
+All Python tests:
+
+```bash
+make test-python
 ```
 
 Selected Python tests:
 
 ```bash
-python3 -m unittest -v tests.test_route_diversity
-python3 -m unittest -v tests.test_cli_entrypoints
+./scripts/dev-container.sh run python -m unittest -v tests.test_route_diversity
+./scripts/dev-container.sh run python -m unittest -v tests.test_cli_entrypoints
 ```
 
 ## Canonical editing model

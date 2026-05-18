@@ -1,6 +1,7 @@
 {
   "junctions": [
     {
+      "area_id": "karura",
       "id": "family_trail_west",
       "kind": "junction",
       "location": {
@@ -15,6 +16,7 @@
       ]
     },
     {
+      "area_id": "karura",
       "id": "kiambu_side_exit",
       "kind": "junction",
       "location": {
@@ -27,13 +29,65 @@
         "kiambu-side",
         "exit"
       ]
+    },
+    {
+      "area_id": "sigiria",
+      "id": "sigiria_gate_e_limuru",
+      "kind": "gate",
+      "location": {
+        "lat": -1.2465946,
+        "lon": 36.8151386
+      },
+      "name": "Gate E / Limuru Road",
+      "notes": "OSM node 6950727290, Sigiria gate on Limuru Road.",
+      "osm": {
+        "type": "node",
+        "id": 6950727290,
+        "url": "https://www.openstreetmap.org/node/6950727290"
+      },
+      "tags": [
+        "sigiria",
+        "gate-e",
+        "limuru-road"
+      ]
+    },
+    {
+      "area_id": "sigiria",
+      "id": "sigiria_gate_f_thigiri",
+      "kind": "gate",
+      "location": {
+        "lat": -1.2406117,
+        "lon": 36.7950299
+      },
+      "name": "Gate F / Thigiri Lane",
+      "notes": "OSM node 2847789394, Sigiria gate on Thigiri Lane.",
+      "osm": {
+        "type": "node",
+        "id": 2847789394,
+        "url": "https://www.openstreetmap.org/node/2847789394"
+      },
+      "tags": [
+        "sigiria",
+        "gate-f",
+        "thigiri-lane"
+      ]
     }
   ],
   "meta": {
     "asset_id": "karura-junctions-curated-v1",
     "asset_kind": "junction_catalog",
-    "area": "Karura",
-    "description": "Curated named junction locations for Karura.",
+    "area": "Karura and Sigiria",
+    "areas": [
+      {
+        "id": "karura",
+        "name": "Karura Forest"
+      },
+      {
+        "id": "sigiria",
+        "name": "Sigiria Forest"
+      }
+    ],
+    "description": "Curated named junction locations for Karura and Sigiria.",
     "schema_version": 3
   }
 }

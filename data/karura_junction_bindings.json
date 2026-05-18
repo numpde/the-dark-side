@@ -1,9 +1,9 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T10:40:49.991380Z",
-    "asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "generated_at": "2026-05-18T18:11:42.203356Z",
+    "asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "asset_kind": "junction_bindings",
-    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "junction_catalog_asset_id": "karura-junctions-curated-v1",
     "junctions_path": "curated/karura_junctions.json",
     "graph_path": "data/karura_contigs.json"
@@ -13,9 +13,9 @@
       "junction_id": "family_trail_west",
       "graph_node_id": 13075347358,
       "incident_contig_ids": [
-        101,
-        128,
-        268
+        108,
+        139,
+        412
       ],
       "distance_m": 0.0
     },
@@ -23,10 +23,29 @@
       "junction_id": "kiambu_side_exit",
       "graph_node_id": 6159312406,
       "incident_contig_ids": [
-        37,
-        134,
-        211,
-        212
+        38,
+        149,
+        319,
+        320
+      ],
+      "distance_m": 0.0
+    },
+    {
+      "junction_id": "sigiria_gate_e_limuru",
+      "graph_node_id": 2847798978,
+      "incident_contig_ids": [
+        192,
+        193,
+        194
+      ],
+      "distance_m": 13.086
+    },
+    {
+      "junction_id": "sigiria_gate_f_thigiri",
+      "graph_node_id": 2847789394,
+      "incident_contig_ids": [
+        80,
+        84
       ],
       "distance_m": 0.0
     }

@@ -16,7 +16,7 @@
           ]
         },
         {
-          "contig_id": 218,
+          "contig_id": 332,
           "node_ids": [
             6369379405,
             260566262,
@@ -30,7 +30,7 @@
           ]
         },
         {
-          "contig_id": 217,
+          "contig_id": 331,
           "node_ids": [
             6369379403,
             260566268,
@@ -48,7 +48,7 @@
           ]
         },
         {
-          "contig_id": 216,
+          "contig_id": 330,
           "node_ids": [
             6369379402,
             6608828392,
@@ -62,7 +62,7 @@
           ]
         },
         {
-          "contig_id": 136,
+          "contig_id": 151,
           "node_ids": [
             2639598617,
             260566273,
@@ -145,7 +145,7 @@
     {
       "matches": [
         {
-          "contig_id": 13,
+          "contig_id": 14,
           "node_ids": [
             272329805,
             2847949705
@@ -155,7 +155,7 @@
           ]
         },
         {
-          "contig_id": 153,
+          "contig_id": 257,
           "node_ids": [
             2847824295,
             2847949590,
@@ -224,7 +224,7 @@
     {
       "matches": [
         {
-          "contig_id": 14,
+          "contig_id": 15,
           "node_ids": [
             281376836,
             281376837,
@@ -236,7 +236,7 @@
           ]
         },
         {
-          "contig_id": 15,
+          "contig_id": 16,
           "node_ids": [
             281376836,
             281377327
@@ -267,7 +267,7 @@
     {
       "matches": [
         {
-          "contig_id": 16,
+          "contig_id": 17,
           "node_ids": [
             281376839,
             281377365,
@@ -279,7 +279,7 @@
           ]
         },
         {
-          "contig_id": 23,
+          "contig_id": 24,
           "node_ids": [
             281377362,
             281377363
@@ -310,7 +310,7 @@
     {
       "matches": [
         {
-          "contig_id": 17,
+          "contig_id": 18,
           "node_ids": [
             281376839,
             281377367,
@@ -328,7 +328,7 @@
           ]
         },
         {
-          "contig_id": 24,
+          "contig_id": 25,
           "node_ids": [
             281377375,
             281377376
@@ -365,7 +365,7 @@
     {
       "matches": [
         {
-          "contig_id": 26,
+          "contig_id": 27,
           "node_ids": [
             745351446,
             745351458,
@@ -397,7 +397,7 @@
     {
       "matches": [
         {
-          "contig_id": 27,
+          "contig_id": 28,
           "node_ids": [
             745351464,
             745351466
@@ -407,7 +407,7 @@
           ]
         },
         {
-          "contig_id": 29,
+          "contig_id": 30,
           "node_ids": [
             745351466,
             745351473,
@@ -435,7 +435,7 @@
           ]
         },
         {
-          "contig_id": 30,
+          "contig_id": 31,
           "node_ids": [
             745351563,
             745351567,
@@ -489,7 +489,7 @@
     {
       "matches": [
         {
-          "contig_id": 28,
+          "contig_id": 29,
           "node_ids": [
             745351464,
             2847945649
@@ -517,7 +517,7 @@
     {
       "matches": [
         {
-          "contig_id": 31,
+          "contig_id": 32,
           "node_ids": [
             745351588,
             745351590,
@@ -575,7 +575,7 @@
     {
       "matches": [
         {
-          "contig_id": 32,
+          "contig_id": 33,
           "node_ids": [
             745351588,
             2847824234,
@@ -637,7 +637,7 @@
     {
       "matches": [
         {
-          "contig_id": 52,
+          "contig_id": 53,
           "node_ids": [
             747730073,
             2847945627,
@@ -697,7 +697,7 @@
     {
       "matches": [
         {
-          "contig_id": 53,
+          "contig_id": 54,
           "node_ids": [
             747730073,
             2847945629,
@@ -749,7 +749,7 @@
     {
       "matches": [
         {
-          "contig_id": 60,
+          "contig_id": 61,
           "node_ids": [
             747730084,
             11240466007,
@@ -791,7 +791,7 @@
     {
       "matches": [
         {
-          "contig_id": 70,
+          "contig_id": 71,
           "node_ids": [
             748782349,
             747730068,
@@ -829,7 +829,7 @@
     {
       "matches": [
         {
-          "contig_id": 80,
+          "contig_id": 87,
           "node_ids": [
             1554843709,
             2068386467,
@@ -895,7 +895,7 @@
     {
       "matches": [
         {
-          "contig_id": 88,
+          "contig_id": 95,
           "node_ids": [
             1554849718,
             9810358818,
@@ -929,7 +929,7 @@
     {
       "matches": [
         {
-          "contig_id": 92,
+          "contig_id": 99,
           "node_ids": [
             1554851731,
             1554851730,
@@ -959,7 +959,7 @@
     {
       "matches": [
         {
-          "contig_id": 97,
+          "contig_id": 104,
           "node_ids": [
             1562475927,
             9810272408,
@@ -993,7 +993,7 @@
     {
       "matches": [
         {
-          "contig_id": 100,
+          "contig_id": 107,
           "node_ids": [
             2026570585,
             2847941636,
@@ -1025,7 +1025,7 @@
     {
       "matches": [
         {
-          "contig_id": 107,
+          "contig_id": 117,
           "node_ids": [
             2068386553,
             5518866299,
@@ -1101,7 +1101,7 @@
     {
       "matches": [
         {
-          "contig_id": 162,
+          "contig_id": 266,
           "node_ids": [
             2847940694,
             2847940686,
@@ -1151,7 +1151,7 @@
     {
       "matches": [
         {
-          "contig_id": 102,
+          "contig_id": 109,
           "node_ids": [
             2026570598,
             2847941633
@@ -1161,7 +1161,7 @@
           ]
         },
         {
-          "contig_id": 103,
+          "contig_id": 110,
           "node_ids": [
             2026570598,
             2847941634,
@@ -1198,7 +1198,7 @@
     {
       "matches": [
         {
-          "contig_id": 167,
+          "contig_id": 271,
           "node_ids": [
             2847945484,
             747730109,
@@ -1248,7 +1248,7 @@
     {
       "matches": [
         {
-          "contig_id": 168,
+          "contig_id": 272,
           "node_ids": [
             2847945484,
             2847946201,
@@ -1288,7 +1288,7 @@
     {
       "matches": [
         {
-          "contig_id": 161,
+          "contig_id": 265,
           "node_ids": [
             2847940688,
             2847945605
@@ -1298,7 +1298,7 @@
           ]
         },
         {
-          "contig_id": 160,
+          "contig_id": 264,
           "node_ids": [
             2847940688,
             2847945604,
@@ -1329,7 +1329,7 @@
     {
       "matches": [
         {
-          "contig_id": 174,
+          "contig_id": 278,
           "node_ids": [
             2847945648,
             2847945657
@@ -1339,7 +1339,7 @@
           ]
         },
         {
-          "contig_id": 176,
+          "contig_id": 280,
           "node_ids": [
             2847945649,
             2847945657
@@ -1368,7 +1368,7 @@
     {
       "matches": [
         {
-          "contig_id": 177,
+          "contig_id": 281,
           "node_ids": [
             2847945649,
             6503768700
@@ -1396,7 +1396,7 @@
     {
       "matches": [
         {
-          "contig_id": 182,
+          "contig_id": 286,
           "node_ids": [
             2847949507,
             6503768724,
@@ -1428,7 +1428,7 @@
     {
       "matches": [
         {
-          "contig_id": 255,
+          "contig_id": 396,
           "node_ids": [
             11240465997,
             11240465998
@@ -1438,7 +1438,7 @@
           ]
         },
         {
-          "contig_id": 257,
+          "contig_id": 398,
           "node_ids": [
             11240465998,
             13768222683
@@ -1468,7 +1468,7 @@
     {
       "matches": [
         {
-          "contig_id": 203,
+          "contig_id": 309,
           "node_ids": [
             4803107764,
             10597364805,
@@ -1506,7 +1506,7 @@
     {
       "matches": [
         {
-          "contig_id": 236,
+          "contig_id": 350,
           "node_ids": [
             6503768714,
             11950508029,
@@ -1546,17 +1546,33 @@
     {
       "matches": [
         {
-          "contig_id": 250,
+          "contig_id": 293,
           "node_ids": [
-            9810327703,
-            9810327702,
-            9810327701,
-            9810327700,
-            9810327699,
-            9810327698,
+            2847949524,
+            12330726053,
+            12330726054,
+            12330726046
+          ],
+          "way_ids": [
+            1068718241
+          ]
+        },
+        {
+          "contig_id": 406,
+          "node_ids": [
+            12330726043,
+            9810327689,
+            12330726046
+          ],
+          "way_ids": [
+            1068718241
+          ]
+        },
+        {
+          "contig_id": 389,
+          "node_ids": [
             9810327697,
             9810327696,
-            9810327692,
             9810327691,
             9810327690,
             12330726043
@@ -1572,29 +1588,27 @@
       "rule_id": "route-policy-path-23c711d3",
       "selector": {
         "node_ids": [
-          9810327703,
-          9810327702,
-          9810327701,
-          9810327700,
-          9810327699,
-          9810327698,
-          9810327697,
-          9810327696,
-          9810327692,
-          9810327691,
+          2847949524,
+          12330726053,
+          12330726054,
+          12330726046,
+          9810327689,
+          12330726043,
           9810327690,
-          12330726043
+          9810327691,
+          9810327696,
+          9810327697
         ],
         "way_ids": [
           1068718241
         ]
       },
-      "status": "exact"
+      "status": "split_across_contigs"
     },
     {
       "matches": [
         {
-          "contig_id": 74,
+          "contig_id": 75,
           "node_ids": [
             748782536,
             11952184374,
@@ -1630,7 +1644,7 @@
     {
       "matches": [
         {
-          "contig_id": 125,
+          "contig_id": 136,
           "node_ids": [
             2068417293,
             2068421885,
@@ -1668,7 +1682,7 @@
     {
       "matches": [
         {
-          "contig_id": 126,
+          "contig_id": 137,
           "node_ids": [
             2068417293,
             2068421887,
@@ -1712,7 +1726,7 @@
     {
       "matches": [
         {
-          "contig_id": 240,
+          "contig_id": 354,
           "node_ids": [
             6784413869,
             6784413870
@@ -1740,7 +1754,7 @@
     {
       "matches": [
         {
-          "contig_id": 256,
+          "contig_id": 397,
           "node_ids": [
             11240465998,
             13768011702
@@ -1768,7 +1782,7 @@
     {
       "matches": [
         {
-          "contig_id": 272,
+          "contig_id": 419,
           "node_ids": [
             13768011702,
             13768011703
@@ -1796,7 +1810,7 @@
     {
       "matches": [
         {
-          "contig_id": 245,
+          "contig_id": 382,
           "node_ids": [
             7687057404,
             11952125960,
@@ -1839,11 +1853,11 @@
     }
   ],
   "meta": {
-    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-7f3b8b5a9ba4",
+    "asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5-2168fb9ae3a7",
     "asset_kind": "route_policy_bindings",
     "binding_count": 40,
-    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_digest": "7f3b8b5a9ba4"
+    "route_policy_digest": "2168fb9ae3a7"
   }
 }

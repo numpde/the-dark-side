@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-04-28T10:40:50.080714Z",
+    "generated_at": "2026-05-18T18:11:42.355661Z",
     "asset_kind": "app_manifest",
-    "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
-    "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
-    "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
+    "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
+    "junction_bindings_asset_id": "karura-junction-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "route_policy_asset_id": "karura-route-policy-v1",
-    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886-7f3b8b5a9ba4",
+    "route_policy_bindings_asset_id": "karura-route-policy-bindings-for-karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5-2168fb9ae3a7",
     "catalog_build_path": "source/catalog_build.json",
     "catalog_build_digest": "1feff1d312fb",
     "elevation_asset_matches_graph": true
@@ -14,9 +14,9 @@
   "planner": {
     "algorithm": "browser-mcts-v1",
     "network_path": "karura-network.geojson",
-    "network_version": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "network_version": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "background_network_path": "karura-editor-network.geojson",
-    "background_network_version": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-20260428T094743502991Z-karura-map-patches-v1-59f50fd07886",
+    "background_network_version": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "config": {
       "short_connector_max_length_m": 35.0,
       "max_overlap_m": 100.0,
@@ -54,13 +54,14 @@
       "id": "karura",
       "name": "Karura Forest",
       "bounds": [
-        36.793039,
-        -1.261402,
-        36.860715,
-        -1.222037
+        36.817706,
+        -1.247239,
+        36.843909,
+        -1.239855
       ],
       "junctions": [
         {
+          "area_id": "karura",
           "id": "family_trail_west",
           "kind": "junction",
           "location": {
@@ -76,6 +77,7 @@
           "graph_node_id": 13075347358
         },
         {
+          "area_id": "karura",
           "id": "kiambu_side_exit",
           "kind": "junction",
           "location": {
@@ -114,6 +116,88 @@
           "id": "kiambu_side_exit__to__kiambu_side_exit",
           "start_junction_id": "kiambu_side_exit",
           "end_junction_id": "kiambu_side_exit",
+          "is_loop": true
+        }
+      ]
+    },
+    {
+      "id": "sigiria",
+      "name": "Sigiria Forest",
+      "bounds": [
+        36.79503,
+        -1.246595,
+        36.815139,
+        -1.240612
+      ],
+      "junctions": [
+        {
+          "area_id": "sigiria",
+          "id": "sigiria_gate_e_limuru",
+          "kind": "gate",
+          "location": {
+            "lat": -1.2465946,
+            "lon": 36.8151386
+          },
+          "name": "Gate E / Limuru Road",
+          "notes": "OSM node 6950727290, Sigiria gate on Limuru Road.",
+          "osm": {
+            "type": "node",
+            "id": 6950727290,
+            "url": "https://www.openstreetmap.org/node/6950727290"
+          },
+          "tags": [
+            "sigiria",
+            "gate-e",
+            "limuru-road"
+          ],
+          "graph_node_id": 2847798978
+        },
+        {
+          "area_id": "sigiria",
+          "id": "sigiria_gate_f_thigiri",
+          "kind": "gate",
+          "location": {
+            "lat": -1.2406117,
+            "lon": 36.7950299
+          },
+          "name": "Gate F / Thigiri Lane",
+          "notes": "OSM node 2847789394, Sigiria gate on Thigiri Lane.",
+          "osm": {
+            "type": "node",
+            "id": 2847789394,
+            "url": "https://www.openstreetmap.org/node/2847789394"
+          },
+          "tags": [
+            "sigiria",
+            "gate-f",
+            "thigiri-lane"
+          ],
+          "graph_node_id": 2847789394
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "sigiria_gate_e_limuru__to__sigiria_gate_e_limuru",
+          "start_junction_id": "sigiria_gate_e_limuru",
+          "end_junction_id": "sigiria_gate_e_limuru",
+          "is_loop": true
+        },
+        {
+          "id": "sigiria_gate_e_limuru__to__sigiria_gate_f_thigiri",
+          "start_junction_id": "sigiria_gate_e_limuru",
+          "end_junction_id": "sigiria_gate_f_thigiri",
+          "is_loop": false
+        },
+        {
+          "id": "sigiria_gate_f_thigiri__to__sigiria_gate_e_limuru",
+          "start_junction_id": "sigiria_gate_f_thigiri",
+          "end_junction_id": "sigiria_gate_e_limuru",
+          "is_loop": false
+        },
+        {
+          "id": "sigiria_gate_f_thigiri__to__sigiria_gate_f_thigiri",
+          "start_junction_id": "sigiria_gate_f_thigiri",
+          "end_junction_id": "sigiria_gate_f_thigiri",
           "is_loop": true
         }
       ]

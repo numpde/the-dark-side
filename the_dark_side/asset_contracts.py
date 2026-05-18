@@ -160,11 +160,28 @@ def validate_junction_catalog_document(payload: object, *, label: str) -> dict:
     meta = require_json_object(document.get("meta"), label=f"{label}.meta")
     require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
     require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    area_ids: set[str] = set()
+    if "areas" in meta:
+        areas = require_json_array(meta.get("areas"), label=f"{label}.meta.areas")
+        for index, area in enumerate(areas):
+            item = require_json_object(area, label=f"{label}.meta.areas[{index}]")
+            area_id = require_nonempty_string(item.get("id"), label=f"{label}.meta.areas[{index}].id")
+            require_nonempty_string(item.get("name"), label=f"{label}.meta.areas[{index}].name")
+            if area_id in area_ids:
+                raise ValueError(f"{label}.meta.areas contains duplicate id {area_id!r}")
+            area_ids.add(area_id)
     junctions = require_json_array(document.get("junctions"), label=f"{label}.junctions")
     for index, junction in enumerate(junctions):
         item = require_json_object(junction, label=f"{label}.junctions[{index}]")
         require_nonempty_string(item.get("id"), label=f"{label}.junctions[{index}].id")
         require_nonempty_string(item.get("name"), label=f"{label}.junctions[{index}].name")
+        area_id = item.get("area_id")
+        if area_id is not None:
+            normalized_area_id = require_nonempty_string(area_id, label=f"{label}.junctions[{index}].area_id")
+            if area_ids and normalized_area_id not in area_ids:
+                raise ValueError(
+                    f"{label}.junctions[{index}].area_id references unknown area {normalized_area_id!r}"
+                )
         location = require_json_object(item.get("location"), label=f"{label}.junctions[{index}].location")
         lat = location.get("lat")
         lon = location.get("lon")

@@ -27,6 +27,7 @@ from .karura_common import (
 )
 from .route_policy import (
     apply_route_policy_to_edge_graph,
+    apply_route_policy_bindings,
     build_route_policy_bindings,
     contig_tags_for_segments,
     edge_policy_signature,

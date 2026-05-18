@@ -84,6 +84,26 @@ test("route app canonicalizes invalid selector pairs to a valid scenario", async
   await expect(page.locator("#new-route-button")).toBeEnabled();
 });
 
+test("route app exposes Sigiria as a separate area with its gates", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.locator("#new-route-button")).toBeEnabled();
+  await page.locator("#area-select").selectOption("sigiria");
+
+  await expect(page.locator("#start-select")).toHaveValue("sigiria_gate_e_limuru");
+  await expect(page.locator("#end-select")).toHaveValue("sigiria_gate_e_limuru");
+  await expect(page.locator("#start-select option")).toHaveText([
+    "Gate E / Limuru Road",
+    "Gate F / Thigiri Lane",
+  ]);
+  await expect(page.locator("#end-select option")).toHaveText([
+    "Gate E / Limuru Road",
+    "Gate F / Thigiri Lane",
+  ]);
+  await expect(page).toHaveURL(/area=sigiria/);
+  await expect(page.locator("#scenario-label")).toContainText("km");
+});
+
 test("route app keeps mobile buttons separate from footer and footer near the viewport bottom", async ({ page }) => {
   await page.setViewportSize({ width: 430, height: 932 });
   await page.goto("/");

@@ -21,7 +21,9 @@ from the_dark_side.download_karura_map import (
     BoundaryRecord,
     KaruraMap,
     NodeRecord,
+    build_map as build_downloaded_map,
     build_boundary_zone_classifier,
+    build_query,
 )
 from the_dark_side.route_policy import apply_route_policy_bindings, build_route_policy_bindings
 
@@ -32,6 +34,73 @@ class MapPatchPipelineTest(unittest.TestCase):
             missing_path = Path(tmpdir) / "missing.json"
             with self.assertRaises(FileNotFoundError):
                 load_required_json(missing_path, label="patchset file")
+
+    def test_download_query_can_include_closed_boundary_way_area(self) -> None:
+        query = build_query([13626194], 180, boundary_way_ids=[24040003])
+
+        self.assertIn("rel(13626194)->.rel0;", query)
+        self.assertIn("way(24040003)->.boundaryWay0;", query)
+        self.assertIn(".boundaryWay0 map_to_area->.boundaryWayArea0;", query)
+        self.assertIn("way(area.boundaryWayArea0);", query)
+
+    def test_build_map_can_use_closed_way_as_boundary_component(self) -> None:
+        payload = {
+            "elements": [
+                {"type": "node", "id": 1, "lat": 0.0, "lon": 0.0},
+                {"type": "node", "id": 2, "lat": 0.0, "lon": 1.0},
+                {"type": "node", "id": 3, "lat": 1.0, "lon": 1.0},
+                {"type": "node", "id": 4, "lat": 1.0, "lon": 0.0},
+                {"type": "node", "id": 11, "lat": 0.25, "lon": 0.25},
+                {"type": "node", "id": 12, "lat": 0.75, "lon": 0.75},
+                {
+                    "type": "way",
+                    "id": 24040003,
+                    "nodes": [1, 2, 3, 4, 1],
+                    "tags": {"landuse": "forest", "name": "Sigiria Forest"},
+                },
+                {
+                    "type": "way",
+                    "id": 100,
+                    "nodes": [11, 12],
+                    "tags": {"highway": "path", "name": "Inside Sigiria"},
+                },
+            ]
+        }
+
+        karura_map = build_downloaded_map(
+            payload,
+            relation_ids=[],
+            boundary_way_ids=[24040003],
+            overpass_url="https://example.invalid/overpass",
+            query="test query",
+        )
+
+        self.assertEqual(karura_map.meta["boundary_way_ids"], [24040003])
+        self.assertEqual(karura_map.meta["boundary_ways"][0]["way_tags"]["name"], "Sigiria Forest")
+        self.assertEqual(karura_map.boundary.relation_id, 24040003)
+        self.assertEqual(karura_map.boundary.outer_rings, [[1, 2, 3, 4, 1]])
+        self.assertEqual(karura_map.boundary.components[0].relation_tags["local:boundary_source"], "way")
+        self.assertIn(100, karura_map.ways)
+        self.assertEqual(karura_map.ways[100].segment_zones, ["core"])
+
+    def test_build_map_rejects_open_boundary_way(self) -> None:
+        payload = {
+            "elements": [
+                {"type": "node", "id": 1, "lat": 0.0, "lon": 0.0},
+                {"type": "node", "id": 2, "lat": 0.0, "lon": 1.0},
+                {"type": "node", "id": 3, "lat": 1.0, "lon": 1.0},
+                {"type": "way", "id": 24040003, "nodes": [1, 2, 3], "tags": {"name": "Open"}},
+            ]
+        }
+
+        with self.assertRaisesRegex(RuntimeError, "not a closed ring"):
+            build_downloaded_map(
+                payload,
+                relation_ids=[],
+                boundary_way_ids=[24040003],
+                overpass_url="https://example.invalid/overpass",
+                query="test query",
+            )
 
     def test_malformed_patchset_file_raises_instead_of_loading(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

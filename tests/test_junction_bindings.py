@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import unittest
 
 from the_dark_side.asset_contracts import load_required_junction_bindings, load_required_junction_catalog
-from the_dark_side.junction_bindings import build_junction_bindings
+from the_dark_side.junction_bindings import build_junction_bindings, nearest_graph_node
 from the_dark_side.karura_routing import (
     load_graph_junction_context,
     resolve_context_junction_ref,
@@ -51,6 +51,21 @@ class JunctionBindingsTest(unittest.TestCase):
         self.assertEqual(ref.incident_contig_ids, (7,))
         self.assertEqual(ref.name, "Alpha")
 
+    def test_nearest_graph_node_prefers_routable_nodes(self) -> None:
+        graph = SimpleNamespace(
+            nodes={
+                10: SimpleNamespace(id=10, lat=-1.0, lon=36.0),
+                20: SimpleNamespace(id=20, lat=-1.001, lon=36.001),
+            },
+            adjacency={
+                20: [(7, 20)],
+            },
+        )
+
+        node_id, _ = nearest_graph_node(graph, lat=-1.0, lon=36.0)
+
+        self.assertEqual(node_id, 20)
+
     def test_resolve_requires_bindings_instead_of_legacy_asset_refs(self) -> None:
         catalog = {
             "meta": {"asset_id": "junction-catalog-1", "asset_kind": "junction_catalog"},
@@ -77,6 +92,31 @@ class JunctionBindingsTest(unittest.TestCase):
             catalog_path = Path(tmpdir) / "junctions.json"
             catalog_path.write_text(json.dumps({"meta": {"asset_id": "junction-catalog-1"}, "junctions": []}))
             with self.assertRaisesRegex(ValueError, r"junction catalog\.meta\.asset_kind"):
+                load_required_junction_catalog(catalog_path, label="junction catalog")
+
+    def test_load_junction_catalog_rejects_unknown_area_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            catalog_path = Path(tmpdir) / "junctions.json"
+            catalog_path.write_text(
+                json.dumps(
+                    {
+                        "meta": {
+                            "asset_id": "junction-catalog-1",
+                            "asset_kind": "junction_catalog",
+                            "areas": [{"id": "karura", "name": "Karura Forest"}],
+                        },
+                        "junctions": [
+                            {
+                                "area_id": "sigiria",
+                                "id": "gate_e",
+                                "name": "Gate E",
+                                "location": {"lat": -1.24, "lon": 36.81},
+                            }
+                        ],
+                    }
+                )
+            )
+            with self.assertRaisesRegex(ValueError, r"unknown area 'sigiria'"):
                 load_required_junction_catalog(catalog_path, label="junction catalog")
 
     def test_load_junction_bindings_rejects_malformed_document(self) -> None:

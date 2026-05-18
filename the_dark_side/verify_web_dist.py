@@ -53,6 +53,9 @@ def verify_web_dist(args: argparse.Namespace) -> dict:
     editor_script = parse_entry_script(require_path(dist_dir / "editor.html"), "editor")
     require_path(dist_dir / index_script.removeprefix("./"))
     require_path(dist_dir / editor_script.removeprefix("./"))
+    require_path(dist_dir / "vendor" / "leaflet" / "leaflet.css")
+    require_path(dist_dir / "vendor" / "leaflet" / "leaflet.js")
+    require_path(dist_dir / "vendor" / "leaflet" / "images" / "marker-icon.png")
 
     worker_assets = sorted(assets_dir.glob("route-worker-*.js"))
     if len(worker_assets) != 1:
@@ -69,6 +72,13 @@ def verify_web_dist(args: argparse.Namespace) -> dict:
     app_bundle_text = (dist_dir / index_script.removeprefix("./")).read_text()
     editor_bundle_text = (dist_dir / editor_script.removeprefix("./")).read_text()
     worker_bundle_text = worker_assets[0].read_text()
+    index_html = (dist_dir / "index.html").read_text()
+    editor_html = (dist_dir / "editor.html").read_text()
+    for html_label, html_text in (("index.html", index_html), ("editor.html", editor_html)):
+        if "https://unpkg.com/leaflet" in html_text:
+            raise SystemExit(f"{html_label} must use the vendored Leaflet assets")
+        if "./vendor/leaflet/leaflet.css" not in html_text or "./vendor/leaflet/leaflet.js" not in html_text:
+            raise SystemExit(f"{html_label} must reference vendored Leaflet CSS and JS")
     for label, bundle_text in (
         ("built app bundle", app_bundle_text),
         ("built editor bundle", editor_bundle_text),
