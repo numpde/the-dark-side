@@ -320,7 +320,7 @@ On push to `main`, CI uses the checked-in data assets and:
 
 CI does not refresh OSM or elevation from external services. Do that locally with `--allow-network`, commit the resulting data assets, then push.
 
-The workflow has read-only repository contents permission plus the minimum Pages deployment permissions: `pages: write` and `id-token: write`.
+The workflow keeps repository contents read-only, grants `pages: write` and `id-token: write` only to the deploy job, and pins GitHub-owned actions to commit SHAs.
 
 The public URL stays:
 

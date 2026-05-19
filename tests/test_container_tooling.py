@@ -1,5 +1,6 @@
 import json
 import pathlib
+import re
 import unittest
 
 
@@ -71,6 +72,21 @@ class ContainerToolingContractTest(unittest.TestCase):
                 self.assertIn("./vendor/leaflet/leaflet.css", html)
                 self.assertIn("./vendor/leaflet/leaflet.js", html)
                 self.assertNotIn("https://unpkg.com/leaflet", html)
+
+    def test_pages_workflow_uses_pinned_actions_and_least_privilege(self):
+        workflow = (ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(encoding="utf-8")
+        action_refs = re.findall(r"uses:\s+(actions/[-\w]+)@([0-9a-fA-F]+)", workflow)
+
+        self.assertNotIn("schedule:", workflow)
+        self.assertIn("persist-credentials: false", workflow)
+        self.assertIn("timeout-minutes:", workflow)
+        self.assertIn("permissions:\n  contents: read\n", workflow)
+        self.assertIn("permissions:\n      pages: write\n      id-token: write", workflow)
+        self.assertGreaterEqual(len(action_refs), 4)
+        for action_name, ref in action_refs:
+            with self.subTest(action=action_name):
+                self.assertRegex(ref, r"^[0-9a-fA-F]{40}$")
+        self.assertNotRegex(workflow, r"uses:\s+actions/[-\w]+@v\d+")
 
 
 if __name__ == "__main__":

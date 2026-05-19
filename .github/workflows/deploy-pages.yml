@@ -2,8 +2,6 @@ name: Deploy Static App
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 2 * * *"
   push:
     branches: ["main"]
     paths:
@@ -11,6 +9,7 @@ on:
       - ".dockerignore"
       - "Dockerfile"
       - "Makefile"
+      - "requirements.txt"
       - "package.json"
       - "package-lock.json"
       - "playwright.config.mjs"
@@ -18,30 +17,34 @@ on:
       - "source/**"
       - "tests/**"
       - "web/**"
-      - "curated/karura_junctions.json"
-      - "data/karura_map.json"
-      - "data/karura_elevation.json"
+      - "curated/**"
+      - "data/**"
       - "the_dark_side/**"
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      # actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          persist-credentials: false
 
-      - uses: actions/configure-pages@v6
+      # actions/configure-pages@v6
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
 
       - name: Install contained dependencies
         run: ./scripts/dev-container.sh --install
@@ -49,7 +52,8 @@ jobs:
       - name: Run contained checks and build Pages artifact
         run: ./scripts/dev-container.sh ci
 
-      - uses: actions/upload-pages-artifact@v5
+      # actions/upload-pages-artifact@v5
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
         with:
           path: dist
 
@@ -58,7 +62,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v5
+        # actions/deploy-pages@v5
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
