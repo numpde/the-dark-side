@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-05-18T18:11:42.355661Z",
+    "generated_at": "2026-05-19T10:00:35.797454Z",
     "asset_kind": "app_manifest",
     "ride_graph_asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "editor_graph_asset_id": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
@@ -53,6 +53,14 @@
     {
       "id": "karura",
       "name": "Karura Forest",
+      "boundary_refs": [
+        "r13626194",
+        "r15417497"
+      ],
+      "network_path": "karura-network-karura.geojson",
+      "network_version": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5-karura",
+      "background_network_path": "karura-editor-network.geojson",
+      "background_network_version": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
       "bounds": [
         36.817706,
         -1.247239,
@@ -123,6 +131,13 @@
     {
       "id": "sigiria",
       "name": "Sigiria Forest",
+      "boundary_refs": [
+        "w24040003"
+      ],
+      "network_path": "karura-network-sigiria.geojson",
+      "network_version": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5-sigiria",
+      "background_network_path": "karura-editor-network.geojson",
+      "background_network_version": "karura-contigs-editor-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
       "bounds": [
         36.79503,
         -1.246595,

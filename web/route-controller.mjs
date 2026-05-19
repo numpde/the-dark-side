@@ -245,7 +245,7 @@ export function createRouteController({
     syncSurface();
     routeSurfaceRuntime.renderBackgroundNetwork(null);
 
-    const { plannerNetwork, backgroundNetwork } = await loadAreaAssets(appManifestUrl, appState.manifest);
+    const { plannerNetwork, backgroundNetwork } = await loadAreaAssets(appManifestUrl, appState.manifest, area);
     if (loadId !== appState.activeAreaLoadId) {
       return;
     }

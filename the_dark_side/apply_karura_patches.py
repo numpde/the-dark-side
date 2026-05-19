@@ -15,8 +15,11 @@ from .download_karura_map import (
     KaruraMap,
     NodeRecord,
     WayRecord,
+    build_boundary_membership_classifier,
     build_boundary_zone_classifier,
+    classify_segment_membership,
     classify_segment_zone,
+    filled_segment_refs,
     fill_kept_segment_gaps,
     haversine_meters,
     keep_segment_by_endpoint,
@@ -105,6 +108,7 @@ def compute_way_record(
 
     segment_pairs: list[list[int]] = []
     segment_zones: list[str] = []
+    segment_refs: list[str] = []
     total_length_m = 0.0
     inside_length_m = 0.0
     buffer_length_m = 0.0
@@ -116,6 +120,7 @@ def compute_way_record(
     segment_lengths: list[float] = []
     keep_flags: list[bool] = []
     raw_segment_zones: list[str] = []
+    raw_segment_refs: list[list[str]] = []
     for first_id, second_id in segments:
         first = nodes[first_id]
         second = nodes[second_id]
@@ -123,9 +128,14 @@ def compute_way_record(
         total_length_m += segment_length
         if boundary_zone_for_point is None:
             segment_zone = "outside"
+            refs: list[str] = []
+        elif callable(getattr(boundary_zone_for_point, "membership", None)):
+            segment_zone, refs = classify_segment_membership(first, second, boundary_zone_for_point.membership)
         else:
             segment_zone = classify_segment_zone(first, second, boundary_zone_for_point)
+            refs = []
         raw_segment_zones.append(segment_zone)
+        raw_segment_refs.append(refs)
         if boundary_mode == "inside_midpoint":
             midpoint = ((first.lon + second.lon) / 2, (first.lat + second.lat) / 2)
             if boundary_zone_for_point is None:
@@ -133,8 +143,12 @@ def compute_way_record(
                 segment_zone = "core" if is_inside else "outside"
             else:
                 segment_zone = boundary_zone_for_point(midpoint)
+                if callable(getattr(boundary_zone_for_point, "membership", None)):
+                    midpoint_membership = boundary_zone_for_point.membership(midpoint)
+                    refs = sorted(midpoint_membership["core"] | midpoint_membership["buffer"])
                 is_inside = segment_zone != "outside"
             raw_segment_zones[-1] = segment_zone
+            raw_segment_refs[-1] = refs
         elif boundary_mode == "all_segments":
             is_inside = False
         else:
@@ -154,6 +168,7 @@ def compute_way_record(
 
     if boundary_mode == "inside_endpoint" and fill_segment_gaps:
         keep_flags = fill_kept_segment_gaps(keep_flags)
+    raw_segment_refs = filled_segment_refs(raw_segment_refs, keep_flags)
 
     for index, ((first_id, second_id), keep) in enumerate(zip(segments, keep_flags)):
         if keep:
@@ -162,6 +177,7 @@ def compute_way_record(
             if segment_zone == "outside":
                 segment_zone = "buffer"
             segment_zones.append(segment_zone)
+            segment_refs.append(",".join(raw_segment_refs[index]))
 
     if not segment_pairs:
         raise ValueError(f"way {way_id} has no segments kept by the Karura boundary rule")
@@ -172,6 +188,7 @@ def compute_way_record(
         tags=tags,
         segment_pairs=segment_pairs,
         segment_zones=segment_zones,
+        segment_refs=segment_refs,
         total_length_m=total_length_m,
         inside_length_m=inside_length_m,
         buffer_length_m=buffer_length_m,
@@ -244,6 +261,7 @@ def apply_update_way_tags(*, patch: dict[str, Any], ways: dict[int, WayRecord]) 
         tags=tags,
         segment_pairs=[list(pair) for pair in current.segment_pairs],
         segment_zones=list(current.segment_zones),
+        segment_refs=list(current.segment_refs),
         total_length_m=current.total_length_m,
         inside_length_m=current.inside_length_m,
         buffer_length_m=current.buffer_length_m,
@@ -294,31 +312,42 @@ def apply_patchset(
         node_id: NodeRecord(id=node.id, lat=node.lat, lon=node.lon)
         for node_id, node in karura_map.nodes.items()
     }
-    ways = {
-        way_id: WayRecord(
-            id=way.id,
-            node_ids=list(way.node_ids),
-            tags=dict(way.tags),
-            segment_pairs=[list(pair) for pair in way.segment_pairs],
-            segment_zones=list(way.segment_zones),
-            total_length_m=way.total_length_m,
-            inside_length_m=way.inside_length_m,
-            buffer_length_m=way.buffer_length_m,
-            bounds=list(way.bounds),
-        )
-        for way_id, way in karura_map.ways.items()
-    }
     boundary_zone_for_point = build_boundary_zone_classifier(
         karura_map.boundary,
         nodes,
         boundary_buffer_m=boundary_buffer_m,
         respect_inner_rings=respect_inner_rings,
     )
+    boundary_membership_for_point = build_boundary_membership_classifier(
+        karura_map.boundary,
+        nodes,
+        boundary_buffer_m=boundary_buffer_m,
+        respect_inner_rings=respect_inner_rings,
+    )
+    # compute_way_record accepts the existing zone classifier callable; attach
+    # the richer membership function so local add/replace patches inherit the
+    # same area refs as downloaded OSM ways without duplicating area IDs.
+    boundary_zone_for_point.membership = boundary_membership_for_point
     inside_karura = build_inside_karura(
         karura_map.boundary,
         nodes,
         respect_inner_rings=respect_inner_rings,
     )
+    # Older downloaded map snapshots did not persist per-segment boundary refs.
+    # Recomputing source ways here keeps the area SSoT upgrade reproducible in
+    # locked CI without forcing a fresh OSM download for metadata-only changes.
+    ways = {
+        way_id: compute_way_record(
+            way_id=way.id,
+            node_ids=list(way.node_ids),
+            tags=dict(way.tags),
+            nodes=nodes,
+            inside_karura=inside_karura,
+            boundary_zone_for_point=boundary_zone_for_point,
+            fill_segment_gaps=fill_segment_gaps,
+        )
+        for way_id, way in karura_map.ways.items()
+    }
     applied_patch_ids: list[str] = []
     applied_patches: list[dict[str, Any]] = []
 

@@ -44,6 +44,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -223,6 +224,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -261,6 +263,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -325,6 +328,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -373,6 +377,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -411,6 +416,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -422,49 +428,35 @@
     },
     {
       "bounds": [
-        36.8180797,
-        -1.2413982,
+        36.818831,
+        -1.241085,
         36.819081,
         -1.240879
       ],
       "endpoint_node_ids": [
         271326706,
-        11952125949
+        2847941648
       ],
       "highway_types": {
-        "unclassified": 4
+        "unclassified": 1
       },
       "id": 7,
       "is_cycle": false,
-      "length_m": 127.053,
+      "length_m": 36.015,
       "node_ids": [
         271326706,
-        2847941648,
-        271326705,
-        271326704,
-        11952125949
+        2847941648
       ],
-      "segment_count": 4,
+      "segment_count": 1,
       "segment_pairs": [
         [
           271326706,
           2847941648
-        ],
-        [
-          2847941648,
-          271326705
-        ],
-        [
-          271326705,
-          271326704
-        ],
-        [
-          271326704,
-          11952125949
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
       },
       "way_ids": [
         60200207
@@ -476,20 +468,20 @@
     {
       "bounds": [
         36.819081,
-        -1.2422211,
-        36.8204567,
+        -1.2420903,
+        36.820371,
         -1.240879
       ],
       "endpoint_node_ids": [
         271326706,
-        4803107764
+        4304615715
       ],
       "highway_types": {
-        "service": 7
+        "service": 6
       },
       "id": 8,
       "is_cycle": false,
-      "length_m": 215.382,
+      "length_m": 197.995,
       "node_ids": [
         271326706,
         11952125950,
@@ -497,10 +489,9 @@
         4304615717,
         4304615712,
         4304615713,
-        4304615715,
-        4803107764
+        4304615715
       ],
-      "segment_count": 7,
+      "segment_count": 6,
       "segment_pairs": [
         [
           271326706,
@@ -525,13 +516,10 @@
         [
           4304615713,
           4304615715
-        ],
-        [
-          4304615715,
-          4803107764
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -613,6 +601,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -654,6 +643,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -750,6 +740,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -791,6 +782,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -827,6 +819,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -865,6 +858,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -914,6 +908,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -951,6 +946,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -998,6 +994,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -1075,6 +1072,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -1127,6 +1125,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -1178,6 +1177,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -1229,6 +1229,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -1286,6 +1287,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -1337,6 +1339,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -1373,6 +1376,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -1410,6 +1414,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -1477,6 +1482,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -1523,6 +1529,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -1560,6 +1567,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -1597,6 +1605,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -1724,6 +1733,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -1776,6 +1786,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -1879,6 +1890,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -2003,6 +2015,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -2040,6 +2053,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2136,6 +2150,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2202,6 +2217,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2268,6 +2284,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2314,6 +2331,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2350,6 +2368,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2396,6 +2415,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2487,6 +2507,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2588,6 +2609,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2624,6 +2646,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2845,6 +2868,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -2938,6 +2962,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3000,6 +3025,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3073,6 +3099,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -3141,6 +3168,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3197,6 +3225,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3263,6 +3292,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3311,6 +3341,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3347,6 +3378,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3465,6 +3497,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -3557,6 +3590,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -3605,6 +3639,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3661,6 +3696,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3704,6 +3740,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3805,6 +3842,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -3817,53 +3855,34 @@
     {
       "bounds": [
         36.819383,
-        -1.2387985,
-        36.8250104,
+        -1.238357,
+        36.8202575,
         -1.2383025
       ],
       "endpoint_node_ids": [
         747730080,
-        9521586419
+        13556268407
       ],
       "highway_types": {
-        "footway": 5
+        "footway": 1
       },
       "id": 59,
       "is_cycle": false,
-      "length_m": 630.467,
+      "length_m": 97.406,
       "node_ids": [
         747730080,
-        13556268407,
-        13556268408,
-        13556268406,
-        10597364829,
-        9521586419
+        13556268407
       ],
-      "segment_count": 5,
+      "segment_count": 1,
       "segment_pairs": [
         [
           747730080,
           13556268407
-        ],
-        [
-          13556268407,
-          13556268408
-        ],
-        [
-          13556268408,
-          13556268406
-        ],
-        [
-          13556268406,
-          10597364829
-        ],
-        [
-          10597364829,
-          9521586419
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core"
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
       },
       "way_ids": [
         142777587
@@ -4141,6 +4160,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4212,6 +4232,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -4274,6 +4295,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4317,6 +4339,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4353,6 +4376,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4421,6 +4445,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4457,6 +4482,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4543,6 +4569,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4591,6 +4618,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4627,6 +4655,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4670,6 +4699,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4731,6 +4761,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -4803,6 +4834,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4840,6 +4872,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4876,6 +4909,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -4932,6 +4966,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "include"
       },
@@ -4999,6 +5034,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5042,6 +5078,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5078,6 +5115,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5116,6 +5154,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5152,6 +5191,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5199,6 +5239,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5243,6 +5284,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -5279,6 +5321,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5315,6 +5358,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -5372,6 +5416,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5450,6 +5495,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5572,6 +5618,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -5636,6 +5683,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5739,6 +5787,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5815,6 +5864,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5886,6 +5936,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5929,6 +5980,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -5980,6 +6032,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6053,6 +6106,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6104,6 +6158,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -6148,6 +6203,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6251,6 +6307,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6289,6 +6346,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6332,6 +6390,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "include"
       },
@@ -6386,6 +6445,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6444,6 +6504,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6517,6 +6578,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6553,6 +6615,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6604,6 +6667,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -6656,6 +6720,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6694,6 +6759,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6742,6 +6808,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -6781,6 +6848,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6819,6 +6887,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer",
         "local:unavailable_until": "2026-06-30"
       },
@@ -6878,6 +6947,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:unavailable_until": "2026-06-30"
       },
@@ -6917,6 +6987,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -6960,6 +7031,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -7018,6 +7090,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -7056,12 +7129,215 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
         196510854
       ],
       "way_names": []
+    },
+    {
+      "bounds": [
+        36.821757,
+        -1.2323029,
+        36.8225998,
+        -1.2315153
+      ],
+      "endpoint_node_ids": [
+        2068386331,
+        2068386820
+      ],
+      "highway_types": {
+        "path": 9
+      },
+      "id": 115,
+      "is_cycle": false,
+      "length_m": 131.731,
+      "node_ids": [
+        2068386331,
+        2068386326,
+        2068386314,
+        2068386308,
+        2068386305,
+        2068386303,
+        2068386295,
+        9923873815,
+        2068386290,
+        2068386820
+      ],
+      "segment_count": 9,
+      "segment_pairs": [
+        [
+          2068386331,
+          2068386326
+        ],
+        [
+          2068386326,
+          2068386314
+        ],
+        [
+          2068386314,
+          2068386308
+        ],
+        [
+          2068386308,
+          2068386305
+        ],
+        [
+          2068386305,
+          2068386303
+        ],
+        [
+          2068386303,
+          2068386295
+        ],
+        [
+          2068386295,
+          9923873815
+        ],
+        [
+          9923873815,
+          2068386290
+        ],
+        [
+          2068386290,
+          2068386820
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194",
+        "local:boundary_zone": "core"
+      },
+      "way_ids": [
+        196510846
+      ],
+      "way_names": [
+        "Kima Trail"
+      ]
+    },
+    {
+      "bounds": [
+        36.8225998,
+        -1.2323425,
+        36.8226064,
+        -1.2323029
+      ],
+      "endpoint_node_ids": [
+        2068386331,
+        2068386334
+      ],
+      "highway_types": {
+        "path": 1
+      },
+      "id": 116,
+      "is_cycle": false,
+      "length_m": 4.464,
+      "node_ids": [
+        2068386331,
+        2068386334
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
+        [
+          2068386331,
+          2068386334
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        196510846
+      ],
+      "way_names": [
+        "Kima Trail"
+      ]
+    },
+    {
+      "bounds": [
+        36.822495,
+        -1.2336447,
+        36.8227607,
+        -1.2323425
+      ],
+      "endpoint_node_ids": [
+        2068386334,
+        13768277790
+      ],
+      "highway_types": {
+        "path": 10
+      },
+      "id": 117,
+      "is_cycle": false,
+      "length_m": 159.454,
+      "node_ids": [
+        2068386334,
+        2068386342,
+        2068386349,
+        2068386357,
+        2068386365,
+        2068386373,
+        2068386386,
+        2068386397,
+        2068386409,
+        2068386417,
+        13768277790
+      ],
+      "segment_count": 10,
+      "segment_pairs": [
+        [
+          2068386334,
+          2068386342
+        ],
+        [
+          2068386342,
+          2068386349
+        ],
+        [
+          2068386349,
+          2068386357
+        ],
+        [
+          2068386357,
+          2068386365
+        ],
+        [
+          2068386365,
+          2068386373
+        ],
+        [
+          2068386373,
+          2068386386
+        ],
+        [
+          2068386386,
+          2068386397
+        ],
+        [
+          2068386397,
+          2068386409
+        ],
+        [
+          2068386409,
+          2068386417
+        ],
+        [
+          2068386417,
+          13768277790
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r15417497",
+        "local:boundary_zone": "core"
+      },
+      "way_ids": [
+        196510846
+      ],
+      "way_names": [
+        "Kima Trail"
+      ]
     },
     {
       "bounds": [
@@ -7077,7 +7353,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 115,
+      "id": 118,
       "is_cycle": false,
       "length_m": 91.107,
       "node_ids": [
@@ -7112,6 +7388,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7133,7 +7410,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 116,
+      "id": 119,
       "is_cycle": false,
       "length_m": 301.634,
       "node_ids": [
@@ -7193,6 +7470,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7217,7 +7495,7 @@
         "footway": 1,
         "path": 22
       },
-      "id": 117,
+      "id": 120,
       "is_cycle": false,
       "length_m": 558.657,
       "node_ids": [
@@ -7342,6 +7620,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -7366,7 +7645,7 @@
       "highway_types": {
         "unclassified": 5
       },
-      "id": 118,
+      "id": 121,
       "is_cycle": false,
       "length_m": 67.528,
       "node_ids": [
@@ -7401,6 +7680,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7422,7 +7702,7 @@
         6503767383
       ],
       "highway_types": {},
-      "id": 119,
+      "id": 122,
       "is_cycle": false,
       "length_m": 48.525,
       "node_ids": [
@@ -7442,6 +7722,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7461,7 +7742,7 @@
         6503767383
       ],
       "highway_types": {},
-      "id": 120,
+      "id": 123,
       "is_cycle": false,
       "length_m": 109.098,
       "node_ids": [
@@ -7496,6 +7777,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7517,7 +7799,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 121,
+      "id": 124,
       "is_cycle": false,
       "length_m": 131.553,
       "node_ids": [
@@ -7562,6 +7844,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7583,7 +7866,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 122,
+      "id": 125,
       "is_cycle": false,
       "length_m": 24.138,
       "node_ids": [
@@ -7603,6 +7886,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7624,7 +7908,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 123,
+      "id": 126,
       "is_cycle": false,
       "length_m": 56.506,
       "node_ids": [
@@ -7659,6 +7943,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7680,7 +7965,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 124,
+      "id": 127,
       "is_cycle": false,
       "length_m": 19.318,
       "node_ids": [
@@ -7700,6 +7985,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7721,7 +8007,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 125,
+      "id": 128,
       "is_cycle": false,
       "length_m": 83.378,
       "node_ids": [
@@ -7761,6 +8047,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7782,7 +8069,7 @@
       "highway_types": {
         "unclassified": 8
       },
-      "id": 126,
+      "id": 129,
       "is_cycle": false,
       "length_m": 158.795,
       "node_ids": [
@@ -7832,6 +8119,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7855,7 +8143,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 127,
+      "id": 130,
       "is_cycle": false,
       "length_m": 22.089,
       "node_ids": [
@@ -7870,6 +8158,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7893,7 +8182,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 128,
+      "id": 131,
       "is_cycle": false,
       "length_m": 63.033,
       "node_ids": [
@@ -7923,6 +8212,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7944,7 +8234,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 129,
+      "id": 132,
       "is_cycle": false,
       "length_m": 70.493,
       "node_ids": [
@@ -7974,6 +8264,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -7997,7 +8288,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 130,
+      "id": 133,
       "is_cycle": false,
       "length_m": 99.932,
       "node_ids": [
@@ -8037,6 +8328,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8060,7 +8352,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 131,
+      "id": 134,
       "is_cycle": false,
       "length_m": 79.313,
       "node_ids": [
@@ -8100,6 +8392,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8121,7 +8414,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 132,
+      "id": 135,
       "is_cycle": false,
       "length_m": 8.796,
       "node_ids": [
@@ -8136,6 +8429,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8157,7 +8451,7 @@
       "highway_types": {
         "path": 16
       },
-      "id": 133,
+      "id": 136,
       "is_cycle": false,
       "length_m": 299.206,
       "node_ids": [
@@ -8247,145 +8541,13 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
         196510842
       ],
       "way_names": []
-    },
-    {
-      "bounds": [
-        36.821757,
-        -1.2336447,
-        36.8227607,
-        -1.2315153
-      ],
-      "endpoint_node_ids": [
-        2068386820,
-        13768277790
-      ],
-      "highway_types": {
-        "path": 20
-      },
-      "id": 134,
-      "is_cycle": false,
-      "length_m": 295.649,
-      "node_ids": [
-        2068386820,
-        2068386290,
-        9923873815,
-        2068386295,
-        2068386303,
-        2068386305,
-        2068386308,
-        2068386314,
-        2068386326,
-        2068386331,
-        2068386334,
-        2068386342,
-        2068386349,
-        2068386357,
-        2068386365,
-        2068386373,
-        2068386386,
-        2068386397,
-        2068386409,
-        2068386417,
-        13768277790
-      ],
-      "segment_count": 20,
-      "segment_pairs": [
-        [
-          2068386820,
-          2068386290
-        ],
-        [
-          2068386290,
-          9923873815
-        ],
-        [
-          9923873815,
-          2068386295
-        ],
-        [
-          2068386295,
-          2068386303
-        ],
-        [
-          2068386303,
-          2068386305
-        ],
-        [
-          2068386305,
-          2068386308
-        ],
-        [
-          2068386308,
-          2068386314
-        ],
-        [
-          2068386314,
-          2068386326
-        ],
-        [
-          2068386326,
-          2068386331
-        ],
-        [
-          2068386331,
-          2068386334
-        ],
-        [
-          2068386334,
-          2068386342
-        ],
-        [
-          2068386342,
-          2068386349
-        ],
-        [
-          2068386349,
-          2068386357
-        ],
-        [
-          2068386357,
-          2068386365
-        ],
-        [
-          2068386365,
-          2068386373
-        ],
-        [
-          2068386373,
-          2068386386
-        ],
-        [
-          2068386386,
-          2068386397
-        ],
-        [
-          2068386397,
-          2068386409
-        ],
-        [
-          2068386409,
-          2068386417
-        ],
-        [
-          2068386417,
-          13768277790
-        ]
-      ],
-      "tags": {
-        "local:boundary_zone": "core"
-      },
-      "way_ids": [
-        196510846
-      ],
-      "way_names": [
-        "Kima Trail"
-      ]
     },
     {
       "bounds": [
@@ -8401,7 +8563,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 135,
+      "id": 137,
       "is_cycle": false,
       "length_m": 108.718,
       "node_ids": [
@@ -8431,6 +8593,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8450,7 +8613,7 @@
         2068421872
       ],
       "highway_types": {},
-      "id": 136,
+      "id": 138,
       "is_cycle": false,
       "length_m": 72.701,
       "node_ids": [
@@ -8490,6 +8653,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -8510,7 +8674,7 @@
         2068421872
       ],
       "highway_types": {},
-      "id": 137,
+      "id": 139,
       "is_cycle": false,
       "length_m": 292.084,
       "node_ids": [
@@ -8565,6 +8729,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -8587,7 +8752,7 @@
       "highway_types": {
         "unclassified": 1
       },
-      "id": 138,
+      "id": 140,
       "is_cycle": false,
       "length_m": 2.363,
       "node_ids": [
@@ -8602,6 +8767,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8625,7 +8791,7 @@
       "highway_types": {
         "footway": 43
       },
-      "id": 139,
+      "id": 141,
       "is_cycle": false,
       "length_m": 1248.093,
       "node_ids": [
@@ -8850,6 +9016,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8873,7 +9040,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 140,
+      "id": 142,
       "is_cycle": false,
       "length_m": 298.15,
       "node_ids": [
@@ -8913,6 +9080,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -8936,7 +9104,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 141,
+      "id": 143,
       "is_cycle": false,
       "length_m": 300.466,
       "node_ids": [
@@ -8991,6 +9159,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9014,7 +9183,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 142,
+      "id": 144,
       "is_cycle": false,
       "length_m": 147.134,
       "node_ids": [
@@ -9044,6 +9213,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9067,7 +9237,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 143,
+      "id": 145,
       "is_cycle": false,
       "length_m": 259.565,
       "node_ids": [
@@ -9097,6 +9267,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9118,7 +9289,7 @@
       "highway_types": {
         "secondary": 4
       },
-      "id": 144,
+      "id": 146,
       "is_cycle": false,
       "length_m": 89.931,
       "node_ids": [
@@ -9148,6 +9319,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9171,7 +9343,7 @@
       "highway_types": {
         "secondary": 1
       },
-      "id": 145,
+      "id": 147,
       "is_cycle": false,
       "length_m": 25.778,
       "node_ids": [
@@ -9186,6 +9358,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9209,7 +9382,7 @@
       "highway_types": {
         "secondary": 1
       },
-      "id": 146,
+      "id": 148,
       "is_cycle": false,
       "length_m": 23.477,
       "node_ids": [
@@ -9224,6 +9397,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9234,37 +9408,72 @@
     {
       "bounds": [
         36.813566,
-        -1.2428435,
-        36.8137935,
+        -1.2422167,
+        36.8136875,
         -1.2416389
       ],
       "endpoint_node_ids": [
         2413983779,
-        6366642374
+        2458494726
       ],
       "highway_types": {
-        "secondary": 2
+        "secondary": 1
       },
-      "id": 147,
+      "id": 149,
       "is_cycle": false,
-      "length_m": 136.339,
+      "length_m": 65.653,
       "node_ids": [
         2413983779,
-        2458494726,
-        6366642374
+        2458494726
       ],
-      "segment_count": 2,
+      "segment_count": 1,
       "segment_pairs": [
         [
           2413983779,
           2458494726
-        ],
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "w24040003",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        770407194
+      ],
+      "way_names": [
+        "Limuru Road"
+      ]
+    },
+    {
+      "bounds": [
+        36.8136875,
+        -1.2428435,
+        36.8137935,
+        -1.2422167
+      ],
+      "endpoint_node_ids": [
+        2458494726,
+        6366642374
+      ],
+      "highway_types": {
+        "secondary": 1
+      },
+      "id": 150,
+      "is_cycle": false,
+      "length_m": 70.686,
+      "node_ids": [
+        2458494726,
+        6366642374
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
         [
           2458494726,
           6366642374
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -9288,7 +9497,7 @@
       "highway_types": {
         "trunk": 1
       },
-      "id": 148,
+      "id": 151,
       "is_cycle": false,
       "length_m": 77.885,
       "node_ids": [
@@ -9303,6 +9512,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9326,7 +9536,7 @@
       "highway_types": {
         "track": 2
       },
-      "id": 149,
+      "id": 152,
       "is_cycle": false,
       "length_m": 28.452,
       "node_ids": [
@@ -9346,6 +9556,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9367,7 +9578,7 @@
       "highway_types": {
         "service": 2
       },
-      "id": 150,
+      "id": 153,
       "is_cycle": false,
       "length_m": 126.766,
       "node_ids": [
@@ -9387,6 +9598,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -9408,7 +9620,7 @@
       "highway_types": {
         "trunk": 3
       },
-      "id": 151,
+      "id": 154,
       "is_cycle": false,
       "length_m": 343.45,
       "node_ids": [
@@ -9433,6 +9645,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -9457,7 +9670,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 152,
+      "id": 155,
       "is_cycle": false,
       "length_m": 15.886,
       "node_ids": [
@@ -9477,6 +9690,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9498,7 +9712,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 153,
+      "id": 156,
       "is_cycle": false,
       "length_m": 171.963,
       "node_ids": [
@@ -9568,6 +9782,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9589,7 +9804,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 154,
+      "id": 157,
       "is_cycle": false,
       "length_m": 176.357,
       "node_ids": [
@@ -9624,6 +9839,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9645,7 +9861,7 @@
       "highway_types": {
         "path": 19
       },
-      "id": 155,
+      "id": 158,
       "is_cycle": false,
       "length_m": 489.8,
       "node_ids": [
@@ -9750,6 +9966,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9771,7 +9988,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 156,
+      "id": 159,
       "is_cycle": false,
       "length_m": 41.688,
       "node_ids": [
@@ -9796,6 +10013,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9817,7 +10035,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 157,
+      "id": 160,
       "is_cycle": false,
       "length_m": 287.225,
       "node_ids": [
@@ -9882,6 +10100,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9903,7 +10122,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 158,
+      "id": 161,
       "is_cycle": false,
       "length_m": 50.921,
       "node_ids": [
@@ -9928,6 +10147,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -9949,7 +10169,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 159,
+      "id": 162,
       "is_cycle": false,
       "length_m": 70.919,
       "node_ids": [
@@ -9984,6 +10204,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10005,7 +10226,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 160,
+      "id": 163,
       "is_cycle": false,
       "length_m": 79.167,
       "node_ids": [
@@ -10025,6 +10246,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10046,7 +10268,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 161,
+      "id": 164,
       "is_cycle": false,
       "length_m": 95.683,
       "node_ids": [
@@ -10081,6 +10303,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10102,7 +10325,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 162,
+      "id": 165,
       "is_cycle": false,
       "length_m": 23.577,
       "node_ids": [
@@ -10122,6 +10345,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10143,7 +10367,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 163,
+      "id": 166,
       "is_cycle": false,
       "length_m": 215.827,
       "node_ids": [
@@ -10218,6 +10442,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10239,7 +10464,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 164,
+      "id": 167,
       "is_cycle": false,
       "length_m": 60.173,
       "node_ids": [
@@ -10269,6 +10494,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10290,7 +10516,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 165,
+      "id": 168,
       "is_cycle": false,
       "length_m": 266.246,
       "node_ids": [
@@ -10360,6 +10586,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10381,7 +10608,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 166,
+      "id": 169,
       "is_cycle": false,
       "length_m": 16.927,
       "node_ids": [
@@ -10401,6 +10628,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10422,7 +10650,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 167,
+      "id": 170,
       "is_cycle": false,
       "length_m": 15.175,
       "node_ids": [
@@ -10437,6 +10665,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10460,7 +10689,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 168,
+      "id": 171,
       "is_cycle": false,
       "length_m": 7.196,
       "node_ids": [
@@ -10475,6 +10704,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10498,7 +10728,7 @@
       "highway_types": {
         "footway": 8
       },
-      "id": 169,
+      "id": 172,
       "is_cycle": false,
       "length_m": 179.864,
       "node_ids": [
@@ -10548,6 +10778,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10571,7 +10802,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 170,
+      "id": 173,
       "is_cycle": false,
       "length_m": 97.176,
       "node_ids": [
@@ -10601,6 +10832,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10624,7 +10856,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 171,
+      "id": 174,
       "is_cycle": false,
       "length_m": 11.399,
       "node_ids": [
@@ -10639,6 +10871,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10662,7 +10895,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 172,
+      "id": 175,
       "is_cycle": false,
       "length_m": 247.513,
       "node_ids": [
@@ -10737,6 +10970,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10758,7 +10992,7 @@
       "highway_types": {
         "footway": 27
       },
-      "id": 173,
+      "id": 176,
       "is_cycle": false,
       "length_m": 452.184,
       "node_ids": [
@@ -10903,6 +11137,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10926,7 +11161,7 @@
       "highway_types": {
         "footway": 8
       },
-      "id": 174,
+      "id": 177,
       "is_cycle": false,
       "length_m": 281.897,
       "node_ids": [
@@ -10976,6 +11211,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -10999,7 +11235,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 175,
+      "id": 178,
       "is_cycle": false,
       "length_m": 47.987,
       "node_ids": [
@@ -11019,6 +11255,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11042,7 +11279,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 176,
+      "id": 179,
       "is_cycle": false,
       "length_m": 212.992,
       "node_ids": [
@@ -11077,6 +11314,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11100,7 +11338,7 @@
       "highway_types": {
         "footway": 10
       },
-      "id": 177,
+      "id": 180,
       "is_cycle": false,
       "length_m": 190.219,
       "node_ids": [
@@ -11160,6 +11398,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11181,7 +11420,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 178,
+      "id": 181,
       "is_cycle": false,
       "length_m": 142.591,
       "node_ids": [
@@ -11221,6 +11460,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11244,7 +11484,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 179,
+      "id": 182,
       "is_cycle": false,
       "length_m": 13.903,
       "node_ids": [
@@ -11259,6 +11499,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11280,7 +11521,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 180,
+      "id": 183,
       "is_cycle": false,
       "length_m": 247.385,
       "node_ids": [
@@ -11315,6 +11556,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11338,7 +11580,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 181,
+      "id": 184,
       "is_cycle": false,
       "length_m": 103.806,
       "node_ids": [
@@ -11378,6 +11620,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11401,7 +11644,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 182,
+      "id": 185,
       "is_cycle": false,
       "length_m": 19.754,
       "node_ids": [
@@ -11416,6 +11659,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11439,7 +11683,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 183,
+      "id": 186,
       "is_cycle": false,
       "length_m": 213.654,
       "node_ids": [
@@ -11504,6 +11748,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11525,7 +11770,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 184,
+      "id": 187,
       "is_cycle": false,
       "length_m": 350.876,
       "node_ids": [
@@ -11590,6 +11835,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11613,7 +11859,7 @@
       "highway_types": {
         "path": 38
       },
-      "id": 185,
+      "id": 188,
       "is_cycle": false,
       "length_m": 589.369,
       "node_ids": [
@@ -11813,6 +12059,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11834,7 +12081,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 186,
+      "id": 189,
       "is_cycle": false,
       "length_m": 179.649,
       "node_ids": [
@@ -11869,6 +12116,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11892,7 +12140,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 187,
+      "id": 190,
       "is_cycle": false,
       "length_m": 118.111,
       "node_ids": [
@@ -11942,6 +12190,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -11963,7 +12212,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 188,
+      "id": 191,
       "is_cycle": false,
       "length_m": 84.084,
       "node_ids": [
@@ -11988,6 +12237,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12009,7 +12259,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 189,
+      "id": 192,
       "is_cycle": false,
       "length_m": 36.031,
       "node_ids": [
@@ -12024,6 +12274,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12047,7 +12298,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 190,
+      "id": 193,
       "is_cycle": false,
       "length_m": 293.564,
       "node_ids": [
@@ -12112,6 +12363,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12135,7 +12387,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 191,
+      "id": 194,
       "is_cycle": false,
       "length_m": 73.68,
       "node_ids": [
@@ -12150,6 +12402,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12171,7 +12424,7 @@
       "highway_types": {
         "footway": 33
       },
-      "id": 192,
+      "id": 195,
       "is_cycle": false,
       "length_m": 718.17,
       "node_ids": [
@@ -12346,6 +12599,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12369,7 +12623,7 @@
       "highway_types": {
         "footway": 10
       },
-      "id": 193,
+      "id": 196,
       "is_cycle": false,
       "length_m": 155.7,
       "node_ids": [
@@ -12429,6 +12683,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12452,7 +12707,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 194,
+      "id": 197,
       "is_cycle": false,
       "length_m": 55.883,
       "node_ids": [
@@ -12472,6 +12727,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12493,7 +12749,7 @@
       "highway_types": {
         "footway": 20
       },
-      "id": 195,
+      "id": 198,
       "is_cycle": false,
       "length_m": 427.175,
       "node_ids": [
@@ -12603,6 +12859,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12626,7 +12883,7 @@
       "highway_types": {
         "footway": 9
       },
-      "id": 196,
+      "id": 199,
       "is_cycle": false,
       "length_m": 170.056,
       "node_ids": [
@@ -12681,6 +12938,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12704,7 +12962,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 197,
+      "id": 200,
       "is_cycle": false,
       "length_m": 217.597,
       "node_ids": [
@@ -12774,6 +13032,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12795,7 +13054,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 198,
+      "id": 201,
       "is_cycle": false,
       "length_m": 59.113,
       "node_ids": [
@@ -12815,6 +13074,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12836,7 +13096,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 199,
+      "id": 202,
       "is_cycle": false,
       "length_m": 523.657,
       "node_ids": [
@@ -12901,6 +13161,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12922,7 +13183,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 200,
+      "id": 203,
       "is_cycle": false,
       "length_m": 33.781,
       "node_ids": [
@@ -12942,6 +13203,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -12965,7 +13227,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 201,
+      "id": 204,
       "is_cycle": false,
       "length_m": 145.291,
       "node_ids": [
@@ -13000,6 +13262,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13023,7 +13286,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 202,
+      "id": 205,
       "is_cycle": false,
       "length_m": 99.667,
       "node_ids": [
@@ -13063,6 +13326,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13084,7 +13348,7 @@
       "highway_types": {
         "path": 21
       },
-      "id": 203,
+      "id": 206,
       "is_cycle": false,
       "length_m": 794.574,
       "node_ids": [
@@ -13199,6 +13463,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13222,7 +13487,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 204,
+      "id": 207,
       "is_cycle": false,
       "length_m": 171.524,
       "node_ids": [
@@ -13262,6 +13527,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13285,7 +13551,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 205,
+      "id": 208,
       "is_cycle": false,
       "length_m": 44.553,
       "node_ids": [
@@ -13315,6 +13581,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13336,7 +13603,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 206,
+      "id": 209,
       "is_cycle": false,
       "length_m": 11.926,
       "node_ids": [
@@ -13351,6 +13618,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13374,7 +13642,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 207,
+      "id": 210,
       "is_cycle": false,
       "length_m": 148.008,
       "node_ids": [
@@ -13419,6 +13687,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13440,7 +13709,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 208,
+      "id": 211,
       "is_cycle": false,
       "length_m": 192.446,
       "node_ids": [
@@ -13485,6 +13754,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13508,7 +13778,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 209,
+      "id": 212,
       "is_cycle": false,
       "length_m": 48.036,
       "node_ids": [
@@ -13528,6 +13798,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13551,7 +13822,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 210,
+      "id": 213,
       "is_cycle": false,
       "length_m": 72.033,
       "node_ids": [
@@ -13591,6 +13862,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13612,7 +13884,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 211,
+      "id": 214,
       "is_cycle": false,
       "length_m": 104.327,
       "node_ids": [
@@ -13652,6 +13924,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13675,7 +13948,7 @@
       "highway_types": {
         "footway": 11
       },
-      "id": 212,
+      "id": 215,
       "is_cycle": false,
       "length_m": 177.396,
       "node_ids": [
@@ -13740,6 +14013,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13761,7 +14035,7 @@
       "highway_types": {
         "path": 17
       },
-      "id": 213,
+      "id": 216,
       "is_cycle": false,
       "length_m": 251.657,
       "node_ids": [
@@ -13856,6 +14130,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13879,7 +14154,7 @@
       "highway_types": {
         "path": 15
       },
-      "id": 214,
+      "id": 217,
       "is_cycle": false,
       "length_m": 288.956,
       "node_ids": [
@@ -13964,6 +14239,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -13985,7 +14261,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 215,
+      "id": 218,
       "is_cycle": false,
       "length_m": 239.937,
       "node_ids": [
@@ -14030,6 +14306,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14052,7 +14329,7 @@
         "footway": 4,
         "path": 26
       },
-      "id": 216,
+      "id": 219,
       "is_cycle": false,
       "length_m": 927.074,
       "node_ids": [
@@ -14212,6 +14489,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14234,7 +14512,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 217,
+      "id": 220,
       "is_cycle": false,
       "length_m": 169.061,
       "node_ids": [
@@ -14284,6 +14562,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14305,7 +14584,7 @@
       "highway_types": {
         "path": 15
       },
-      "id": 218,
+      "id": 221,
       "is_cycle": false,
       "length_m": 474.039,
       "node_ids": [
@@ -14390,6 +14669,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14411,7 +14691,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 219,
+      "id": 222,
       "is_cycle": false,
       "length_m": 158.595,
       "node_ids": [
@@ -14451,6 +14731,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14472,7 +14753,7 @@
       "highway_types": {
         "footway": 19
       },
-      "id": 220,
+      "id": 223,
       "is_cycle": false,
       "length_m": 398.884,
       "node_ids": [
@@ -14577,6 +14858,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14598,7 +14880,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 221,
+      "id": 224,
       "is_cycle": false,
       "length_m": 53.001,
       "node_ids": [
@@ -14623,6 +14905,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14644,7 +14927,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 222,
+      "id": 225,
       "is_cycle": false,
       "length_m": 223.291,
       "node_ids": [
@@ -14684,6 +14967,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14707,7 +14991,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 223,
+      "id": 226,
       "is_cycle": false,
       "length_m": 43.639,
       "node_ids": [
@@ -14732,6 +15016,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14753,7 +15038,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 224,
+      "id": 227,
       "is_cycle": false,
       "length_m": 37.206,
       "node_ids": [
@@ -14778,6 +15063,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14799,7 +15085,7 @@
       "highway_types": {
         "footway": 14
       },
-      "id": 225,
+      "id": 228,
       "is_cycle": false,
       "length_m": 322.411,
       "node_ids": [
@@ -14879,6 +15165,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14902,7 +15189,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 226,
+      "id": 229,
       "is_cycle": false,
       "length_m": 133.875,
       "node_ids": [
@@ -14942,6 +15229,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -14965,7 +15253,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 227,
+      "id": 230,
       "is_cycle": false,
       "length_m": 378.485,
       "node_ids": [
@@ -15035,6 +15323,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15056,7 +15345,7 @@
       "highway_types": {
         "footway": 15
       },
-      "id": 228,
+      "id": 231,
       "is_cycle": false,
       "length_m": 249.339,
       "node_ids": [
@@ -15141,6 +15430,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15162,7 +15452,7 @@
       "highway_types": {
         "footway": 17
       },
-      "id": 229,
+      "id": 232,
       "is_cycle": false,
       "length_m": 490.013,
       "node_ids": [
@@ -15257,6 +15547,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15278,7 +15569,7 @@
       "highway_types": {
         "footway": 13
       },
-      "id": 230,
+      "id": 233,
       "is_cycle": false,
       "length_m": 931.524,
       "node_ids": [
@@ -15353,6 +15644,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15374,7 +15666,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 231,
+      "id": 234,
       "is_cycle": false,
       "length_m": 58.644,
       "node_ids": [
@@ -15399,6 +15691,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15420,7 +15713,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 232,
+      "id": 235,
       "is_cycle": false,
       "length_m": 54.098,
       "node_ids": [
@@ -15455,6 +15748,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15476,7 +15770,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 233,
+      "id": 236,
       "is_cycle": false,
       "length_m": 207.137,
       "node_ids": [
@@ -15546,6 +15840,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15567,7 +15862,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 234,
+      "id": 237,
       "is_cycle": false,
       "length_m": 192.338,
       "node_ids": [
@@ -15617,6 +15912,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15638,7 +15934,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 235,
+      "id": 238,
       "is_cycle": false,
       "length_m": 83.794,
       "node_ids": [
@@ -15678,6 +15974,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15699,7 +15996,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 236,
+      "id": 239,
       "is_cycle": false,
       "length_m": 118.652,
       "node_ids": [
@@ -15719,6 +16016,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15740,7 +16038,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 237,
+      "id": 240,
       "is_cycle": false,
       "length_m": 15.794,
       "node_ids": [
@@ -15755,6 +16053,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15776,7 +16075,7 @@
       "highway_types": {
         "footway": 7
       },
-      "id": 238,
+      "id": 241,
       "is_cycle": false,
       "length_m": 220.515,
       "node_ids": [
@@ -15821,6 +16120,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15842,7 +16142,7 @@
       "highway_types": {
         "footway": 7
       },
-      "id": 239,
+      "id": 242,
       "is_cycle": false,
       "length_m": 182.69,
       "node_ids": [
@@ -15887,6 +16187,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15908,7 +16209,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 240,
+      "id": 243,
       "is_cycle": false,
       "length_m": 54.375,
       "node_ids": [
@@ -15928,6 +16229,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -15949,7 +16251,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 241,
+      "id": 244,
       "is_cycle": false,
       "length_m": 97.648,
       "node_ids": [
@@ -15979,6 +16281,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16002,7 +16305,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 242,
+      "id": 245,
       "is_cycle": false,
       "length_m": 279.82,
       "node_ids": [
@@ -16072,6 +16375,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16095,7 +16399,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 243,
+      "id": 246,
       "is_cycle": false,
       "length_m": 120.544,
       "node_ids": [
@@ -16110,6 +16414,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16131,7 +16436,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 244,
+      "id": 247,
       "is_cycle": false,
       "length_m": 14.536,
       "node_ids": [
@@ -16146,6 +16451,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16167,7 +16473,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 245,
+      "id": 248,
       "is_cycle": false,
       "length_m": 147.779,
       "node_ids": [
@@ -16222,6 +16528,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16245,7 +16552,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 246,
+      "id": 249,
       "is_cycle": false,
       "length_m": 148.835,
       "node_ids": [
@@ -16275,6 +16582,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16298,7 +16606,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 247,
+      "id": 250,
       "is_cycle": false,
       "length_m": 251.671,
       "node_ids": [
@@ -16338,6 +16646,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16359,7 +16668,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 248,
+      "id": 251,
       "is_cycle": false,
       "length_m": 228.608,
       "node_ids": [
@@ -16419,6 +16728,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16440,7 +16750,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 249,
+      "id": 252,
       "is_cycle": false,
       "length_m": 383.469,
       "node_ids": [
@@ -16480,6 +16790,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16501,7 +16812,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 250,
+      "id": 253,
       "is_cycle": false,
       "length_m": 110.785,
       "node_ids": [
@@ -16551,6 +16862,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16572,7 +16884,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 251,
+      "id": 254,
       "is_cycle": false,
       "length_m": 86.156,
       "node_ids": [
@@ -16587,6 +16899,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16608,7 +16921,7 @@
       "highway_types": {
         "path": 15
       },
-      "id": 252,
+      "id": 255,
       "is_cycle": false,
       "length_m": 251.089,
       "node_ids": [
@@ -16693,6 +17006,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16714,7 +17028,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 253,
+      "id": 256,
       "is_cycle": false,
       "length_m": 27.57,
       "node_ids": [
@@ -16734,6 +17048,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16755,7 +17070,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 254,
+      "id": 257,
       "is_cycle": false,
       "length_m": 191.932,
       "node_ids": [
@@ -16830,6 +17145,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -16851,7 +17167,7 @@
       "highway_types": {
         "footway": 49
       },
-      "id": 255,
+      "id": 258,
       "is_cycle": false,
       "length_m": 1071.763,
       "node_ids": [
@@ -17106,6 +17422,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17131,7 +17448,7 @@
       "highway_types": {
         "footway": 52
       },
-      "id": 256,
+      "id": 259,
       "is_cycle": false,
       "length_m": 1203.352,
       "node_ids": [
@@ -17401,6 +17718,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17424,7 +17742,7 @@
       "highway_types": {
         "footway": 21
       },
-      "id": 257,
+      "id": 260,
       "is_cycle": false,
       "length_m": 466.811,
       "node_ids": [
@@ -17539,6 +17857,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -17563,7 +17882,7 @@
       "highway_types": {
         "footway": 10
       },
-      "id": 258,
+      "id": 261,
       "is_cycle": false,
       "length_m": 203.079,
       "node_ids": [
@@ -17623,6 +17942,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17646,7 +17966,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 259,
+      "id": 262,
       "is_cycle": false,
       "length_m": 23.829,
       "node_ids": [
@@ -17661,6 +17981,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17684,7 +18005,7 @@
       "highway_types": {
         "path": 11
       },
-      "id": 260,
+      "id": 263,
       "is_cycle": false,
       "length_m": 317.371,
       "node_ids": [
@@ -17749,6 +18070,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17772,7 +18094,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 261,
+      "id": 264,
       "is_cycle": false,
       "length_m": 78.185,
       "node_ids": [
@@ -17797,6 +18119,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17818,7 +18141,7 @@
       "highway_types": {
         "path": 23
       },
-      "id": 262,
+      "id": 265,
       "is_cycle": false,
       "length_m": 391.872,
       "node_ids": [
@@ -17943,6 +18266,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -17966,7 +18290,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 263,
+      "id": 266,
       "is_cycle": false,
       "length_m": 54.267,
       "node_ids": [
@@ -17981,6 +18305,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18002,7 +18327,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 264,
+      "id": 267,
       "is_cycle": false,
       "length_m": 17.872,
       "node_ids": [
@@ -18022,6 +18347,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -18044,7 +18370,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 265,
+      "id": 268,
       "is_cycle": false,
       "length_m": 19.969,
       "node_ids": [
@@ -18059,6 +18385,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -18081,7 +18408,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 266,
+      "id": 269,
       "is_cycle": false,
       "length_m": 186.265,
       "node_ids": [
@@ -18151,6 +18478,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -18173,7 +18501,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 267,
+      "id": 270,
       "is_cycle": false,
       "length_m": 122.698,
       "node_ids": [
@@ -18213,6 +18541,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18234,7 +18563,7 @@
       "highway_types": {
         "footway": 17
       },
-      "id": 268,
+      "id": 271,
       "is_cycle": false,
       "length_m": 318.472,
       "node_ids": [
@@ -18329,6 +18658,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18350,7 +18680,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 269,
+      "id": 272,
       "is_cycle": false,
       "length_m": 160.966,
       "node_ids": [
@@ -18390,6 +18720,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18411,7 +18742,7 @@
       "highway_types": {
         "unclassified": 1
       },
-      "id": 270,
+      "id": 273,
       "is_cycle": false,
       "length_m": 17.85,
       "node_ids": [
@@ -18426,7 +18757,57 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        60200207
+      ],
+      "way_names": [
+        "KFEET Track"
+      ]
+    },
+    {
+      "bounds": [
+        36.8180797,
+        -1.2413982,
+        36.818831,
+        -1.241085
+      ],
+      "endpoint_node_ids": [
+        2847941648,
+        11952125949
+      ],
+      "highway_types": {
+        "unclassified": 3
+      },
+      "id": 274,
+      "is_cycle": false,
+      "length_m": 91.037,
+      "node_ids": [
+        2847941648,
+        271326705,
+        271326704,
+        11952125949
+      ],
+      "segment_count": 3,
+      "segment_pairs": [
+        [
+          2847941648,
+          271326705
+        ],
+        [
+          271326705,
+          271326704
+        ],
+        [
+          271326704,
+          11952125949
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194",
+        "local:boundary_zone": "core"
       },
       "way_ids": [
         60200207
@@ -18449,7 +18830,7 @@
       "highway_types": {
         "residential": 12
       },
-      "id": 271,
+      "id": 275,
       "is_cycle": false,
       "length_m": 194.713,
       "node_ids": [
@@ -18519,6 +18900,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -18541,7 +18923,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 272,
+      "id": 276,
       "is_cycle": false,
       "length_m": 121.493,
       "node_ids": [
@@ -18586,6 +18968,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "include"
       },
@@ -18608,7 +18991,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 273,
+      "id": 277,
       "is_cycle": false,
       "length_m": 236.533,
       "node_ids": [
@@ -18648,6 +19031,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18669,7 +19053,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 274,
+      "id": 278,
       "is_cycle": false,
       "length_m": 136.332,
       "node_ids": [
@@ -18714,6 +19098,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -18735,7 +19120,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 275,
+      "id": 279,
       "is_cycle": false,
       "length_m": 405.606,
       "node_ids": [
@@ -18790,6 +19175,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18811,7 +19197,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 276,
+      "id": 280,
       "is_cycle": false,
       "length_m": 121.453,
       "node_ids": [
@@ -18831,6 +19217,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18852,7 +19239,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 277,
+      "id": 281,
       "is_cycle": false,
       "length_m": 205.744,
       "node_ids": [
@@ -18902,6 +19289,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -18923,7 +19311,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 278,
+      "id": 282,
       "is_cycle": false,
       "length_m": 31.668,
       "node_ids": [
@@ -18938,6 +19326,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -18960,7 +19349,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 279,
+      "id": 283,
       "is_cycle": false,
       "length_m": 5.222,
       "node_ids": [
@@ -18980,6 +19369,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19001,7 +19391,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 280,
+      "id": 284,
       "is_cycle": false,
       "length_m": 36.902,
       "node_ids": [
@@ -19016,6 +19406,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -19038,7 +19429,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 281,
+      "id": 285,
       "is_cycle": false,
       "length_m": 68.635,
       "node_ids": [
@@ -19053,6 +19444,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -19075,7 +19467,7 @@
       "highway_types": {
         "path": 17
       },
-      "id": 282,
+      "id": 286,
       "is_cycle": false,
       "length_m": 323.667,
       "node_ids": [
@@ -19170,6 +19562,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19191,7 +19584,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 283,
+      "id": 287,
       "is_cycle": false,
       "length_m": 28.007,
       "node_ids": [
@@ -19216,6 +19609,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19237,7 +19631,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 284,
+      "id": 288,
       "is_cycle": false,
       "length_m": 128.705,
       "node_ids": [
@@ -19272,6 +19666,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19295,7 +19690,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 285,
+      "id": 289,
       "is_cycle": false,
       "length_m": 76.278,
       "node_ids": [
@@ -19315,6 +19710,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19338,7 +19734,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 286,
+      "id": 290,
       "is_cycle": false,
       "length_m": 559.261,
       "node_ids": [
@@ -19363,6 +19759,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:unavailable_until": "2026-06-01"
       },
@@ -19385,7 +19782,7 @@
       "highway_types": {
         "track": 10
       },
-      "id": 287,
+      "id": 291,
       "is_cycle": false,
       "length_m": 824.19,
       "node_ids": [
@@ -19445,6 +19842,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19468,7 +19866,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 288,
+      "id": 292,
       "is_cycle": false,
       "length_m": 200.649,
       "node_ids": [
@@ -19508,6 +19906,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19531,7 +19930,7 @@
       "highway_types": {
         "path": 60
       },
-      "id": 289,
+      "id": 293,
       "is_cycle": false,
       "length_m": 1327.082,
       "node_ids": [
@@ -19841,6 +20240,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19862,7 +20262,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 290,
+      "id": 294,
       "is_cycle": false,
       "length_m": 152.294,
       "node_ids": [
@@ -19892,6 +20292,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19915,7 +20316,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 291,
+      "id": 295,
       "is_cycle": false,
       "length_m": 57.271,
       "node_ids": [
@@ -19940,6 +20341,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -19963,7 +20365,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 292,
+      "id": 296,
       "is_cycle": false,
       "length_m": 320.917,
       "node_ids": [
@@ -20023,6 +20425,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20044,7 +20447,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 293,
+      "id": 297,
       "is_cycle": false,
       "length_m": 45.901,
       "node_ids": [
@@ -20069,6 +20472,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -20092,7 +20496,7 @@
         "footway": 2,
         "path": 1
       },
-      "id": 294,
+      "id": 298,
       "is_cycle": false,
       "length_m": 20.113,
       "node_ids": [
@@ -20117,6 +20521,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20142,7 +20547,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 295,
+      "id": 299,
       "is_cycle": false,
       "length_m": 94.23,
       "node_ids": [
@@ -20162,6 +20567,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20183,7 +20589,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 296,
+      "id": 300,
       "is_cycle": false,
       "length_m": 975.091,
       "node_ids": [
@@ -20233,6 +20639,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20254,7 +20661,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 297,
+      "id": 301,
       "is_cycle": false,
       "length_m": 154.714,
       "node_ids": [
@@ -20269,6 +20676,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20290,7 +20698,7 @@
       "highway_types": {
         "path": 20
       },
-      "id": 298,
+      "id": 302,
       "is_cycle": false,
       "length_m": 269.486,
       "node_ids": [
@@ -20400,6 +20808,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20421,7 +20830,7 @@
       "highway_types": {
         "path": 14
       },
-      "id": 299,
+      "id": 303,
       "is_cycle": false,
       "length_m": 304.251,
       "node_ids": [
@@ -20501,6 +20910,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20522,7 +20932,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 300,
+      "id": 304,
       "is_cycle": false,
       "length_m": 271.24,
       "node_ids": [
@@ -20537,6 +20947,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20558,7 +20969,7 @@
       "highway_types": {
         "path": 8
       },
-      "id": 301,
+      "id": 305,
       "is_cycle": false,
       "length_m": 221.366,
       "node_ids": [
@@ -20608,6 +21019,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20629,7 +21041,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 302,
+      "id": 306,
       "is_cycle": false,
       "length_m": 363.794,
       "node_ids": [
@@ -20644,6 +21056,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20665,7 +21078,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 303,
+      "id": 307,
       "is_cycle": false,
       "length_m": 353.197,
       "node_ids": [
@@ -20690,6 +21103,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20711,7 +21125,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 304,
+      "id": 308,
       "is_cycle": false,
       "length_m": 215.577,
       "node_ids": [
@@ -20736,10 +21150,48 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
         280734652
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.820371,
+        -1.2422211,
+        36.8204567,
+        -1.2420903
+      ],
+      "endpoint_node_ids": [
+        4304615715,
+        4803107764
+      ],
+      "highway_types": {
+        "service": 1
+      },
+      "id": 309,
+      "is_cycle": false,
+      "length_m": 17.387,
+      "node_ids": [
+        4304615715,
+        4803107764
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
+        [
+          4304615715,
+          4803107764
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        431217470
       ],
       "way_names": []
     },
@@ -20757,7 +21209,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 305,
+      "id": 310,
       "is_cycle": false,
       "length_m": 120.839,
       "node_ids": [
@@ -20787,6 +21239,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20808,7 +21261,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 306,
+      "id": 311,
       "is_cycle": false,
       "length_m": 122.889,
       "node_ids": [
@@ -20843,6 +21296,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20864,7 +21318,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 307,
+      "id": 312,
       "is_cycle": false,
       "length_m": 127.693,
       "node_ids": [
@@ -20894,6 +21348,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20915,7 +21370,7 @@
       "highway_types": {
         "service": 6
       },
-      "id": 308,
+      "id": 313,
       "is_cycle": false,
       "length_m": 89.742,
       "node_ids": [
@@ -20955,6 +21410,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -20966,53 +21422,37 @@
       "bounds": [
         36.8204567,
         -1.2422211,
-        36.8206582,
-        -1.241907
+        36.8204676,
+        -1.2420624
       ],
       "endpoint_node_ids": [
         4803107764,
-        10597364814
+        10597364805
       ],
       "highway_types": {
-        "footway": 4
+        "footway": 1
       },
-      "id": 309,
+      "id": 314,
       "is_cycle": false,
-      "length_m": 47.928,
+      "length_m": 17.688,
       "node_ids": [
         4803107764,
-        10597364805,
-        10597364811,
-        10597364813,
-        10597364814
+        10597364805
       ],
-      "segment_count": 4,
+      "segment_count": 1,
       "segment_pairs": [
         [
           4803107764,
           10597364805
-        ],
-        [
-          10597364805,
-          10597364811
-        ],
-        [
-          10597364811,
-          10597364813
-        ],
-        [
-          10597364813,
-          10597364814
         ]
       ],
       "tags": {
-        "local:boundary_zone": "core",
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
       "way_ids": [
-        1136841297,
-        1136841299,
-        1136841300
+        1136841297
       ],
       "way_names": []
     },
@@ -21030,7 +21470,7 @@
       "highway_types": {
         "service": 8
       },
-      "id": 310,
+      "id": 315,
       "is_cycle": false,
       "length_m": 68.921,
       "node_ids": [
@@ -21080,6 +21520,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -21101,7 +21542,7 @@
       "highway_types": {
         "service": 2
       },
-      "id": 311,
+      "id": 316,
       "is_cycle": false,
       "length_m": 54.005,
       "node_ids": [
@@ -21121,6 +21562,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21142,7 +21584,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 312,
+      "id": 317,
       "is_cycle": false,
       "length_m": 25.304,
       "node_ids": [
@@ -21162,6 +21604,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21183,7 +21626,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 313,
+      "id": 318,
       "is_cycle": false,
       "length_m": 30.589,
       "node_ids": [
@@ -21198,6 +21641,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21219,7 +21663,7 @@
       "highway_types": {
         "track": 2
       },
-      "id": 314,
+      "id": 319,
       "is_cycle": false,
       "length_m": 417.234,
       "node_ids": [
@@ -21239,6 +21683,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21263,7 +21708,7 @@
         "footway": 3,
         "path": 6
       },
-      "id": 315,
+      "id": 320,
       "is_cycle": false,
       "length_m": 319.647,
       "node_ids": [
@@ -21318,6 +21763,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21342,7 +21788,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 316,
+      "id": 321,
       "is_cycle": false,
       "length_m": 65.798,
       "node_ids": [
@@ -21367,6 +21813,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21390,7 +21837,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 317,
+      "id": 322,
       "is_cycle": false,
       "length_m": 26.879,
       "node_ids": [
@@ -21405,6 +21852,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21426,7 +21874,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 318,
+      "id": 323,
       "is_cycle": false,
       "length_m": 79.038,
       "node_ids": [
@@ -21446,6 +21894,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21467,7 +21916,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 319,
+      "id": 324,
       "is_cycle": false,
       "length_m": 63.69,
       "node_ids": [
@@ -21497,6 +21946,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21520,7 +21970,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 320,
+      "id": 325,
       "is_cycle": false,
       "length_m": 15.078,
       "node_ids": [
@@ -21535,6 +21985,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21558,7 +22009,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 321,
+      "id": 326,
       "is_cycle": false,
       "length_m": 271.663,
       "node_ids": [
@@ -21598,6 +22049,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21623,7 +22075,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 322,
+      "id": 327,
       "is_cycle": false,
       "length_m": 58.842,
       "node_ids": [
@@ -21638,6 +22090,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21659,7 +22112,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 323,
+      "id": 328,
       "is_cycle": false,
       "length_m": 62.371,
       "node_ids": [
@@ -21674,6 +22127,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21695,7 +22149,7 @@
       "highway_types": {
         "residential": 1
       },
-      "id": 324,
+      "id": 329,
       "is_cycle": false,
       "length_m": 8.658,
       "node_ids": [
@@ -21710,6 +22164,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -21731,7 +22186,7 @@
       "highway_types": {
         "secondary": 4
       },
-      "id": 325,
+      "id": 330,
       "is_cycle": false,
       "length_m": 140.412,
       "node_ids": [
@@ -21761,6 +22216,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -21784,7 +22240,7 @@
       "highway_types": {
         "secondary": 2
       },
-      "id": 326,
+      "id": 331,
       "is_cycle": false,
       "length_m": 77.99,
       "node_ids": [
@@ -21804,6 +22260,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21827,7 +22284,7 @@
       "highway_types": {
         "secondary": 1
       },
-      "id": 327,
+      "id": 332,
       "is_cycle": false,
       "length_m": 49.958,
       "node_ids": [
@@ -21842,6 +22299,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21865,7 +22323,7 @@
       "highway_types": {
         "secondary": 5
       },
-      "id": 328,
+      "id": 333,
       "is_cycle": false,
       "length_m": 136.816,
       "node_ids": [
@@ -21900,6 +22358,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -21923,7 +22382,7 @@
       "highway_types": {
         "secondary": 3
       },
-      "id": 329,
+      "id": 334,
       "is_cycle": false,
       "length_m": 211.709,
       "node_ids": [
@@ -21948,6 +22407,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -21971,7 +22431,7 @@
       "highway_types": {
         "trunk": 5
       },
-      "id": 330,
+      "id": 335,
       "is_cycle": false,
       "length_m": 341.804,
       "node_ids": [
@@ -22006,6 +22466,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -22030,7 +22491,7 @@
       "highway_types": {
         "trunk": 9
       },
-      "id": 331,
+      "id": 336,
       "is_cycle": false,
       "length_m": 329.283,
       "node_ids": [
@@ -22085,6 +22546,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -22109,7 +22571,7 @@
       "highway_types": {
         "trunk": 5
       },
-      "id": 332,
+      "id": 337,
       "is_cycle": false,
       "length_m": 230.213,
       "node_ids": [
@@ -22144,6 +22606,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "exclude"
       },
@@ -22168,7 +22631,7 @@
       "highway_types": {
         "residential": 1
       },
-      "id": 333,
+      "id": 338,
       "is_cycle": false,
       "length_m": 7.385,
       "node_ids": [
@@ -22183,6 +22646,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22206,7 +22670,7 @@
       "highway_types": {
         "residential": 1
       },
-      "id": 334,
+      "id": 339,
       "is_cycle": false,
       "length_m": 66.496,
       "node_ids": [
@@ -22221,6 +22685,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22244,7 +22709,7 @@
       "highway_types": {
         "residential": 6
       },
-      "id": 335,
+      "id": 340,
       "is_cycle": false,
       "length_m": 76.821,
       "node_ids": [
@@ -22284,6 +22749,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22307,7 +22773,7 @@
       "highway_types": {
         "residential": 5
       },
-      "id": 336,
+      "id": 341,
       "is_cycle": false,
       "length_m": 268.705,
       "node_ids": [
@@ -22342,6 +22808,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22365,7 +22832,7 @@
       "highway_types": {
         "residential": 1
       },
-      "id": 337,
+      "id": 342,
       "is_cycle": false,
       "length_m": 28.038,
       "node_ids": [
@@ -22380,6 +22847,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22401,7 +22869,7 @@
       "highway_types": {
         "residential": 5
       },
-      "id": 338,
+      "id": 343,
       "is_cycle": false,
       "length_m": 113.965,
       "node_ids": [
@@ -22436,6 +22904,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22459,7 +22928,7 @@
       "highway_types": {
         "service": 4
       },
-      "id": 339,
+      "id": 344,
       "is_cycle": false,
       "length_m": 78.079,
       "node_ids": [
@@ -22489,6 +22958,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -22510,7 +22980,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 340,
+      "id": 345,
       "is_cycle": false,
       "length_m": 3.886,
       "node_ids": [
@@ -22525,6 +22995,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22546,7 +23017,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 341,
+      "id": 346,
       "is_cycle": false,
       "length_m": 12.867,
       "node_ids": [
@@ -22561,6 +23032,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22582,7 +23054,7 @@
       "highway_types": {
         "path": 41
       },
-      "id": 342,
+      "id": 347,
       "is_cycle": false,
       "length_m": 1259.956,
       "node_ids": [
@@ -22797,6 +23269,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22820,7 +23293,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 343,
+      "id": 348,
       "is_cycle": false,
       "length_m": 19.657,
       "node_ids": [
@@ -22835,6 +23308,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22856,7 +23330,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 344,
+      "id": 349,
       "is_cycle": false,
       "length_m": 99.97,
       "node_ids": [
@@ -22886,6 +23360,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22907,7 +23382,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 345,
+      "id": 350,
       "is_cycle": false,
       "length_m": 99.2,
       "node_ids": [
@@ -22922,6 +23397,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22943,7 +23419,7 @@
       "highway_types": {
         "track": 3
       },
-      "id": 346,
+      "id": 351,
       "is_cycle": false,
       "length_m": 352.95,
       "node_ids": [
@@ -22968,6 +23444,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -22994,7 +23471,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 347,
+      "id": 352,
       "is_cycle": false,
       "length_m": 73.13,
       "node_ids": [
@@ -23009,6 +23486,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23030,7 +23508,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 348,
+      "id": 353,
       "is_cycle": false,
       "length_m": 55.217,
       "node_ids": [
@@ -23045,6 +23523,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23066,7 +23545,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 349,
+      "id": 354,
       "is_cycle": false,
       "length_m": 432.727,
       "node_ids": [
@@ -23081,6 +23560,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23104,7 +23584,7 @@
       "highway_types": {
         "footway": 7
       },
-      "id": 350,
+      "id": 355,
       "is_cycle": false,
       "length_m": 208.45,
       "node_ids": [
@@ -23149,6 +23629,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -23171,7 +23652,7 @@
       "highway_types": {
         "footway": 10
       },
-      "id": 351,
+      "id": 356,
       "is_cycle": false,
       "length_m": 384.326,
       "node_ids": [
@@ -23231,6 +23712,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23252,7 +23734,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 352,
+      "id": 357,
       "is_cycle": false,
       "length_m": 10.574,
       "node_ids": [
@@ -23267,6 +23749,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23290,7 +23773,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 353,
+      "id": 358,
       "is_cycle": false,
       "length_m": 308.126,
       "node_ids": [
@@ -23345,6 +23828,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23366,7 +23850,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 354,
+      "id": 359,
       "is_cycle": false,
       "length_m": 88.395,
       "node_ids": [
@@ -23381,6 +23865,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -23403,7 +23888,7 @@
       "highway_types": {
         "secondary": 6
       },
-      "id": 355,
+      "id": 360,
       "is_cycle": false,
       "length_m": 106.691,
       "node_ids": [
@@ -23443,6 +23928,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23466,7 +23952,7 @@
       "highway_types": {
         "service": 3
       },
-      "id": 356,
+      "id": 361,
       "is_cycle": false,
       "length_m": 59.77,
       "node_ids": [
@@ -23491,6 +23977,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23512,7 +23999,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 357,
+      "id": 362,
       "is_cycle": false,
       "length_m": 27.439,
       "node_ids": [
@@ -23527,6 +24014,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -23548,7 +24036,7 @@
       "highway_types": {
         "service": 11
       },
-      "id": 358,
+      "id": 363,
       "is_cycle": false,
       "length_m": 138.639,
       "node_ids": [
@@ -23613,6 +24101,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -23634,7 +24123,7 @@
       "highway_types": {
         "service": 3
       },
-      "id": 359,
+      "id": 364,
       "is_cycle": false,
       "length_m": 35.336,
       "node_ids": [
@@ -23659,6 +24148,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -23680,7 +24170,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 360,
+      "id": 365,
       "is_cycle": false,
       "length_m": 21.555,
       "node_ids": [
@@ -23695,6 +24185,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -23714,7 +24205,7 @@
         13845622380
       ],
       "highway_types": {},
-      "id": 361,
+      "id": 366,
       "is_cycle": false,
       "length_m": 148.403,
       "node_ids": [
@@ -23744,6 +24235,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23763,7 +24255,7 @@
         13845622380
       ],
       "highway_types": {},
-      "id": 362,
+      "id": 367,
       "is_cycle": false,
       "length_m": 75.621,
       "node_ids": [
@@ -23783,6 +24275,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23804,7 +24297,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 363,
+      "id": 368,
       "is_cycle": false,
       "length_m": 31.105,
       "node_ids": [
@@ -23819,6 +24312,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23840,7 +24334,7 @@
       "highway_types": {
         "footway": 3
       },
-      "id": 364,
+      "id": 369,
       "is_cycle": false,
       "length_m": 124.641,
       "node_ids": [
@@ -23865,6 +24359,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23886,7 +24381,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 365,
+      "id": 370,
       "is_cycle": false,
       "length_m": 149.476,
       "node_ids": [
@@ -23926,6 +24421,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -23947,7 +24443,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 366,
+      "id": 371,
       "is_cycle": false,
       "length_m": 224.872,
       "node_ids": [
@@ -24022,6 +24518,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24043,7 +24540,7 @@
       "highway_types": {
         "footway": 16
       },
-      "id": 367,
+      "id": 372,
       "is_cycle": false,
       "length_m": 412.757,
       "node_ids": [
@@ -24133,6 +24630,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24155,7 +24653,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 368,
+      "id": 373,
       "is_cycle": false,
       "length_m": 271.479,
       "node_ids": [
@@ -24225,6 +24723,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24246,7 +24745,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 369,
+      "id": 374,
       "is_cycle": false,
       "length_m": 141.119,
       "node_ids": [
@@ -24281,6 +24780,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24302,7 +24802,7 @@
       "highway_types": {
         "path": 29
       },
-      "id": 370,
+      "id": 375,
       "is_cycle": false,
       "length_m": 470.275,
       "node_ids": [
@@ -24457,6 +24957,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24478,7 +24979,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 371,
+      "id": 376,
       "is_cycle": false,
       "length_m": 74.909,
       "node_ids": [
@@ -24493,6 +24994,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24514,7 +25016,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 372,
+      "id": 377,
       "is_cycle": false,
       "length_m": 91.261,
       "node_ids": [
@@ -24554,6 +25056,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24575,7 +25078,7 @@
       "highway_types": {
         "path": 16
       },
-      "id": 373,
+      "id": 378,
       "is_cycle": false,
       "length_m": 325.573,
       "node_ids": [
@@ -24665,6 +25168,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24686,7 +25190,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 374,
+      "id": 379,
       "is_cycle": false,
       "length_m": 73.202,
       "node_ids": [
@@ -24716,6 +25220,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24737,7 +25242,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 375,
+      "id": 380,
       "is_cycle": false,
       "length_m": 321.023,
       "node_ids": [
@@ -24812,6 +25317,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24821,38 +25327,71 @@
     },
     {
       "bounds": [
-        36.8136071,
+        36.813717,
         -1.2428596,
         36.813827,
-        -1.2416596
+        -1.2422013
       ],
       "endpoint_node_ids": [
         7191425670,
-        7191425672
+        7191425671
       ],
       "highway_types": {
-        "secondary": 2
+        "secondary": 1
       },
-      "id": 376,
+      "id": 381,
       "is_cycle": false,
-      "length_m": 135.675,
+      "length_m": 74.214,
       "node_ids": [
         7191425670,
-        7191425671,
-        7191425672
+        7191425671
       ],
-      "segment_count": 2,
+      "segment_count": 1,
       "segment_pairs": [
         [
           7191425670,
           7191425671
-        ],
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194,w24040003",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        770407195
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8136071,
+        -1.2422013,
+        36.813717,
+        -1.2416596
+      ],
+      "endpoint_node_ids": [
+        7191425671,
+        7191425672
+      ],
+      "highway_types": {
+        "secondary": 1
+      },
+      "id": 382,
+      "is_cycle": false,
+      "length_m": 61.461,
+      "node_ids": [
+        7191425671,
+        7191425672
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
         [
           7191425671,
           7191425672
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -24874,7 +25413,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 377,
+      "id": 383,
       "is_cycle": false,
       "length_m": 21.089,
       "node_ids": [
@@ -24889,6 +25428,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24910,7 +25450,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 378,
+      "id": 384,
       "is_cycle": false,
       "length_m": 23.501,
       "node_ids": [
@@ -24930,6 +25470,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -24951,7 +25492,7 @@
       "highway_types": {
         "track": 4
       },
-      "id": 379,
+      "id": 385,
       "is_cycle": false,
       "length_m": 123.512,
       "node_ids": [
@@ -24981,6 +25522,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25002,7 +25544,7 @@
       "highway_types": {
         "path": 7
       },
-      "id": 380,
+      "id": 386,
       "is_cycle": false,
       "length_m": 125.492,
       "node_ids": [
@@ -25047,6 +25589,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25068,7 +25611,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 381,
+      "id": 387,
       "is_cycle": false,
       "length_m": 41.293,
       "node_ids": [
@@ -25083,6 +25626,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25104,7 +25648,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 382,
+      "id": 388,
       "is_cycle": false,
       "length_m": 292.45,
       "node_ids": [
@@ -25159,6 +25703,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -25181,7 +25726,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 383,
+      "id": 389,
       "is_cycle": false,
       "length_m": 14.137,
       "node_ids": [
@@ -25196,6 +25741,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -25217,7 +25763,7 @@
       "highway_types": {
         "service": 8
       },
-      "id": 384,
+      "id": 390,
       "is_cycle": false,
       "length_m": 124.887,
       "node_ids": [
@@ -25267,6 +25813,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25288,7 +25835,7 @@
       "highway_types": {
         "residential": 1
       },
-      "id": 385,
+      "id": 391,
       "is_cycle": false,
       "length_m": 15.601,
       "node_ids": [
@@ -25303,6 +25850,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -25324,7 +25872,7 @@
       "highway_types": {
         "residential": 2
       },
-      "id": 386,
+      "id": 392,
       "is_cycle": false,
       "length_m": 5.653,
       "node_ids": [
@@ -25344,6 +25892,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25353,21 +25902,21 @@
     },
     {
       "bounds": [
-        36.8193758,
-        -1.2354076,
+        36.8208522,
+        -1.2315591,
         36.8212286,
         -1.2311815
       ],
       "endpoint_node_ids": [
         9189127987,
-        9923907622
+        9923907661
       ],
       "highway_types": {
-        "path": 56
+        "path": 10
       },
-      "id": 387,
+      "id": 393,
       "is_cycle": false,
-      "length_m": 685.636,
+      "length_m": 88.537,
       "node_ids": [
         9189127987,
         12341461509,
@@ -25379,55 +25928,9 @@
         12341461504,
         9923907663,
         9923907662,
-        9923907661,
-        9923907660,
-        12341461514,
-        12341461513,
-        12341461512,
-        12341461515,
-        12341461510,
-        12341461511,
-        9923907659,
-        9923907658,
-        9923907657,
-        9923907656,
-        9923907655,
-        9923907654,
-        9923907653,
-        9923907652,
-        9923907651,
-        12341461516,
-        9923907650,
-        9923907649,
-        9923907648,
-        9923907647,
-        9923907646,
-        9923907645,
-        9923907644,
-        9923907643,
-        9923907642,
-        9923907641,
-        9923907640,
-        9923907639,
-        9923907638,
-        9923907637,
-        9923907636,
-        9923907635,
-        9923907634,
-        9923907633,
-        9923907632,
-        9923907631,
-        9923907630,
-        9923907629,
-        9923907628,
-        9923907627,
-        9923907626,
-        9923907625,
-        9923907624,
-        9923907623,
-        9923907622
+        9923907661
       ],
-      "segment_count": 56,
+      "segment_count": 10,
       "segment_pairs": [
         [
           9189127987,
@@ -25468,199 +25971,70 @@
         [
           9923907662,
           9923907661
-        ],
-        [
-          9923907661,
-          9923907660
-        ],
-        [
-          9923907660,
-          12341461514
-        ],
-        [
-          12341461514,
-          12341461513
-        ],
-        [
-          12341461513,
-          12341461512
-        ],
-        [
-          12341461512,
-          12341461515
-        ],
-        [
-          12341461515,
-          12341461510
-        ],
-        [
-          12341461510,
-          12341461511
-        ],
-        [
-          12341461511,
-          9923907659
-        ],
-        [
-          9923907659,
-          9923907658
-        ],
-        [
-          9923907658,
-          9923907657
-        ],
-        [
-          9923907657,
-          9923907656
-        ],
-        [
-          9923907656,
-          9923907655
-        ],
-        [
-          9923907655,
-          9923907654
-        ],
-        [
-          9923907654,
-          9923907653
-        ],
-        [
-          9923907653,
-          9923907652
-        ],
-        [
-          9923907652,
-          9923907651
-        ],
-        [
-          9923907651,
-          12341461516
-        ],
-        [
-          12341461516,
-          9923907650
-        ],
-        [
-          9923907650,
-          9923907649
-        ],
-        [
-          9923907649,
-          9923907648
-        ],
-        [
-          9923907648,
-          9923907647
-        ],
-        [
-          9923907647,
-          9923907646
-        ],
-        [
-          9923907646,
-          9923907645
-        ],
-        [
-          9923907645,
-          9923907644
-        ],
-        [
-          9923907644,
-          9923907643
-        ],
-        [
-          9923907643,
-          9923907642
-        ],
-        [
-          9923907642,
-          9923907641
-        ],
-        [
-          9923907641,
-          9923907640
-        ],
-        [
-          9923907640,
-          9923907639
-        ],
-        [
-          9923907639,
-          9923907638
-        ],
-        [
-          9923907638,
-          9923907637
-        ],
-        [
-          9923907637,
-          9923907636
-        ],
-        [
-          9923907636,
-          9923907635
-        ],
-        [
-          9923907635,
-          9923907634
-        ],
-        [
-          9923907634,
-          9923907633
-        ],
-        [
-          9923907633,
-          9923907632
-        ],
-        [
-          9923907632,
-          9923907631
-        ],
-        [
-          9923907631,
-          9923907630
-        ],
-        [
-          9923907630,
-          9923907629
-        ],
-        [
-          9923907629,
-          9923907628
-        ],
-        [
-          9923907628,
-          9923907627
-        ],
-        [
-          9923907627,
-          9923907626
-        ],
-        [
-          9923907626,
-          9923907625
-        ],
-        [
-          9923907625,
-          9923907624
-        ],
-        [
-          9923907624,
-          9923907623
-        ],
-        [
-          9923907623,
-          9923907622
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
         1082822653
       ],
       "way_names": []
+    },
+    {
+      "bounds": [
+        36.8202575,
+        -1.2387985,
+        36.8250104,
+        -1.2383025
+      ],
+      "endpoint_node_ids": [
+        9521586419,
+        13556268407
+      ],
+      "highway_types": {
+        "footway": 4
+      },
+      "id": 394,
+      "is_cycle": false,
+      "length_m": 533.061,
+      "node_ids": [
+        9521586419,
+        10597364829,
+        13556268406,
+        13556268408,
+        13556268407
+      ],
+      "segment_count": 4,
+      "segment_pairs": [
+        [
+          9521586419,
+          10597364829
+        ],
+        [
+          10597364829,
+          13556268406
+        ],
+        [
+          13556268406,
+          13556268408
+        ],
+        [
+          13556268408,
+          13556268407
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194",
+        "local:boundary_zone": "core"
+      },
+      "way_ids": [
+        142777587
+      ],
+      "way_names": [
+        "Middle Track"
+      ]
     },
     {
       "bounds": [
@@ -25676,7 +26050,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 388,
+      "id": 395,
       "is_cycle": false,
       "length_m": 177.769,
       "node_ids": [
@@ -25731,6 +26105,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25752,7 +26127,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 389,
+      "id": 396,
       "is_cycle": false,
       "length_m": 38.297,
       "node_ids": [
@@ -25782,6 +26157,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -25804,7 +26180,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 390,
+      "id": 397,
       "is_cycle": false,
       "length_m": 16.599,
       "node_ids": [
@@ -25819,6 +26195,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25840,7 +26217,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 391,
+      "id": 398,
       "is_cycle": false,
       "length_m": 35.488,
       "node_ids": [
@@ -25860,6 +26237,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25881,7 +26259,7 @@
       "highway_types": {
         "path": 11
       },
-      "id": 392,
+      "id": 399,
       "is_cycle": false,
       "length_m": 311.59,
       "node_ids": [
@@ -25946,6 +26324,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -25969,7 +26348,7 @@
       "highway_types": {
         "path": 6
       },
-      "id": 393,
+      "id": 400,
       "is_cycle": false,
       "length_m": 72.893,
       "node_ids": [
@@ -26009,10 +26388,355 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r15417497",
         "local:boundary_zone": "core"
       },
       "way_ids": [
         1082822653
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8193758,
+        -1.2354076,
+        36.8208534,
+        -1.2316077
+      ],
+      "endpoint_node_ids": [
+        9923907622,
+        9923907660
+      ],
+      "highway_types": {
+        "path": 45
+      },
+      "id": 401,
+      "is_cycle": false,
+      "length_m": 582.093,
+      "node_ids": [
+        9923907622,
+        9923907623,
+        9923907624,
+        9923907625,
+        9923907626,
+        9923907627,
+        9923907628,
+        9923907629,
+        9923907630,
+        9923907631,
+        9923907632,
+        9923907633,
+        9923907634,
+        9923907635,
+        9923907636,
+        9923907637,
+        9923907638,
+        9923907639,
+        9923907640,
+        9923907641,
+        9923907642,
+        9923907643,
+        9923907644,
+        9923907645,
+        9923907646,
+        9923907647,
+        9923907648,
+        9923907649,
+        9923907650,
+        12341461516,
+        9923907651,
+        9923907652,
+        9923907653,
+        9923907654,
+        9923907655,
+        9923907656,
+        9923907657,
+        9923907658,
+        9923907659,
+        12341461511,
+        12341461510,
+        12341461515,
+        12341461512,
+        12341461513,
+        12341461514,
+        9923907660
+      ],
+      "segment_count": 45,
+      "segment_pairs": [
+        [
+          9923907622,
+          9923907623
+        ],
+        [
+          9923907623,
+          9923907624
+        ],
+        [
+          9923907624,
+          9923907625
+        ],
+        [
+          9923907625,
+          9923907626
+        ],
+        [
+          9923907626,
+          9923907627
+        ],
+        [
+          9923907627,
+          9923907628
+        ],
+        [
+          9923907628,
+          9923907629
+        ],
+        [
+          9923907629,
+          9923907630
+        ],
+        [
+          9923907630,
+          9923907631
+        ],
+        [
+          9923907631,
+          9923907632
+        ],
+        [
+          9923907632,
+          9923907633
+        ],
+        [
+          9923907633,
+          9923907634
+        ],
+        [
+          9923907634,
+          9923907635
+        ],
+        [
+          9923907635,
+          9923907636
+        ],
+        [
+          9923907636,
+          9923907637
+        ],
+        [
+          9923907637,
+          9923907638
+        ],
+        [
+          9923907638,
+          9923907639
+        ],
+        [
+          9923907639,
+          9923907640
+        ],
+        [
+          9923907640,
+          9923907641
+        ],
+        [
+          9923907641,
+          9923907642
+        ],
+        [
+          9923907642,
+          9923907643
+        ],
+        [
+          9923907643,
+          9923907644
+        ],
+        [
+          9923907644,
+          9923907645
+        ],
+        [
+          9923907645,
+          9923907646
+        ],
+        [
+          9923907646,
+          9923907647
+        ],
+        [
+          9923907647,
+          9923907648
+        ],
+        [
+          9923907648,
+          9923907649
+        ],
+        [
+          9923907649,
+          9923907650
+        ],
+        [
+          9923907650,
+          12341461516
+        ],
+        [
+          12341461516,
+          9923907651
+        ],
+        [
+          9923907651,
+          9923907652
+        ],
+        [
+          9923907652,
+          9923907653
+        ],
+        [
+          9923907653,
+          9923907654
+        ],
+        [
+          9923907654,
+          9923907655
+        ],
+        [
+          9923907655,
+          9923907656
+        ],
+        [
+          9923907656,
+          9923907657
+        ],
+        [
+          9923907657,
+          9923907658
+        ],
+        [
+          9923907658,
+          9923907659
+        ],
+        [
+          9923907659,
+          12341461511
+        ],
+        [
+          12341461511,
+          12341461510
+        ],
+        [
+          12341461510,
+          12341461515
+        ],
+        [
+          12341461515,
+          12341461512
+        ],
+        [
+          12341461512,
+          12341461513
+        ],
+        [
+          12341461513,
+          12341461514
+        ],
+        [
+          12341461514,
+          9923907660
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r15417497",
+        "local:boundary_zone": "core"
+      },
+      "way_ids": [
+        1082822653
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8208534,
+        -1.2316503,
+        36.8209529,
+        -1.2315591
+      ],
+      "endpoint_node_ids": [
+        9923907660,
+        9923907661
+      ],
+      "highway_types": {
+        "path": 1
+      },
+      "id": 402,
+      "is_cycle": false,
+      "length_m": 15.006,
+      "node_ids": [
+        9923907660,
+        9923907661
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
+        [
+          9923907660,
+          9923907661
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        1082822653
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8204676,
+        -1.2420624,
+        36.8206582,
+        -1.241907
+      ],
+      "endpoint_node_ids": [
+        10597364805,
+        10597364814
+      ],
+      "highway_types": {
+        "footway": 3
+      },
+      "id": 403,
+      "is_cycle": false,
+      "length_m": 30.24,
+      "node_ids": [
+        10597364805,
+        10597364811,
+        10597364813,
+        10597364814
+      ],
+      "segment_count": 3,
+      "segment_pairs": [
+        [
+          10597364805,
+          10597364811
+        ],
+        [
+          10597364811,
+          10597364813
+        ],
+        [
+          10597364813,
+          10597364814
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r15417497",
+        "local:boundary_zone": "core",
+        "local:routing_state": "exclude"
+      },
+      "way_ids": [
+        1136841297,
+        1136841299,
+        1136841300
       ],
       "way_names": []
     },
@@ -26030,7 +26754,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 394,
+      "id": 404,
       "is_cycle": false,
       "length_m": 55.657,
       "node_ids": [
@@ -26050,6 +26774,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26071,7 +26796,7 @@
       "highway_types": {
         "residential": 2
       },
-      "id": 395,
+      "id": 405,
       "is_cycle": false,
       "length_m": 141.676,
       "node_ids": [
@@ -26091,6 +26816,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26112,7 +26838,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 396,
+      "id": 406,
       "is_cycle": false,
       "length_m": 38.096,
       "node_ids": [
@@ -26127,6 +26853,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "include"
       },
@@ -26149,7 +26876,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 397,
+      "id": 407,
       "is_cycle": false,
       "length_m": 41.278,
       "node_ids": [
@@ -26164,6 +26891,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "include"
       },
@@ -26186,7 +26914,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 398,
+      "id": 408,
       "is_cycle": false,
       "length_m": 50.014,
       "node_ids": [
@@ -26201,6 +26929,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "include"
       },
@@ -26223,7 +26952,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 399,
+      "id": 409,
       "is_cycle": false,
       "length_m": 107.665,
       "node_ids": [
@@ -26258,6 +26987,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26279,7 +27009,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 400,
+      "id": 410,
       "is_cycle": false,
       "length_m": 96.869,
       "node_ids": [
@@ -26294,6 +27024,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26315,7 +27046,7 @@
       "highway_types": {
         "track": 6
       },
-      "id": 401,
+      "id": 411,
       "is_cycle": false,
       "length_m": 258.012,
       "node_ids": [
@@ -26355,6 +27086,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26376,7 +27108,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 402,
+      "id": 412,
       "is_cycle": false,
       "length_m": 42.165,
       "node_ids": [
@@ -26391,6 +27123,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26412,7 +27145,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 403,
+      "id": 413,
       "is_cycle": false,
       "length_m": 2.548,
       "node_ids": [
@@ -26427,6 +27160,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26448,7 +27182,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 404,
+      "id": 414,
       "is_cycle": false,
       "length_m": 57.433,
       "node_ids": [
@@ -26478,6 +27212,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26499,7 +27234,7 @@
       "highway_types": {
         "path": 13
       },
-      "id": 405,
+      "id": 415,
       "is_cycle": false,
       "length_m": 218.653,
       "node_ids": [
@@ -26574,6 +27309,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26595,7 +27331,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 406,
+      "id": 416,
       "is_cycle": false,
       "length_m": 21.033,
       "node_ids": [
@@ -26615,6 +27351,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core",
         "local:routing_state": "exclude"
       },
@@ -26637,7 +27374,7 @@
       "highway_types": {
         "path": 3
       },
-      "id": 407,
+      "id": 417,
       "is_cycle": false,
       "length_m": 62.792,
       "node_ids": [
@@ -26662,6 +27399,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26683,7 +27421,7 @@
       "highway_types": {
         "path": 2
       },
-      "id": 408,
+      "id": 418,
       "is_cycle": false,
       "length_m": 62.698,
       "node_ids": [
@@ -26703,6 +27441,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26724,7 +27463,7 @@
       "highway_types": {
         "service": 2
       },
-      "id": 409,
+      "id": 419,
       "is_cycle": false,
       "length_m": 15.577,
       "node_ids": [
@@ -26744,6 +27483,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26765,7 +27505,7 @@
       "highway_types": {
         "service": 3
       },
-      "id": 410,
+      "id": 420,
       "is_cycle": false,
       "length_m": 21.109,
       "node_ids": [
@@ -26790,6 +27530,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26811,7 +27552,7 @@
       "highway_types": {
         "service": 1
       },
-      "id": 411,
+      "id": 421,
       "is_cycle": false,
       "length_m": 41.927,
       "node_ids": [
@@ -26826,6 +27567,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer"
       },
       "way_ids": [
@@ -26847,7 +27589,7 @@
       "highway_types": {
         "path": 17
       },
-      "id": 412,
+      "id": 422,
       "is_cycle": false,
       "length_m": 124.158,
       "node_ids": [
@@ -26942,6 +27684,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -26963,7 +27706,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 413,
+      "id": 423,
       "is_cycle": false,
       "length_m": 254.212,
       "node_ids": [
@@ -26998,6 +27741,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27021,7 +27765,7 @@
       "highway_types": {
         "path": 19
       },
-      "id": 414,
+      "id": 424,
       "is_cycle": false,
       "length_m": 262.614,
       "node_ids": [
@@ -27126,6 +27870,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27147,7 +27892,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 415,
+      "id": 425,
       "is_cycle": false,
       "length_m": 6.204,
       "node_ids": [
@@ -27162,6 +27907,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27185,7 +27931,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 416,
+      "id": 426,
       "is_cycle": false,
       "length_m": 99.378,
       "node_ids": [
@@ -27220,6 +27966,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27243,7 +27990,7 @@
       "highway_types": {
         "footway": 2
       },
-      "id": 417,
+      "id": 427,
       "is_cycle": false,
       "length_m": 16.548,
       "node_ids": [
@@ -27263,6 +28010,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27286,7 +28034,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 418,
+      "id": 428,
       "is_cycle": false,
       "length_m": 10.016,
       "node_ids": [
@@ -27301,6 +28049,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27322,7 +28071,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 419,
+      "id": 429,
       "is_cycle": false,
       "length_m": 45.023,
       "node_ids": [
@@ -27337,6 +28086,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "buffer",
         "local:routing_state": "include"
       },
@@ -27359,7 +28109,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 420,
+      "id": 430,
       "is_cycle": false,
       "length_m": 146.334,
       "node_ids": [
@@ -27389,6 +28139,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27410,7 +28161,7 @@
       "highway_types": {
         "footway": 38
       },
-      "id": 421,
+      "id": 431,
       "is_cycle": false,
       "length_m": 832.027,
       "node_ids": [
@@ -27610,6 +28361,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27621,36 +28373,100 @@
       "bounds": [
         36.822495,
         -1.2336447,
-        36.8237977,
-        -1.2330979
+        36.8229567,
+        -1.2335209
       ],
       "endpoint_node_ids": [
         13768277790,
-        13768277794
+        13768277791
       ],
       "highway_types": {
-        "path": 4
+        "path": 1
       },
-      "id": 422,
+      "id": 432,
       "is_cycle": false,
-      "length_m": 158.073,
+      "length_m": 53.141,
       "node_ids": [
         13768277790,
-        13768277791,
-        13768277792,
-        13768277793,
-        13768277794
+        13768277791
       ],
-      "segment_count": 4,
+      "segment_count": 1,
       "segment_pairs": [
         [
           13768277790,
           13768277791
-        ],
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r15417497",
+        "local:boundary_zone": "core"
+      },
+      "way_ids": [
+        1504673113
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8229567,
+        -1.2335209,
+        36.8232649,
+        -1.2333975
+      ],
+      "endpoint_node_ids": [
+        13768277791,
+        13768277792
+      ],
+      "highway_types": {
+        "path": 1
+      },
+      "id": 433,
+      "is_cycle": false,
+      "length_m": 36.908,
+      "node_ids": [
+        13768277791,
+        13768277792
+      ],
+      "segment_count": 1,
+      "segment_pairs": [
         [
           13768277791,
           13768277792
-        ],
+        ]
+      ],
+      "tags": {
+        "local:boundary_refs": "r13626194,r15417497",
+        "local:boundary_zone": "buffer"
+      },
+      "way_ids": [
+        1504673113
+      ],
+      "way_names": []
+    },
+    {
+      "bounds": [
+        36.8232649,
+        -1.2333975,
+        36.8237977,
+        -1.2330979
+      ],
+      "endpoint_node_ids": [
+        13768277792,
+        13768277794
+      ],
+      "highway_types": {
+        "path": 2
+      },
+      "id": 434,
+      "is_cycle": false,
+      "length_m": 68.025,
+      "node_ids": [
+        13768277792,
+        13768277793,
+        13768277794
+      ],
+      "segment_count": 2,
+      "segment_pairs": [
         [
           13768277792,
           13768277793
@@ -27661,6 +28477,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27682,7 +28499,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 423,
+      "id": 435,
       "is_cycle": false,
       "length_m": 27.71,
       "node_ids": [
@@ -27697,6 +28514,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27718,7 +28536,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 424,
+      "id": 436,
       "is_cycle": false,
       "length_m": 26.562,
       "node_ids": [
@@ -27733,6 +28551,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27756,7 +28575,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 425,
+      "id": 437,
       "is_cycle": false,
       "length_m": 38.031,
       "node_ids": [
@@ -27771,6 +28590,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27792,7 +28612,7 @@
       "highway_types": {
         "path": 16
       },
-      "id": 426,
+      "id": 438,
       "is_cycle": false,
       "length_m": 373.961,
       "node_ids": [
@@ -27882,6 +28702,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27903,7 +28724,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 427,
+      "id": 439,
       "is_cycle": false,
       "length_m": 385.709,
       "node_ids": [
@@ -27958,6 +28779,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -27979,7 +28801,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 428,
+      "id": 440,
       "is_cycle": false,
       "length_m": 60.916,
       "node_ids": [
@@ -27994,6 +28816,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28015,7 +28838,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 429,
+      "id": 441,
       "is_cycle": false,
       "length_m": 62.338,
       "node_ids": [
@@ -28030,6 +28853,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28051,7 +28875,7 @@
       "highway_types": {
         "path": 9
       },
-      "id": 430,
+      "id": 442,
       "is_cycle": false,
       "length_m": 361.346,
       "node_ids": [
@@ -28106,6 +28930,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28127,7 +28952,7 @@
       "highway_types": {
         "path": 10
       },
-      "id": 431,
+      "id": 443,
       "is_cycle": false,
       "length_m": 381.603,
       "node_ids": [
@@ -28187,6 +29012,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28208,7 +29034,7 @@
       "highway_types": {
         "path": 12
       },
-      "id": 432,
+      "id": 444,
       "is_cycle": false,
       "length_m": 351.03,
       "node_ids": [
@@ -28278,6 +29104,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28299,7 +29126,7 @@
       "highway_types": {
         "path": 5
       },
-      "id": 433,
+      "id": 445,
       "is_cycle": false,
       "length_m": 128.874,
       "node_ids": [
@@ -28334,6 +29161,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28355,7 +29183,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 434,
+      "id": 446,
       "is_cycle": false,
       "length_m": 38.71,
       "node_ids": [
@@ -28370,6 +29198,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28391,7 +29220,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 435,
+      "id": 447,
       "is_cycle": false,
       "length_m": 26.715,
       "node_ids": [
@@ -28406,6 +29235,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28427,7 +29257,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 436,
+      "id": 448,
       "is_cycle": false,
       "length_m": 25.579,
       "node_ids": [
@@ -28442,6 +29272,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28463,7 +29294,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 437,
+      "id": 449,
       "is_cycle": false,
       "length_m": 28.592,
       "node_ids": [
@@ -28478,6 +29309,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28501,7 +29333,7 @@
       "highway_types": {
         "track": 1
       },
-      "id": 438,
+      "id": 450,
       "is_cycle": false,
       "length_m": 28.074,
       "node_ids": [
@@ -28516,6 +29348,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28539,7 +29372,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 439,
+      "id": 451,
       "is_cycle": false,
       "length_m": 41.008,
       "node_ids": [
@@ -28554,6 +29387,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28575,7 +29409,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 440,
+      "id": 452,
       "is_cycle": false,
       "length_m": 12.943,
       "node_ids": [
@@ -28590,6 +29424,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28611,7 +29446,7 @@
       "highway_types": {
         "path": 1
       },
-      "id": 441,
+      "id": 453,
       "is_cycle": false,
       "length_m": 8.972,
       "node_ids": [
@@ -28626,6 +29461,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28647,7 +29483,7 @@
       "highway_types": {
         "path": 4
       },
-      "id": 442,
+      "id": 454,
       "is_cycle": false,
       "length_m": 106.813,
       "node_ids": [
@@ -28677,6 +29513,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28698,7 +29535,7 @@
       "highway_types": {
         "service": 5
       },
-      "id": 443,
+      "id": 455,
       "is_cycle": false,
       "length_m": 128.209,
       "node_ids": [
@@ -28733,6 +29570,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28754,7 +29592,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 444,
+      "id": 456,
       "is_cycle": false,
       "length_m": 28.264,
       "node_ids": [
@@ -28769,6 +29607,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28790,7 +29629,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 445,
+      "id": 457,
       "is_cycle": false,
       "length_m": 27.712,
       "node_ids": [
@@ -28805,6 +29644,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28826,7 +29666,7 @@
       "highway_types": {
         "footway": 7
       },
-      "id": 446,
+      "id": 458,
       "is_cycle": false,
       "length_m": 208.136,
       "node_ids": [
@@ -28871,6 +29711,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28892,7 +29733,7 @@
       "highway_types": {
         "footway": 5
       },
-      "id": 447,
+      "id": 459,
       "is_cycle": false,
       "length_m": 143.189,
       "node_ids": [
@@ -28927,6 +29768,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28948,7 +29790,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 448,
+      "id": 460,
       "is_cycle": false,
       "length_m": 41.101,
       "node_ids": [
@@ -28963,6 +29805,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -28984,7 +29827,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 449,
+      "id": 461,
       "is_cycle": false,
       "length_m": 215.078,
       "node_ids": [
@@ -29024,6 +29867,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29046,7 +29890,7 @@
         "footway": 4,
         "path": 1
       },
-      "id": 450,
+      "id": 462,
       "is_cycle": false,
       "length_m": 240.964,
       "node_ids": [
@@ -29081,6 +29925,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29103,7 +29948,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 451,
+      "id": 463,
       "is_cycle": false,
       "length_m": 24.332,
       "node_ids": [
@@ -29118,6 +29963,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29139,7 +29985,7 @@
       "highway_types": {
         "footway": 15
       },
-      "id": 452,
+      "id": 464,
       "is_cycle": false,
       "length_m": 388.131,
       "node_ids": [
@@ -29224,6 +30070,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29245,7 +30092,7 @@
       "highway_types": {
         "footway": 4
       },
-      "id": 453,
+      "id": 465,
       "is_cycle": false,
       "length_m": 120.104,
       "node_ids": [
@@ -29275,6 +30122,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29296,7 +30144,7 @@
       "highway_types": {
         "footway": 1
       },
-      "id": 454,
+      "id": 466,
       "is_cycle": false,
       "length_m": 36.374,
       "node_ids": [
@@ -29311,6 +30159,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29332,7 +30181,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 455,
+      "id": 467,
       "is_cycle": false,
       "length_m": 273.797,
       "node_ids": [
@@ -29372,6 +30221,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29393,7 +30243,7 @@
       "highway_types": {
         "footway": 6
       },
-      "id": 456,
+      "id": 468,
       "is_cycle": false,
       "length_m": 231.422,
       "node_ids": [
@@ -29433,6 +30283,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "w24040003",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29452,7 +30303,7 @@
         4803107746
       ],
       "highway_types": {},
-      "id": 457,
+      "id": 469,
       "is_cycle": true,
       "length_m": 344.404,
       "node_ids": [
@@ -29532,6 +30383,7 @@
         ]
       ],
       "tags": {
+        "local:boundary_refs": "r13626194",
         "local:boundary_zone": "core"
       },
       "way_ids": [
@@ -29541,6 +30393,12 @@
     }
   ],
   "crossings": {
+    "10597364805": {
+      "degree": 2,
+      "id": 10597364805,
+      "lat": -1.2420624,
+      "lon": 36.8204676
+    },
     "10597364814": {
       "degree": 1,
       "id": 10597364814,
@@ -29745,6 +30603,12 @@
       "lat": -1.2470287,
       "lon": 36.8329536
     },
+    "13556268407": {
+      "degree": 2,
+      "id": 13556268407,
+      "lat": -1.2383025,
+      "lon": 36.8202575
+    },
     "13768011702": {
       "degree": 3,
       "id": 13768011702,
@@ -29780,6 +30644,18 @@
       "id": 13768277790,
       "lat": -1.2336447,
       "lon": 36.822495
+    },
+    "13768277791": {
+      "degree": 2,
+      "id": 13768277791,
+      "lat": -1.2335209,
+      "lon": 36.8229567
+    },
+    "13768277792": {
+      "degree": 2,
+      "id": 13768277792,
+      "lat": -1.2333975,
+      "lon": 36.8232649
     },
     "13768277794": {
       "degree": 3,
@@ -30147,6 +31023,18 @@
       "lat": -1.2417617,
       "lon": 36.8180056
     },
+    "2068386331": {
+      "degree": 2,
+      "id": 2068386331,
+      "lat": -1.2323029,
+      "lon": 36.8225998
+    },
+    "2068386334": {
+      "degree": 2,
+      "id": 2068386334,
+      "lat": -1.2323425,
+      "lon": 36.8226064
+    },
     "2068386428": {
       "degree": 3,
       "id": 2068386428,
@@ -30266,6 +31154,12 @@
       "id": 2413983779,
       "lat": -1.2416389,
       "lon": 36.813566
+    },
+    "2458494726": {
+      "degree": 2,
+      "id": 2458494726,
+      "lat": -1.2422167,
+      "lon": 36.8136875
     },
     "2475596947": {
       "degree": 3,
@@ -30765,6 +31659,12 @@
       "lat": -1.247174,
       "lon": 36.8159349
     },
+    "2847941648": {
+      "degree": 2,
+      "id": 2847941648,
+      "lat": -1.241085,
+      "lon": 36.818831
+    },
     "2847945484": {
       "degree": 3,
       "id": 2847945484,
@@ -30896,6 +31796,12 @@
       "id": 2847949919,
       "lat": -1.2300259,
       "lon": 36.8221328
+    },
+    "4304615715": {
+      "degree": 2,
+      "id": 4304615715,
+      "lat": -1.2420903,
+      "lon": 36.820371
     },
     "4537141151": {
       "degree": 3,
@@ -31251,6 +32157,12 @@
       "lat": -1.2428596,
       "lon": 36.813827
     },
+    "7191425671": {
+      "degree": 2,
+      "id": 7191425671,
+      "lat": -1.2422013,
+      "lon": 36.813717
+    },
     "7191425672": {
       "degree": 1,
       "id": 7191425672,
@@ -31568,6 +32480,18 @@
       "id": 9923907622,
       "lat": -1.2354076,
       "lon": 36.8204603
+    },
+    "9923907660": {
+      "degree": 2,
+      "id": 9923907660,
+      "lat": -1.2316503,
+      "lon": 36.8208534
+    },
+    "9923907661": {
+      "degree": 2,
+      "id": 9923907661,
+      "lat": -1.2315591,
+      "lon": 36.8209529
     }
   },
   "meta": {
@@ -31615,8 +32539,8 @@
     ],
     "asset_id": "karura-contigs-ride-from-karura-map-patched-from-karura-map-r13626194-r15417497-w24040003-20260518T180127799396Z-karura-map-patches-v1-749f0e98b5c5",
     "asset_kind": "contig_graph",
-    "contig_count": 457,
-    "crossing_count": 338,
+    "contig_count": 469,
+    "crossing_count": 350,
     "edge_count": 3001,
     "graph_mode": "ride",
     "node_count": 4642,

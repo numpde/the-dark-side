@@ -77,16 +77,6 @@
     "asset_id": "karura-junctions-curated-v1",
     "asset_kind": "junction_catalog",
     "area": "Karura and Sigiria",
-    "areas": [
-      {
-        "id": "karura",
-        "name": "Karura Forest"
-      },
-      {
-        "id": "sigiria",
-        "name": "Sigiria Forest"
-      }
-    ],
     "description": "Curated named junction locations for Karura and Sigiria.",
     "schema_version": 3
   }

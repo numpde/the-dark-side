@@ -56,6 +56,14 @@ function validateArea(area, index) {
   const normalized = requireObject(area, `areas[${index}]`, { context });
   requireString(normalized.id, `areas[${index}].id`, { context });
   requireString(normalized.name, `areas[${index}].name`, { context });
+  requireString(normalized.network_path, `areas[${index}].network_path`, { context });
+  requireString(normalized.network_version, `areas[${index}].network_version`, { context });
+  requireString(normalized.background_network_path, `areas[${index}].background_network_path`, { context });
+  requireString(normalized.background_network_version, `areas[${index}].background_network_version`, { context });
+  requireArray(normalized.boundary_refs, `areas[${index}].boundary_refs`, { context });
+  normalized.boundary_refs.forEach((ref, refIndex) => {
+    requireString(ref, `areas[${index}].boundary_refs[${refIndex}]`, { context });
+  });
   requireArray(normalized.bounds, `areas[${index}].bounds`, { context });
   if (normalized.bounds.length !== 4) {
     throw new Error(`App manifest is missing valid areas[${index}].bounds`);

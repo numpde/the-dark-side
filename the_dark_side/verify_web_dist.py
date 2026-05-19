@@ -98,6 +98,13 @@ def verify_web_dist(args: argparse.Namespace) -> dict:
 
     require_path(generated_dir / app_manifest["planner"]["network_path"])
     require_path(generated_dir / app_manifest["planner"]["background_network_path"])
+    for area_index, area in enumerate(app_manifest.get("areas", [])):
+        if not isinstance(area.get("network_path"), str) or not area["network_path"]:
+            raise SystemExit(f"built app manifest is stale; areas[{area_index}] is missing network_path")
+        if not isinstance(area.get("background_network_path"), str) or not area["background_network_path"]:
+            raise SystemExit(f"built app manifest is stale; areas[{area_index}] is missing background_network_path")
+        require_path(generated_dir / area["network_path"])
+        require_path(generated_dir / area["background_network_path"])
     require_path(generated_dir / editor_manifest["editor"]["network_path"])
 
     route_policy_path = editor_manifest["meta"]["route_policy_path"]

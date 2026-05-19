@@ -77,11 +77,14 @@ class MapPatchPipelineTest(unittest.TestCase):
 
         self.assertEqual(karura_map.meta["boundary_way_ids"], [24040003])
         self.assertEqual(karura_map.meta["boundary_ways"][0]["way_tags"]["name"], "Sigiria Forest")
+        self.assertEqual(karura_map.meta["boundary_refs"], ["w24040003"])
         self.assertEqual(karura_map.boundary.relation_id, 24040003)
         self.assertEqual(karura_map.boundary.outer_rings, [[1, 2, 3, 4, 1]])
+        self.assertEqual(karura_map.boundary.components[0].component_ref, "w24040003")
         self.assertEqual(karura_map.boundary.components[0].relation_tags["local:boundary_source"], "way")
         self.assertIn(100, karura_map.ways)
         self.assertEqual(karura_map.ways[100].segment_zones, ["core"])
+        self.assertEqual(karura_map.ways[100].segment_refs, ["w24040003"])
 
     def test_build_map_rejects_open_boundary_way(self) -> None:
         payload = {

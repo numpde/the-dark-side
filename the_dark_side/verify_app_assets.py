@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import argparse
 
-from .asset_contracts import load_required_elevation_asset
+from .asset_contracts import load_required_area_catalog, load_required_elevation_asset
 from .asset_contracts import load_required_junction_bindings, load_required_junction_catalog, load_required_json
 from .asset_pipeline_cli import add_app_asset_args
 from .build_config import (
@@ -14,10 +14,10 @@ from .build_config import (
     load_catalog_build_config,
 )
 from .karura_routing import load_route_graph
-from .rebuild_app_assets import build_app_manifest, editor_args_from_app_args
+from .rebuild_app_assets import app_area_defs, build_app_manifest, build_area_networks, editor_args_from_app_args
 from .verify_helpers import assert_equal, normalized
 from .verify_editor_assets import verify_editor_assets
-from .karura_common import print_json_document
+from .karura_common import print_json_document, repo_rel
 from .web_assets import load_elevation_asset, network_geojson
 
 
@@ -56,6 +56,21 @@ def validate_manifest_schema(manifest: dict) -> None:
         if not isinstance(area, dict):
             raise SystemExit("app manifest is stale; area entries must be objects")
         junctions = area.get("junctions")
+        area_network_path = area.get("network_path")
+        area_network_version = area.get("network_version")
+        background_network_path = area.get("background_network_path")
+        background_network_version = area.get("background_network_version")
+        boundary_refs = area.get("boundary_refs")
+        if not isinstance(area_network_path, str) or not area_network_path:
+            raise SystemExit("app manifest is stale; area is missing network_path")
+        if not isinstance(area_network_version, str) or not area_network_version:
+            raise SystemExit("app manifest is stale; area is missing network_version")
+        if not isinstance(background_network_path, str) or not background_network_path:
+            raise SystemExit("app manifest is stale; area is missing background_network_path")
+        if not isinstance(background_network_version, str) or not background_network_version:
+            raise SystemExit("app manifest is stale; area is missing background_network_version")
+        if not isinstance(boundary_refs, list) or not all(isinstance(ref, str) and ref for ref in boundary_refs):
+            raise SystemExit("app manifest is stale; area is missing boundary_refs")
         if not isinstance(junctions, list) or not junctions:
             raise SystemExit("app manifest is stale; area is missing non-empty junctions list")
         junction_ids = set()
@@ -122,6 +137,7 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
         node_elevations=node_elevations if elevation_matches_graph else None,
     )
     junction_catalog = load_required_junction_catalog(args.junctions_json, label="junction catalog")
+    area_catalog = load_required_area_catalog(args.areas_json, label="area catalog")
     junction_bindings = load_required_junction_bindings(args.junction_bindings_json, label="junction bindings")
     actual_network = load_required_json(args.output_network, label="published route network")
     actual_manifest = load_required_json(args.output_app_manifest, label="published app manifest")
@@ -130,10 +146,23 @@ def verify_app_assets(args: argparse.Namespace) -> dict:
         raise SystemExit("app manifest is stale; elevation_asset_matches_graph must be true for published app assets")
     rebuild_hint = "rebuild app assets and commit the derived output"
     assert_equal(str(args.output_network), actual_network, expected_network, rebuild_hint=rebuild_hint)
+    expected_area_networks = build_area_networks(
+        graph,
+        app_area_defs(area_catalog),
+        output_network=args.output_network,
+        node_elevations=node_elevations if elevation_matches_graph else {},
+        source_path=repo_rel(args.contigs_json),
+        write_files=False,
+    )
+    for area_id, expected_area_network in expected_area_networks.items():
+        area_network_path = args.output_network.with_name(f"{args.output_network.stem}-{area_id}{args.output_network.suffix}")
+        actual_area_network = load_required_json(area_network_path, label=f"published {area_id} route network")
+        assert_equal(str(area_network_path), actual_area_network, expected_area_network, rebuild_hint=rebuild_hint)
     expected_manifest = build_app_manifest(
         args,
         editor_manifest=load_required_json(args.output_editor_manifest, label="published editor manifest"),
         graph=graph,
+        area_catalog=area_catalog,
         junction_catalog=junction_catalog,
         junction_bindings=junction_bindings,
         build_config_payload=build_config_payload,

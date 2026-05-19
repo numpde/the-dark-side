@@ -15,7 +15,14 @@ from pathlib import Path
 from typing import Any
 
 from .asset_contracts import load_required_json
+from .area_catalog import (
+    boundary_component_ref,
+    boundary_way_ids_from_areas,
+    load_area_catalog,
+    relation_ids_from_areas,
+)
 from .karura_common import (
+    AREAS_JSON,
     MAP_JSON as DEFAULT_MAP_JSON,
     RAW_JSON as DEFAULT_RAW_JSON,
     mercator,
@@ -57,6 +64,7 @@ class WayRecord:
     tags: dict[str, str]
     segment_pairs: list[list[int]]
     segment_zones: list[str]
+    segment_refs: list[str]
     total_length_m: float
     inside_length_m: float
     buffer_length_m: float
@@ -69,6 +77,7 @@ class WayRecord:
             "tags": self.tags,
             "segment_pairs": self.segment_pairs,
             "segment_zones": self.segment_zones,
+            "segment_refs": self.segment_refs,
             "total_length_m": round(self.total_length_m, 3),
             "inside_length_m": round(self.inside_length_m, 3),
             "buffer_length_m": round(self.buffer_length_m, 3),
@@ -82,9 +91,15 @@ class BoundaryComponent:
     relation_tags: dict[str, str]
     outer_rings: list[list[int]]
     inner_rings: list[list[int]]
+    component_ref: str = ""
 
     def to_dict(self) -> dict[str, Any]:
+        component_ref = self.component_ref or boundary_component_ref(
+            "way" if self.relation_tags.get("local:boundary_source") == "way" else "relation",
+            self.relation_id,
+        )
         return {
+            "component_ref": component_ref,
             "relation_id": self.relation_id,
             "relation_tags": self.relation_tags,
             "outer_rings": self.outer_rings,
@@ -105,6 +120,7 @@ class BoundaryRecord:
             return self.components
         return [
             BoundaryComponent(
+                component_ref=boundary_component_ref("relation", self.relation_id),
                 relation_id=self.relation_id,
                 relation_tags=self.relation_tags,
                 outer_rings=self.outer_rings,
@@ -144,6 +160,12 @@ class KaruraMap:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--areas-json",
+        type=Path,
+        default=AREAS_JSON,
+        help="Canonical area catalog used to derive boundary relation/way ids when explicit ids are not supplied",
+    )
+    parser.add_argument(
         "--relation-id",
         dest="relation_ids",
         type=int,
@@ -181,7 +203,11 @@ def parse_args() -> argparse.Namespace:
         help="Respect inner rings as holes instead of using only the outer shell",
     )
     args = parser.parse_args()
-    if not args.relation_ids:
+    if args.relation_ids is None and not args.boundary_way_ids:
+        area_catalog = load_area_catalog(args.areas_json)
+        args.relation_ids = relation_ids_from_areas(area_catalog)
+        args.boundary_way_ids = boundary_way_ids_from_areas(area_catalog)
+    elif args.relation_ids is None:
         args.relation_ids = list(DEFAULT_RELATION_IDS)
     return args
 
@@ -381,6 +407,95 @@ def build_boundary_zone_classifier(
     return boundary_zone
 
 
+def build_boundary_membership_classifier(
+    boundary: BoundaryRecord,
+    nodes: dict[int, NodeRecord],
+    *,
+    boundary_buffer_m: float,
+    respect_inner_rings: bool = False,
+):
+    def effective_component_ref(component: BoundaryComponent) -> str:
+        return component.component_ref or boundary_component_ref(
+            "way" if component.relation_tags.get("local:boundary_source") == "way" else "relation",
+            component.relation_id,
+        )
+
+    component_coords = [
+        (
+            effective_component_ref(component),
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.outer_rings],
+            [[(nodes[node_id].lon, nodes[node_id].lat) for node_id in ring if node_id in nodes] for ring in component.inner_rings],
+        )
+        for component in boundary.iter_components()
+    ]
+
+    def point_membership(point: tuple[float, float]) -> dict[str, set[str]]:
+        core_refs: set[str] = set()
+        buffer_refs: set[str] = set()
+        for component_ref, outer_ring_coords, inner_ring_coords in component_coords:
+            inside_outer = any(point_in_ring(point, ring) for ring in outer_ring_coords)
+            inside_inner = respect_inner_rings and any(point_in_ring(point, ring) for ring in inner_ring_coords)
+            if inside_outer and not inside_inner:
+                core_refs.add(component_ref)
+                continue
+            if boundary_buffer_m <= 0:
+                continue
+            nearest = float("inf")
+            for ring in outer_ring_coords:
+                nearest = min(nearest, min_ring_distance_m(point, ring))
+            if respect_inner_rings:
+                for ring in inner_ring_coords:
+                    nearest = min(nearest, min_ring_distance_m(point, ring))
+            if nearest <= boundary_buffer_m:
+                buffer_refs.add(component_ref)
+        return {"core": core_refs, "buffer": buffer_refs}
+
+    return point_membership
+
+
+def classify_segment_membership(
+    first: NodeRecord,
+    second: NodeRecord,
+    boundary_membership_for_point,
+) -> tuple[str, list[str]]:
+    first_membership = boundary_membership_for_point((first.lon, first.lat))
+    second_membership = boundary_membership_for_point((second.lon, second.lat))
+    shared_core_refs = first_membership["core"] & second_membership["core"]
+    if shared_core_refs:
+        return "core", sorted(shared_core_refs)
+    refs = (
+        first_membership["core"]
+        | first_membership["buffer"]
+        | second_membership["core"]
+        | second_membership["buffer"]
+    )
+    if refs:
+        return "buffer", sorted(refs)
+    return "outside", []
+
+
+def filled_segment_refs(raw_segment_refs: list[list[str]], keep_flags: list[bool]) -> list[list[str]]:
+    filled = [list(refs) for refs in raw_segment_refs]
+    for index, keep in enumerate(keep_flags):
+        if not keep or filled[index]:
+            continue
+        left_refs: list[str] = []
+        right_refs: list[str] = []
+        for left_index in range(index - 1, -1, -1):
+            if keep_flags[left_index] and filled[left_index]:
+                left_refs = filled[left_index]
+                break
+        for right_index in range(index + 1, len(filled)):
+            if keep_flags[right_index] and filled[right_index]:
+                right_refs = filled[right_index]
+                break
+        # Gap-filled outside segments are retained only to keep a local OSM way
+        # continuous after clipping. They inherit the nearest kept component ref
+        # so downstream area filters stay deterministic instead of hand-tagged.
+        filled[index] = sorted(set(left_refs) | set(right_refs))
+    return filled
+
+
 def build_inside_karura(
     boundary: BoundaryRecord,
     nodes: dict[int, NodeRecord],
@@ -488,6 +603,7 @@ def build_map(
         boundary_way_refs.update(inner_way_refs)
         boundary_components.append(
             BoundaryComponent(
+                component_ref=boundary_component_ref("relation", relation_id),
                 relation_id=relation_id,
                 relation_tags=dict(relation.get("tags", {})),
                 outer_rings=join_rings([way_rows[way_id]["node_ids"] for way_id in outer_way_refs if way_id in way_rows]),
@@ -502,6 +618,7 @@ def build_map(
             raise RuntimeError(f"Boundary way is not a closed ring: {way_id}")
         boundary_components.append(
             BoundaryComponent(
+                component_ref=boundary_component_ref("way", way_id),
                 relation_id=way_id,
                 relation_tags={
                     **dict(way_row.get("tags", {})),
@@ -534,6 +651,12 @@ def build_map(
         boundary_buffer_m=boundary_buffer_m,
         respect_inner_rings=respect_inner_rings,
     )
+    boundary_membership_for_point = build_boundary_membership_classifier(
+        boundary,
+        nodes,
+        boundary_buffer_m=boundary_buffer_m,
+        respect_inner_rings=respect_inner_rings,
+    )
 
     ways: dict[int, WayRecord] = {}
     for way_id, row in way_rows.items():
@@ -543,6 +666,7 @@ def build_map(
 
         segment_pairs: list[list[int]] = []
         segment_zones: list[str] = []
+        segment_refs: list[str] = []
         total_length_m = 0.0
         inside_length_m = 0.0
         buffer_length_m = 0.0
@@ -555,18 +679,21 @@ def build_map(
         keep_flags = []
         segment_lengths = []
         raw_segment_zones = []
+        raw_segment_refs: list[list[str]] = []
         for first_id, second_id in segments:
             first = nodes[first_id]
             second = nodes[second_id]
             segment_length = haversine_meters(first, second)
             total_length_m += segment_length
             segment_lengths.append(segment_length)
-            segment_zone = classify_segment_zone(first, second, boundary_zone_for_point)
+            segment_zone, refs = classify_segment_membership(first, second, boundary_membership_for_point)
             raw_segment_zones.append(segment_zone)
+            raw_segment_refs.append(refs)
             keep_flags.append(keep_segment_by_endpoint(first, second, boundary_zone_for_point))
 
         if fill_segment_gaps:
             keep_flags = fill_kept_segment_gaps(keep_flags)
+        raw_segment_refs = filled_segment_refs(raw_segment_refs, keep_flags)
         for index, ((first_id, second_id), segment_length, keep) in enumerate(zip(segments, segment_lengths, keep_flags)):
             if keep:
                 segment_zone = raw_segment_zones[index]
@@ -574,6 +701,7 @@ def build_map(
                     segment_zone = "buffer"
                 segment_pairs.append([first_id, second_id])
                 segment_zones.append(segment_zone)
+                segment_refs.append(",".join(raw_segment_refs[index]))
                 if segment_zone == "core":
                     inside_length_m += segment_length
                 elif segment_zone == "buffer":
@@ -588,6 +716,7 @@ def build_map(
             tags=row["tags"],
             segment_pairs=segment_pairs,
             segment_zones=segment_zones,
+            segment_refs=segment_refs,
             total_length_m=total_length_m,
             inside_length_m=inside_length_m,
             buffer_length_m=buffer_length_m,
@@ -618,6 +747,7 @@ def build_map(
             }
             for way_id in boundary_way_ids
         ],
+        "boundary_refs": boundary_component_ids,
         "fill_segment_gaps": fill_segment_gaps,
         "respect_inner_rings": respect_inner_rings,
         "boundary_buffer_m": boundary_buffer_m,
@@ -640,6 +770,13 @@ def load_map(path: Path) -> KaruraMap:
         components=[
             BoundaryComponent(
                 relation_id=int(component_payload["relation_id"]),
+                component_ref=str(
+                    component_payload.get("component_ref")
+                    or boundary_component_ref(
+                        "way" if component_payload.get("relation_tags", {}).get("local:boundary_source") == "way" else "relation",
+                        int(component_payload["relation_id"]),
+                    )
+                ),
                 relation_tags=dict(component_payload["relation_tags"]),
                 outer_rings=[[int(node_id) for node_id in ring] for ring in component_payload["outer_rings"]],
                 inner_rings=[[int(node_id) for node_id in ring] for ring in component_payload["inner_rings"]],
@@ -666,6 +803,13 @@ def load_map(path: Path) -> KaruraMap:
                 for zone in way_payload.get(
                     "segment_zones",
                     ["core"] * len(way_payload["segment_pairs"]),
+                )
+            ],
+            segment_refs=[
+                str(refs)
+                for refs in way_payload.get(
+                    "segment_refs",
+                    [""] * len(way_payload["segment_pairs"]),
                 )
             ],
             total_length_m=float(way_payload["total_length_m"]),

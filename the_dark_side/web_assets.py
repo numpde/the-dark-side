@@ -31,7 +31,13 @@ def rounded_contig_elevations(node_ids: list[int] | tuple[int, ...], node_elevat
     return elevations
 
 
-def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[int, float] | None = None) -> dict:
+def network_geojson(
+    graph,
+    *,
+    meta: dict | None = None,
+    node_elevations: dict[int, float] | None = None,
+    include_contig=None,
+) -> dict:
     features = []
     if isinstance(graph, dict):
         nodes = {
@@ -43,6 +49,8 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
         }
         contigs = graph["contigs"]
         for contig in contigs:
+            if include_contig is not None and not include_contig(contig):
+                continue
             coordinates = [
                 [round(nodes[int(node_id)]["lon"], 6), round(nodes[int(node_id)]["lat"], 6)]
                 for node_id in contig["node_ids"]
@@ -71,6 +79,8 @@ def network_geojson(graph, *, meta: dict | None = None, node_elevations: dict[in
         return {"type": "FeatureCollection", "meta": meta or {}, "features": features}
 
     for contig in graph.contigs.values():
+        if include_contig is not None and not include_contig(contig):
+            continue
         coordinates = [
             [round(graph.nodes[node_id].lon, 6), round(graph.nodes[node_id].lat, 6)]
             for node_id in contig.node_ids

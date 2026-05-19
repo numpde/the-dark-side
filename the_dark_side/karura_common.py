@@ -26,6 +26,7 @@ ROUTE_CATALOG_JSON = ROUTES_DIR / "karura-route-catalog.json"
 BENCHMARKS_DIR = DATA_DIR / "benchmarks"
 ELEVATION_CACHE_DIR = DATA_DIR / "elevation_cache"
 CURATED_DIR = REPO_ROOT / "curated"
+AREAS_JSON = CURATED_DIR / "areas.json"
 JUNCTIONS_JSON = CURATED_DIR / "karura_junctions.json"
 ROUTING_OVERRIDES_JSON = CURATED_DIR / "karura_routing_overrides.json"
 ASSETS_DIR = REPO_ROOT / "assets"
@@ -52,6 +53,7 @@ LOCAL_BICYCLE_DIRECTION_TAG = "local:bicycle_direction"
 LOCAL_AVAILABILITY_TAG = "local:availability"
 LOCAL_UNAVAILABLE_UNTIL_TAG = "local:unavailable_until"
 LOCAL_BOUNDARY_ZONE_TAG = "local:boundary_zone"
+LOCAL_BOUNDARY_REFS_TAG = "local:boundary_refs"
 KARURA_TIMEZONE = ZoneInfo("Africa/Nairobi")
 
 

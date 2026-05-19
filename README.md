@@ -224,11 +224,11 @@ Rebuilds should fail if canonical rules or curated junctions can no longer be re
 
 ### Areas and gates
 
-Areas are defined in `curated/karura_junctions.json` under `meta.areas`. Each curated junction has an `area_id`; the app manifest groups the area dropdown and start/end selectors from those values.
+Areas are defined in `curated/areas.json`. Each area declares the canonical boundary components used to derive OSM downloads, normalized segment membership, per-area planner networks, and app manifest metadata. Each curated junction in `curated/karura_junctions.json` has an `area_id`; the app manifest validates those IDs against the area catalog and groups the dropdown plus start/end selectors from them.
 
 Current published areas:
-- `karura`: Karura Forest
-- `sigiria`: Sigiria Forest
+- `karura`: Karura Forest, from OSM boundary relations `13626194` and `15417497`
+- `sigiria`: Sigiria Forest, from OSM closed boundary way `24040003`
 
 Sigiria entrances are curated from OSM nodes:
 - Gate E / Limuru Road: `6950727290`
@@ -246,6 +246,8 @@ Segments in `B - A`:
 - are tagged `local:boundary_zone=buffer`
 - are excluded from routing by default
 - can be explicitly re-included via route policy
+
+Routable segments also carry `local:boundary_refs` after normalization and patching. The app publishes `web/generated/karura-network-<area>.geojson` files by filtering that tag, so selecting Sigiria or Karura loads an area-scoped planner graph instead of relying on the combined network to stay inside the selected forest.
 
 This keeps near-boundary connectors visible and editable without silently making them routable. Simple closed OSM areas can stay as ways; relation conversion is only needed upstream in OSM if the geometry needs multipolygon semantics such as holes or multiple outer rings.
 
@@ -278,7 +280,8 @@ Offline debug/oracle tools:
 
 The published app does not use the Python route generators. It plans routes in the browser from:
 - `web/generated/app-manifest.json`
-- `web/generated/karura-network.geojson`
+- the selected area's `web/generated/karura-network-<area>.geojson`
+- `web/generated/karura-network.geojson` as the legacy combined planner network
 
 ## Data outputs
 
@@ -297,7 +300,11 @@ Important derived files:
 - `web/generated/karura-editor-network.geojson`
   - editor/background network
 - `web/generated/karura-network.geojson`
-  - planner network
+  - legacy combined planner network
+- `web/generated/karura-network-karura.geojson`
+  - Karura-only planner network
+- `web/generated/karura-network-sigiria.geojson`
+  - Sigiria-only planner network
 - `web/generated/editor-manifest.json`
   - editor bootstrap payload
 - `web/generated/app-manifest.json`

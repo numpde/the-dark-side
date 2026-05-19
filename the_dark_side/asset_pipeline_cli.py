@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .karura_common import (
     APP_MANIFEST_JSON,
+    AREAS_JSON,
     CATALOG_BUILD_JSON,
     CONTIGS_JSON,
     EDITOR_MANIFEST_JSON,
@@ -48,6 +49,7 @@ def add_editor_asset_args(
     parser.add_argument("--route-policy-json", type=Path, default=ROUTE_POLICY_JSON)
     parser.add_argument("--patched-map-json", type=Path, default=PATCHED_MAP_JSON)
     parser.add_argument("--contigs-json", type=Path, default=CONTIGS_JSON)
+    parser.add_argument("--areas-json", type=Path, default=AREAS_JSON)
     parser.add_argument("--junctions-json", type=Path, default=JUNCTIONS_JSON)
     parser.add_argument("--junction-bindings-json", type=Path, default=JUNCTION_BINDINGS_JSON)
     parser.add_argument("--route-policy-bindings-json", type=Path, default=ROUTE_POLICY_BINDINGS_JSON)
@@ -76,6 +78,7 @@ def editor_rebuild_argv_from_namespace(
         "--route-policy-json", str(args.route_policy_json),
         "--patched-map-json", str(args.patched_map_json),
         "--contigs-json", str(args.contigs_json),
+        "--areas-json", str(args.areas_json),
         "--junctions-json", str(args.junctions_json),
         "--junction-bindings-json", str(args.junction_bindings_json),
         "--route-policy-bindings-json", str(args.route_policy_bindings_json),

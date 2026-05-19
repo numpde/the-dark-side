@@ -155,6 +155,58 @@ def load_required_route_policy_bindings(path: Path, *, label: str) -> dict:
     return validate_route_policy_bindings_document(load_required_json(path, label=label), label=label)
 
 
+def validate_area_catalog_document(payload: object, *, label: str) -> dict:
+    document = require_json_object(payload, label=label)
+    meta = require_json_object(document.get("meta"), label=f"{label}.meta")
+    require_nonempty_string(meta.get("asset_id"), label=f"{label}.meta.asset_id")
+    require_nonempty_string(meta.get("asset_kind"), label=f"{label}.meta.asset_kind")
+    areas = require_json_array(document.get("areas"), label=f"{label}.areas")
+    area_ids: set[str] = set()
+    component_refs: set[str] = set()
+    for index, area in enumerate(areas):
+        item = require_json_object(area, label=f"{label}.areas[{index}]")
+        area_id = require_nonempty_string(item.get("id"), label=f"{label}.areas[{index}].id")
+        require_nonempty_string(item.get("name"), label=f"{label}.areas[{index}].name")
+        if area_id in area_ids:
+            raise ValueError(f"{label}.areas contains duplicate id {area_id!r}")
+        area_ids.add(area_id)
+        components = require_json_array(
+            item.get("boundary_components"),
+            label=f"{label}.areas[{index}].boundary_components",
+        )
+        if not components:
+            raise ValueError(f"{label}.areas[{index}].boundary_components must not be empty")
+        for component_index, component in enumerate(components):
+            component_item = require_json_object(
+                component,
+                label=f"{label}.areas[{index}].boundary_components[{component_index}]",
+            )
+            component_type = require_nonempty_string(
+                component_item.get("type"),
+                label=f"{label}.areas[{index}].boundary_components[{component_index}].type",
+            )
+            if component_type not in {"relation", "way"}:
+                raise ValueError(
+                    f"{label}.areas[{index}].boundary_components[{component_index}].type "
+                    "must be relation or way"
+                )
+            component_id = component_item.get("id")
+            if not isinstance(component_id, int):
+                raise ValueError(
+                    f"{label}.areas[{index}].boundary_components[{component_index}].id must be an integer"
+                )
+            prefix = "r" if component_type == "relation" else "w"
+            component_ref = f"{prefix}{component_id}"
+            if component_ref in component_refs:
+                raise ValueError(f"{label}.areas contains duplicate boundary component {component_ref!r}")
+            component_refs.add(component_ref)
+    return document
+
+
+def load_required_area_catalog(path: Path, *, label: str) -> dict:
+    return validate_area_catalog_document(load_required_json(path, label=label), label=label)
+
+
 def validate_junction_catalog_document(payload: object, *, label: str) -> dict:
     document = require_json_object(payload, label=label)
     meta = require_json_object(document.get("meta"), label=f"{label}.meta")

@@ -1,0 +1,34 @@
+{
+  "areas": [
+    {
+      "id": "karura",
+      "name": "Karura Forest",
+      "boundary_components": [
+        {
+          "type": "relation",
+          "id": 13626194
+        },
+        {
+          "type": "relation",
+          "id": 15417497
+        }
+      ]
+    },
+    {
+      "id": "sigiria",
+      "name": "Sigiria Forest",
+      "boundary_components": [
+        {
+          "type": "way",
+          "id": 24040003
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "asset_id": "karura-areas-curated-v1",
+    "asset_kind": "area_catalog",
+    "description": "Canonical area boundaries used to derive downloads, per-area planner networks, and app area metadata.",
+    "schema_version": 1
+  }
+}

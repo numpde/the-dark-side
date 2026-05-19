@@ -15,6 +15,7 @@ from typing import Any
 from .asset_contracts import load_required_route_policy
 from .download_karura_map import load_map
 from .karura_common import (
+    LOCAL_BOUNDARY_REFS_TAG,
     LOCAL_BOUNDARY_ZONE_TAG,
     CONTIGS_JSON as DEFAULT_OUT_JSON,
     ROUTE_POLICY_JSON,
@@ -84,13 +85,17 @@ def build_edge_graph(
         segment_zones = list(way.get("segment_zones", ["core"] * len(way["segment_pairs"])))
         if len(segment_zones) != len(way["segment_pairs"]):
             raise ValueError(f"way {way_id} has mismatched segment_zones and segment_pairs lengths")
+        segment_refs = list(way.get("segment_refs", [""] * len(way["segment_pairs"])))
+        if len(segment_refs) != len(way["segment_pairs"]):
+            raise ValueError(f"way {way_id} has mismatched segment_refs and segment_pairs lengths")
 
-        for (first_id, second_id), segment_zone in zip(way["segment_pairs"], segment_zones):
+        for (first_id, second_id), segment_zone, segment_ref in zip(way["segment_pairs"], segment_zones, segment_refs):
             if first_id not in nodes or second_id not in nodes:
                 continue
             segment_tags = {
                 **tags,
                 LOCAL_BOUNDARY_ZONE_TAG: str(segment_zone),
+                LOCAL_BOUNDARY_REFS_TAG: str(segment_ref),
                 "__segment_node_ids__": (int(first_id), int(second_id)),
             }
             if not include_way(way_id, segment_tags):
@@ -115,6 +120,14 @@ def build_edge_graph(
             if existing_zone is not None and existing_zone != str(segment_zone):
                 raise ValueError(f"source map edge {first_id}->{second_id} spans conflicting boundary zones")
             edge["tags"][LOCAL_BOUNDARY_ZONE_TAG] = str(segment_zone)
+            new_refs = {ref for ref in str(segment_ref).split(",") if ref}
+            if new_refs:
+                existing_refs = {
+                    ref
+                    for ref in edge["tags"].get(LOCAL_BOUNDARY_REFS_TAG, "").split(",")
+                    if ref
+                }
+                edge["tags"][LOCAL_BOUNDARY_REFS_TAG] = ",".join(sorted(existing_refs | new_refs))
             edge["tags"] = merge_policy_tags(
                 edge["tags"],
                 extract_policy_tags(segment_tags),

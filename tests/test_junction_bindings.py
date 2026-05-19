@@ -6,7 +6,11 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 
-from the_dark_side.asset_contracts import load_required_junction_bindings, load_required_junction_catalog
+from the_dark_side.asset_contracts import (
+    load_required_area_catalog,
+    load_required_junction_bindings,
+    load_required_junction_catalog,
+)
 from the_dark_side.junction_bindings import build_junction_bindings, nearest_graph_node
 from the_dark_side.karura_routing import (
     load_graph_junction_context,
@@ -118,6 +122,29 @@ class JunctionBindingsTest(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, r"unknown area 'sigiria'"):
                 load_required_junction_catalog(catalog_path, label="junction catalog")
+
+    def test_load_area_catalog_rejects_duplicate_boundary_components(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            catalog_path = Path(tmpdir) / "areas.json"
+            catalog_path.write_text(
+                json.dumps(
+                    {
+                        "meta": {"asset_id": "areas-1", "asset_kind": "area_catalog"},
+                        "areas": [
+                            {
+                                "id": "karura",
+                                "name": "Karura Forest",
+                                "boundary_components": [
+                                    {"type": "way", "id": 24040003},
+                                    {"type": "way", "id": 24040003},
+                                ],
+                            }
+                        ],
+                    }
+                )
+            )
+            with self.assertRaisesRegex(ValueError, r"duplicate boundary component 'w24040003'"):
+                load_required_area_catalog(catalog_path, label="area catalog")
 
     def test_load_junction_bindings_rejects_malformed_document(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

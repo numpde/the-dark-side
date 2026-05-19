@@ -52,6 +52,10 @@ def main(argv: list[str] | None = None) -> None:
                 "editor_manifest": str(app_args.output_editor_manifest),
                 "app_manifest": str(app_args.output_app_manifest),
                 "network_feature_count": len(app_bundle["route_network"]["features"]),
+                "area_network_feature_counts": {
+                    area_id: len(network["features"])
+                    for area_id, network in app_bundle["area_networks"].items()
+                },
                 "elevation_refreshed": args.with_elevation,
             },
             indent=2,
