@@ -2,9 +2,10 @@
 
 Random bike routes through Karura Forest and Sigiria Forest, plus the data/build tooling behind the published app.
 
+**Open the app: [numpde.github.io/the-dark-side](https://numpde.github.io/the-dark-side/)**
+
 ## App
 
-- Live app: `https://numpde.github.io/the-dark-side/`
 - Local app: `http://127.0.0.1:8765/`
 - Local editor: `http://127.0.0.1:8765/editor.html`
 
