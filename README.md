@@ -25,7 +25,7 @@ What the editor does:
 .
 ├── the_dark_side/        Python package
 ├── source/               Canonical structural patches, route policy, planner config
-├── curated/              Canonical junction + figure catalogs
+├── curated/              Canonical area, junction, and figure catalogs
 ├── data/                 Downloaded map snapshot, elevation cache, and derived graph assets
 ├── web/                  Frontend source
 ├── dist/                 Built Pages artifact, generated locally and in CI
@@ -42,6 +42,7 @@ The project has three layers:
    - `source/karura-map-patches.json`
    - `source/karura-route-policy.json`
    - `source/catalog_build.json`
+   - `curated/areas.json`
    - `curated/karura_junctions.json`
    - `curated/karura_figures.json`
 
@@ -123,14 +124,11 @@ Rebuild everything, optionally refreshing elevation first:
 Refresh the OSM snapshot before rebuilding derived assets:
 
 ```bash
-./scripts/dev-container.sh --allow-network run python -m the_dark_side.download_karura_map \
-  --boundary-way-id 24040003
-./scripts/dev-container.sh run python -m the_dark_side.apply_karura_patches
-./scripts/dev-container.sh run python -m the_dark_side.build_karura_contigs
+./scripts/dev-container.sh --allow-network run python -m the_dark_side.download_karura_map
 ./scripts/dev-container.sh --allow-network rebuild:all --with-elevation
 ```
 
-`24040003` is the current OSM way for Sigiria Forest. Karura Forest and Karura Playground are included by the downloader's default relations.
+The downloader reads `curated/areas.json` by default and derives the current boundary components from it. Today that means Karura relation `13626194`, Karura Playground relation `15417497`, and Sigiria Forest way `24040003`. Only pass `--relation-id` or `--boundary-way-id` for an explicit one-off override.
 
 ### Verify
 
@@ -233,6 +231,8 @@ Current published areas:
 Sigiria entrances are curated from OSM nodes:
 - Gate E / Limuru Road: `6950727290`
 - Gate F / Thigiri Lane: `2847789394`
+
+When adding a new app area, update `curated/areas.json`, add or reassign junctions in `curated/karura_junctions.json`, then rebuild and verify. The per-area network files are generated outputs, not hand-edited source.
 
 ## Boundary model
 
